@@ -64,7 +64,7 @@ export default {
 
 ul {
   list-style-type: none;
-  padding: 10px;
+  padding: 0;
 }
 
 .icon {
@@ -85,14 +85,14 @@ ul {
 }
 
 .option:hover {
-  background-color: var(--red-color);
+  background-color: var(--red-dark-color);
   font-weight: bold;
   color: white;
   text-shadow: 2px 2px 4px #000000;
 }
 
 .selectedOption {
-  background-color: rgba(248, 248, 248, 255);
+  background-color: var(--gray-light-color);
   color: black;
   font-weight: bold;
   text-shadow: 2px 2px 4px #cfcfcf;

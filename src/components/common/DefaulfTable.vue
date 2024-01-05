@@ -40,7 +40,7 @@ th, td {
 }
 
 th {
-    background-color: var(--gray-color);
+    background-color: var(--gray-dark-color);
     color: white;
 }
 
@@ -49,6 +49,6 @@ tr:nth-child(even) {
 }
 
 tr:hover {
-    background-color: #cdc8f3;
+    background-color: var(--red-light-color);
 }
 </style>

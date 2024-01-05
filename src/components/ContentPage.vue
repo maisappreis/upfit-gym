@@ -34,6 +34,6 @@ export default {
 
   width: 87vw;
   height: 83vh;
-  background-color: rgb(232, 232, 232);
+  background-color:var(--gray-light-color);
 }
 </style>

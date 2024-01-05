@@ -23,7 +23,7 @@ export default {
   height: 30px;
   padding: 10px;
   text-align: center;
-  background-color: var(--gray-color);
+  background-color: var(--gray-dark-color);
 }
 
 .footer-text {

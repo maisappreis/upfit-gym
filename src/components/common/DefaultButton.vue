@@ -14,7 +14,7 @@ export default {
 <style scoped>
 .button-area {
     margin: 20px 20px 0px 20px;
-    background-color: var(--red-color);
+    background-color: var(--red-dark-color);
     border: none;
     padding: 10px 20px;
     color: white;
