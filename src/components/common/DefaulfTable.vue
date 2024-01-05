@@ -88,7 +88,7 @@
                 <option value="8">8</option>
             </select>
             <span class="pagination-items"
-                >Total de {{ totalItems }} dados</span
+                >Total de {{ totalItems }} itens</span
             >
         </div>
     </div>
@@ -119,15 +119,23 @@ export default {
         },
 
         totalPages() {
-            return Math.ceil(this.filteredData.length / this.itemsPerPage);
+            if (this.searchedField && this.searchedField.length > 0) {
+                return Math.ceil(this.filteredData.length / this.itemsPerPage);
+            } else {
+                return Math.ceil(this.data.length / this.itemsPerPage);
+            }
         },
 
         totalItems() {
-            return this.filteredData.length;
+            if (this.searchedField && this.searchedField.length > 0) {
+                return this.filteredData.length;
+            } else {
+                return this.data.length;
+            }
         },
 
         filteredList() {
-            if (this.searchedField.length > 0) {
+            if (this.searchedField && this.searchedField.length > 0) {
                 return this.data.reduce((filteredData, item) => {
                     const matched = this.searchedField.some((element) => {
                         const searchedFieldName = element.toLowerCase();
@@ -138,7 +146,7 @@ export default {
                     if (matched) {
                         filteredData.push(item);
                     }
-                    this.filteredData = filteredData
+                    this.filteredData = filteredData;
                     return filteredData;
                 }, []);
             } else {
