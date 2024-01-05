@@ -10,6 +10,8 @@ import { faHandHoldingDollar } from '@fortawesome/free-solid-svg-icons';
 import { faMoneyBillTrendUp } from '@fortawesome/free-solid-svg-icons';
 import { faMoneyBillTransfer } from '@fortawesome/free-solid-svg-icons';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
+import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 
 
 library.add(faHeart)
@@ -19,6 +21,8 @@ library.add(faHandHoldingDollar)
 library.add(faMoneyBillTrendUp)
 library.add(faMoneyBillTransfer)
 library.add(faPlus)
+library.add(faPenToSquare)
+library.add(faTrashCan)
 
 createApp(App)
 .component('font-awesome-icon', FontAwesomeIcon)
