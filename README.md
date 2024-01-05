@@ -2,7 +2,8 @@
 
 This desktop application was developed to manage the company's customers, income and expenses.
 
-foto
+![image](https://github.com/maisappreis/upfit-project/assets/113925909/4a07382e-1902-4a16-b302-83410a3a944d)
+
 
 ## 🛠️ Installation
 ```
