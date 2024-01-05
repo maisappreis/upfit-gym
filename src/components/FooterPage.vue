@@ -1,6 +1,9 @@
 <template>
     <div class="footer-area">
-      FooterPage
+      <span class="footer-text">
+        Desenvolvido com <font-awesome-icon icon="fa-solid fa-heart" class="red" /> por <span class="red">Maisa</span>.
+      </span>
+
     </div>
 </template>
 
@@ -12,9 +15,27 @@ export default {
 
 <style scoped>
 .footer-area {
-  padding: 15px;
-  text-align: center;
-  background-color: gray;
+  position: fixed;
+  top: 94vh;
+  left: 230px;
 
+  width: 83vw;
+  height: 30px;
+  padding: 10px;
+  text-align: center;
+  background-color: black;
+}
+
+.footer-text {
+  color: white;
+  font-size: 16px;
+  text-align: left;
+  /* font-family: 'Marcellus', serif, sans-serif; */
+}
+
+.red {
+    color: red;
+    font-family: 'Dancing Script', Arial, Helvetica, sans-serif;
+    font-size: 20px;
 }
 </style>

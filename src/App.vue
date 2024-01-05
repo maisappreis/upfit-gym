@@ -58,7 +58,7 @@ export default {
   justify-content: left;
 
   margin: 30px;
-  width: 94%;
+  width: 92%;
   height: 90%;  
   background-color: white;
   box-shadow: 2px 2px 20px rgb(148, 148, 148);

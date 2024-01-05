@@ -33,7 +33,7 @@ export default {
   left: 230px;
 
   width: 87vw;
-  height: 80vh;
+  height: 83vh;
   background-color: rgb(232, 232, 232);
 }
 </style>
