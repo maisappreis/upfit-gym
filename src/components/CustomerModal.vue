@@ -9,7 +9,7 @@
             </div>
             <div class="form-item">
                 <label for="frequency">Frequência:</label>
-                <select id="frequency" name="frequency" v-model="frequency">
+                <select id="frequency" name="frequency" v-model="frequency" required>
                     <option value="1x">1x</option>
                     <option value="2x">2x</option>
                     <option value="3x">3x</option>
@@ -23,7 +23,7 @@
             </div>
             <div class="form-item">
                 <label for="plan">Plano:</label>
-                <select id="plan" name="plan" v-model="plan">
+                <select id="plan" name="plan" v-model="plan" required>
                     <option value="mensal">Mensal</option>
                     <option value="trimestral">Trimestral</option>
                     <option value="semestral">Semestral</option>
@@ -75,6 +75,9 @@ export default {
     components: {
         DefaultButton
     },
+    props: {
+        item: Object
+    },
 
     data: function () {
         return {
@@ -106,6 +109,26 @@ export default {
             } catch (error) {
                 console.error('Erro ao salvar os dados.', error);
             }
+        },
+
+        fillModal() {
+            this.customerName = this.item.name;
+            this.frequency = this.item.frequency;
+            this.start = this.item.start;
+            this.plan = this.item.plan;
+            this.value = this.item.value;
+            this.status = this.item.status;
+            this.notes = this.item.notes;
+
+            console.log(this.start)
+            console.log(this.plan)
+            console.log(this.status)
+        }
+    },
+
+    mounted() {
+        if (this.item) {
+            this.fillModal();
         }
     }
 };

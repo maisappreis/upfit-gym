@@ -5,10 +5,15 @@
                 <font-awesome-icon icon="fa-solid fa-plus" class="icon" />
                 Novo Cliente
             </DefaultButton>
-            <DefaultSearch @applySearch="applySearch"/>
+            <DefaultSearch @applySearch="applySearch" />
         </div>
-        <DefaulfTable :columns="columns" :data="customers" :searchedField="searchedField"/>
-        <CustomerModal v-if="showModal" @closeModal="closeModal" />
+        <DefaulfTable
+            :columns="columns"
+            :data="customers"
+            :searchedField="searchedField"
+            @updateCustomer="updateCustomer"
+        />
+        <CustomerModal v-if="showModal" @closeModal="closeModal" :item="item" />
         <div v-if="showModal" class="defocus"></div>
     </div>
 </template>
@@ -20,44 +25,49 @@ import DefaultSearch from "../common/DefaultSearch.vue";
 import CustomerModal from "../CustomerModal.vue";
 import { fetchData } from "../../services/api.js";
 
-
 export default {
     name: "CustomersPage",
     components: {
         DefaulfTable,
         DefaultButton,
         DefaultSearch,
-        CustomerModal
+        CustomerModal,
     },
 
     data() {
         return {
             columns: [
-              { key: "name", name: "Nome" },
-              { key: "frequency", name: "Freq." },
-              { key: "start", name: "Data de início" },
-              { key: "plan", name: "Plano" },
-              { key: "value", name: "Valor" },
-              { key: "status", name: "Status" },
-              { key: "notes", name: "Notas" },
-              { key: "actions", name: "" },
+                { key: "name", name: "Nome" },
+                { key: "frequency", name: "Freq." },
+                { key: "start", name: "Data de início" },
+                { key: "plan", name: "Plano" },
+                { key: "value", name: "Valor" },
+                { key: "status", name: "Status" },
+                { key: "notes", name: "Notas" },
+                { key: "actions", name: "" },
             ],
             customers: [],
             searchedField: [],
-            showModal: false
+            showModal: false,
+            item: {}
         };
     },
 
     methods: {
-        applySearch (field) {
-            this.searchedField = field
+        applySearch(field) {
+            this.searchedField = field;
         },
 
-        addCustomer () {
+        addCustomer() {
             this.showModal = true;
         },
 
-        closeModal () {
+        updateCustomer(item) {
+            this.showModal = true;
+            this.item = item;
+        },
+
+        closeModal() {
             this.showModal = false;
             this.loadData();
         },
@@ -67,13 +77,13 @@ export default {
                 const data = await fetchData();
                 this.customers = data.customers;
             } catch (error) {
-                console.error('Erro ao requisitar os dados...', error);
+                console.error("Erro ao requisitar os dados...", error);
             }
         },
     },
     mounted() {
         this.loadData();
-    }
+    },
 };
 </script>
 

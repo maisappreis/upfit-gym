@@ -15,10 +15,12 @@
                             <font-awesome-icon
                                 icon="fa-solid fa-pen-to-square"
                                 class="icon"
+                                @click="$emit('updateCustomer', item)"
                             />
                             <font-awesome-icon
                                 icon="fa-solid fa-trash-can"
                                 class="icon"
+                                @click="$emit('deleteCustomer', item)"
                             />
                         </span>
                         <span
@@ -102,6 +104,7 @@ export default {
         data: Array,
         searchedField: Array,
     },
+
     data: function () {
         return {
             itemsPerPage: 8,
