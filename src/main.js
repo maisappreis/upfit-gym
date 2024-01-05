@@ -1,11 +1,24 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faHeart } from '@fortawesome/free-solid-svg-icons'
+import { createApp } from 'vue';
+import App from './App.vue';
+import './styles/variables.css';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { faHeart } from '@fortawesome/free-solid-svg-icons';
+import { faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faChartLine } from '@fortawesome/free-solid-svg-icons';
+import { faHandHoldingDollar } from '@fortawesome/free-solid-svg-icons';
+import { faMoneyBillTrendUp } from '@fortawesome/free-solid-svg-icons';
+import { faMoneyBillTransfer } from '@fortawesome/free-solid-svg-icons';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 
 library.add(faHeart)
+library.add(faUsers)
+library.add(faChartLine)
+library.add(faHandHoldingDollar)
+library.add(faMoneyBillTrendUp)
+library.add(faMoneyBillTransfer)
+library.add(faPlus)
 
 createApp(App)
 .component('font-awesome-icon', FontAwesomeIcon)

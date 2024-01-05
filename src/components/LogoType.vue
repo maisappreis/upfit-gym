@@ -1,6 +1,6 @@
 <template>
     <div class="logo-area">
-      LogoType
+      <img src="@/assets/logo.png" alt="Logo">
     </div>
 </template>
 
@@ -12,6 +12,10 @@ export default {
 
 <style scoped>
 .logo-area {
-  height: 100px;
+  height: 150px;
+}
+
+img {
+  height: 100%;
 }
 </style>

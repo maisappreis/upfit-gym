@@ -1,19 +1,31 @@
 <template>
     <div class="hearder-area">
       <div class="text-box" v-if="selectedPage === 'metrics'">
-        <h2 class="title">Métricas</h2>
+        <div class="header-title">
+          <font-awesome-icon icon="fa-solid fa-chart-line" class="icon" />
+          <h2 class="title">Métricas</h2>
+        </div>        
         <p class="subtitle">Estatísticas das entradas e saídas do caixa</p>
       </div>
       <div class="text-box" v-if="selectedPage === 'customers'">
-        <h2 class="title">Clientes</h2>
+        <div class="header-title">
+          <font-awesome-icon icon="fa-solid fa-users" class="icon" />
+          <h2 class="title">Clientes</h2>
+        </div>
         <p class="subtitle">Cadastramento dos clientes</p>
       </div>
       <div class="text-box" v-if="selectedPage === 'revenue'">
-        <h2 class="title">Receitas</h2>
+        <div class="header-title">
+          <font-awesome-icon icon="fa-solid fa-hand-holding-dollar" class="icon" />
+          <h2 class="title">Receitas</h2>
+        </div>
         <p class="subtitle">Descrição</p>
       </div>
       <div class="text-box" v-if="selectedPage === 'expenses'">
-        <h2 class="title">Despesas</h2>
+        <div class="header-title">
+          <font-awesome-icon icon="fa-solid fa-money-bill-transfer" class="icon" />
+          <h2 class="title">Despesas</h2>
+        </div>
         <p class="subtitle">Descrição</p>
       </div>
     </div>
@@ -45,11 +57,20 @@ export default {
   margin-left: 240px;
 }
 
+.header-title {
+  display: flex;
+}
+
 .title {
   margin: 15px 0 6px 0;
 }
 
+.icon {
+  margin: 15px;
+  font-size: 25px;
+}
+
 .subtitle {
-  margin: 10px 0 5px 0;
+  margin: 2px 0 5px 15px;
 }
 </style>

@@ -3,15 +3,23 @@
       <LogoType />
       <ul>
         <li class="option pad" :class="{ selectedOption: selectedPage === 'metrics' }" @click="openContent('metrics')">
-          Métricas
+            <font-awesome-icon icon="fa-solid fa-chart-line" class="icon"
+              :class="{ selectedIcon: selectedPage === 'metrics' }" />
+            Métricas
         </li>
         <li class="option pad" :class="{ selectedOption: selectedPage === 'customers' }" @click="openContent('customers')">
+          <font-awesome-icon icon="fa-solid fa-users" class="icon" 
+            :class="{ selectedIcon: selectedPage === 'customers' }"/>
           Clientes
         </li>
         <li class="option pad" :class="{ selectedOption: selectedPage === 'revenue' }" @click="openContent('revenue')">
+          <font-awesome-icon icon="fa-solid fa-hand-holding-dollar" class="icon" 
+            :class="{ selectedIcon: selectedPage === 'revenue' }"/>
           Receitas
         </li>
         <li class="option pad" :class="{ selectedOption: selectedPage === 'expenses' }" @click="openContent('expenses')">
+          <font-awesome-icon icon="fa-solid fa-money-bill-transfer" class="icon" 
+            :class="{ selectedIcon: selectedPage === 'expenses' }"/>
           Despesas
         </li>
       </ul>
@@ -50,13 +58,19 @@ export default {
   min-width: 230px;
   z-index: 10;
 
-  background-color: rgb(0, 98, 152);
+  background-color: var(--black-color);
   min-height: 100vh;
 }
 
 ul {
   list-style-type: none;
   padding: 10px;
+}
+
+.icon {
+  padding-right: 10px;
+  font-size: 22px;
+  color: white;
 }
 
 .option {
@@ -71,7 +85,7 @@ ul {
 }
 
 .option:hover {
-  background-color: rgb(0, 71, 109);
+  background-color: var(--red-color);
   font-weight: bold;
   color: white;
   text-shadow: 2px 2px 4px #000000;
@@ -82,6 +96,10 @@ ul {
   color: black;
   font-weight: bold;
   text-shadow: 2px 2px 4px #cfcfcf;
+}
+
+.selectedIcon {
+  color: var(--black-color);
 }
 
 </style>

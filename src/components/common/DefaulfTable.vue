@@ -40,7 +40,7 @@ th, td {
 }
 
 th {
-    background-color: #060058;
+    background-color: var(--gray-color);
     color: white;
 }
 
