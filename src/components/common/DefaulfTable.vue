@@ -31,6 +31,9 @@
                         >
                             {{ item[column.key] }}
                         </span>
+                        <span v-else-if="column.key === 'value'">
+                            R$ {{ item[column.key] }}
+                        </span>
                         <span v-else>
                             {{ item[column.key] }}
                         </span>
@@ -97,43 +100,54 @@ export default {
     props: {
         columns: Array,
         data: Array,
+        searchedField: Array,
     },
     data: function () {
         return {
-            input: "",
             itemsPerPage: 8,
             currentPage: 1,
-            filteredData: []
+            filteredData: [],
         };
     },
 
     computed: {
         paginatedData() {
-            this.filterData();
             const startIndex = (this.currentPage - 1) * this.itemsPerPage;
             const endIndex = startIndex + Number(this.itemsPerPage);
 
-            console.log('itemsPerPage:', this.itemsPerPage)
-            console.log('return:', this.data.slice(startIndex, endIndex))
-            return this.data.slice(startIndex, endIndex)
+            return this.filteredList.slice(startIndex, endIndex);
         },
+
         totalPages() {
             return Math.ceil(this.filteredData.length / this.itemsPerPage);
         },
+
         totalItems() {
             return this.filteredData.length;
-        }
+        },
+
+        filteredList() {
+            if (this.searchedField.length > 0) {
+                return this.data.reduce((filteredData, item) => {
+                    const matched = this.searchedField.some((element) => {
+                        const searchedFieldName = element.toLowerCase();
+                        const listedFieldName = item.name.toLowerCase();
+
+                        return listedFieldName.includes(searchedFieldName);
+                    });
+                    if (matched) {
+                        filteredData.push(item);
+                    }
+                    this.filteredData = filteredData
+                    return filteredData;
+                }, []);
+            } else {
+                return this.data;
+            }
+        },
     },
 
     methods: {
-        filterData () {
-            if (this.input !== "") {
-                this.filteredData = this.data
-            } else {
-                this.filteredData = this.data
-            }
-        },
-
         previousPage() {
             if (this.currentPage > 1) {
                 this.currentPage -= 1;

@@ -30,7 +30,6 @@ export default {
   color: white;
   font-size: 16px;
   text-align: left;
-  /* font-family: 'Marcellus', serif, sans-serif; */
 }
 
 .red {
