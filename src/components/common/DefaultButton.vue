@@ -1,6 +1,5 @@
 <template>
-    <button class="button-area">
-        <font-awesome-icon icon="fa-solid fa-plus" class="icon" />
+    <button class="button-area" @click="$emit('executeAction')">
         <slot></slot>
     </button>
 </template>
@@ -24,10 +23,6 @@ export default {
     font-weight: bold;
     font-size: 15px;
     border-radius: 8px;
-}
-
-.icon {
-    margin-right: 10px;
-    font-size: 18px;
+    cursor: pointer;
 }
 </style>
