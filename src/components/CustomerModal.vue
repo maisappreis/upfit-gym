@@ -68,6 +68,7 @@
 
 <script>
 import DefaultButton from "./common/DefaultButton.vue";
+import { postData } from "../services/api.js";
 
 export default {
     name: "CustomerModal",
@@ -88,18 +89,23 @@ export default {
     },
 
     methods: {
-        saveCustomer() {
-            let newCustomer = {
-                name: this.customerName,
-                frequency: this.frequency,
-                start: this.start,
-                plan: this.plan,
-                value: this.value,
-                status: this.status,
-                notes: this.notes
-            }
+        async saveCustomer() {
+            try {
+                let newCustomer = {
+                    name: this.customerName,
+                    frequency: this.frequency,
+                    start: this.start,
+                    plan: this.plan,
+                    value: this.value,
+                    status: this.status,
+                    notes: this.notes,
+                    actions: ""
+                }
 
-            console.log('newCustomer', newCustomer)
+                await postData(newCustomer);
+            } catch (error) {
+                console.error('Erro ao salvar os dados.', error);
+            }
         }
     }
 };

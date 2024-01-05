@@ -1,0 +1,179 @@
+{
+  "customers": [
+    {
+      "id": 1,
+      "name": "John Doe",
+      "frequency": "2x",
+      "start": "22/01/2023",
+      "plan": "Mensal",
+      "value": 250,
+      "status": "Ativo",
+      "notes": "Anotações",
+      "actions": ""
+    },
+    {
+      "id": 2,
+      "name": "Jane Doe",
+      "frequency": "2x",
+      "start": "22/01/2023",
+      "plan": "Mensal",
+      "value": 250,
+      "status": "Ativo",
+      "notes": "Anotações",
+      "actions": ""
+    },
+    {
+      "id": 3,
+      "name": "Jane Doe",
+      "frequency": "2x",
+      "start": "22/01/2023",
+      "plan": "Mensal",
+      "value": 250,
+      "status": "Inativo",
+      "notes": "Anotações",
+      "actions": ""
+    },
+    {
+      "id": 4,
+      "name": "Jane Doe",
+      "frequency": "2x",
+      "start": "22/01/2023",
+      "plan": "Mensal",
+      "value": 250,
+      "status": "Ativo",
+      "notes": "Anotações",
+      "actions": ""
+    },
+    {
+      "id": 5,
+      "name": "Jane Doe",
+      "frequency": "2x",
+      "start": "22/01/2023",
+      "plan": "Mensal",
+      "value": 250,
+      "status": "Ativo",
+      "notes": "Anotações",
+      "actions": ""
+    },
+    {
+      "id": 6,
+      "name": "Maisa Preis",
+      "frequency": "2x",
+      "start": "22/01/2023",
+      "plan": "Mensal",
+      "value": 250,
+      "status": "Inativo",
+      "notes": "Anotações",
+      "actions": ""
+    },
+    {
+      "id": 7,
+      "name": "Jane Doe",
+      "frequency": "2x",
+      "start": "22/01/2023",
+      "plan": "Mensal",
+      "value": 250,
+      "status": "Ativo",
+      "notes": "Anotações",
+      "actions": ""
+    },
+    {
+      "id": 8,
+      "name": "Jane Doe",
+      "frequency": "2x",
+      "start": "22/01/2023",
+      "plan": "Mensal",
+      "value": 250,
+      "status": "Ativo",
+      "notes": "Anotações",
+      "actions": ""
+    },
+    {
+      "id": 9,
+      "name": "Jane Doe",
+      "frequency": "2x",
+      "start": "22/01/2023",
+      "plan": "Mensal",
+      "value": 250,
+      "status": "Ativo",
+      "notes": "Anotações",
+      "actions": ""
+    },
+    {
+      "id": 10,
+      "name": "Jane Doe",
+      "frequency": "2x",
+      "start": "22/01/2023",
+      "plan": "Mensal",
+      "value": 250,
+      "status": "Inativo",
+      "notes": "Anotações",
+      "actions": ""
+    },
+    {
+      "id": 11,
+      "name": "Renan Bernhardt",
+      "frequency": "2x",
+      "start": "22/01/2023",
+      "plan": "Mensal",
+      "value": 250,
+      "status": "Ativo",
+      "notes": "Anotações",
+      "actions": ""
+    },
+    {
+      "id": 12,
+      "name": "Jane Doe",
+      "frequency": "2x",
+      "start": "22/01/2023",
+      "plan": "Mensal",
+      "value": 250,
+      "status": "Inativo",
+      "notes": "Anotações",
+      "actions": ""
+    },
+    {
+      "id": 13,
+      "name": "Jane Doe",
+      "frequency": "2x",
+      "start": "22/01/2023",
+      "plan": "Mensal",
+      "value": 250,
+      "status": "Ativo",
+      "notes": "Anotações",
+      "actions": ""
+    },
+    {
+      "id": 14,
+      "name": "Jane Doe",
+      "frequency": "2x",
+      "start": "22/01/2023",
+      "plan": "Mensal",
+      "value": 250,
+      "status": "Inativo",
+      "notes": "Anotações",
+      "actions": ""
+    },
+    {
+      "id": 15,
+      "name": "Jane Doe",
+      "frequency": "2x",
+      "start": "22/01/2023",
+      "plan": "Mensal",
+      "value": 250,
+      "status": "Ativo",
+      "notes": "Anotações",
+      "actions": ""
+    }
+  ],
+  "products": [
+    {
+      "id": 1,
+      "name": "Product A"
+    },
+    {
+      "id": 2,
+      "name": "Product B"
+    }
+  ]
+}

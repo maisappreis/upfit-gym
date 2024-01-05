@@ -7,7 +7,7 @@
             </DefaultButton>
             <DefaultSearch @applySearch="applySearch"/>
         </div>
-        <DefaulfTable :columns="columns" :data="users" :searchedField="searchedField"/>
+        <DefaulfTable :columns="columns" :data="customers" :searchedField="searchedField"/>
         <CustomerModal v-if="showModal" @closeModal="closeModal" />
         <div v-if="showModal" class="defocus"></div>
     </div>
@@ -18,6 +18,8 @@ import DefaulfTable from "../common/DefaulfTable.vue";
 import DefaultButton from "../common/DefaultButton.vue";
 import DefaultSearch from "../common/DefaultSearch.vue";
 import CustomerModal from "../CustomerModal.vue";
+import { fetchData } from "../../services/api.js";
+
 
 export default {
     name: "CustomersPage",
@@ -40,23 +42,7 @@ export default {
               { key: "notes", name: "Notas" },
               { key: "actions", name: "" },
             ],
-            users: [
-                { name: "John Doe", frequency: "2x", start: "22/01/2023", plan: "Mensal", value: 250, status: "Ativo", notes: "Anotações", actions: "icone" },
-                { name: "Jane Doe", frequency: "2x", start: "22/01/2023", plan: "Mensal", value: 250, status: "Ativo", notes: "Anotações", actions: "icone" },
-                { name: "Jane Doe", frequency: "2x", start: "22/01/2023", plan: "Mensal", value: 250, status: "Inativo", notes: "Anotações", actions: "icone" },
-                { name: "Jane Doe", frequency: "2x", start: "22/01/2023", plan: "Mensal", value: 250, status: "Ativo", notes: "Anotações", actions: "icone" },
-                { name: "Jane Doe", frequency: "2x", start: "22/01/2023", plan: "Mensal", value: 250, status: "Ativo", notes: "Anotações", actions: "icone" },
-                { name: "Maisa Preis", frequency: "2x", start: "22/01/2023", plan: "Mensal", value: 250, status: "Inativo", notes: "Anotações", actions: "icone" },
-                { name: "Jane Doe", frequency: "2x", start: "22/01/2023", plan: "Mensal", value: 250, status: "Ativo", notes: "Anotações", actions: "icone" },
-                { name: "Jane Doe", frequency: "2x", start: "22/01/2023", plan: "Mensal", value: 250, status: "Ativo", notes: "Anotações", actions: "icone" },
-                { name: "Jane Doe", frequency: "2x", start: "22/01/2023", plan: "Mensal", value: 250, status: "Ativo", notes: "Anotações", actions: "icone" },
-                { name: "Jane Doe", frequency: "2x", start: "22/01/2023", plan: "Mensal", value: 250, status: "Inativo", notes: "Anotações", actions: "icone" },
-                { name: "Renan Bernhardt", frequency: "2x", start: "22/01/2023", plan: "Mensal", value: 250, status: "Ativo", notes: "Anotações", actions: "icone" },
-                { name: "Jane Doe", frequency: "2x", start: "22/01/2023", plan: "Mensal", value: 250, status: "Inativo", notes: "Anotações", actions: "icone" },
-                { name: "Jane Doe", frequency: "2x", start: "22/01/2023", plan: "Mensal", value: 250, status: "Ativo", notes: "Anotações", actions: "icone" },
-                { name: "Jane Doe", frequency: "2x", start: "22/01/2023", plan: "Mensal", value: 250, status: "Inativo", notes: "Anotações", actions: "icone" },
-                { name: "Jane Doe", frequency: "2x", start: "22/01/2023", plan: "Mensal", value: 250, status: "Ativo", notes: "Anotações", actions: "icone" },
-            ],
+            customers: [],
             searchedField: [],
             showModal: false
         };
@@ -73,7 +59,20 @@ export default {
 
         closeModal () {
             this.showModal = false;
-        }
+            this.loadData();
+        },
+
+        async loadData() {
+            try {
+                const data = await fetchData();
+                this.customers = data.customers;
+            } catch (error) {
+                console.error('Erro ao requisitar os dados...', error);
+            }
+        },
+    },
+    mounted() {
+        this.loadData();
     }
 };
 </script>
