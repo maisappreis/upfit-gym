@@ -1,5 +1,5 @@
 <template>
-    <div class="expenses-area">
+    <div class="content-area">
         ExpensesPage
     </div>
 </template>
@@ -11,9 +11,4 @@ export default {
 </script>
 
 <style scoped>
-.expenses-area {
-  background-color: rgb(220, 220, 220);
-  width: 100%;
-  height: 100%;
-}
 </style>

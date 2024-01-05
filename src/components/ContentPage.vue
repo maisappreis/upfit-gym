@@ -1,6 +1,7 @@
 <template>
-    <div>
+    <div class="content">
       <MetricsPage v-if="selectedPage === 'metrics'" />
+      <CustomersPage v-if="selectedPage === 'customers'" />
       <RevenuePage v-if="selectedPage === 'revenue'" />
       <ExpensesPage v-if="selectedPage === 'expenses'" />
     </div>
@@ -8,6 +9,7 @@
 
 <script>
 import MetricsPage from './content/MetricsPage.vue';
+import CustomersPage from './content/CustomersPage.vue';
 import RevenuePage from './content/RevenuePage.vue';
 import ExpensesPage from './content/ExpensesPage.vue';
 
@@ -15,7 +17,7 @@ import ExpensesPage from './content/ExpensesPage.vue';
 export default {
   name: 'ContentPage',
   components: {
-    RevenuePage, ExpensesPage, MetricsPage
+    RevenuePage, ExpensesPage, MetricsPage, CustomersPage
   },
   props: {
     selectedPage: String
@@ -24,4 +26,14 @@ export default {
 </script>
 
 <style scoped>
+
+.content {
+  position: fixed;
+  top: 90px;
+  left: 230px;
+
+  width: 87vw;
+  height: 80vh;
+  background-color: rgb(232, 232, 232);
+}
 </style>

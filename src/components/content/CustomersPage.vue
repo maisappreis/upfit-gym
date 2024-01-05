@@ -10,7 +10,7 @@ import DefaulfTable from '../common/DefaulfTable.vue';
 import DefaultButton from '../common/DefaultButton.vue';
 
 export default {
-  name: 'RevenuePage',
+  name: 'CustomersPage',
   components: {
     DefaulfTable, DefaultButton
   },

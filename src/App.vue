@@ -34,6 +34,10 @@ export default {
 </script>
 
 <style>
+* {
+  font-family: 'Montserrat', sans-serif;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -42,39 +46,22 @@ export default {
   color: black;
 }
 
-/* .app-area {
-  display: grid;
-  grid-template-areas:
-    'sidebar header header header header header '
-    'sidebar content content content content content'
-    'sidebar content content content content content'
-    'sidebar content content content content content'
-    'sidebar content content content content content'
-    'sidebar content content content content content'
-    'sidebar content content content content content'
-    'sidebar footer footer footer footer footer';
-  height: 100vh;
-  margin: 0;
-}
-
-.header { grid-area: header; }
-.sidebar { grid-area: sidebar; }
-.content { grid-area: content; }
-.footer { grid-area: footer; }
-
-.grid-container > div {
-  font-size: 30px;
-} */
-
 .app-area {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
 
-.content {
-  flex: 1;
-  padding: 20px;
+.content-area {
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+
+  margin: 30px;
+  width: 94%;
+  height: 90%;  
+  background-color: white;
+  box-shadow: 2px 2px 20px rgb(148, 148, 148);
 }
 
 </style>

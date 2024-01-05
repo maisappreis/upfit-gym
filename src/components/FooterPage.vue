@@ -14,5 +14,7 @@ export default {
 .footer-area {
   padding: 15px;
   text-align: center;
+  background-color: gray;
+
 }
 </style>
