@@ -1,16 +1,27 @@
-# frontend2
+# Desktop Application for a Gym Company
 
-## Project setup
+This desktop application was developed to manage the company's customers, income and expenses.
+
+foto
+
+## 🛠️ Installation
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+## 🌱 On Development
+
+To run in the browser:
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
+To run in the desktop:
+```
+npm run electron:serve
+```
+
+## 💻 On Production
 ```
 npm run build
 ```
