@@ -1,0 +1,13 @@
+.defocus {
+    position: absolute;
+    top: 0;
+    left: 0px;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.611);
+}
+
+.icon-add {
+    margin-right: 10px;
+    font-size: 18px;
+}

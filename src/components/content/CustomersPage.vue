@@ -2,7 +2,7 @@
     <div class="content-area">
         <div style="display: flex; justify-content: space-between">
             <DefaultButton @executeAction="addCustomer">
-                <font-awesome-icon icon="fa-solid fa-plus" class="icon" />
+                <font-awesome-icon icon="fa-solid fa-plus" class="icon-add" />
                 Novo Cliente
             </DefaultButton>
             <DefaultSearch @applySearch="applySearch" />
@@ -13,7 +13,9 @@
             :searchedField="searchedField"
             @updateCustomer="updateCustomer"
         />
-        <CustomerModal v-if="showModal" @closeModal="closeModal" :item="item" />
+        <DefaultModal v-if="showModal">
+            <CustomersForm :item="item" @closeModal="closeModal" />
+        </DefaultModal>
         <div v-if="showModal" class="defocus"></div>
     </div>
 </template>
@@ -22,7 +24,8 @@
 import DefaulfTable from "../common/DefaulfTable.vue";
 import DefaultButton from "../common/DefaultButton.vue";
 import DefaultSearch from "../common/DefaultSearch.vue";
-import CustomerModal from "../CustomerModal.vue";
+import DefaultModal from "../common/DefaultModal.vue";
+import CustomersForm from "../forms/CustomersForm.vue";
 import { fetchData } from "../../services/api.js";
 
 export default {
@@ -31,7 +34,8 @@ export default {
         DefaulfTable,
         DefaultButton,
         DefaultSearch,
-        CustomerModal,
+        DefaultModal,
+        CustomersForm
     },
 
     data() {
@@ -88,17 +92,4 @@ export default {
 </script>
 
 <style scoped>
-.defocus {
-    position: absolute;
-    top: 0;
-    left: 0px;
-    height: 100vh;
-    width: 100vw;
-    background-color: rgba(0, 0, 0, 0.611);
-}
-
-.icon {
-    margin-right: 10px;
-    font-size: 18px;
-}
 </style>

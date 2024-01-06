@@ -1,13 +1,17 @@
 <template>
     <div class="content-area">
-      <div style="display: flex; justify-content: space-between">
+        <div style="display: flex; justify-content: space-between">
             <DefaultButton @executeAction="addRevenue">
-                <font-awesome-icon icon="fa-solid fa-plus" class="icon" />
+                <font-awesome-icon icon="fa-solid fa-plus" class="icon-add" />
                 Nova Receita
             </DefaultButton>
             <DefaultSearch @applySearch="applySearch" />
         </div>
         <DefaulfTable :columns="columns" :data="revenue" />
+        <DefaultModal v-if="showModal">
+            <CustomersForm :item="item" @closeModal="closeModal" />
+        </DefaultModal>
+        <div v-if="showModal" class="defocus"></div>
     </div>
 </template>
 
@@ -15,12 +19,18 @@
 import DefaulfTable from "../common/DefaulfTable.vue";
 import DefaultButton from "../common/DefaultButton.vue";
 import DefaultSearch from "../common/DefaultSearch.vue";
+import DefaultModal from "../common/DefaultModal.vue";
+import CustomersForm from "../forms/CustomersForm.vue";
 import { fetchData } from "../../services/api.js";
 
 export default {
     name: "RevenuePage",
     components: {
-        DefaulfTable, DefaultButton, DefaultSearch
+        DefaulfTable,
+        DefaultButton,
+        DefaultSearch,
+        DefaultModal,
+        CustomersForm
     },
 
     data() {
@@ -37,34 +47,44 @@ export default {
                 { key: "actions", name: "" },
             ],
             revenue: [],
+            showModal: false,
+            item: {},
         };
     },
 
     methods: {
+        addRevenue() {
+            this.showModal = true;
+        },
+
+        closeModal() {
+            this.showModal = false;
+            this.loadData();
+        },
+
         async loadData() {
             try {
                 const data = await fetchData();
-                this.customers = data.customers
+                this.customers = data.customers;
                 this.revenue = data.revenue;
 
-                this.updateRevenue()
+                this.customers.forEach((customer) => {
+                    const matchingRevenue = this.revenue.find(
+                        (revenue) =>
+                            revenue.idCustomer === customer.id.toString()
+                    );
+
+                    if (matchingRevenue) {
+                        matchingRevenue.name = customer.name;
+                        matchingRevenue.value = customer.value;
+                        matchingRevenue.start = customer.start;
+                        matchingRevenue.plan = customer.plan;
+                    }
+                });
             } catch (error) {
                 console.error("Erro ao requisitar os dados...", error);
             }
         },
-
-        updateRevenue() {
-          this.customers.forEach(customer => {
-          const matchingRevenue = this.revenue.find(revenue => revenue.idCustomer === customer.id.toString());
-
-          if (matchingRevenue) {
-            matchingRevenue.name = customer.name;
-            matchingRevenue.value = customer.value;
-            matchingRevenue.start = customer.start;
-            matchingRevenue.plan = customer.plan;
-          }
-        });
-        }
     },
 
     mounted() {
@@ -74,8 +94,4 @@ export default {
 </script>
 
 <style scoped>
-.icon {
-    margin-right: 10px;
-    font-size: 18px;
-}
 </style>

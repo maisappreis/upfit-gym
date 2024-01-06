@@ -1,5 +1,5 @@
 <template>
-    <div class="modal-area">
+    <div>
         <h2>Adicionar Novo Cliente</h2>
         <!-- <form action="/submit_form" method="post" class="form-area"> -->
         <div class="form-area">
@@ -67,14 +67,16 @@
 </template>
 
 <script>
-import DefaultButton from "./common/DefaultButton.vue";
-import { postData } from "../services/api.js";
+import DefaultButton from "../common/DefaultButton.vue";
+import { postData } from "../../services/api.js";
 
 export default {
-    name: "CustomerModal",
-    components: {
+  name: "CustomersForm",
+
+  components: {
         DefaultButton
     },
+
     props: {
         item: Object
     },
@@ -131,20 +133,10 @@ export default {
             this.fillModal();
         }
     }
-};
+}
 </script>
 
 <style scoped>
-.modal-area {
-    position: absolute;
-    top: 30px;
-    left: 20vw;
-    background-color: white;
-    height: 75vh;
-    width: 40vw;
-    z-index: 12;
-    border-radius: 10px;
-}
 
 .form-area {
     display: flex;
