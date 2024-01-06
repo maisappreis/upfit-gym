@@ -13,7 +13,7 @@
     },
     {
       "id": 2,
-      "name": "Jane Doe",
+      "name": "Maria Jones",
       "frequency": "2x",
       "start": "22/01/2023",
       "plan": "Mensal",
@@ -24,7 +24,7 @@
     },
     {
       "id": 3,
-      "name": "Jane Doe",
+      "name": "Julia Hills",
       "frequency": "2x",
       "start": "22/01/2023",
       "plan": "Mensal",
@@ -166,14 +166,33 @@
       "actions": ""
     }
   ],
-  "products": [
+  "revenue": [
     {
       "id": 1,
-      "name": "Product A"
+      "idCustomer": "1",
+      "year": 2024,
+      "month": "Janeiro",
+      "notes": "Anotações",
+      "paid": false,
+      "actions": ""
     },
     {
       "id": 2,
-      "name": "Product B"
+      "idCustomer": "2",
+      "year": 2024,
+      "month": "Janeiro",
+      "notes": "Anotações",
+      "paid": true,
+      "actions": ""
+    },
+    {
+      "id": 3,
+      "idCustomer": "3",
+      "year": 2024,
+      "month": "Janeiro",
+      "notes": "Anotações",
+      "paid": false,
+      "actions": ""
     }
   ]
 }

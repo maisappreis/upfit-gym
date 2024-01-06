@@ -49,7 +49,7 @@ export default {
             customers: [],
             searchedField: [],
             showModal: false,
-            item: {}
+            item: {},
         };
     },
 

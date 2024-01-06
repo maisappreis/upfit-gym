@@ -36,6 +36,13 @@
                         <span v-else-if="column.key === 'value'">
                             R$ {{ item[column.key] }}
                         </span>
+                        <span v-else-if="column.key === 'paid'" class="status"
+                            :class="{
+                                active: item[column.key] === true,
+                                inactive: item[column.key] === false,
+                            }">
+                            {{ item[column.key] ? "Pago" : "À Pagar" }}
+                        </span>
                         <span v-else>
                             {{ item[column.key] }}
                         </span>
