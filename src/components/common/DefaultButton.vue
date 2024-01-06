@@ -17,7 +17,7 @@ export default {
     border: none;
     padding: 12px 20px;
     color: white;
-    width: 180px;
+    width: 200px;
 
     font-family: "Montserrat", sans-serif;
     font-weight: bold;

@@ -19,14 +19,14 @@
           <font-awesome-icon icon="fa-solid fa-hand-holding-dollar" class="icon" />
           <h2 class="title">Receitas</h2>
         </div>
-        <p class="subtitle">Descrição</p>
+        <p class="subtitle">Controle do recebimento das mensalidades dos clientes</p>
       </div>
       <div class="text-box" v-if="selectedPage === 'expenses'">
         <div class="header-title">
           <font-awesome-icon icon="fa-solid fa-money-bill-transfer" class="icon" />
           <h2 class="title">Despesas</h2>
         </div>
-        <p class="subtitle">Descrição</p>
+        <p class="subtitle">Controle do pagamento das contas</p>
       </div>
     </div>
 </template>

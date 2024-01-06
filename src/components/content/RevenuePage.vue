@@ -7,9 +7,13 @@
             </DefaultButton>
             <DefaultSearch @applySearch="applySearch" />
         </div>
-        <DefaulfTable :columns="columns" :data="revenue" />
+        <DefaulfTable
+            :columns="columns"
+            :data="revenue"
+            :searchedField="searchedField"
+        />
         <DefaultModal v-if="showModal">
-            <CustomersForm :item="item" @closeModal="closeModal" />
+            <RevenueForm :item="item" @closeModal="closeModal" />
         </DefaultModal>
         <div v-if="showModal" class="defocus"></div>
     </div>
@@ -20,7 +24,7 @@ import DefaulfTable from "../common/DefaulfTable.vue";
 import DefaultButton from "../common/DefaultButton.vue";
 import DefaultSearch from "../common/DefaultSearch.vue";
 import DefaultModal from "../common/DefaultModal.vue";
-import CustomersForm from "../forms/CustomersForm.vue";
+import RevenueForm from "../forms/RevenueForm.vue";
 import { fetchData } from "../../services/api.js";
 
 export default {
@@ -30,7 +34,7 @@ export default {
         DefaultButton,
         DefaultSearch,
         DefaultModal,
-        CustomersForm
+        RevenueForm,
     },
 
     data() {
@@ -47,12 +51,17 @@ export default {
                 { key: "actions", name: "" },
             ],
             revenue: [],
+            searchedField: [],
             showModal: false,
             item: {},
         };
     },
 
     methods: {
+        applySearch(field) {
+            this.searchedField = field;
+        },
+
         addRevenue() {
             this.showModal = true;
         },

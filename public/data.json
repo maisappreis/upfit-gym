@@ -194,5 +194,37 @@
       "paid": false,
       "actions": ""
     }
+  ],
+  "expenses": [
+    {
+      "id": 1,
+      "year": 2024,
+      "month": "Janeiro",
+      "name": "Aluguel",
+      "due_date": "23/01/2024",
+      "paid": false,
+      "checkbox": false,
+      "actions": ""
+    },
+    {
+      "id": 2,
+      "year": 2024,
+      "month": "Janeiro",
+      "name": "Condomínio",
+      "due_date": "23/01/2024",
+      "paid": true,
+      "checkbox": true,
+      "actions": ""
+    },
+    {
+      "id": 3,
+      "year": 2024,
+      "month": "Janeiro",
+      "name": "Energia elétrica",
+      "due_date": "23/01/2024",
+      "paid": false,
+      "checkbox": false,
+      "actions": ""
+    }
   ]
 }

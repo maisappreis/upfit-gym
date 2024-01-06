@@ -1,6 +1,6 @@
 <template>
     <input class="search-area" type="text"
-        placeholder="Pesquise vários itens pelo nome separados por virgula..."
+        placeholder="Pesquisar nomes separados por vírgula..."
         v-model="search" @keyup.enter="applyFilter">
 </template>
 
@@ -38,7 +38,7 @@ export default {
 .search-area {
     margin: 20px 20px 0px 20px;
     padding: 12px;
-    width: 500px;
+    width: 400px;
 
     font-weight: bold;
     font-size: 15px;

@@ -3,14 +3,22 @@
         <table class="table-area">
             <thead>
                 <tr>
-                    <th v-for="column in columns" :key="column.key">
+                    <th
+                        v-for="column in columns"
+                        :key="column.key"
+                        style="text-align: center"
+                    >
                         {{ column.name }}
                     </th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="(item, index) in paginatedData" :key="index">
-                    <td v-for="column in columns" :key="column.key">
+                    <td
+                        v-for="column in columns"
+                        :key="column.key"
+                        style="text-align: center"
+                    >
                         <span v-if="column.key === 'actions'">
                             <font-awesome-icon
                                 icon="fa-solid fa-pen-to-square"
@@ -36,12 +44,23 @@
                         <span v-else-if="column.key === 'value'">
                             R$ {{ item[column.key] }}
                         </span>
-                        <span v-else-if="column.key === 'paid'" class="status"
+                        <span
+                            v-else-if="column.key === 'paid'"
+                            class="status"
                             :class="{
                                 active: item[column.key] === true,
                                 inactive: item[column.key] === false,
-                            }">
+                            }"
+                        >
                             {{ item[column.key] ? "Pago" : "À Pagar" }}
+                        </span>
+                        <span v-else-if="column.key === 'checkbox'">
+                            <input
+                                class="checkbox"
+                                type="checkbox"
+                                :checked="item[column.key]"
+                                @change="handleCheckboxChange"
+                            />
                         </span>
                         <span v-else>
                             {{ item[column.key] }}
@@ -117,6 +136,7 @@ export default {
             itemsPerPage: 8,
             currentPage: 1,
             filteredData: [],
+            checkboxState: false,
         };
     },
 
@@ -166,6 +186,13 @@ export default {
     },
 
     methods: {
+        handleCheckboxChange(event) {
+            let checkboxState = event.target.checked;
+
+            // Dar uma emit para a ExpensesPage e fazer um PATCH para salvar a alteração.
+            console.log("checkboxState", checkboxState);
+        },
+
         previousPage() {
             if (this.currentPage > 1) {
                 this.currentPage -= 1;
@@ -298,5 +325,10 @@ tr:hover {
     font-weight: bold;
     font-size: 14px;
     margin: 10px;
+}
+
+.checkbox {
+    transform: scale(1.5);
+    margin-right: 5px;
 }
 </style>
