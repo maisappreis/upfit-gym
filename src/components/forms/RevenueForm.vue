@@ -8,7 +8,7 @@
                     class="form-select"
                     id="plan"
                     name="plan"
-                    v-model="customerName"
+                    v-model="customer"
                     required
                 >
                     <option value="mensal">Mensal</option>
@@ -41,7 +41,7 @@
             <div class="form-buttons-area">
                 <DefaultButton
                     style="background-color: green"
-                    @executeAction="createRevenue"
+                    @executeAction="saveRevenue"
                 >
                     Salvar
                 </DefaultButton>
@@ -68,18 +68,28 @@ export default {
     },
 
     props: {
+        item: Object,
+        action: String,
         modalTitle: String,
     },
 
     data: function () {
         return {
-            customerName: "",
+            customer: "",
             value: 0,
             notes: "",
         };
     },
 
     methods: {
+        async saveRevenue() {
+            if (this.action === "create") {
+                this.createRevenue();
+            } else {
+                this.updateRevenue();
+            }
+        },
+
         async createRevenue() {
             try {
                 let newRevenue = {
@@ -97,6 +107,20 @@ export default {
                 console.error("Erro ao criar uma receita.", error);
             }
         },
+
+        async updateRevenue() {
+            console.log("Faz PATCH");
+        },
+
+        fillModal() {
+            this.customer = this.item.name;
+        },
+    },
+
+    mounted() {
+        if (this.action === "update") {
+            this.fillModal();
+        }
     },
 };
 </script>

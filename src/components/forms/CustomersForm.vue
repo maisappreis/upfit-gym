@@ -138,6 +138,7 @@ export default {
 
     props: {
         item: Object,
+        action: String,
         modalTitle: String,
     },
 
@@ -155,6 +156,14 @@ export default {
 
     methods: {
         async saveCustomer() {
+            if (this.action === "create") {
+                this.createCustomer();
+            } else {
+                this.updateCustomer();
+            }
+        },
+
+        async createCustomer() {
             try {
                 let newCustomer = {
                     name: this.customerName,
@@ -166,11 +175,14 @@ export default {
                     notes: this.notes,
                     actions: "",
                 };
-
-                await postData("customers", newCustomer);
+                await postData("customers", JSON.stringify(newCustomer));
             } catch (error) {
-                console.error("Erro ao salvar os dados.", error);
+                console.error("Erro ao adicionar cliente.", error);
             }
+        },
+
+        async updateCustomer() {
+            console.log("Faz PATCH");
         },
 
         fillModal() {
@@ -189,7 +201,7 @@ export default {
     },
 
     mounted() {
-        if (this.item) {
+        if (this.action === "update") {
             this.fillModal();
         }
     },

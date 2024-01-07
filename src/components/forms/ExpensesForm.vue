@@ -29,7 +29,7 @@
             <div class="form-buttons-area">
                 <DefaultButton
                     style="background-color: green"
-                    @executeAction="saveCustomer"
+                    @executeAction="saveExpense"
                 >
                     Salvar
                 </DefaultButton>
@@ -56,6 +56,8 @@ export default {
     },
 
     props: {
+        item: Object,
+        action: String,
         modalTitle: String,
     },
 
@@ -67,7 +69,15 @@ export default {
     },
 
     methods: {
-        async saveCustomer() {
+        async saveExpense() {
+            if (this.action === "create") {
+                this.createExpense();
+            } else {
+                this.updateExpense();
+            }
+        },
+
+        async createExpense() {
             try {
                 let newExpense = {
                     year: 2024, // Mês e ano deve ser pego da própria data de vendimento.
@@ -82,6 +92,21 @@ export default {
                 console.error("Erro ao salvar os dados.", error);
             }
         },
+
+        async updateExpense() {
+            console.log("Faz PATCH");
+        },
+
+        fillModal() {
+            this.bill = this.item.name;
+            this.due_date = this.item.due_date;
+        },
+    },
+
+    mounted() {
+        if (this.action === "update") {
+            this.fillModal();
+        }
     },
 };
 </script>

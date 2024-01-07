@@ -24,6 +24,7 @@
             <ExpensesForm
                 v-else
                 :item="item"
+                :action="action"
                 :modalTitle="modalTitle"
                 @closeModal="closeModal"
             />
@@ -50,7 +51,7 @@ export default {
         DefaultSearch,
         DefaultModal,
         ExpensesForm,
-        DeleteMessage
+        DeleteMessage,
     },
 
     data() {
@@ -103,7 +104,7 @@ export default {
             this.action = "delete";
 
             this.deleteMessage = `Tem certeza que deseja excluir o pagamento da despesa
-                                    de ${item.name } referente ao mês de ${item.month}/${item.year}?`
+                                    de ${item.name} referente ao mês de ${item.month}/${item.year}?`;
         },
 
         closeModal() {

@@ -24,6 +24,7 @@
             <CustomersForm
                 v-else
                 :item="item"
+                :action="action"
                 :modalTitle="modalTitle"
                 @closeModal="closeModal"
             />
@@ -103,7 +104,7 @@ export default {
             this.showModal = true;
             this.action = "delete";
 
-            this.deleteMessage = `Tem certeza que deseja excluir o cliente ${item.name }?`
+            this.deleteMessage = `Tem certeza que deseja excluir o cliente ${item.name}?`;
         },
 
         closeModal() {

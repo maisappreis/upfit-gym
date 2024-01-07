@@ -25,6 +25,7 @@
             <RevenueForm
                 v-else
                 :item="item"
+                :action="action"
                 :modalTitle="modalTitle"
                 @closeModal="closeModal"
             />
@@ -50,7 +51,7 @@ export default {
         DefaultSearch,
         DefaultModal,
         RevenueForm,
-        DeleteMessage
+        DeleteMessage,
     },
 
     data() {
@@ -106,7 +107,7 @@ export default {
             this.action = "delete";
 
             this.deleteMessage = `Tem certeza que deseja excluir o recebimento da mensalidade do 
-                                    cliente ${item.name } referente ao mês de ${item.month}/${item.year}?`
+                                    cliente ${item.name} referente ao mês de ${item.month}/${item.year}?`;
         },
 
         closeModal() {
