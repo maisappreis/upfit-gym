@@ -46,11 +46,12 @@
                         </span>
                         <span
                             v-else-if="column.key === 'paid'"
-                            class="status"
+                            class="status paid"
                             :class="{
                                 active: item[column.key] === true,
                                 inactive: item[column.key] === false,
                             }"
+                            @click="changePaidStatus(item)"
                         >
                             {{ item[column.key] ? "Pago" : "À Pagar" }}
                         </span>
@@ -123,6 +124,8 @@
 </template>
 
 <script>
+import { updateData } from "../../services/api.js";
+
 export default {
     name: "DefaulfTable",
     props: {
@@ -186,6 +189,24 @@ export default {
     },
 
     methods: {
+        async changePaidStatus(item) {
+            console.log("Funciona", item);
+
+            let updatedPaidStatus = {
+                paid: !item.paid,
+            };
+
+            try {
+                await updateData(item.id, "revenue", updatedPaidStatus);
+                this.$emit("updateTable");
+            } catch (error) {
+                console.error(
+                    "Erro ao atualizar o status de pagamento...",
+                    error
+                );
+            }
+        },
+
         handleCheckboxChange(event) {
             let checkboxState = event.target.checked;
 
@@ -273,6 +294,10 @@ tr:hover {
     color: white;
     padding: 3px 10px;
     border-radius: 8px;
+}
+
+.paid {
+    cursor: pointer;
 }
 
 .active {
