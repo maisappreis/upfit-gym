@@ -15,16 +15,16 @@
             @deleteItem="showDeleteModal"
         />
         <DefaultModal v-if="showModal">
-            <CustomersForm
-                v-if="action === 'update'"
-                :item="item"
-                :modalTitle="modalTitle"
-                @closeModal="closeModal"
-            />
             <DeleteMessage
-                v-else
+                v-if="action === 'delete'"
                 :deleteMessage="deleteMessage"
                 @deleteItem="deleteCustomer"
+                @closeModal="closeModal"
+            />
+            <CustomersForm
+                v-else
+                :item="item"
+                :modalTitle="modalTitle"
                 @closeModal="closeModal"
             />
         </DefaultModal>
@@ -81,6 +81,7 @@ export default {
 
         addCustomer() {
             this.showModal = true;
+            this.action = "create";
             this.modalTitle = "Adicionar Cliente";
         },
 

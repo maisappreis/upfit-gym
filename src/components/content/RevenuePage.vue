@@ -11,20 +11,21 @@
             :columns="columns"
             :data="revenue"
             :searchedField="searchedField"
+            @updateTable="loadData"
             @updateItem="updateRevenue"
             @deleteItem="showDeleteModal"
         />
         <DefaultModal v-if="showModal">
-            <RevenueForm
-                v-if="action === 'update'"
-                :item="item"
-                :modalTitle="modalTitle"
-                @closeModal="closeModal"
-            />
             <DeleteMessage
-                v-else
+                v-if="action === 'delete'"
                 :deleteMessage="deleteMessage"
                 @deleteItem="deleteRevenue"
+                @closeModal="closeModal"
+            />
+            <RevenueForm
+                v-else
+                :item="item"
+                :modalTitle="modalTitle"
                 @closeModal="closeModal"
             />
         </DefaultModal>
@@ -82,6 +83,7 @@ export default {
 
         addRevenue() {
             this.showModal = true;
+            this.action = "create";
             this.modalTitle = "Adicionar Receita";
         },
 
