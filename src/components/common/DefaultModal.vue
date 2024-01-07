@@ -17,7 +17,6 @@ export default {
     top: 30px;
     left: 20vw;
     background-color: white;
-    padding: 10px 0;
     height: max-content;
     width: 40vw;
     z-index: 12;

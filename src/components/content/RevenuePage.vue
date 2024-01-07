@@ -12,11 +12,19 @@
             :data="revenue"
             :searchedField="searchedField"
             @updateItem="updateRevenue"
+            @deleteItem="showDeleteModal"
         />
         <DefaultModal v-if="showModal">
             <RevenueForm
+                v-if="action === 'update'"
                 :item="item"
                 :modalTitle="modalTitle"
+                @closeModal="closeModal"
+            />
+            <DeleteMessage
+                v-else
+                :deleteMessage="deleteMessage"
+                @deleteItem="deleteRevenue"
                 @closeModal="closeModal"
             />
         </DefaultModal>
@@ -30,6 +38,7 @@ import DefaultButton from "../common/DefaultButton.vue";
 import DefaultSearch from "../common/DefaultSearch.vue";
 import DefaultModal from "../common/DefaultModal.vue";
 import RevenueForm from "../forms/RevenueForm.vue";
+import DeleteMessage from "../common/DeleteMessage.vue";
 import { fetchData } from "../../services/api.js";
 
 export default {
@@ -40,6 +49,7 @@ export default {
         DefaultSearch,
         DefaultModal,
         RevenueForm,
+        DeleteMessage
     },
 
     data() {
@@ -59,6 +69,8 @@ export default {
             searchedField: [],
             showModal: false,
             item: {},
+            action: "",
+            deleteMessage: "",
             modalTitle: "",
         };
     },
@@ -76,7 +88,23 @@ export default {
         updateRevenue(item) {
             this.showModal = true;
             this.item = item;
+            this.action = "update";
             this.modalTitle = "Atualizar Receita";
+        },
+
+        deleteRevenue() {
+            console.log(
+                `Fazer método DELETE em ${this.item.name}, id: ${this.item.id}`
+            );
+        },
+
+        showDeleteModal(item) {
+            this.item = item;
+            this.showModal = true;
+            this.action = "delete";
+
+            this.deleteMessage = `Tem certeza que deseja excluir o recebimento da mensalidade do 
+                                    cliente ${item.name } referente ao mês de ${item.month}/${item.year}?`
         },
 
         closeModal() {

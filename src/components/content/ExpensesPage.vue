@@ -12,15 +12,21 @@
             :data="expenses"
             :searchedField="searchedField"
             @updateItem="updateExpense"
-            @deleteItem="deleteExpense"
+            @deleteItem="showDeleteModal"
         />
         <DefaultModal v-if="showModal">
             <ExpensesForm
+                v-if="action === 'update'"
                 :item="item"
                 :modalTitle="modalTitle"
                 @closeModal="closeModal"
             />
-            <div>{{ deleteMessage }}</div>
+            <DeleteMessage
+                v-else
+                :deleteMessage="deleteMessage"
+                @deleteItem="deleteExpense"
+                @closeModal="closeModal"
+            />
         </DefaultModal>
         <div v-if="showModal" class="defocus"></div>
     </div>
@@ -32,6 +38,7 @@ import DefaultButton from "../common/DefaultButton.vue";
 import DefaultSearch from "../common/DefaultSearch.vue";
 import DefaultModal from "../common/DefaultModal.vue";
 import ExpensesForm from "../forms/ExpensesForm.vue";
+import DeleteMessage from "../common/DeleteMessage.vue";
 import { fetchData } from "../../services/api.js";
 
 export default {
@@ -43,6 +50,7 @@ export default {
         DefaultSearch,
         DefaultModal,
         ExpensesForm,
+        DeleteMessage
     },
 
     data() {
@@ -60,6 +68,7 @@ export default {
             searchedField: [],
             showModal: false,
             item: {},
+            action: "",
             deleteMessage: "",
             modalTitle: "",
         };
@@ -81,10 +90,19 @@ export default {
             this.modalTitle = "Atualizar Despesa";
         },
 
-        deleteExpense(item) {
-            console.log("item", item);
+        deleteExpense() {
+            console.log(
+                `Fazer método DELETE em ${this.item.name}, id: ${this.item.id}`
+            );
+        },
+
+        showDeleteModal(item) {
+            this.item = item;
             this.showModal = true;
-            this.deleteMessage = `Tem certeza que deseja excluir a conta `;
+            this.action = "delete";
+
+            this.deleteMessage = `Tem certeza que deseja excluir o pagamento da despesa
+                                    de ${item.name } referente ao mês de ${item.month}/${item.year}?`
         },
 
         closeModal() {
