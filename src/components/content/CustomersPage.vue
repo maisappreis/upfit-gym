@@ -11,10 +11,14 @@
             :columns="columns"
             :data="customers"
             :searchedField="searchedField"
-            @updateCustomer="updateCustomer"
+            @updateItem="updateCustomer"
         />
         <DefaultModal v-if="showModal">
-            <CustomersForm :item="item" @closeModal="closeModal" />
+            <CustomersForm
+                :item="item"
+                :modalTitle="modalTitle"
+                @closeModal="closeModal"
+            />
         </DefaultModal>
         <div v-if="showModal" class="defocus"></div>
     </div>
@@ -35,7 +39,7 @@ export default {
         DefaultButton,
         DefaultSearch,
         DefaultModal,
-        CustomersForm
+        CustomersForm,
     },
 
     data() {
@@ -64,11 +68,13 @@ export default {
 
         addCustomer() {
             this.showModal = true;
+            this.modalTitle = "Adicionar Cliente";
         },
 
         updateCustomer(item) {
             this.showModal = true;
             this.item = item;
+            this.modalTitle = "Atualizar Cliente";
         },
 
         closeModal() {

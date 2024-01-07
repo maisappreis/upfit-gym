@@ -23,12 +23,12 @@
                             <font-awesome-icon
                                 icon="fa-solid fa-pen-to-square"
                                 class="icon"
-                                @click="$emit('updateCustomer', item)"
+                                @click="$emit('updateItem', item)"
                             />
                             <font-awesome-icon
                                 icon="fa-solid fa-trash-can"
                                 class="icon"
-                                @click="$emit('deleteCustomer', item)"
+                                @click="$emit('deleteItem', item)"
                             />
                         </span>
                         <span

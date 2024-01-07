@@ -7,9 +7,20 @@
             </DefaultButton>
             <DefaultSearch @applySearch="applySearch" />
         </div>
-        <DefaulfTable :columns="columns" :data="expenses" :searchedField="searchedField" />
+        <DefaulfTable
+            :columns="columns"
+            :data="expenses"
+            :searchedField="searchedField"
+            @updateItem="updateExpense"
+            @deleteItem="deleteExpense"
+        />
         <DefaultModal v-if="showModal">
-            <ExpensesForm :item="item" @closeModal="closeModal" />
+            <ExpensesForm
+                :item="item"
+                :modalTitle="modalTitle"
+                @closeModal="closeModal"
+            />
+            <div>{{ deleteMessage }}</div>
         </DefaultModal>
         <div v-if="showModal" class="defocus"></div>
     </div>
@@ -24,14 +35,14 @@ import ExpensesForm from "../forms/ExpensesForm.vue";
 import { fetchData } from "../../services/api.js";
 
 export default {
-  name: 'ExpensesPage',
+    name: "ExpensesPage",
 
-  components: {
+    components: {
         DefaulfTable,
         DefaultButton,
         DefaultSearch,
         DefaultModal,
-        ExpensesForm
+        ExpensesForm,
     },
 
     data() {
@@ -49,6 +60,8 @@ export default {
             searchedField: [],
             showModal: false,
             item: {},
+            deleteMessage: "",
+            modalTitle: "",
         };
     },
 
@@ -59,6 +72,19 @@ export default {
 
         addExpense() {
             this.showModal = true;
+            this.modalTitle = "Adicionar Despesa";
+        },
+
+        updateExpense(item) {
+            this.showModal = true;
+            this.item = item;
+            this.modalTitle = "Atualizar Despesa";
+        },
+
+        deleteExpense(item) {
+            console.log("item", item);
+            this.showModal = true;
+            this.deleteMessage = `Tem certeza que deseja excluir a conta `;
         },
 
         closeModal() {
@@ -79,7 +105,7 @@ export default {
     mounted() {
         this.loadData();
     },
-}
+};
 </script>
 
 <style scoped>

@@ -1,15 +1,28 @@
 <template>
     <div>
-        <h2>Adicionar Novo Cliente</h2>
+        <h2>{{ modalTitle }}</h2>
         <!-- <form action="/submit_form" method="post" class="form-area"> -->
         <div class="form-area">
             <div class="form-item">
-                <label for="name">Nome:</label>
-                <input type="text" id="name" name="name" v-model="customerName" required>
+                <label class="form-label" for="name">Nome:</label>
+                <input
+                    class="form-input"
+                    type="text"
+                    id="name"
+                    name="name"
+                    v-model="customerName"
+                    required
+                />
             </div>
             <div class="form-item">
-                <label for="frequency">Frequência:</label>
-                <select id="frequency" name="frequency" v-model="frequency" required>
+                <label class="form-label" for="frequency">Frequência:</label>
+                <select
+                    class="form-select"
+                    id="frequency"
+                    name="frequency"
+                    v-model="frequency"
+                    required
+                >
                     <option value="1x">1x</option>
                     <option value="2x">2x</option>
                     <option value="3x">3x</option>
@@ -18,12 +31,25 @@
                 </select>
             </div>
             <div class="form-item">
-                <label for="start">Data de Início:</label>
-                <input type="date" id="start" name="start" v-model="start" required>
+                <label class="form-label" for="start">Data de Início:</label>
+                <input
+                    class="form-input"
+                    type="date"
+                    id="start"
+                    name="start"
+                    v-model="start"
+                    required
+                />
             </div>
             <div class="form-item">
-                <label for="plan">Plano:</label>
-                <select id="plan" name="plan" v-model="plan" required>
+                <label class="form-label" for="plan">Plano:</label>
+                <select
+                    class="form-select"
+                    id="plan"
+                    name="plan"
+                    v-model="plan"
+                    required
+                >
                     <option value="mensal">Mensal</option>
                     <option value="trimestral">Trimestral</option>
                     <option value="semestral">Semestral</option>
@@ -31,27 +57,60 @@
                 </select>
             </div>
             <div class="form-item">
-                <label for="value">Valor:</label>
-                <input type="number" id="value" name="value" v-model="value" required>
+                <label class="form-label" for="value">Valor:</label>
+                <input
+                    class="form-input"
+                    type="number"
+                    id="value"
+                    name="value"
+                    v-model="value"
+                    required
+                />
             </div>
             <div class="form-item">
-                <label>Status:</label>
-                <input class="radio" type="radio" id="active" name="status" value="active" v-model="status">
-                <label for="active">Ativo</label>
-                <input class="radio" type="radio" id="inactive" name="status" value="inactive" v-model="status">
-                <label for="inactive">Inativo</label>
+                <label class="form-label">Status:</label>
+                <input
+                    class="form-radio"
+                    type="radio"
+                    id="active"
+                    name="status"
+                    value="active"
+                    v-model="status"
+                />
+                <label class="form-label" for="active">Ativo</label>
+                <input
+                    class="form-radio"
+                    type="radio"
+                    id="inactive"
+                    name="status"
+                    value="inactive"
+                    v-model="status"
+                />
+                <label class="form-label" for="inactive">Inativo</label>
             </div>
             <div class="form-item">
-                <label for="notes">Notas:</label>
-                <textarea id="notes" name="notes" rows="4" v-model="notes"></textarea>
+                <label class="form-label" for="notes">Notas:</label>
+                <textarea
+                    class="form-textarea"
+                    id="notes"
+                    name="notes"
+                    rows="4"
+                    v-model="notes"
+                ></textarea>
             </div>
-            <div class="buttons-area">
-                <DefaultButton style="background-color: green;" @executeAction="saveCustomer">
+            <div class="form-buttons-area">
+                <DefaultButton
+                    style="background-color: green"
+                    @executeAction="saveCustomer"
+                >
                     Salvar
                 </DefaultButton>
-                <DefaultButton style="background-color: red;" @executeAction="$emit('closeModal')">
+                <DefaultButton
+                    style="background-color: red"
+                    @executeAction="$emit('closeModal')"
+                >
                     Cancelar
-                </DefaultButton>   
+                </DefaultButton>
             </div>
 
             <!-- Email Input -->
@@ -61,7 +120,7 @@
             <!-- Checkbox -->
             <!-- <input type="checkbox" id="subscribe" name="subscribe">
             <label for="subscribe">Subscribe to our newsletter</label> -->
-        <!-- </form> -->
+            <!-- </form> -->
         </div>
     </div>
 </template>
@@ -71,14 +130,15 @@ import DefaultButton from "../common/DefaultButton.vue";
 import { postData } from "../../services/api.js";
 
 export default {
-  name: "CustomersForm",
+    name: "CustomersForm",
 
-  components: {
-        DefaultButton
+    components: {
+        DefaultButton,
     },
 
     props: {
-        item: Object
+        item: Object,
+        modalTitle: String,
     },
 
     data: function () {
@@ -89,8 +149,8 @@ export default {
             plan: "",
             value: 0,
             status: "",
-            notes: ""
-        }
+            notes: "",
+        };
     },
 
     methods: {
@@ -104,12 +164,12 @@ export default {
                     value: this.value,
                     status: this.status,
                     notes: this.notes,
-                    actions: ""
-                }
+                    actions: "",
+                };
 
                 await postData(newCustomer);
             } catch (error) {
-                console.error('Erro ao salvar os dados.', error);
+                console.error("Erro ao salvar os dados.", error);
             }
         },
 
@@ -122,57 +182,19 @@ export default {
             this.status = this.item.status;
             this.notes = this.item.notes;
 
-            console.log(this.start)
-            console.log(this.plan)
-            console.log(this.status)
-        }
+            console.log(this.start);
+            console.log(this.plan);
+            console.log(this.status);
+        },
     },
 
     mounted() {
         if (this.item) {
             this.fillModal();
         }
-    }
-}
+    },
+};
 </script>
 
 <style scoped>
-
-.form-area {
-    display: flex;
-    flex-direction: column;
-    justify-content: left;
-    margin: 20px 40px;
-}
-
-.form-item {
-    display: flex;
-    margin: 10px 0;
-}
-
-.radio-item {
-    display: flex;
-}
-
-.radio {
-    margin: 10px;
-    width: 20px;
-}
-
-label {
-    text-align: left;
-    margin: 5px 15px 0 0;
-}
-
-input, textarea, select {
-    width: 100%;
-    padding: 5px;
-    border-radius: 5px;
-    border: 2px solid #b4b4b4;
-}
-
-.buttons-area {
-    display: flex;
-    justify-content: center;
-}
 </style>
