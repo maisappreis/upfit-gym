@@ -9,43 +9,22 @@
                     type="text"
                     id="name"
                     name="name"
-                    v-model="customerName"
+                    v-model="bill"
                     required
                 />
             </div>
             <div class="form-item">
-                <label class="form-label" for="start"
+                <label class="form-label" for="due-date"
                     >Data de Vencimento:</label
                 >
                 <input
                     class="form-input"
                     type="date"
-                    id="start"
-                    name="start"
-                    v-model="start"
+                    id="due-date"
+                    name="due-date"
+                    v-model="dueDate"
                     required
                 />
-            </div>
-            <div class="form-item">
-                <label class="form-label">Status:</label>
-                <input
-                    class="form-radio"
-                    type="radio"
-                    id="active"
-                    name="status"
-                    value="pago"
-                    v-model="status"
-                />
-                <label class="form-label" for="active">Pago</label>
-                <input
-                    class="form-radio"
-                    type="radio"
-                    id="inactive"
-                    name="status"
-                    value="à pagar"
-                    v-model="status"
-                />
-                <label class="form-label" for="inactive">À Pagar</label>
             </div>
             <div class="form-buttons-area">
                 <DefaultButton
@@ -67,6 +46,7 @@
 
 <script>
 import DefaultButton from "../common/DefaultButton.vue";
+import { postData } from "../../services/api.js";
 
 export default {
     name: "ExpensesForm",
@@ -77,6 +57,31 @@ export default {
 
     props: {
         modalTitle: String,
+    },
+
+    data() {
+        return {
+            bill: "",
+            dueDate: "",
+        };
+    },
+
+    methods: {
+        async saveCustomer() {
+            try {
+                let newExpense = {
+                    year: 2024, // Mês e ano deve ser pego da própria data de vendimento.
+                    month: "Janeiro",
+                    name: this.customerName,
+                    due_date: this.frequency,
+                    paid: false,
+                };
+                console.log("newExpense", newExpense);
+                await postData("expenses", newExpense);
+            } catch (error) {
+                console.error("Erro ao salvar os dados.", error);
+            }
+        },
     },
 };
 </script>

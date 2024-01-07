@@ -167,7 +167,7 @@ export default {
                     actions: "",
                 };
 
-                await postData(newCustomer);
+                await postData("customers", newCustomer);
             } catch (error) {
                 console.error("Erro ao salvar os dados.", error);
             }

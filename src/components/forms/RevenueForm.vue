@@ -41,7 +41,7 @@
             <div class="form-buttons-area">
                 <DefaultButton
                     style="background-color: green"
-                    @executeAction="saveCustomer"
+                    @executeAction="createRevenue"
                 >
                     Salvar
                 </DefaultButton>
@@ -58,6 +58,7 @@
 
 <script>
 import DefaultButton from "../common/DefaultButton.vue";
+import { postData } from "../../services/api.js";
 
 export default {
     name: "RevenueForm",
@@ -74,9 +75,29 @@ export default {
         return {
             customerName: "",
             value: 0,
-            notes: ""
-        }
-    }
+            notes: "",
+        };
+    },
+
+    methods: {
+        async createRevenue() {
+            try {
+                let newRevenue = {
+                    id: 1, // Corrigir aqui, os dados estão mocados.
+                    idCustomer: "1",
+                    year: 2024,
+                    month: "Janeiro",
+                    notes: "Anotações",
+                    paid: false,
+                    actions: "",
+                };
+
+                await postData("revenue", newRevenue);
+            } catch (error) {
+                console.error("Erro ao criar uma receita.", error);
+            }
+        },
+    },
 };
 </script>
 
