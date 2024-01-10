@@ -12,6 +12,7 @@
             :columns="columns"
             :data="filteredRevenue"
             :searchedField="searchedField"
+            :page="currentPage"
             @updateTable="loadData"
             @updateItem="updateRevenue"
             @deleteItem="showDeleteModal"
@@ -79,6 +80,7 @@ export default {
             modalTitle: "",
             currentMonth: "",
             currentYear: 0,
+            currentPage: ""
         };
     },
 
@@ -147,6 +149,7 @@ export default {
                 const data = await fetchData();
                 this.customers = data.customers;
                 this.revenue = data.revenue;
+                this.currentPage = "revenue"
 
                 this.customers.forEach((customer) => {
                     const matchingRevenue = this.revenue.find(

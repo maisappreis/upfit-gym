@@ -153,6 +153,7 @@ export default {
         columns: Array,
         data: Array,
         searchedField: Array,
+        page: String
     },
 
     data: function () {
@@ -236,14 +237,12 @@ export default {
         },
 
         async changePaidStatus(item) {
-            console.log("Funciona", item);
-
             let updatedPaidStatus = {
                 paid: !item.paid,
             };
 
             try {
-                await updateData(item.id, "revenue", updatedPaidStatus);
+                await updateData(item.id, this.page, updatedPaidStatus);
                 this.$emit("updateTable");
             } catch (error) {
                 console.error(

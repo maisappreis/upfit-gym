@@ -12,6 +12,7 @@
             :columns="columns"
             :data="filteredExpenses"
             :searchedField="searchedField"
+            :page="currentPage"
             @updateItem="updateExpense"
             @deleteItem="showDeleteModal"
         />
@@ -77,6 +78,7 @@ export default {
             modalTitle: "",
             currentMonth: "",
             currentYear: 0,
+            currentPage: ""
         };
     },
 
@@ -143,6 +145,7 @@ export default {
             try {
                 const data = await fetchData();
                 this.expenses = data.expenses;
+                this.currentPage = "expenses"
             } catch (error) {
                 console.error("Erro ao requisitar os dados...", error);
             }
