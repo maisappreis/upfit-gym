@@ -40,7 +40,6 @@ import DefaultSearch from "../common/DefaultSearch.vue";
 import DefaultModal from "../common/DefaultModal.vue";
 import CustomersForm from "../forms/CustomersForm.vue";
 import DeleteMessage from "../common/DeleteMessage.vue";
-import { fetchData } from "../../services/api.js";
 
 export default {
     name: "CustomersPage",
@@ -51,6 +50,10 @@ export default {
         DefaultModal,
         CustomersForm,
         DeleteMessage,
+    },
+
+    props: {
+        customers: Array,
     },
 
     data() {
@@ -65,7 +68,6 @@ export default {
                 { key: "notes", name: "Notas" },
                 { key: "actions", name: "" },
             ],
-            customers: [],
             searchedField: [],
             showModal: false,
             item: {},
@@ -109,20 +111,8 @@ export default {
 
         closeModal() {
             this.showModal = false;
-            this.loadData();
+            this.$emit("updateData");
         },
-
-        async loadData() {
-            try {
-                const data = await fetchData();
-                this.customers = data.customers;
-            } catch (error) {
-                console.error("Erro ao requisitar os dados...", error);
-            }
-        },
-    },
-    mounted() {
-        this.loadData();
     },
 };
 </script>

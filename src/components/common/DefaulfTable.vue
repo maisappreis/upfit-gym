@@ -243,7 +243,7 @@ export default {
 
             try {
                 await updateData(item.id, this.page, updatedPaidStatus);
-                this.$emit("updateTable");
+                this.$emit("updateData");
             } catch (error) {
                 console.error(
                     "Erro ao atualizar o status de pagamento...",

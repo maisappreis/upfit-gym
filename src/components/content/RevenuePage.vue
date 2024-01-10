@@ -12,8 +12,8 @@
             :columns="columns"
             :data="filteredRevenue"
             :searchedField="searchedField"
-            :page="currentPage"
-            @updateTable="loadData"
+            :page="selectedPage"
+            @updateData="$emit('updateData')"
             @updateItem="updateRevenue"
             @deleteItem="showDeleteModal"
         />
@@ -27,6 +27,7 @@
             <RevenueForm
                 v-else
                 :item="item"
+                :customers="customers"
                 :action="action"
                 :modalTitle="modalTitle"
                 @closeModal="closeModal"
@@ -44,7 +45,6 @@ import DefaultModal from "../common/DefaultModal.vue";
 import MonthFilter from "../common/MonthFilter.vue";
 import RevenueForm from "../forms/RevenueForm.vue";
 import DeleteMessage from "../common/DeleteMessage.vue";
-import { fetchData } from "../../services/api.js";
 
 export default {
     name: "RevenuePage",
@@ -56,6 +56,12 @@ export default {
         RevenueForm,
         DeleteMessage,
         MonthFilter,
+    },
+
+    props: {
+        revenue: Array,
+        customers: Array,
+        selectedPage: String,
     },
 
     data() {
@@ -71,7 +77,6 @@ export default {
                 { key: "paid", name: "Status" },
                 { key: "actions", name: "" },
             ],
-            revenue: [],
             searchedField: [],
             showModal: false,
             item: {},
@@ -80,7 +85,6 @@ export default {
             modalTitle: "",
             currentMonth: "",
             currentYear: 0,
-            currentPage: ""
         };
     },
 
@@ -141,37 +145,30 @@ export default {
 
         closeModal() {
             this.showModal = false;
-            this.loadData();
+            this.$emit("updateData");
         },
 
-        async loadData() {
-            try {
-                const data = await fetchData();
-                this.customers = data.customers;
-                this.revenue = data.revenue;
-                this.currentPage = "revenue"
+        incrementData() {
+            this.customers.forEach((customer) => {
+                const matchingRevenue = this.revenue.find(
+                    (revenue) => revenue.idCustomer === customer.id.toString()
+                );
 
-                this.customers.forEach((customer) => {
-                    const matchingRevenue = this.revenue.find(
-                        (revenue) =>
-                            revenue.idCustomer === customer.id.toString()
-                    );
-
-                    if (matchingRevenue) {
-                        matchingRevenue.name = customer.name;
-                        matchingRevenue.value = customer.value;
-                        matchingRevenue.start = customer.start;
-                        matchingRevenue.plan = customer.plan;
-                    }
-                });
-            } catch (error) {
-                console.error("Erro ao requisitar os dados...", error);
-            }
+                if (matchingRevenue) {
+                    matchingRevenue.name = customer.name;
+                    matchingRevenue.value = customer.value;
+                    matchingRevenue.start = customer.start;
+                    matchingRevenue.plan = customer.plan;
+                }
+            });
         },
     },
 
     mounted() {
-        this.loadData();
+        if (this.customers && this.customers.length > 0) {
+            this.incrementData();
+            console.log(this.customers);
+        }
     },
 };
 </script>

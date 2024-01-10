@@ -12,7 +12,8 @@
             :columns="columns"
             :data="filteredExpenses"
             :searchedField="searchedField"
-            :page="currentPage"
+            :page="selectedPage"
+            @updateData="$emit('updateData')"
             @updateItem="updateExpense"
             @deleteItem="showDeleteModal"
         />
@@ -43,7 +44,6 @@ import DefaultModal from "../common/DefaultModal.vue";
 import MonthFilter from "../common/MonthFilter.vue";
 import ExpensesForm from "../forms/ExpensesForm.vue";
 import DeleteMessage from "../common/DeleteMessage.vue";
-import { fetchData } from "../../services/api.js";
 
 export default {
     name: "ExpensesPage",
@@ -55,7 +55,12 @@ export default {
         DefaultModal,
         ExpensesForm,
         DeleteMessage,
-        MonthFilter
+        MonthFilter,
+    },
+
+    props: {
+        expenses: Array,
+        selectedPage: String,
     },
 
     data() {
@@ -69,7 +74,6 @@ export default {
                 { key: "paid", name: "Status" },
                 { key: "actions", name: "" },
             ],
-            expenses: [],
             searchedField: [],
             showModal: false,
             item: {},
@@ -78,7 +82,6 @@ export default {
             modalTitle: "",
             currentMonth: "",
             currentYear: 0,
-            currentPage: ""
         };
     },
 
@@ -118,6 +121,7 @@ export default {
         updateExpense(item) {
             this.showModal = true;
             this.item = item;
+            this.action = "update";
             this.modalTitle = "Atualizar Despesa";
         },
 
@@ -138,22 +142,8 @@ export default {
 
         closeModal() {
             this.showModal = false;
-            this.loadData();
+            this.$emit("updateData");
         },
-
-        async loadData() {
-            try {
-                const data = await fetchData();
-                this.expenses = data.expenses;
-                this.currentPage = "expenses"
-            } catch (error) {
-                console.error("Erro ao requisitar os dados...", error);
-            }
-        },
-    },
-
-    mounted() {
-        this.loadData();
     },
 };
 </script>
