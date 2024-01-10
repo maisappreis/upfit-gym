@@ -25,11 +25,17 @@
                                     icon="fa-solid fa-pen-to-square"
                                     class="icon"
                                     @click="$emit('updateItem', item)"
+                                    @mouseover="
+                                        showTooltip('Atualizar', $event)
+                                    "
+                                    @mouseout="hideTooltip()"
                                 />
                                 <font-awesome-icon
                                     icon="fa-solid fa-trash-can"
                                     class="icon"
                                     @click="$emit('deleteItem', item)"
+                                    @mouseover="showTooltip('Excluir', $event)"
+                                    @mouseout="hideTooltip()"
                                 />
                             </span>
                             <span
@@ -53,6 +59,14 @@
                                     inactive: item[column.key] === false,
                                 }"
                                 @click="changePaidStatus(item)"
+                                @mouseover="
+                                    showTooltip(
+                                        'status',
+                                        $event,
+                                        item[column.key]
+                                    )
+                                "
+                                @mouseout="hideTooltip()"
                             >
                                 {{ item[column.key] ? "Pago" : "À Pagar" }}
                             </span>
@@ -116,16 +130,25 @@
                     >Total de {{ totalItems }} itens</span
                 >
             </div>
+            <DefaulfTooltip
+                v-if="showingTooltip"
+                :mouseX="mouseX"
+                :mouseY="mouseY"
+            >
+                <p>{{ this.tooltip }}</p>
+            </DefaulfTooltip>
         </div>
         <div v-else class="not-found">Nenhum resultado foi encontrado.</div>
     </div>
 </template>
 
 <script>
+import DefaulfTooltip from "./DefaultTooltip.vue";
 import { updateData } from "../../services/api.js";
 
 export default {
     name: "DefaulfTable",
+    components: { DefaulfTooltip },
     props: {
         columns: Array,
         data: Array,
@@ -138,6 +161,10 @@ export default {
             currentPage: 1,
             filteredData: [],
             checkboxState: false,
+            showingTooltip: false,
+            tooltip: "",
+            mouseX: 0,
+            mouseY: 0,
         };
     },
 
@@ -187,6 +214,27 @@ export default {
     },
 
     methods: {
+        showTooltip(tooltip, event, item) {
+            if (tooltip === "status") {
+                if (item) {
+                    this.tooltip = "Marcar como à pagar";
+                } else {
+                    this.tooltip = "Marcar como pago";
+                }
+            } else {
+                this.tooltip = tooltip;
+            }
+
+            this.showingTooltip = true;
+
+            this.mouseX = event.clientX;
+            this.mouseY = event.clientY + 15;
+        },
+
+        hideTooltip() {
+            this.showingTooltip = false;
+        },
+
         async changePaidStatus(item) {
             console.log("Funciona", item);
 
