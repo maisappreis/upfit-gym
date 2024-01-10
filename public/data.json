@@ -188,8 +188,17 @@
     {
       "id": 3,
       "idCustomer": "3",
-      "year": 2024,
+      "year": 2025,
       "month": "Janeiro",
+      "notes": "Anotações",
+      "paid": false,
+      "actions": ""
+    },
+    {
+      "id": 4,
+      "idCustomer": "4",
+      "year": 2024,
+      "month": "Fevereiro",
       "notes": "Anotações",
       "paid": false,
       "actions": ""

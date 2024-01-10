@@ -5,11 +5,12 @@
                 <font-awesome-icon icon="fa-solid fa-plus" class="icon-add" />
                 Nova Despesa
             </DefaultButton>
+            <MonthFilter @get-month="getMonth" @get-year="getYear" />
             <DefaultSearch @applySearch="applySearch" />
         </div>
         <DefaulfTable
             :columns="columns"
-            :data="expenses"
+            :data="filteredExpenses"
             :searchedField="searchedField"
             @updateItem="updateExpense"
             @deleteItem="showDeleteModal"
@@ -38,6 +39,7 @@ import DefaulfTable from "../common/DefaulfTable.vue";
 import DefaultButton from "../common/DefaultButton.vue";
 import DefaultSearch from "../common/DefaultSearch.vue";
 import DefaultModal from "../common/DefaultModal.vue";
+import MonthFilter from "../common/MonthFilter.vue";
 import ExpensesForm from "../forms/ExpensesForm.vue";
 import DeleteMessage from "../common/DeleteMessage.vue";
 import { fetchData } from "../../services/api.js";
@@ -52,6 +54,7 @@ export default {
         DefaultModal,
         ExpensesForm,
         DeleteMessage,
+        MonthFilter
     },
 
     data() {
@@ -72,10 +75,34 @@ export default {
             action: "",
             deleteMessage: "",
             modalTitle: "",
+            currentMonth: "",
+            currentYear: 0,
         };
     },
 
+    computed: {
+        filteredExpenses() {
+            if (this.currentMonth === "all") {
+                return this.expenses.filter((e) => e.year === this.currentYear);
+            } else {
+                return this.expenses.filter(
+                    (e) =>
+                        e.month === this.currentMonth &&
+                        e.year === this.currentYear
+                );
+            }
+        },
+    },
+
     methods: {
+        getMonth(month) {
+            this.currentMonth = month;
+        },
+
+        getYear(year) {
+            this.currentYear = Number(year);
+        },
+
         applySearch(field) {
             this.searchedField = field;
         },

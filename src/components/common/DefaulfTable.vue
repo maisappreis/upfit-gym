@@ -1,117 +1,123 @@
 <template>
     <div>
-        <table class="table-area">
-            <thead>
-                <tr>
-                    <th
-                        v-for="column in columns"
-                        :key="column.key"
-                        style="text-align: center"
-                    >
-                        {{ column.name }}
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(item, index) in paginatedData" :key="index">
-                    <td
-                        v-for="column in columns"
-                        :key="column.key"
-                        style="text-align: center"
-                    >
-                        <span v-if="column.key === 'actions'">
-                            <font-awesome-icon
-                                icon="fa-solid fa-pen-to-square"
-                                class="icon"
-                                @click="$emit('updateItem', item)"
-                            />
-                            <font-awesome-icon
-                                icon="fa-solid fa-trash-can"
-                                class="icon"
-                                @click="$emit('deleteItem', item)"
-                            />
-                        </span>
-                        <span
-                            v-else-if="column.key === 'status'"
-                            class="status"
-                            :class="{
-                                active: item[column.key] === 'Ativo',
-                                inactive: item[column.key] === 'Inativo',
-                            }"
+        <div v-if="columns.length > 0 && paginatedData.length > 0">
+            <table class="table-area">
+                <thead>
+                    <tr>
+                        <th
+                            v-for="column in columns"
+                            :key="column.key"
+                            style="text-align: center"
                         >
-                            {{ item[column.key] }}
-                        </span>
-                        <span v-else-if="column.key === 'value'">
-                            R$ {{ item[column.key] }}
-                        </span>
-                        <span
-                            v-else-if="column.key === 'paid'"
-                            class="status paid"
-                            :class="{
-                                active: item[column.key] === true,
-                                inactive: item[column.key] === false,
-                            }"
-                            @click="changePaidStatus(item)"
+                            {{ column.name }}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(item, index) in paginatedData" :key="index">
+                        <td
+                            v-for="column in columns"
+                            :key="column.key"
+                            style="text-align: center"
                         >
-                            {{ item[column.key] ? "Pago" : "À Pagar" }}
-                        </span>
-                        <span v-else>
-                            {{ item[column.key] }}
-                        </span>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <div class="pagination-area">
-            <span class="pagination-items"
-                >Página {{ currentPage }} de {{ totalPages }}</span
-            >
-            <button
-                class="pagination-button"
-                @click="goToFirstPage"
-                :disabled="currentPage === 1"
-            >
-                &laquo;&laquo;
-            </button>
-            <button
-                class="pagination-button"
-                @click="previousPage"
-                :disabled="currentPage === 1"
-            >
-                &laquo;
-            </button>
-            <template v-for="pageNumber in getPageNumbers()" :key="pageNumber">
+                            <span v-if="column.key === 'actions'">
+                                <font-awesome-icon
+                                    icon="fa-solid fa-pen-to-square"
+                                    class="icon"
+                                    @click="$emit('updateItem', item)"
+                                />
+                                <font-awesome-icon
+                                    icon="fa-solid fa-trash-can"
+                                    class="icon"
+                                    @click="$emit('deleteItem', item)"
+                                />
+                            </span>
+                            <span
+                                v-else-if="column.key === 'status'"
+                                class="status"
+                                :class="{
+                                    active: item[column.key] === 'Ativo',
+                                    inactive: item[column.key] === 'Inativo',
+                                }"
+                            >
+                                {{ item[column.key] }}
+                            </span>
+                            <span v-else-if="column.key === 'value'">
+                                R$ {{ item[column.key] }}
+                            </span>
+                            <span
+                                v-else-if="column.key === 'paid'"
+                                class="status paid"
+                                :class="{
+                                    active: item[column.key] === true,
+                                    inactive: item[column.key] === false,
+                                }"
+                                @click="changePaidStatus(item)"
+                            >
+                                {{ item[column.key] ? "Pago" : "À Pagar" }}
+                            </span>
+                            <span v-else>
+                                {{ item[column.key] }}
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="pagination-area">
+                <span class="pagination-items"
+                    >Página {{ currentPage }} de {{ totalPages }}</span
+                >
                 <button
                     class="pagination-button"
-                    @click="goToPage(pageNumber)"
-                    :class="{ active: pageNumber === currentPage }"
+                    @click="goToFirstPage"
+                    :disabled="currentPage === 1"
                 >
-                    {{ pageNumber }}
+                    &laquo;&laquo;
                 </button>
-            </template>
-            <button
-                class="pagination-button"
-                @click="nextPage"
-                :disabled="currentPage === totalPages"
-            >
-                &raquo;
-            </button>
-            <button
-                class="pagination-button"
-                @click="goToLastPage"
-                :disabled="currentPage === totalPages"
-            >
-                &raquo;&raquo;
-            </button>
-            <select v-model="itemsPerPage">
-                <option value="3">3</option>
-                <option value="5">5</option>
-                <option value="8">8</option>
-            </select>
-            <span class="pagination-items"
-                >Total de {{ totalItems }} itens</span
-            >
+                <button
+                    class="pagination-button"
+                    @click="previousPage"
+                    :disabled="currentPage === 1"
+                >
+                    &laquo;
+                </button>
+                <template
+                    v-for="pageNumber in getPageNumbers()"
+                    :key="pageNumber"
+                >
+                    <button
+                        class="pagination-button"
+                        @click="goToPage(pageNumber)"
+                        :class="{ active: pageNumber === currentPage }"
+                    >
+                        {{ pageNumber }}
+                    </button>
+                </template>
+                <button
+                    class="pagination-button"
+                    @click="nextPage"
+                    :disabled="currentPage === totalPages"
+                >
+                    &raquo;
+                </button>
+                <button
+                    class="pagination-button"
+                    @click="goToLastPage"
+                    :disabled="currentPage === totalPages"
+                >
+                    &raquo;&raquo;
+                </button>
+                <select v-model="itemsPerPage">
+                    <option value="3">3</option>
+                    <option value="5">5</option>
+                    <option value="8">8</option>
+                </select>
+                <span class="pagination-items"
+                    >Total de {{ totalItems }} itens</span
+                >
+            </div>
         </div>
+        <div v-else class="not-found">Nenhum resultado foi encontrado.</div>
     </div>
 </template>
 

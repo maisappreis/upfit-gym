@@ -5,11 +5,12 @@
                 <font-awesome-icon icon="fa-solid fa-plus" class="icon-add" />
                 Nova Receita
             </DefaultButton>
+            <MonthFilter @get-month="getMonth" @get-year="getYear" />
             <DefaultSearch @applySearch="applySearch" />
         </div>
         <DefaulfTable
             :columns="columns"
-            :data="revenue"
+            :data="filteredRevenue"
             :searchedField="searchedField"
             @updateTable="loadData"
             @updateItem="updateRevenue"
@@ -39,6 +40,7 @@ import DefaulfTable from "../common/DefaulfTable.vue";
 import DefaultButton from "../common/DefaultButton.vue";
 import DefaultSearch from "../common/DefaultSearch.vue";
 import DefaultModal from "../common/DefaultModal.vue";
+import MonthFilter from "../common/MonthFilter.vue";
 import RevenueForm from "../forms/RevenueForm.vue";
 import DeleteMessage from "../common/DeleteMessage.vue";
 import { fetchData } from "../../services/api.js";
@@ -52,6 +54,7 @@ export default {
         DefaultModal,
         RevenueForm,
         DeleteMessage,
+        MonthFilter,
     },
 
     data() {
@@ -74,10 +77,34 @@ export default {
             action: "",
             deleteMessage: "",
             modalTitle: "",
+            currentMonth: "",
+            currentYear: 0,
         };
     },
 
+    computed: {
+        filteredRevenue() {
+            if (this.currentMonth === "all") {
+                return this.revenue.filter((e) => e.year === this.currentYear);
+            } else {
+                return this.revenue.filter(
+                    (e) =>
+                        e.month === this.currentMonth &&
+                        e.year === this.currentYear
+                );
+            }
+        },
+    },
+
     methods: {
+        getMonth(month) {
+            this.currentMonth = month;
+        },
+
+        getYear(year) {
+            this.currentYear = Number(year);
+        },
+
         applySearch(field) {
             this.searchedField = field;
         },
