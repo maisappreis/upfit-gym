@@ -55,14 +55,6 @@
                         >
                             {{ item[column.key] ? "Pago" : "À Pagar" }}
                         </span>
-                        <span v-else-if="column.key === 'checkbox'">
-                            <input
-                                class="checkbox"
-                                type="checkbox"
-                                :checked="item[column.key]"
-                                @change="handleCheckboxChange"
-                            />
-                        </span>
                         <span v-else>
                             {{ item[column.key] }}
                         </span>
