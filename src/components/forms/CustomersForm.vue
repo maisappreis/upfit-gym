@@ -50,10 +50,10 @@
                     v-model="plan"
                     required
                 >
-                    <option value="mensal">Mensal</option>
-                    <option value="trimestral">Trimestral</option>
-                    <option value="semestral">Semestral</option>
-                    <option value="anual">Anual</option>
+                    <option value="Mensal">Mensal</option>
+                    <option value="Trimestral">Trimestral</option>
+                    <option value="Semestral">Semestral</option>
+                    <option value="Anual">Anual</option>
                 </select>
             </div>
             <div class="form-item">
@@ -194,9 +194,11 @@ export default {
             this.status = this.item.status;
             this.notes = this.item.notes;
 
-            console.log(this.start);
-            console.log(this.plan);
-            console.log(this.status);
+            if (this.item.status === "Ativo") {
+                this.status = "active"
+            } else {
+                this.status = "inactive"
+            }
         },
     },
 

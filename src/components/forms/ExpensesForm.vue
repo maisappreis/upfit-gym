@@ -99,7 +99,7 @@ export default {
 
         fillModal() {
             this.bill = this.item.name;
-            this.due_date = this.item.due_date;
+            this.dueDate = this.item.due_date;
         },
     },
 

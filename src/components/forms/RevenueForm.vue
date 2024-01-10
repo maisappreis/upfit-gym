@@ -11,10 +11,13 @@
                     v-model="customer"
                     required
                 >
-                    <option value="mensal">Mensal</option>
-                    <option value="trimestral">Trimestral</option>
-                    <option value="semestral">Semestral</option>
-                    <option value="anual">Anual</option>
+                    <option
+                        v-for="(customer, index) in customers"
+                        :key="index"
+                        :value="customer.name"
+                    >
+                        {{ customer.name }}
+                    </option>
                 </select>
             </div>
             <div class="form-item">
@@ -71,6 +74,7 @@ export default {
         item: Object,
         action: String,
         modalTitle: String,
+        customers: Array
     },
 
     data: function () {
@@ -114,6 +118,8 @@ export default {
 
         fillModal() {
             this.customer = this.item.name;
+            this.value = this.item.value;
+            this.notes = this.item.notes;
         },
     },
 
