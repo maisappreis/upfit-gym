@@ -49,7 +49,7 @@
                                 {{ item[column.key] }}
                             </span>
                             <span v-else-if="column.key === 'value'">
-                                R$ {{ item[column.key] }}
+                                R$ {{ item[column.key].toString().replace(/\./g, ",") }}
                             </span>
                             <span
                                 v-else-if="column.key === 'paid'"
