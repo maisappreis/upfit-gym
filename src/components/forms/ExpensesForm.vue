@@ -75,6 +75,9 @@ export default {
             } else {
                 this.updateExpense();
             }
+
+            this.$emit('updateTable')
+            this.$emit('closeModal')
         },
 
         async createExpense() {

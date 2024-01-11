@@ -252,13 +252,6 @@ export default {
             }
         },
 
-        handleCheckboxChange(event) {
-            let checkboxState = event.target.checked;
-
-            // Dar uma emit para a ExpensesPage e fazer um PATCH para salvar a alteração.
-            console.log("checkboxState", checkboxState);
-        },
-
         previousPage() {
             if (this.currentPage > 1) {
                 this.currentPage -= 1;

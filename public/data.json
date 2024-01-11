@@ -172,6 +172,7 @@
       "idCustomer": "1",
       "year": 2024,
       "month": "Janeiro",
+      "value": 250.55,
       "notes": "Anotações",
       "paid": false,
       "actions": ""
@@ -181,6 +182,7 @@
       "idCustomer": "2",
       "year": 2024,
       "month": "Janeiro",
+      "value": 250.55,
       "notes": "Anotações",
       "paid": true,
       "actions": ""
@@ -190,6 +192,7 @@
       "idCustomer": "3",
       "year": 2025,
       "month": "Janeiro",
+      "value": 250.55,
       "notes": "Anotações",
       "paid": false,
       "actions": ""
@@ -199,6 +202,7 @@
       "idCustomer": "4",
       "year": 2024,
       "month": "Fevereiro",
+      "value": 250.55,
       "notes": "Anotações",
       "paid": false,
       "actions": ""

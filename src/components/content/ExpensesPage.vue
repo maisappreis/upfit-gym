@@ -29,6 +29,7 @@
                 :item="item"
                 :action="action"
                 :modalTitle="modalTitle"
+                @updateTable="$emit('updateData')"
                 @closeModal="closeModal"
             />
         </DefaultModal>
@@ -129,6 +130,9 @@ export default {
             console.log(
                 `Fazer método DELETE em ${this.item.name}, id: ${this.item.id}`
             );
+
+            this.showModal = false;
+            this.$emit('updateData')
         },
 
         showDeleteModal(item) {
@@ -142,7 +146,6 @@ export default {
 
         closeModal() {
             this.showModal = false;
-            this.$emit("updateData");
         },
     },
 };

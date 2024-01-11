@@ -161,6 +161,9 @@ export default {
             } else {
                 this.updateCustomer();
             }
+
+            this.$emit('updateTable')
+            this.$emit('closeModal')
         },
 
         async createCustomer() {

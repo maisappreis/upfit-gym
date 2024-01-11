@@ -92,6 +92,9 @@ export default {
             } else {
                 this.updateRevenue();
             }
+
+            this.$emit('updateTable')
+            this.$emit('closeModal')
         },
 
         async createRevenue() {
@@ -101,6 +104,7 @@ export default {
                     idCustomer: "1",
                     year: 2024,
                     month: "Janeiro",
+                    value: 588.33,
                     notes: "Anotações",
                     paid: false,
                     actions: "",
@@ -118,8 +122,13 @@ export default {
 
         fillModal() {
             this.customer = this.item.name;
-            this.value = this.item.value;
+            this.value = this.item.value
             this.notes = this.item.notes;
+
+            // let va = this.value.toString()
+
+            // console.log(this.value, typeof(this.value))
+            console.log(typeof(this.value))
         },
     },
 
