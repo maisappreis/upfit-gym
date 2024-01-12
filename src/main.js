@@ -13,6 +13,8 @@ import { faMoneyBillTransfer } from '@fortawesome/free-solid-svg-icons';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
 
 library.add(faHeart)
@@ -24,6 +26,8 @@ library.add(faMoneyBillTransfer)
 library.add(faPlus)
 library.add(faPenToSquare)
 library.add(faTrashCan)
+library.add(faCheck)
+library.add(faXmark)
 
 createApp(App)
 .component('font-awesome-icon', FontAwesomeIcon)
