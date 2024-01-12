@@ -8,7 +8,7 @@
             <MonthFilter @get-month="getMonth" @get-year="getYear" />
             <DefaultSearch @applySearch="applySearch" />
         </div>
-        <DefaulfTable
+        <DefaultTable
             :columns="columns"
             :data="filteredRevenue"
             :searchedField="searchedField"
@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import DefaulfTable from "../common/DefaulfTable.vue";
+import DefaultTable from "../common/DefaultTable.vue";
 import DefaultButton from "../common/DefaultButton.vue";
 import DefaultSearch from "../common/DefaultSearch.vue";
 import DefaultModal from "../common/DefaultModal.vue";
@@ -50,7 +50,7 @@ import DeleteMessage from "../common/DeleteMessage.vue";
 export default {
     name: "RevenuePage",
     components: {
-        DefaulfTable,
+        DefaultTable,
         DefaultButton,
         DefaultSearch,
         DefaultModal,

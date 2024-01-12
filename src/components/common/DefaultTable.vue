@@ -49,7 +49,12 @@
                                 {{ item[column.key] }}
                             </span>
                             <span v-else-if="column.key === 'value'">
-                                R$ {{ item[column.key].toString().replace(/\./g, ",") }}
+                                R$
+                                {{
+                                    item[column.key]
+                                        .toString()
+                                        .replace(/\./g, ",")
+                                }}
                             </span>
                             <span
                                 v-else-if="column.key === 'paid'"
@@ -130,30 +135,37 @@
                     >Total de {{ totalItems }} itens</span
                 >
             </div>
-            <DefaulfTooltip
+            <DefaultTooltip
                 v-if="showingTooltip"
                 :mouseX="mouseX"
                 :mouseY="mouseY"
             >
                 <p>{{ this.tooltip }}</p>
-            </DefaulfTooltip>
+            </DefaultTooltip>
         </div>
         <div v-else class="not-found">Nenhum resultado foi encontrado.</div>
+        <ResponseMessage
+            v-if="responseMessage"
+            :status200="status200"
+            :responseMessage="responseMessage"
+            @closeMessage="responseMessage=''"
+        />
     </div>
 </template>
 
 <script>
-import DefaulfTooltip from "./DefaultTooltip.vue";
+import DefaultTooltip from "./DefaultTooltip.vue";
+import ResponseMessage from "./ResponseMessage.vue";
 import { updateData } from "../../services/api.js";
 
 export default {
-    name: "DefaulfTable",
-    components: { DefaulfTooltip },
+    name: "DefaultTable",
+    components: { DefaultTooltip, ResponseMessage },
     props: {
         columns: Array,
         data: Array,
         searchedField: Array,
-        page: String
+        page: String,
     },
 
     data: function () {
@@ -166,6 +178,8 @@ export default {
             tooltip: "",
             mouseX: 0,
             mouseY: 0,
+            responseMessage: "",
+            status200: false,
         };
     },
 
@@ -244,11 +258,17 @@ export default {
             try {
                 await updateData(item.id, this.page, updatedPaidStatus);
                 this.$emit("updateData");
+
+                this.responseMessage = "Status do pagamento salvo com sucesso!";
+                this.status200 = true;
             } catch (error) {
                 console.error(
                     "Erro ao atualizar o status de pagamento...",
                     error
                 );
+
+                this.responseMessage = "Erro ao salvar o status do pagamento.";
+                this.status200 = false;
             }
         },
 

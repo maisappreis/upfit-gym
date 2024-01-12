@@ -7,7 +7,7 @@
             </DefaultButton>
             <DefaultSearch @applySearch="applySearch" />
         </div>
-        <DefaulfTable
+        <DefaultTable
             :columns="columns"
             :data="customers"
             :searchedField="searchedField"
@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import DefaulfTable from "../common/DefaulfTable.vue";
+import DefaultTable from "../common/DefaultTable.vue";
 import DefaultButton from "../common/DefaultButton.vue";
 import DefaultSearch from "../common/DefaultSearch.vue";
 import DefaultModal from "../common/DefaultModal.vue";
@@ -45,7 +45,7 @@ import DeleteMessage from "../common/DeleteMessage.vue";
 export default {
     name: "CustomersPage",
     components: {
-        DefaulfTable,
+        DefaultTable,
         DefaultButton,
         DefaultSearch,
         DefaultModal,
