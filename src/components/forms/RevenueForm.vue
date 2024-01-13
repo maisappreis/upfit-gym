@@ -150,14 +150,10 @@ export default {
                 };
 
                 await postData("revenue", newRevenue);
-
-                this.msg = "Receita criada com sucesso!";
-                this.$emit("showMessage", this.msg);
+                this.$emit("showMessage", "Receita criada com sucesso!");
             } catch (error) {
                 console.error("Erro ao criar receita.", error);
-
-                this.msg = "Erro ao criar receita.";
-                this.$emit("showMessage", this.msg);
+                this.$emit("showMessage", "Erro ao criar receita.");
             }
         },
 
@@ -170,18 +166,11 @@ export default {
                     value: this.value,
                     notes: this.notes,
                 };
-
-                console.log("customer", this.customer);
-
                 await updateData(this.item.id, "revenue", newRevenue);
-
-                this.msg = "Receita atualizada com sucesso!";
-                this.$emit("showMessage", this.msg);
+                this.$emit("showMessage", "Receita atualizada com sucesso!");
             } catch (error) {
                 console.error("Erro ao atualizar receita.", error);
-
-                this.msg = "Erro ao atualizar receita.";
-                this.$emit("showMessage", this.msg);
+                this.$emit("showMessage", "Erro ao atualizar receita.");
             }
         },
 

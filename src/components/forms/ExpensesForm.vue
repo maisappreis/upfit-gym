@@ -108,14 +108,10 @@ export default {
                 };
 
                 await postData("expenses", newExpense);
-
-                this.msg = "Despesa criada com sucesso!";
-                this.$emit("showMessage", this.msg);
+                this.$emit("showMessage", "Despesa criada com sucesso!");
             } catch (error) {
                 console.error("Erro ao criar despesa.", error);
-
-                this.msg = "Erro ao criar despesa.";
-                this.$emit("showMessage", this.msg);
+                this.$emit("showMessage", "Erro ao criar despesa.");
             }
         },
 
@@ -131,14 +127,10 @@ export default {
                 };
 
                 await updateData(this.item.id, "expenses", newExpense);
-
-                this.msg = "Despesa atualizada com sucesso!";
-                this.$emit("showMessage", this.msg);
+                this.$emit("showMessage", "Despesa atualizada com sucesso!");
             } catch (error) {
                 console.error("Erro ao atualizar despesa.", error);
-
-                this.msg = "Erro ao atualizar despesa.";
-                this.$emit("showMessage", this.msg);
+                this.$emit("showMessage", "Erro ao atualizar despesa.");
             }
         },
 

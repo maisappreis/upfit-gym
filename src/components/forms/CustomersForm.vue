@@ -179,14 +179,10 @@ export default {
                 };
 
                 await postData("customers", newCustomer);
-
-                this.msg = "Cliente criado com sucesso!";
-                this.$emit("showMessage", this.msg);
+                this.$emit("showMessage", "Cliente criado com sucesso!");
             } catch (error) {
                 console.error("Erro ao criar cliente.", error);
-
-                this.msg = "Erro ao criar cliente.";
-                this.$emit("showMessage", this.msg);
+                this.$emit("showMessage", "Erro ao criar cliente.");
             }
         },
 
@@ -203,14 +199,10 @@ export default {
                 };
 
                 await updateData(this.item.id, "customers", updatedCustomer);
-
-                this.msg = "Cliente atualizado com sucesso!";
-                this.$emit("showMessage", this.msg);
+                this.$emit("showMessage", "Cliente atualizado com sucesso!");
             } catch (error) {
                 console.error("Erro ao atualizar cliente.", error);
-
-                this.msg = "Erro ao atualizar cliente.";
-                this.$emit("showMessage", this.msg);
+                this.$emit("showMessage", "Erro ao atualizar cliente.");
             }
         },
 
