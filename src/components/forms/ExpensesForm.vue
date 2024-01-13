@@ -26,6 +26,17 @@
                     required
                 />
             </div>
+            <div class="form-item">
+                <label class="form-label" for="value">Valor:</label>
+                <input
+                    class="form-input"
+                    type="number"
+                    id="value"
+                    name="value"
+                    v-model="value"
+                    required
+                />
+            </div>
             <div class="form-buttons-area">
                 <DefaultButton
                     style="background-color: green"
@@ -46,10 +57,12 @@
 
 <script>
 import DefaultButton from "../common/DefaultButton.vue";
-import { postData } from "../../services/api.js";
+import { postData, updateData } from "../../services/api.js";
+import { globalVariablesMixin } from "../../utils/variables.js";
 
 export default {
     name: "ExpensesForm",
+    mixins: [globalVariablesMixin],
 
     components: {
         DefaultButton,
@@ -65,39 +78,77 @@ export default {
         return {
             bill: "",
             dueDate: "",
+            value: 0
         };
     },
 
     methods: {
-        async saveExpense() {
+        saveExpense() {
             if (this.action === "create") {
                 this.createExpense();
             } else {
                 this.updateExpense();
             }
 
-            this.$emit('updateTable')
-            this.$emit('closeModal')
+            this.$emit("updateTable");
         },
 
         async createExpense() {
             try {
+                let date = this.getYearAndMonth(this.dueDate);
+
                 let newExpense = {
-                    year: 2024, // Mês e ano deve ser pego da própria data de vendimento.
-                    month: "Janeiro",
-                    name: this.customerName,
-                    due_date: this.frequency,
+                    year: date.year,
+                    month: date.month,
+                    name: this.bill,
+                    due_date: this.dueDate,
+                    value: this.value,
                     paid: false,
+                    actions: ""
                 };
-                console.log("newExpense", newExpense);
+
                 await postData("expenses", newExpense);
+
+                this.msg = "Despesa criada com sucesso!";
+                this.$emit("showMessage", this.msg);
             } catch (error) {
-                console.error("Erro ao salvar os dados.", error);
+                console.error("Erro ao criar despesa.", error);
+
+                this.msg = "Erro ao criar despesa.";
+                this.$emit("showMessage", this.msg);
             }
         },
 
         async updateExpense() {
-            console.log("Faz PATCH");
+            try {
+                let date = this.getYearAndMonth(this.dueDate);
+
+                let newExpense = {
+                    year: date.year,
+                    month: date.month,
+                    name: this.bill,
+                    due_date: this.dueDate,
+                };
+
+                await updateData(this.item.id, "expenses", newExpense);
+
+                this.msg = "Despesa atualizada com sucesso!";
+                this.$emit("showMessage", this.msg);
+            } catch (error) {
+                console.error("Erro ao atualizar despesa.", error);
+
+                this.msg = "Erro ao atualizar despesa.";
+                this.$emit("showMessage", this.msg);
+            }
+        },
+
+        getYearAndMonth(dueDate) {
+            let parsedDate = new Date(dueDate);
+            let year = parsedDate.getFullYear();
+            let monthNumber = parsedDate.getMonth();
+            let month = this.months[monthNumber];
+
+            return { year, month };
         },
 
         fillModal() {

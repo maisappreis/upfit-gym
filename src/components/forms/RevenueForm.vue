@@ -14,7 +14,7 @@
                     <option
                         v-for="(customer, index) in customers"
                         :key="index"
-                        :value="customer.name"
+                        :value="customer"
                     >
                         {{ customer.name }}
                     </option>
@@ -30,6 +30,43 @@
                     v-model="value"
                     required
                 />
+            </div>
+            <div class="form-item">
+                <label class="form-label" for="month" style="min-width: 110px"
+                    >Receber em:</label
+                >
+                <select
+                    class="form-select font month"
+                    style="margin-right: 10px"
+                    id="month"
+                    name="month"
+                    v-model="month"
+                    required
+                >
+                    <option
+                        v-for="(month, index) in months"
+                        :key="index"
+                        :value="month"
+                    >
+                        {{ month }}
+                    </option>
+                </select>
+                <select
+                    class="form-select font"
+                    style="max-width: 120px"
+                    id="year"
+                    name="year"
+                    v-model="year"
+                    required
+                >
+                    <option
+                        v-for="(year, index) in years"
+                        :key="index"
+                        :value="year"
+                    >
+                        {{ year }}
+                    </option>
+                </select>
             </div>
             <div class="form-item">
                 <label class="form-label" for="notes">Notas:</label>
@@ -61,10 +98,12 @@
 
 <script>
 import DefaultButton from "../common/DefaultButton.vue";
-import { postData } from "../../services/api.js";
+import { postData, updateData } from "../../services/api.js";
+import { globalVariablesMixin } from "../../utils/variables.js";
 
 export default {
     name: "RevenueForm",
+    mixins: [globalVariablesMixin],
 
     components: {
         DefaultButton,
@@ -74,7 +113,7 @@ export default {
         item: Object,
         action: String,
         modalTitle: String,
-        customers: Array
+        customers: Array,
     },
 
     data: function () {
@@ -82,53 +121,74 @@ export default {
             customer: "",
             value: 0,
             notes: "",
+            year: 0,
+            month: "",
         };
     },
 
     methods: {
-        async saveRevenue() {
+        saveRevenue() {
             if (this.action === "create") {
                 this.createRevenue();
             } else {
                 this.updateRevenue();
             }
 
-            this.$emit('updateTable')
-            this.$emit('closeModal')
+            this.$emit("updateTable");
         },
 
         async createRevenue() {
             try {
                 let newRevenue = {
-                    id: 1, // Corrigir aqui, os dados estão mocados.
-                    idCustomer: "1",
-                    year: 2024,
-                    month: "Janeiro",
-                    value: 588.33,
-                    notes: "Anotações",
+                    customerID: this.customer.id,
+                    year: this.year,
+                    month: this.month,
+                    value: this.value,
+                    notes: this.notes,
                     paid: false,
                     actions: "",
                 };
 
                 await postData("revenue", newRevenue);
+
+                this.msg = "Receita criada com sucesso!";
+                this.$emit("showMessage", this.msg);
             } catch (error) {
-                console.error("Erro ao criar uma receita.", error);
+                console.error("Erro ao criar receita.", error);
+
+                this.msg = "Erro ao criar receita.";
+                this.$emit("showMessage", this.msg);
             }
         },
 
         async updateRevenue() {
-            console.log("Faz PATCH");
+            try {
+                let newRevenue = {
+                    customerID: "1",
+                    year: this.year,
+                    month: this.month,
+                    value: this.value,
+                    notes: this.notes,
+                };
+
+                console.log("customer", this.customer);
+
+                await updateData(this.item.id, "revenue", newRevenue);
+
+                this.msg = "Receita atualizada com sucesso!";
+                this.$emit("showMessage", this.msg);
+            } catch (error) {
+                console.error("Erro ao atualizar receita.", error);
+
+                this.msg = "Erro ao atualizar receita.";
+                this.$emit("showMessage", this.msg);
+            }
         },
 
         fillModal() {
             this.customer = this.item.name;
-            this.value = this.item.value
+            this.value = this.item.value;
             this.notes = this.item.notes;
-
-            // let va = this.value.toString()
-
-            // console.log(this.value, typeof(this.value))
-            console.log(typeof(this.value))
         },
     },
 

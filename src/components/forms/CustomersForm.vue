@@ -127,7 +127,7 @@
 
 <script>
 import DefaultButton from "../common/DefaultButton.vue";
-import { postData } from "../../services/api.js";
+import { postData, updateData } from "../../services/api.js";
 
 export default {
     name: "CustomersForm",
@@ -166,18 +166,18 @@ export default {
         },
 
         async createCustomer() {
-            let newCustomer = {
-                name: this.customerName,
-                frequency: this.frequency,
-                start: this.start,
-                plan: this.plan,
-                value: this.value,
-                status: this.status,
-                notes: this.notes,
-                actions: "",
-            };
-
             try {
+                let newCustomer = {
+                    name: this.customerName,
+                    frequency: this.frequency,
+                    start: this.start,
+                    plan: this.plan,
+                    value: this.value,
+                    status: this.status,
+                    notes: this.notes,
+                    actions: ""
+                };
+
                 await postData("customers", newCustomer);
 
                 this.msg = "Cliente criado com sucesso!";
@@ -191,7 +191,27 @@ export default {
         },
 
         async updateCustomer() {
-            console.log("Faz PATCH");
+            try {
+                let updatedCustomer = {
+                    name: this.customerName,
+                    frequency: this.frequency,
+                    start: this.start,
+                    plan: this.plan,
+                    value: this.value,
+                    status: this.status,
+                    notes: this.notes,
+                };
+
+                await updateData(this.item.id, "customers", updatedCustomer);
+
+                this.msg = "Cliente atualizado com sucesso!";
+                this.$emit("showMessage", this.msg);
+            } catch (error) {
+                console.error("Erro ao atualizar cliente.", error);
+
+                this.msg = "Erro ao atualizar cliente.";
+                this.$emit("showMessage", this.msg);
+            }
         },
 
         fillModal() {
