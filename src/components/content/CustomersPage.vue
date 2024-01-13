@@ -43,6 +43,7 @@ import DefaultSearch from "../common/DefaultSearch.vue";
 import DefaultModal from "../common/DefaultModal.vue";
 import CustomersForm from "../forms/CustomersForm.vue";
 import DeleteMessage from "../common/DeleteMessage.vue";
+import { deleteData } from "../../services/api.js";
 
 export default {
     name: "CustomersPage",
@@ -99,10 +100,16 @@ export default {
             this.modalTitle = "Atualizar Cliente";
         },
 
-        deleteCustomer() {
-            console.log(
-                `Fazer método DELETE em ${this.item.name}, id: ${this.item.id}`
-            );
+        async deleteCustomer() {
+            try {
+                await deleteData(this.item.id, "customers");
+
+                this.showMessage("Cliente excluído com sucesso!");
+            } catch (error) {
+                console.error("Erro ao excluir cliente.", error);
+
+                this.showMessage("Erro ao excluir cliente.");
+            }
 
             this.showModal = false;
             this.$emit("updateData");

@@ -12,6 +12,7 @@
             :columns="columns"
             :data="filteredRevenue"
             :searchedField="searchedField"
+            :requestMessage="requestMessage"
             :page="selectedPage"
             @updateData="$emit('updateData')"
             @updateItem="updateRevenue"
@@ -32,6 +33,7 @@
                 :modalTitle="modalTitle"
                 @updateTable="$emit('updateData')"
                 @closeModal="closeModal"
+                @showMessage="showMessage"
             />
         </DefaultModal>
         <div v-if="showModal" class="defocus"></div>
@@ -46,6 +48,7 @@ import DefaultModal from "../common/DefaultModal.vue";
 import MonthFilter from "../common/MonthFilter.vue";
 import RevenueForm from "../forms/RevenueForm.vue";
 import DeleteMessage from "../common/DeleteMessage.vue";
+import { deleteData } from "../../services/api.js";
 
 export default {
     name: "RevenuePage",
@@ -84,6 +87,7 @@ export default {
             action: "",
             deleteMessage: "",
             modalTitle: "",
+            requestMessage: "",
             currentMonth: "",
             currentYear: 0,
         };
@@ -129,10 +133,16 @@ export default {
             this.modalTitle = "Atualizar Receita";
         },
 
-        deleteRevenue() {
-            console.log(
-                `Fazer método DELETE em ${this.item.name}, id: ${this.item.id}`
-            );
+        async deleteRevenue() {
+            try {
+                await deleteData(this.item.id, "revenue");
+
+                this.showMessage("Receita excluída com sucesso!");
+            } catch (error) {
+                console.error("Erro ao excluir receita.", error);
+
+                this.showMessage("Erro ao excluir receita.");
+            }
 
             this.showModal = false;
             this.$emit('updateData')
@@ -149,6 +159,10 @@ export default {
 
         closeModal() {
             this.showModal = false;
+        },
+
+        showMessage(msg) {
+            this.requestMessage = msg;
         },
 
         incrementData() {

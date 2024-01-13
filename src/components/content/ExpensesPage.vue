@@ -12,6 +12,7 @@
             :columns="columns"
             :data="filteredExpenses"
             :searchedField="searchedField"
+            :requestMessage="requestMessage"
             :page="selectedPage"
             @updateData="$emit('updateData')"
             @updateItem="updateExpense"
@@ -31,6 +32,7 @@
                 :modalTitle="modalTitle"
                 @updateTable="$emit('updateData')"
                 @closeModal="closeModal"
+                @showMessage="showMessage"
             />
         </DefaultModal>
         <div v-if="showModal" class="defocus"></div>
@@ -45,6 +47,7 @@ import DefaultModal from "../common/DefaultModal.vue";
 import MonthFilter from "../common/MonthFilter.vue";
 import ExpensesForm from "../forms/ExpensesForm.vue";
 import DeleteMessage from "../common/DeleteMessage.vue";
+import { deleteData } from "../../services/api.js";
 
 export default {
     name: "ExpensesPage",
@@ -81,6 +84,7 @@ export default {
             action: "",
             deleteMessage: "",
             modalTitle: "",
+            requestMessage: "",
             currentMonth: "",
             currentYear: 0,
         };
@@ -126,10 +130,16 @@ export default {
             this.modalTitle = "Atualizar Despesa";
         },
 
-        deleteExpense() {
-            console.log(
-                `Fazer método DELETE em ${this.item.name}, id: ${this.item.id}`
-            );
+        async deleteExpense() {
+            try {
+                await deleteData(this.item.id, "expenses");
+
+                this.showMessage("Despesa excluída com sucesso!");
+            } catch (error) {
+                console.error("Erro ao excluir despesa.", error);
+
+                this.showMessage("Erro ao excluir despesa.");
+            }
 
             this.showModal = false;
             this.$emit('updateData')
@@ -146,6 +156,10 @@ export default {
 
         closeModal() {
             this.showModal = false;
+        },
+
+        showMessage(msg) {
+            this.requestMessage = msg;
         },
     },
 };
