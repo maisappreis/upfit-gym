@@ -91,7 +91,7 @@ export default {
 
     computed: {
         filteredRevenue() {
-            if (this.currentMonth === "all") {
+            if (this.currentMonth === "Todos os meses") {
                 return this.revenue.filter((e) => e.year === this.currentYear);
             } else {
                 return this.revenue.filter(

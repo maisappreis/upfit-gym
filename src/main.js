@@ -15,6 +15,7 @@ import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { globalVariablesMixin } from './utils/variables.js';
 
 
 library.add(faHeart)
@@ -29,6 +30,8 @@ library.add(faTrashCan)
 library.add(faCheck)
 library.add(faXmark)
 
-createApp(App)
-.component('font-awesome-icon', FontAwesomeIcon)
-.mount('#app')
+
+const app = createApp(App);
+app.mixin(globalVariablesMixin);
+app.component('font-awesome-icon', FontAwesomeIcon)
+app.mount('#app');

@@ -88,7 +88,7 @@ export default {
 
     computed: {
         filteredExpenses() {
-            if (this.currentMonth === "all") {
+            if (this.currentMonth === "Todos os meses") {
                 return this.expenses.filter((e) => e.year === this.currentYear);
             } else {
                 return this.expenses.filter(
