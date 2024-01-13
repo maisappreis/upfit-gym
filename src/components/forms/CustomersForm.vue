@@ -155,32 +155,38 @@ export default {
     },
 
     methods: {
-        async saveCustomer() {
+        saveCustomer() {
             if (this.action === "create") {
                 this.createCustomer();
             } else {
                 this.updateCustomer();
             }
 
-            this.$emit('updateTable')
-            this.$emit('closeModal')
+            this.$emit("updateTable");
         },
 
         async createCustomer() {
+            let newCustomer = {
+                name: this.customerName,
+                frequency: this.frequency,
+                start: this.start,
+                plan: this.plan,
+                value: this.value,
+                status: this.status,
+                notes: this.notes,
+                actions: "",
+            };
+
             try {
-                let newCustomer = {
-                    name: this.customerName,
-                    frequency: this.frequency,
-                    start: this.start,
-                    plan: this.plan,
-                    value: this.value,
-                    status: this.status,
-                    notes: this.notes,
-                    actions: "",
-                };
-                await postData("customers", JSON.stringify(newCustomer));
+                await postData("customers", newCustomer);
+
+                this.msg = "Cliente criado com sucesso!";
+                this.$emit("showMessage", this.msg);
             } catch (error) {
-                console.error("Erro ao adicionar cliente.", error);
+                console.error("Erro ao criar cliente.", error);
+
+                this.msg = "Erro ao criar cliente.";
+                this.$emit("showMessage", this.msg);
             }
         },
 
@@ -198,9 +204,9 @@ export default {
             this.notes = this.item.notes;
 
             if (this.item.status === "Ativo") {
-                this.status = "active"
+                this.status = "active";
             } else {
-                this.status = "inactive"
+                this.status = "inactive";
             }
         },
     },

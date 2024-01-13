@@ -1,17 +1,17 @@
 <template>
     <div>
-        <div v-if="status200" class="box-area success">
+        <div v-if="showAlert" class="box-area success">
             <div class="marker green"></div>
             <div class="message-area">
                 <font-awesome-icon icon="fa-solid fa-check" class="icon" />
-                {{ responseMessage }}
+                <slot></slot>
             </div>
         </div>
         <div v-else class="box-area error">
             <div class="marker red"></div>
             <div class="message-area">
                 <font-awesome-icon icon="fa-solid fa-xmark" class="icon" />
-                {{ responseMessage }}
+                <slot></slot>
             </div>
         </div>
     </div>
@@ -22,24 +22,23 @@ export default {
     name: "ResponseMessage",
 
     props: {
-        status200: Boolean,
         responseMessage: String,
     },
 
-    data() {
-        return {
-            showResponseMessage: false,
-        };
+    computed: {
+        showAlert() {
+            return this.responseMessage.includes("success");
+        },
     },
-
+    
     methods: {
         closeMessage() {
-            this.$emit('closeMessage')
-        }
+            this.$emit("closeMessage");
+        },
     },
 
     mounted() {
-        setTimeout(this.closeMessage, 3000);
+        setTimeout(this.closeMessage, 5000);
     },
 };
 </script>
@@ -51,7 +50,7 @@ export default {
     right: 75px;
     height: 90px;
     width: 500px;
-    z-index: 12;
+    z-index: 99;
     border-radius: 8px;
 
     display: flex;

@@ -11,6 +11,7 @@
             :columns="columns"
             :data="customers"
             :searchedField="searchedField"
+            :requestMessage="requestMessage"
             @updateItem="updateCustomer"
             @deleteItem="showDeleteModal"
         />
@@ -28,6 +29,7 @@
                 :modalTitle="modalTitle"
                 @updateTable="$emit('updateData')"
                 @closeModal="closeModal"
+                @showMessage="showMessage"
             />
         </DefaultModal>
         <div v-if="showModal" class="defocus"></div>
@@ -75,6 +77,7 @@ export default {
             action: "",
             deleteMessage: "",
             modalTitle: "",
+            requestMessage: "",
         };
     },
 
@@ -102,7 +105,7 @@ export default {
             );
 
             this.showModal = false;
-            this.$emit('updateData')
+            this.$emit("updateData");
         },
 
         showDeleteModal(item) {
@@ -115,6 +118,10 @@ export default {
 
         closeModal() {
             this.showModal = false;
+        },
+
+        showMessage(msg) {
+            this.requestMessage = msg;
         },
     },
 };

@@ -146,10 +146,11 @@
         <div v-else class="not-found">Nenhum resultado foi encontrado.</div>
         <ResponseMessage
             v-if="responseMessage"
-            :status200="status200"
             :responseMessage="responseMessage"
-            @closeMessage="responseMessage=''"
-        />
+            @closeMessage="responseMessage = ''"
+        >
+            {{ responseMessage }}
+        </ResponseMessage>
     </div>
 </template>
 
@@ -166,6 +167,7 @@ export default {
         data: Array,
         searchedField: Array,
         page: String,
+        requestMessage: String,
     },
 
     data: function () {
@@ -179,7 +181,6 @@ export default {
             mouseX: 0,
             mouseY: 0,
             responseMessage: "",
-            status200: false,
         };
     },
 
@@ -241,7 +242,6 @@ export default {
             }
 
             this.showingTooltip = true;
-
             this.mouseX = event.clientX;
             this.mouseY = event.clientY + 15;
         },
@@ -260,7 +260,6 @@ export default {
                 this.$emit("updateData");
 
                 this.responseMessage = "Status do pagamento salvo com sucesso!";
-                this.status200 = true;
             } catch (error) {
                 console.error(
                     "Erro ao atualizar o status de pagamento...",
@@ -268,7 +267,6 @@ export default {
                 );
 
                 this.responseMessage = "Erro ao salvar o status do pagamento.";
-                this.status200 = false;
             }
         },
 
@@ -309,6 +307,14 @@ export default {
         goToLastPage() {
             if (this.currentPage !== this.totalPages) {
                 this.currentPage = this.totalPages;
+            }
+        },
+    },
+
+    watch: {
+        requestMessage() {
+            if (this.requestMessage) {
+                this.responseMessage = this.requestMessage;
             }
         },
     },
