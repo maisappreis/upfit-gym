@@ -5,7 +5,12 @@
                 <font-awesome-icon icon="fa-solid fa-plus" class="icon-add" />
                 Nova Despesa
             </DefaultButton>
-            <MonthFilter @get-month="getMonth" @get-year="getYear" />
+            <MonthFilter
+                @get-month="getMonth"
+                @get-year="getYear"
+                @get-status="getStatus"
+                :statusList="statusList"
+            />
             <DefaultSearch @applySearch="applySearch" />
         </div>
         <DefaultTable
@@ -75,9 +80,10 @@ export default {
                 { key: "name", name: "Nome" },
                 { key: "due_date", name: "Data de vencimento" },
                 { key: "value", name: "Valor" },
-                { key: "is_paid", name: "Status" },
+                { key: "paid", name: "Status" },
                 { key: "actions", name: "" },
             ],
+            statusList: ["Pago", "À pagar", "Todos"],
             searchedField: [],
             showModal: false,
             item: {},
@@ -87,18 +93,32 @@ export default {
             requestMessage: "",
             currentMonth: "",
             currentYear: 0,
+            currentStatus: "",
         };
     },
 
     computed: {
         filteredExpenses() {
-            if (this.currentMonth === "Todos os meses") {
+            if (
+                this.currentMonth === "Todos os meses" &&
+                this.currentStatus === "Todos"
+            ) {
                 return this.expenses.filter((e) => e.year === this.currentYear);
-            } else {
+            } else if (
+                this.currentMonth !== "Todos os meses" &&
+                this.currentStatus === "Todos"
+            ) {
                 return this.expenses.filter(
                     (e) =>
                         e.month === this.currentMonth &&
                         e.year === this.currentYear
+                );
+            } else {
+                return this.expenses.filter(
+                    (e) =>
+                        e.month === this.currentMonth &&
+                        e.year === this.currentYear &&
+                        e.paid === this.currentStatus
                 );
             }
         },
@@ -111,6 +131,10 @@ export default {
 
         getYear(year) {
             this.currentYear = Number(year);
+        },
+
+        getStatus(status) {
+            this.currentStatus = status;
         },
 
         applySearch(field) {
@@ -142,7 +166,7 @@ export default {
             }
 
             this.showModal = false;
-            this.$emit('updateData')
+            this.$emit("updateData");
         },
 
         showDeleteModal(item) {

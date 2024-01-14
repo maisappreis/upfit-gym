@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const apiUrl = "/data.json";
+// const apiUrl = "/data.json";
+const apiUrl = "/realData.json";
 
 export const fetchData = async () => {
     try {
@@ -26,7 +27,7 @@ export const postData = async (entity, newData) => {
 
 export const updateData = async (id, entity, updatedData) => {
     try {
-        console.log('Atualizando os dados...')
+        console.log('Atualizando os dados...', updatedData)
         const response = await axios.patch(`${apiUrl}/${entity}/${id}`, updatedData);
         return response.data;
     } catch (error) {

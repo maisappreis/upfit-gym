@@ -64,6 +64,7 @@
                                 R$
                                 {{
                                     item[column.key]
+                                        .toFixed(2)
                                         .toString()
                                         .replace(/\./g, ",")
                                 }}
@@ -87,25 +88,6 @@
                                 @mouseout="hideTooltip()"
                             >
                                 {{ item[column.key] }}
-                            </span>
-                            <span
-                                v-else-if="column.key === 'is_paid'"
-                                class="status paid"
-                                :class="{
-                                    active: item[column.key] === true,
-                                    inactive: item[column.key] === false,
-                                }"
-                                @click="changePaidStatus(item)"
-                                @mouseover="
-                                    showTooltip(
-                                        'status',
-                                        $event,
-                                        item[column.key]
-                                    )
-                                "
-                                @mouseout="hideTooltip()"
-                            >
-                                {{ item[column.key] ? "Pago" : "À Pagar" }}
                             </span>
                             <span v-else>
                                 {{ item[column.key] }}
@@ -291,9 +273,15 @@ export default {
 
             try {
                 if (this.page === "expenses") {
-                    updatedPaidStatus = {
-                        paid: !item.is_paid,
-                    };
+                    if (item.paid === "À pagar") {
+                        updatedPaidStatus = {
+                            paid: "Pago",
+                        };
+                    } else if (item.paid === "Pago") {
+                        updatedPaidStatus = {
+                            paid: "À pagar",
+                        };
+                    }
                 } else if (this.page === "revenue") {
                     if (item.paid === "À pagar") {
                         updatedPaidStatus = {

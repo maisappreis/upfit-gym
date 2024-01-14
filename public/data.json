@@ -286,7 +286,7 @@
       "name": "Aluguel",
       "due_date": "2024-01-12",
       "value": 1000,
-      "is_paid": false,
+      "paid": "À pagar",
       "actions": ""
     },
     {
@@ -296,7 +296,7 @@
       "name": "Condomínio",
       "due_date": "2024-01-12",
       "value": 300,
-      "is_paid": true,
+      "paid": "Pago",
       "actions": ""
     },
     {
@@ -306,7 +306,7 @@
       "name": "Energia elétrica",
       "due_date": "2024-01-12",
       "value": 150,
-      "is_paid": false,
+      "paid": "À pagar",
       "actions": ""
     },
     {
@@ -316,7 +316,7 @@
       "name": "Aluguel",
       "due_date": "2024-01-12",
       "value": 1500,
-      "is_paid": false,
+      "paid": "À pagar",
       "actions": ""
     },
     {
@@ -326,7 +326,7 @@
       "name": "Condomínio",
       "due_date": "2024-01-12",
       "value": 200,
-      "is_paid": true,
+      "paid": "Pago",
       "actions": ""
     },
     {
@@ -336,7 +336,7 @@
       "name": "Energia elétrica",
       "due_date": "2024-01-12",
       "value": 100.51,
-      "is_paid": false,
+      "paid": "À pagar",
       "actions": ""
     },{
       "id": 7,
@@ -345,7 +345,7 @@
       "name": "Aluguel",
       "due_date": "2024-01-12",
       "value": 1000,
-      "is_paid": false,
+      "paid": "À pagar",
       "actions": ""
     },
     {
@@ -355,7 +355,7 @@
       "name": "Condomínio",
       "due_date": "2024-01-12",
       "value": 500,
-      "is_paid": true,
+      "paid": "Pago",
       "actions": ""
     },
     {
@@ -365,7 +365,7 @@
       "name": "Energia elétrica",
       "due_date": "2024-01-12",
       "value": 2000,
-      "is_paid": false,
+      "paid": "À pagar",
       "actions": ""
     },
     {
@@ -375,7 +375,7 @@
       "name": "Aluguel",
       "due_date": "2024-01-12",
       "value": 1500,
-      "is_paid": false,
+      "paid": "À pagar",
       "actions": ""
     },
     {
@@ -385,7 +385,7 @@
       "name": "Condomínio",
       "due_date": "2024-01-12",
       "value": 200,
-      "is_paid": true,
+      "paid": "Pago",
       "actions": ""
     },
     {
@@ -395,7 +395,7 @@
       "name": "Energia elétrica",
       "due_date": "2024-01-12",
       "value": 100.51,
-      "is_paid": false,
+      "paid": "À pagar",
       "actions": ""
     },    {
       "id": 13,
@@ -404,7 +404,7 @@
       "name": "Condomínio",
       "due_date": "2024-01-12",
       "value": 500,
-      "is_paid": true,
+      "paid": "Pago",
       "actions": ""
     },
     {
@@ -414,7 +414,7 @@
       "name": "Energia elétrica",
       "due_date": "2024-01-12",
       "value": 2000,
-      "is_paid": false,
+      "paid": "À pagar",
       "actions": ""
     },
     {
@@ -424,7 +424,7 @@
       "name": "Aluguel",
       "due_date": "2024-01-12",
       "value": 1500,
-      "is_paid": false,
+      "paid": "À pagar",
       "actions": ""
     },
     {
@@ -434,7 +434,7 @@
       "name": "Condomínio",
       "due_date": "2024-01-12",
       "value": 500,
-      "is_paid": true,
+      "paid": "Pago",
       "actions": ""
     },
     {
@@ -444,7 +444,7 @@
       "name": "Energia elétrica",
       "due_date": "2024-01-12",
       "value": 200,
-      "is_paid": false,
+      "paid": "À pagar",
       "actions": ""
     }
   ]

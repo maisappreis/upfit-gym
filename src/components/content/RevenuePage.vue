@@ -5,7 +5,12 @@
                 <font-awesome-icon icon="fa-solid fa-plus" class="icon-add" />
                 Nova Receita
             </DefaultButton>
-            <MonthFilter @get-month="getMonth" @get-year="getYear" />
+            <MonthFilter
+                @get-month="getMonth"
+                @get-year="getYear"
+                @get-status="getStatus"
+                :statusList="statusList"
+            />
             <DefaultSearch @applySearch="applySearch" />
         </div>
         <DefaultTable
@@ -81,6 +86,7 @@ export default {
                 { key: "paid", name: "Status" },
                 { key: "actions", name: "" },
             ],
+            statusList: ["Pago", "À pagar", "Link enviado", "Todos"],
             searchedField: [],
             showModal: false,
             item: {},
@@ -90,18 +96,32 @@ export default {
             requestMessage: "",
             currentMonth: "",
             currentYear: 0,
+            currentStatus: "",
         };
     },
 
     computed: {
         filteredRevenue() {
-            if (this.currentMonth === "Todos os meses") {
+            if (
+                this.currentMonth === "Todos os meses" &&
+                this.currentStatus === "Todos"
+            ) {
                 return this.revenue.filter((e) => e.year === this.currentYear);
-            } else {
+            } else if (
+                this.currentMonth !== "Todos os meses" &&
+                this.currentStatus === "Todos"
+            ) {
                 return this.revenue.filter(
                     (e) =>
                         e.month === this.currentMonth &&
                         e.year === this.currentYear
+                );
+            } else {
+                return this.revenue.filter(
+                    (e) =>
+                        e.month === this.currentMonth &&
+                        e.year === this.currentYear &&
+                        e.paid === this.currentStatus
                 );
             }
         },
@@ -114,6 +134,10 @@ export default {
 
         getYear(year) {
             this.currentYear = Number(year);
+        },
+
+        getStatus(status) {
+            this.currentStatus = status;
         },
 
         applySearch(field) {

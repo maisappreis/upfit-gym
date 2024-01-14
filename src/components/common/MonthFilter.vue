@@ -24,9 +24,25 @@
             @change="$emit('get-year', this.year)"
             required
         >
-            <option v-for="(year, index) in years"
-                :key="index" :value="year">
+            <option v-for="(year, index) in years" :key="index" :value="year">
                 {{ year }}
+            </option>
+        </select>
+        <select
+            class="form-select font status"
+            id="status"
+            name="status"
+            v-model="paymentStatus"
+            @change="$emit('get-status', this.paymentStatus)"
+            required
+        >
+            <option disabled selected value="Todos">Status:</option>
+            <option
+                v-for="(status, index) in statusList"
+                :key="index"
+                :value="status"
+            >
+                {{ status }}
             </option>
         </select>
     </div>
@@ -39,10 +55,15 @@ export default {
     name: "MonthFilter",
     mixins: [globalVariablesMixin],
 
+    props: {
+        statusList: Array,
+    },
+
     data() {
         return {
             month: "",
             year: 0,
+            paymentStatus: "",
         };
     },
 
@@ -56,10 +77,17 @@ export default {
             this.$emit("get-month", this.month);
             this.$emit("get-year", this.year);
         },
+
+        getStatus() {
+            this.paymentStatus = "Todos";
+
+            this.$emit("get-status", this.paymentStatus);
+        },
     },
 
     mounted() {
         this.getDate();
+        this.getStatus();
     },
 };
 </script>
@@ -73,10 +101,14 @@ export default {
 
 .font {
     font-size: 16px;
+    margin-left: 15px;
 }
 
 .month {
-    margin-right: 15px;
     min-width: 170px;
+}
+
+.status {
+    min-width: 140px;
 }
 </style>
