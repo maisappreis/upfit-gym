@@ -40,28 +40,11 @@ export default {
     data() {
         return {
             chartData: {
-                labels: ["Janeiro", "Fevereiro", "Março", "Abril"],
-                datasets: [
-                    {
-                        label: "Clientes Ativos",
-                        backgroundColor: "blue",
-                        data: [30, 40, 50, 45],
-                    },
-                ],
+                labels: [],
+                datasets: [],
             },
             chartOptions: {
                 responsive: true,
-                // options: {
-                //     plugins: {
-                //         legend: {
-                //             labels: {
-                //                 font: {
-                //                     size: 20,
-                //                 },
-                //             },
-                //         },
-                //     },
-                // },
             },
         };
     },
@@ -72,6 +55,66 @@ export default {
                 height: `100%`,
                 position: "relative",
             };
+        },
+    },
+
+    methods: {
+        calculateActiveCustomersPerMonth() {
+            const activeCustomersPerMonth = [];
+
+            this.revenue.forEach((revenueRecord) => {
+                 if (revenueRecord.paid) {
+                    const year = revenueRecord.year;
+                    const month = revenueRecord.month;
+                    const customerId = revenueRecord.idCustomer;
+
+                    const customer = this.customers.find(
+                        (cust) => cust.id === parseInt(customerId)
+                    );
+
+                    if (customer && customer.status === "Ativo") {
+                        const existingEntryIndex =
+                            activeCustomersPerMonth.findIndex(
+                                (entry) =>
+                                    entry.year === year && entry.month === month
+                            );
+
+                        if (existingEntryIndex === -1) {
+                            activeCustomersPerMonth.push({
+                                year,
+                                month,
+                                sum: 1,
+                            });
+                        } else {
+                            activeCustomersPerMonth[existingEntryIndex].sum++;
+                        }
+                    }
+                }
+            });
+
+            return activeCustomersPerMonth;
+        },
+    },
+
+    watch: {
+        customers() {
+            let activeCustomers = this.calculateActiveCustomersPerMonth();
+
+            if (activeCustomers && activeCustomers.length > 0) {
+                let labels = activeCustomers.map((e) => e.month);
+                let data = activeCustomers.map((e) => e.sum);
+
+                this.chartData = {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: "Lucro",
+                            backgroundColor: "green",
+                            data: data,
+                        },
+                    ],
+                };
+            }
         },
     },
 };

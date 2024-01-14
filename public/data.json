@@ -29,7 +29,7 @@
       "start": "2024-01-12",
       "plan": "Mensal",
       "value": 250,
-      "status": "Inativo",
+      "status": "Ativo",
       "notes": "Anotações",
       "actions": ""
     },
@@ -46,7 +46,7 @@
     },
     {
       "id": 5,
-      "name": "Jane Doe",
+      "name": "Gery Bob",
       "frequency": "2x",
       "start": "2024-01-12",
       "plan": "Mensal",
@@ -57,18 +57,18 @@
     },
     {
       "id": 6,
-      "name": "Maisa Preis",
+      "name": "Tom wells",
       "frequency": "2x",
       "start": "2024-01-12",
       "plan": "Mensal",
       "value": 250,
-      "status": "Inativo",
+      "status": "Ativo",
       "notes": "Anotações",
       "actions": ""
     },
     {
       "id": 7,
-      "name": "Jane Doe",
+      "name": "Duff Beer",
       "frequency": "2x",
       "start": "2024-01-12",
       "plan": "Mensal",
@@ -79,7 +79,7 @@
     },
     {
       "id": 8,
-      "name": "Jane Doe",
+      "name": "Luna Garrett",
       "frequency": "2x",
       "start": "2024-01-12",
       "plan": "Mensal",
@@ -90,7 +90,7 @@
     },
     {
       "id": 9,
-      "name": "Jane Doe",
+      "name": "Tony Boo",
       "frequency": "2x",
       "start": "2024-01-12",
       "plan": "Mensal",
@@ -101,62 +101,7 @@
     },
     {
       "id": 10,
-      "name": "Jane Doe",
-      "frequency": "2x",
-      "start": "2024-01-12",
-      "plan": "Mensal",
-      "value": 250,
-      "status": "Inativo",
-      "notes": "Anotações",
-      "actions": ""
-    },
-    {
-      "id": 11,
-      "name": "Renan Bernhardt",
-      "frequency": "2x",
-      "start": "2024-01-12",
-      "plan": "Mensal",
-      "value": 250,
-      "status": "Ativo",
-      "notes": "Anotações",
-      "actions": ""
-    },
-    {
-      "id": 12,
-      "name": "Jane Doe",
-      "frequency": "2x",
-      "start": "2024-01-12",
-      "plan": "Mensal",
-      "value": 250,
-      "status": "Inativo",
-      "notes": "Anotações",
-      "actions": ""
-    },
-    {
-      "id": 13,
-      "name": "Jane Doe",
-      "frequency": "2x",
-      "start": "2024-01-12",
-      "plan": "Mensal",
-      "value": 250,
-      "status": "Ativo",
-      "notes": "Anotações",
-      "actions": ""
-    },
-    {
-      "id": 14,
-      "name": "Jane Doe",
-      "frequency": "2x",
-      "start": "2024-01-12",
-      "plan": "Mensal",
-      "value": 250,
-      "status": "Inativo",
-      "notes": "Anotações",
-      "actions": ""
-    },
-    {
-      "id": 15,
-      "name": "Jane Doe",
+      "name": "Jenny Mono",
       "frequency": "2x",
       "start": "2024-01-12",
       "plan": "Mensal",
@@ -174,7 +119,7 @@
       "month": "Janeiro",
       "value": 5000,
       "notes": "Anotações",
-      "paid": false,
+      "paid": true,
       "actions": ""
     },
     {
@@ -194,7 +139,7 @@
       "month": "Fevereiro",
       "value": 3000,
       "notes": "Anotações",
-      "paid": false,
+      "paid": true,
       "actions": ""
     },
     {
@@ -204,7 +149,7 @@
       "month": "Fevereiro",
       "value": 2000,
       "notes": "Anotações",
-      "paid": false,
+      "paid": true,
       "actions": ""
     },
     {
@@ -214,7 +159,7 @@
       "month": "Março",
       "value": 5000,
       "notes": "Anotações",
-      "paid": false,
+      "paid": true,
       "actions": ""
     },
     {
@@ -234,7 +179,7 @@
       "month": "Maio",
       "value": 3000,
       "notes": "Anotações",
-      "paid": false,
+      "paid": true,
       "actions": ""
     },
     {
@@ -244,7 +189,7 @@
       "month": "Junho",
       "value": 2000,
       "notes": "Anotações",
-      "paid": false,
+      "paid": true,
       "actions": ""
     },
     {
@@ -254,7 +199,7 @@
       "month": "Julho",
       "value": 3000,
       "notes": "Anotações",
-      "paid": false,
+      "paid": true,
       "actions": ""
     },
     {
@@ -264,7 +209,7 @@
       "month": "Agosto",
       "value": 2000,
       "notes": "Anotações",
-      "paid": false,
+      "paid": true,
       "actions": ""
     }
   ],
