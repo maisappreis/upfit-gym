@@ -69,7 +69,6 @@ export default {
                 { key: "plan", name: "Plano" },
                 { key: "value", name: "Valor" },
                 { key: "status", name: "Status" },
-                { key: "notes", name: "Notas" },
                 { key: "actions", name: "" },
             ],
             searchedField: [],

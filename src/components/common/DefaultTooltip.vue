@@ -26,5 +26,7 @@ export default {
     padding: 0px 20px;
     z-index: 12;
     border-radius: 10px;
+    line-height: 1.8;
+    margin-right: 30px;
 }
 </style>

@@ -15,6 +15,7 @@ import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import { globalVariablesMixin } from './utils/variables.js';
 import { globalMethods } from './utils/methods.js';
 
@@ -30,6 +31,7 @@ library.add(faPenToSquare)
 library.add(faTrashCan)
 library.add(faCheck)
 library.add(faXmark)
+library.add(faCircleInfo)
 
 
 const app = createApp(App);

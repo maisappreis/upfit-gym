@@ -20,7 +20,19 @@
                             :key="column.key"
                             style="text-align: center"
                         >
-                            <span v-if="column.key === 'actions'">
+                            <span
+                                v-if="column.key === 'actions'"
+                                class="align-right"
+                            >
+                                <font-awesome-icon
+                                    v-if="item.notes"
+                                    icon="fa-solid fa-circle-info"
+                                    class="icon"
+                                    @mouseover="
+                                        showTooltip('notas', $event, item)
+                                    "
+                                    @mouseout="hideTooltip()"
+                                />
                                 <font-awesome-icon
                                     icon="fa-solid fa-pen-to-square"
                                     class="icon"
@@ -257,12 +269,14 @@ export default {
                 } else {
                     this.tooltip = "Marcar como pago";
                 }
+            } else if (tooltip === "notas") {
+                this.tooltip = item.notes;
             } else {
                 this.tooltip = tooltip;
             }
 
             this.showingTooltip = true;
-            this.mouseX = event.clientX;
+            this.mouseX = event.clientX - 40;
             this.mouseY = event.clientY + 15;
         },
 
@@ -463,5 +477,11 @@ tr:hover {
 .checkbox {
     transform: scale(1.5);
     margin-right: 5px;
+}
+
+.align-right {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 15px;
 }
 </style>
