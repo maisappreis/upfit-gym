@@ -114,152 +114,167 @@
   "revenue": [
     {
       "id": 1,
-      "idCustomer": "1",
+      "customer_id": "1",
       "year": 2024,
       "month": "Janeiro",
+      "due_date": 5,
       "value": 5000,
       "notes": "Anotações",
-      "paid": true,
+      "paid": "Pago",
       "actions": ""
     },
     {
       "id": 2,
-      "idCustomer": "2",
+      "customer_id": "2",
       "year": 2024,
       "month": "Janeiro",
+      "due_date": 5,
       "value": 4000,
       "notes": "Anotações",
-      "paid": true,
+      "paid": "Pago",
       "actions": ""
     },
     {
       "id": 3,
-      "idCustomer": "3",
+      "customer_id": "3",
       "year": 2024,
-      "month": "Fevereiro",
+      "month": "Janeiro",
+      "due_date": 5,
       "value": 3000,
       "notes": "Anotações",
-      "paid": true,
+      "paid": "Link enviado",
       "actions": ""
     },
     {
       "id": 4,
-      "idCustomer": "4",
+      "customer_id": "4",
       "year": 2024,
       "month": "Fevereiro",
+      "due_date": 5,
       "value": 2000,
       "notes": "Anotações",
-      "paid": true,
+      "paid": "Pago",
       "actions": ""
     },
     {
       "id": 5,
-      "idCustomer": "1",
+      "customer_id": "1",
       "year": 2024,
       "month": "Março",
+      "due_date": 5,
       "value": 5000,
       "notes": "Anotações",
-      "paid": true,
+      "paid": "Pago",
       "actions": ""
     },
     {
       "id": 6,
-      "idCustomer": "2",
+      "customer_id": "2",
       "year": 2024,
       "month": "Abril",
+      "due_date": 5,
       "value": 4000,
       "notes": "Anotações",
-      "paid": true,
+      "paid": "Pago",
       "actions": ""
     },
     {
       "id": 7,
-      "idCustomer": "3",
+      "customer_id": "3",
       "year": 2024,
       "month": "Maio",
+      "due_date": 5,
       "value": 3000,
       "notes": "Anotações",
-      "paid": true,
+      "paid": "Pago",
       "actions": ""
     },
     {
       "id": 8,
-      "idCustomer": "4",
+      "customer_id": "4",
       "year": 2024,
       "month": "Junho",
+      "due_date": 5,
       "value": 2000,
       "notes": "Anotações",
-      "paid": true,
+      "paid": "Pago",
       "actions": ""
     },
     {
       "id": 9,
-      "idCustomer": "3",
+      "customer_id": "3",
       "year": 2024,
       "month": "Julho",
+      "due_date": 5,
       "value": 3000,
       "notes": "Anotações",
-      "paid": true,
+      "paid": "Pago",
       "actions": ""
     },
     {
       "id": 10,
-      "idCustomer": "4",
+      "customer_id": "4",
       "year": 2024,
       "month": "Agosto",
+      "due_date": 5,
       "value": 2000,
       "notes": "Anotações",
-      "paid": true,
+      "paid": "Pago",
       "actions": ""
     },
     {
       "id": 11,
-      "idCustomer": "4",
+      "customer_id": "4",
       "year": 2024,
       "month": "Setembro",
+      "due_date": 5,
       "value": 2000,
       "notes": "Anotações",
-      "paid": true,
+      "paid": "Pago",
       "actions": ""
     },
     {
       "id": 12,
-      "idCustomer": "3",
+      "customer_id": "3",
       "year": 2024,
       "month": "Outubro",
+      "due_date": 5,
       "value": 3000,
       "notes": "Anotações",
-      "paid": true,
+      "paid": "Pago",
       "actions": ""
     },
     {
       "id": 13,
-      "idCustomer": "4",
+      "customer_id": "4",
       "year": 2024,
       "month": "Novembro",
+      "due_date": 5,
       "value": 2000,
       "notes": "Anotações",
-      "paid": true,
+      "paid": "Pago",
       "actions": ""
     },
     {
       "id": 14,
-      "idCustomer": "3",
+      "customer_id": "3",
       "year": 2024,
       "month": "Dezembro",
+      "due_date": 5,
       "value": 3000,
       "notes": "Anotações",
-      "paid": true,
+      "paid": "Pago",
       "actions": ""
     },
     {
       "id": 15,
-      "idCustomer": "4",
+      "customer_id": "4",
       "year": 2025,
       "month": "Janeiro",
+      "due_date": 5,
       "value": 2000,
       "notes": "Anotações",
-      "paid": true,
+      "paid": "Pago",
       "actions": ""
     }
   ],
@@ -271,7 +286,7 @@
       "name": "Aluguel",
       "due_date": "2024-01-12",
       "value": 1000,
-      "paid": false,
+      "is_paid": false,
       "actions": ""
     },
     {
@@ -280,8 +295,8 @@
       "month": "Janeiro",
       "name": "Condomínio",
       "due_date": "2024-01-12",
-      "value": 500,
-      "paid": true,
+      "value": 300,
+      "is_paid": true,
       "actions": ""
     },
     {
@@ -290,8 +305,8 @@
       "month": "Janeiro",
       "name": "Energia elétrica",
       "due_date": "2024-01-12",
-      "value": 2000,
-      "paid": false,
+      "value": 150,
+      "is_paid": false,
       "actions": ""
     },
     {
@@ -301,7 +316,7 @@
       "name": "Aluguel",
       "due_date": "2024-01-12",
       "value": 1500,
-      "paid": false,
+      "is_paid": false,
       "actions": ""
     },
     {
@@ -311,7 +326,7 @@
       "name": "Condomínio",
       "due_date": "2024-01-12",
       "value": 200,
-      "paid": true,
+      "is_paid": true,
       "actions": ""
     },
     {
@@ -321,7 +336,7 @@
       "name": "Energia elétrica",
       "due_date": "2024-01-12",
       "value": 100.51,
-      "paid": false,
+      "is_paid": false,
       "actions": ""
     },{
       "id": 7,
@@ -330,7 +345,7 @@
       "name": "Aluguel",
       "due_date": "2024-01-12",
       "value": 1000,
-      "paid": false,
+      "is_paid": false,
       "actions": ""
     },
     {
@@ -340,7 +355,7 @@
       "name": "Condomínio",
       "due_date": "2024-01-12",
       "value": 500,
-      "paid": true,
+      "is_paid": true,
       "actions": ""
     },
     {
@@ -350,7 +365,7 @@
       "name": "Energia elétrica",
       "due_date": "2024-01-12",
       "value": 2000,
-      "paid": false,
+      "is_paid": false,
       "actions": ""
     },
     {
@@ -360,7 +375,7 @@
       "name": "Aluguel",
       "due_date": "2024-01-12",
       "value": 1500,
-      "paid": false,
+      "is_paid": false,
       "actions": ""
     },
     {
@@ -370,7 +385,7 @@
       "name": "Condomínio",
       "due_date": "2024-01-12",
       "value": 200,
-      "paid": true,
+      "is_paid": true,
       "actions": ""
     },
     {
@@ -380,7 +395,7 @@
       "name": "Energia elétrica",
       "due_date": "2024-01-12",
       "value": 100.51,
-      "paid": false,
+      "is_paid": false,
       "actions": ""
     },    {
       "id": 13,
@@ -389,7 +404,7 @@
       "name": "Condomínio",
       "due_date": "2024-01-12",
       "value": 500,
-      "paid": true,
+      "is_paid": true,
       "actions": ""
     },
     {
@@ -399,7 +414,7 @@
       "name": "Energia elétrica",
       "due_date": "2024-01-12",
       "value": 2000,
-      "paid": false,
+      "is_paid": false,
       "actions": ""
     },
     {
@@ -409,7 +424,7 @@
       "name": "Aluguel",
       "due_date": "2024-01-12",
       "value": 1500,
-      "paid": false,
+      "is_paid": false,
       "actions": ""
     },
     {
@@ -419,7 +434,7 @@
       "name": "Condomínio",
       "due_date": "2024-01-12",
       "value": 500,
-      "paid": true,
+      "is_paid": true,
       "actions": ""
     },
     {
@@ -429,7 +444,7 @@
       "name": "Energia elétrica",
       "due_date": "2024-01-12",
       "value": 200,
-      "paid": false,
+      "is_paid": false,
       "actions": ""
     }
   ]

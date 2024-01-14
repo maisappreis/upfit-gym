@@ -168,7 +168,7 @@ export default {
         incrementData() {
             this.customers.forEach((customer) => {
                 const matchingRevenue = this.revenue.find(
-                    (revenue) => revenue.idCustomer === customer.id.toString()
+                    (revenue) => revenue.customer_id === customer.id.toString()
                 );
 
                 if (matchingRevenue) {

@@ -60,6 +60,26 @@
                                 v-else-if="column.key === 'paid'"
                                 class="status paid"
                                 :class="{
+                                    active: item[column.key] === 'Pago',
+                                    inactive: item[column.key] === 'À pagar',
+                                    sent: item[column.key] === 'Link enviado',
+                                }"
+                                @click="changePaidStatus(item)"
+                                @mouseover="
+                                    showTooltip(
+                                        'status',
+                                        $event,
+                                        item[column.key]
+                                    )
+                                "
+                                @mouseout="hideTooltip()"
+                            >
+                                {{ item[column.key] }}
+                            </span>
+                            <span
+                                v-else-if="column.key === 'is_paid'"
+                                class="status paid"
+                                :class="{
                                     active: item[column.key] === true,
                                     inactive: item[column.key] === false,
                                 }"
@@ -251,11 +271,31 @@ export default {
         },
 
         async changePaidStatus(item) {
-            let updatedPaidStatus = {
-                paid: !item.paid,
-            };
+            let updatedPaidStatus = {};
+
+            console.log(item);
 
             try {
+                if (this.page === "expenses") {
+                    updatedPaidStatus = {
+                        paid: !item.is_paid,
+                    };
+                } else if (this.page === "revenue") {
+                    if (item.paid === "À pagar") {
+                        updatedPaidStatus = {
+                            paid: "Link enviado",
+                        };
+                    } else if (item.paid === "Link enviado") {
+                        updatedPaidStatus = {
+                            paid: "Pago",
+                        };
+                    } else if (item.paid === "Pago") {
+                        updatedPaidStatus = {
+                            paid: "À pagar",
+                        };
+                    }
+                }
+
                 await updateData(item.id, this.page, updatedPaidStatus);
                 this.$emit("updateData");
 
@@ -370,6 +410,10 @@ tr:hover {
 
 .inactive {
     background-color: red;
+}
+
+.sent {
+    background-color: orange;
 }
 
 .pagination-area {

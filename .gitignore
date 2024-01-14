@@ -27,3 +27,6 @@ pnpm-debug.log*
 
 # Privete Notes
 notes.txt
+
+# Database
+realData.json

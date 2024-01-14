@@ -63,10 +63,10 @@ export default {
             const activeCustomersPerMonth = [];
 
             this.revenue.forEach((revenueRecord) => {
-                 if (revenueRecord.paid) {
+                 if (revenueRecord.paid === "Pago") {
                     const year = revenueRecord.year;
                     const month = revenueRecord.month;
-                    const customerId = revenueRecord.idCustomer;
+                    const customerId = revenueRecord.customer_id;
 
                     const customer = this.customers.find(
                         (cust) => cust.id === parseInt(customerId)

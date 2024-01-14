@@ -75,7 +75,7 @@ export default {
                 { key: "name", name: "Nome" },
                 { key: "due_date", name: "Data de vencimento" },
                 { key: "value", name: "Valor" },
-                { key: "paid", name: "Status" },
+                { key: "is_paid", name: "Status" },
                 { key: "actions", name: "" },
             ],
             searchedField: [],
