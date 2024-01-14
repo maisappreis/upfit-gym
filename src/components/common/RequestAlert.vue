@@ -1,13 +1,13 @@
 <template>
     <div>
-        <div v-if="showAlert" class="box-area success">
+        <div v-if="showAlert" class="alert-area success">
             <div class="marker green"></div>
             <div class="message-area">
                 <font-awesome-icon icon="fa-solid fa-check" class="icon" />
                 <slot></slot>
             </div>
         </div>
-        <div v-else class="box-area error">
+        <div v-else class="alert-area error">
             <div class="marker red"></div>
             <div class="message-area">
                 <font-awesome-icon icon="fa-solid fa-xmark" class="icon" />
@@ -19,7 +19,7 @@
 
 <script>
 export default {
-    name: "ResponseMessage",
+    name: "RequestAlert",
 
     props: {
         responseMessage: String,
@@ -44,7 +44,7 @@ export default {
 </script>
 
 <style scoped>
-.box-area {
+.alert-area {
     position: absolute;
     top: 15px;
     right: 75px;
@@ -83,6 +83,7 @@ export default {
 
 .message-area {
     width: 97%;
+    font-size: 18px;
 }
 
 .icon {

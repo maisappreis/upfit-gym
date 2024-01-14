@@ -144,24 +144,24 @@
             </DefaultTooltip>
         </div>
         <div v-else class="not-found">Nenhum resultado foi encontrado.</div>
-        <ResponseMessage
+        <RequestAlert
             v-if="responseMessage"
             :responseMessage="responseMessage"
             @closeMessage="responseMessage = ''"
         >
             {{ responseMessage }}
-        </ResponseMessage>
+        </RequestAlert>
     </div>
 </template>
 
 <script>
 import DefaultTooltip from "./DefaultTooltip.vue";
-import ResponseMessage from "./ResponseMessage.vue";
+import RequestAlert from "./RequestAlert.vue";
 import { updateData } from "../../services/api.js";
 
 export default {
     name: "DefaultTable",
-    components: { DefaultTooltip, ResponseMessage },
+    components: { DefaultTooltip, RequestAlert },
     props: {
         columns: Array,
         data: Array,
