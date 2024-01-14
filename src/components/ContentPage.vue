@@ -1,6 +1,12 @@
 <template>
     <div class="content">
-        <MetricsPage v-if="selectedPage === 'metrics'" />
+        <MetricsPage
+            v-if="selectedPage === 'metrics'"
+            :customers="customers"
+            :revenue="revenue"
+            :expenses="expenses"
+            @updateData="getData"
+        />
         <CustomersPage
             v-if="selectedPage === 'customers'"
             :customers="customers"

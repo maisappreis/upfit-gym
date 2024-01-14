@@ -5,7 +5,7 @@
           <font-awesome-icon icon="fa-solid fa-chart-line" class="icon" />
           <h2 class="title">Métricas</h2>
         </div>        
-        <p class="subtitle">Estatísticas das entradas e saídas do caixa</p>
+        <p class="subtitle">Visualização gráfica de receita, despesas, lucro e clientes</p>
       </div>
       <div class="text-box" v-if="selectedPage === 'customers'">
         <div class="header-title">
