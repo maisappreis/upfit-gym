@@ -16,6 +16,7 @@ import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { globalVariablesMixin } from './utils/variables.js';
+import { globalMethods } from './utils/methods.js';
 
 
 library.add(faHeart)
@@ -34,4 +35,5 @@ library.add(faXmark)
 const app = createApp(App);
 app.mixin(globalVariablesMixin);
 app.component('font-awesome-icon', FontAwesomeIcon)
+app.config.globalProperties.$methods = globalMethods.methods;
 app.mount('#app');

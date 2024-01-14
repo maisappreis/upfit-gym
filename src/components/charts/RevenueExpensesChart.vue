@@ -53,7 +53,7 @@ export default {
         myStyles() {
             return {
                 height: `100%`,
-                width: '100%',
+                width: "100%",
                 position: "relative",
             };
         },
@@ -65,9 +65,12 @@ export default {
                 this.monthlyRevenue.length > 0 &&
                 this.monthlyExpenses.length > 0
             ) {
-                let labels = this.monthlyRevenue.map((e) => e.month);
-                let revenueData = this.monthlyRevenue.map((e) => e.sum);
-                let expensesData = this.monthlyExpenses.map((e) => e.sum);
+                let monthlyRevenueLast12Months = this.$methods.filterLast12Months(this.monthlyRevenue);
+                let monthlyExpensesLast12Months = this.$methods.filterLast12Months(this.monthlyExpenses);
+
+                let labels = monthlyRevenueLast12Months.map((e) => e.month);
+                let revenueData = monthlyRevenueLast12Months.map((e) => e.sum);
+                let expensesData = monthlyExpensesLast12Months.map((e) => e.sum);
 
                 this.chartData = {
                     labels: labels,

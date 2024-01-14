@@ -211,6 +211,56 @@
       "notes": "Anotações",
       "paid": true,
       "actions": ""
+    },
+    {
+      "id": 11,
+      "idCustomer": "4",
+      "year": 2024,
+      "month": "Setembro",
+      "value": 2000,
+      "notes": "Anotações",
+      "paid": true,
+      "actions": ""
+    },
+    {
+      "id": 12,
+      "idCustomer": "3",
+      "year": 2024,
+      "month": "Outubro",
+      "value": 3000,
+      "notes": "Anotações",
+      "paid": true,
+      "actions": ""
+    },
+    {
+      "id": 13,
+      "idCustomer": "4",
+      "year": 2024,
+      "month": "Novembro",
+      "value": 2000,
+      "notes": "Anotações",
+      "paid": true,
+      "actions": ""
+    },
+    {
+      "id": 14,
+      "idCustomer": "3",
+      "year": 2024,
+      "month": "Dezembro",
+      "value": 3000,
+      "notes": "Anotações",
+      "paid": true,
+      "actions": ""
+    },
+    {
+      "id": 15,
+      "idCustomer": "4",
+      "year": 2025,
+      "month": "Janeiro",
+      "value": 2000,
+      "notes": "Anotações",
+      "paid": true,
+      "actions": ""
     }
   ],
   "expenses": [
@@ -330,6 +380,55 @@
       "name": "Energia elétrica",
       "due_date": "2024-01-12",
       "value": 100.51,
+      "paid": false,
+      "actions": ""
+    },    {
+      "id": 13,
+      "year": 2024,
+      "month": "Setembro",
+      "name": "Condomínio",
+      "due_date": "2024-01-12",
+      "value": 500,
+      "paid": true,
+      "actions": ""
+    },
+    {
+      "id": 14,
+      "year": 2024,
+      "month": "Outubro",
+      "name": "Energia elétrica",
+      "due_date": "2024-01-12",
+      "value": 2000,
+      "paid": false,
+      "actions": ""
+    },
+    {
+      "id": 15,
+      "year": 2024,
+      "month": "Novembro",
+      "name": "Aluguel",
+      "due_date": "2024-01-12",
+      "value": 1500,
+      "paid": false,
+      "actions": ""
+    },
+    {
+      "id": 16,
+      "year": 2024,
+      "month": "Dezembro",
+      "name": "Condomínio",
+      "due_date": "2024-01-12",
+      "value": 500,
+      "paid": true,
+      "actions": ""
+    },
+    {
+      "id": 17,
+      "year": 2025,
+      "month": "Janeiro",
+      "name": "Energia elétrica",
+      "due_date": "2024-01-12",
+      "value": 200,
       "paid": false,
       "actions": ""
     }

@@ -45,13 +45,3 @@ export const deleteData = async (id, entity) => {
         throw error;
     }
 };
-
-// async deleteExistingData() {
-//     try {
-//       const idToDelete = 1; // Example ID to delete
-//       await deleteData(idToDelete);
-//       await this.loadData(); // Refresh the data after deleting
-//     } catch (error) {
-//       console.error('Failed to delete data:', error);
-//     }
-//   },

@@ -101,8 +101,10 @@ export default {
             let activeCustomers = this.calculateActiveCustomersPerMonth();
 
             if (activeCustomers && activeCustomers.length > 0) {
-                let labels = activeCustomers.map((e) => e.month);
-                let data = activeCustomers.map((e) => e.sum);
+
+                let activeCustomersLast12Months = this.$methods.filterLast12Months(activeCustomers);
+                let labels = activeCustomersLast12Months.map((e) => e.month);
+                let data = activeCustomersLast12Months.map((e) => e.sum);
 
                 this.chartData = {
                     labels: labels,

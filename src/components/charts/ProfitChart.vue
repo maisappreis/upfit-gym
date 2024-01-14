@@ -63,8 +63,10 @@ export default {
     watch: {
         monthlyProfit() {
             if (this.monthlyProfit && this.monthlyProfit.length > 0) {
-                let labels = this.monthlyProfit.map((e) => e.month);
-                let data = this.monthlyProfit.map((e) => e.sum);
+                let monthlyProfitLast12Months = this.$methods.filterLast12Months(this.monthlyProfit);
+
+                let labels = monthlyProfitLast12Months.map((e) => e.month);
+                let data = monthlyProfitLast12Months.map((e) => e.sum);
 
                 this.chartData = {
                     labels: labels,
