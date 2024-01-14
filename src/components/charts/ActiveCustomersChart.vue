@@ -110,8 +110,8 @@ export default {
                     labels: labels,
                     datasets: [
                         {
-                            label: "Lucro",
-                            backgroundColor: "green",
+                            label: "Clientes Ativos",
+                            backgroundColor: "blue",
                             data: data,
                         },
                     ],

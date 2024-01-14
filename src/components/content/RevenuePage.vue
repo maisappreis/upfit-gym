@@ -76,8 +76,8 @@ export default {
                 { key: "name", name: "Nome" },
                 { key: "start", name: "Data de início" },
                 { key: "plan", name: "Plano" },
+                { key: "due_date", name: "Vencimento" },
                 { key: "value", name: "Valor" },
-                { key: "notes", name: "Notas" },
                 { key: "paid", name: "Status" },
                 { key: "actions", name: "" },
             ],
@@ -145,7 +145,7 @@ export default {
             }
 
             this.showModal = false;
-            this.$emit('updateData')
+            this.$emit("updateData");
         },
 
         showDeleteModal(item) {
@@ -167,15 +167,15 @@ export default {
 
         incrementData() {
             this.customers.forEach((customer) => {
-                const matchingRevenue = this.revenue.find(
+                const matchingRevenues = this.revenue.filter(
                     (revenue) => revenue.customer_id === customer.id.toString()
                 );
 
-                if (matchingRevenue) {
+                matchingRevenues.forEach((matchingRevenue) => {
                     matchingRevenue.name = customer.name;
                     matchingRevenue.start = customer.start;
                     matchingRevenue.plan = customer.plan;
-                }
+                });
             });
         },
     },
@@ -183,7 +183,7 @@ export default {
     watch: {
         revenue() {
             this.incrementData();
-        }
+        },
     },
 
     mounted() {
