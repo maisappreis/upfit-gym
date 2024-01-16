@@ -81,7 +81,7 @@ export default {
                 { key: "name", name: "Nome" },
                 { key: "start", name: "Data de início" },
                 { key: "plan", name: "Plano" },
-                { key: "due_date", name: "Vencimento" },
+                { key: "payment_day", name: "Vencimento" },
                 { key: "value", name: "Valor" },
                 { key: "paid", name: "Status" },
                 { key: "actions", name: "" },

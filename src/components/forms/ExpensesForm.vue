@@ -14,7 +14,10 @@
                 />
             </div>
             <div class="form-item">
-                <label class="form-label" for="due-date"
+                <label
+                    class="form-label"
+                    for="due-date"
+                    style="min-width: 170px"
                     >Data de Vencimento:</label
                 >
                 <input
@@ -36,6 +39,16 @@
                     v-model="value"
                     required
                 />
+            </div>
+            <div class="form-item">
+                <label class="form-label" for="notes">Notas:</label>
+                <textarea
+                    class="form-textarea"
+                    id="notes"
+                    name="notes"
+                    rows="4"
+                    v-model="notes"
+                ></textarea>
             </div>
             <div class="form-buttons-area">
                 <DefaultButton
@@ -78,7 +91,8 @@ export default {
         return {
             bill: "",
             dueDate: "",
-            value: 0
+            value: 0,
+            notes: "",
         };
     },
 
@@ -96,15 +110,16 @@ export default {
         async createExpense() {
             try {
                 let date = this.getYearAndMonth(this.dueDate);
+                let formatedDueDate = this.$methods.formatDate(this.dueDate)
 
                 let newExpense = {
                     year: date.year,
                     month: date.month,
                     name: this.bill,
-                    due_date: this.dueDate,
+                    due_date: formatedDueDate,
                     value: this.value,
                     paid: false,
-                    actions: ""
+                    notes: "",
                 };
 
                 await postData("expenses", newExpense);
@@ -146,6 +161,8 @@ export default {
         fillModal() {
             this.bill = this.item.name;
             this.dueDate = this.item.due_date;
+            this.value = this.item.value;
+            this.notes = this.item.notes;
         },
     },
 

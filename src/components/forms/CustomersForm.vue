@@ -167,10 +167,12 @@ export default {
 
         async createCustomer() {
             try {
+                let formatedStartDate = this.$methods.formatDate(this.start)
+                
                 let newCustomer = {
                     name: this.customerName,
                     frequency: this.frequency,
-                    start: this.start,
+                    start: formatedStartDate,
                     plan: this.plan,
                     value: this.value,
                     status: this.status,

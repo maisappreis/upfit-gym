@@ -46,5 +46,12 @@ export const globalMethods = {
       ]
       return months.indexOf(month);
     },
+  
+    formatDate(date) {
+      const [year, month, day] = date.split('-');
+
+      const formattedDateString = `${day}/${month}/${year}`;
+      return formattedDateString
+  }
   },
 };

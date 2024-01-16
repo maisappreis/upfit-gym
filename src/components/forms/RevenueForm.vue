@@ -32,7 +32,9 @@
                 />
             </div>
             <div class="form-item">
-                <label class="form-label" for="dueDate" style="min-width: 160px;">Dia do Vencimento:</label>
+                <label class="form-label" for="dueDate" style="min-width: 160px"
+                    >Dia do Vencimento:</label
+                >
                 <input
                     class="form-input"
                     type="number"
@@ -134,7 +136,7 @@ export default {
             notes: "",
             year: 0,
             month: "",
-            dueDate: 0
+            dueDate: 0,
         };
     },
 
@@ -156,7 +158,7 @@ export default {
                     year: this.year,
                     month: this.month,
                     value: this.value,
-                    due_date: this.dueDate,
+                    payment_day: this.dueDate,
                     notes: this.notes,
                     paid: false,
                     actions: "",
@@ -177,7 +179,7 @@ export default {
                     year: this.year,
                     month: this.month,
                     value: this.value,
-                    due_date: this.dueDate,
+                    payment_day: this.dueDate,
                     notes: this.notes,
                 };
                 await updateData(this.item.id, "revenue", newRevenue);
@@ -191,10 +193,10 @@ export default {
         fillModal() {
             let customerID = Number(this.item.customer_id);
 
-            this.customer = this.customers.find(e => e.id === customerID)
+            this.customer = this.customers.find((e) => e.id === customerID);
             this.value = this.item.value;
             this.notes = this.item.notes;
-            this.dueDate = this.item.due_date;
+            this.dueDate = this.item.payment_day;
             this.year = this.item.year;
             this.month = this.item.month;
         },
