@@ -32,6 +32,17 @@
                 />
             </div>
             <div class="form-item">
+                <label class="form-label" for="dueDate" style="min-width: 160px;">Dia do Vencimento:</label>
+                <input
+                    class="form-input"
+                    type="number"
+                    id="dueDate"
+                    name="dueDate"
+                    v-model="dueDate"
+                    required
+                />
+            </div>
+            <div class="form-item">
                 <label class="form-label" for="month" style="min-width: 110px"
                     >Receber em:</label
                 >
@@ -123,6 +134,7 @@ export default {
             notes: "",
             year: 0,
             month: "",
+            dueDate: 0
         };
     },
 
@@ -140,10 +152,11 @@ export default {
         async createRevenue() {
             try {
                 let newRevenue = {
-                    customerID: this.customer.id,
+                    customer_id: this.customer.id,
                     year: this.year,
                     month: this.month,
                     value: this.value,
+                    due_date: this.dueDate,
                     notes: this.notes,
                     paid: false,
                     actions: "",
@@ -164,6 +177,7 @@ export default {
                     year: this.year,
                     month: this.month,
                     value: this.value,
+                    due_date: this.dueDate,
                     notes: this.notes,
                 };
                 await updateData(this.item.id, "revenue", newRevenue);
@@ -175,9 +189,14 @@ export default {
         },
 
         fillModal() {
-            this.customer = this.item.name;
+            let customerID = Number(this.item.customer_id);
+
+            this.customer = this.customers.find(e => e.id === customerID)
             this.value = this.item.value;
             this.notes = this.item.notes;
+            this.dueDate = this.item.due_date;
+            this.year = this.item.year;
+            this.month = this.item.month;
         },
     },
 
