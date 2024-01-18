@@ -47,6 +47,31 @@ export default {
             },
             chartOptions: {
                 responsive: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        labels: {
+                            color: "gray",
+                            boxHeight: 15,
+                            boxWidth: 15,
+                            font: {
+                                size: "20px",
+                            },
+                        },
+                    },
+                    tooltip: {
+                        enabled: true,
+                        bodySpacing: 5,
+                        padding: 15,
+                        displayColors: false,
+                        titleFont: {
+                            size: 18,
+                        },
+                        bodyFont: {
+                            size: 15
+                        }
+                    },
+                },
             },
         };
     },
@@ -63,7 +88,8 @@ export default {
     watch: {
         monthlyProfit() {
             if (this.monthlyProfit && this.monthlyProfit.length > 0) {
-                let monthlyProfitLast12Months = this.$methods.filterLast12Months(this.monthlyProfit);
+                let monthlyProfitLast12Months =
+                    this.$methods.filterLast12Months(this.monthlyProfit);
 
                 let labels = monthlyProfitLast12Months.map((e) => e.month);
                 let data = monthlyProfitLast12Months.map((e) => e.sum);

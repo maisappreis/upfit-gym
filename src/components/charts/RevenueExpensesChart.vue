@@ -45,6 +45,31 @@ export default {
             },
             chartOptions: {
                 responsive: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        labels: {
+                            color: "gray",
+                            boxHeight: 15,
+                            boxWidth: 15,
+                            font: {
+                                size: "20px",
+                            },
+                        },
+                    },
+                    tooltip: {
+                        enabled: true,
+                        bodySpacing: 5,
+                        padding: 15,
+                        displayColors: false,
+                        titleFont: {
+                            size: 18,
+                        },
+                        bodyFont: {
+                            size: 15
+                        }
+                    },
+                },
             },
         };
     },
@@ -65,12 +90,16 @@ export default {
                 this.monthlyRevenue.length > 0 &&
                 this.monthlyExpenses.length > 0
             ) {
-                let monthlyRevenueLast12Months = this.$methods.filterLast12Months(this.monthlyRevenue);
-                let monthlyExpensesLast12Months = this.$methods.filterLast12Months(this.monthlyExpenses);
+                let monthlyRevenueLast12Months =
+                    this.$methods.filterLast12Months(this.monthlyRevenue);
+                let monthlyExpensesLast12Months =
+                    this.$methods.filterLast12Months(this.monthlyExpenses);
 
                 let labels = monthlyRevenueLast12Months.map((e) => e.month);
                 let revenueData = monthlyRevenueLast12Months.map((e) => e.sum);
-                let expensesData = monthlyExpensesLast12Months.map((e) => e.sum);
+                let expensesData = monthlyExpensesLast12Months.map(
+                    (e) => e.sum
+                );
 
                 this.chartData = {
                     labels: labels,
@@ -78,11 +107,15 @@ export default {
                         {
                             label: "Receita",
                             backgroundColor: "green",
+                            borderColor: "rgba(64, 163, 79, 0.8)",
+                            pointRadius: 4,
                             data: revenueData,
                         },
                         {
                             label: "Despesas",
                             backgroundColor: "red",
+                            pointRadius: 4,
+                            borderColor: "rgba(168, 59, 68, 0.8)",
                             data: expensesData,
                         },
                     ],

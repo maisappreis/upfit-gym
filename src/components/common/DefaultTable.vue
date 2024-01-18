@@ -269,8 +269,6 @@ export default {
         async changePaidStatus(item) {
             let updatedPaidStatus = {};
 
-            console.log(item);
-
             try {
                 if (this.page === "expenses") {
                     if (item.paid === "À pagar") {

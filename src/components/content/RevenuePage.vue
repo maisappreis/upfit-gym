@@ -118,7 +118,6 @@ export default {
 
         getYear(year) {
             this.currentYear = year;
-            console.log("currentYear", this.currentYear);
         },
 
         getStatus(status) {

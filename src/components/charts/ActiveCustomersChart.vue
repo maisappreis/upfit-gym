@@ -45,6 +45,31 @@ export default {
             },
             chartOptions: {
                 responsive: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        labels: {
+                            color: "gray",
+                            boxHeight: 15,
+                            boxWidth: 15,
+                            font: {
+                                size: '20px'
+                            }
+                        },
+                    },
+                    tooltip: {
+                        enabled: true,
+                        bodySpacing: 5,
+                        padding: 15,
+                        displayColors: false,
+                        titleFont: {
+                            size: 18,
+                        },
+                        bodyFont: {
+                            size: 15
+                        }
+                    },
+                },
             },
         };
     },
@@ -63,7 +88,7 @@ export default {
             const activeCustomersPerMonth = [];
 
             this.revenue.forEach((revenueRecord) => {
-                 if (revenueRecord.paid === "Pago") {
+                if (revenueRecord.paid === "Pago") {
                     const year = revenueRecord.year;
                     const month = revenueRecord.month;
                     const customerId = revenueRecord.customer_id;
@@ -101,8 +126,8 @@ export default {
             let activeCustomers = this.calculateActiveCustomersPerMonth();
 
             if (activeCustomers && activeCustomers.length > 0) {
-
-                let activeCustomersLast12Months = this.$methods.filterLast12Months(activeCustomers);
+                let activeCustomersLast12Months =
+                    this.$methods.filterLast12Months(activeCustomers);
                 let labels = activeCustomersLast12Months.map((e) => e.month);
                 let data = activeCustomersLast12Months.map((e) => e.sum);
 
@@ -110,8 +135,10 @@ export default {
                     labels: labels,
                     datasets: [
                         {
-                            label: "Clientes Ativos",
+                            label: "Clientes",
                             backgroundColor: "blue",
+                            borderColor: "rgba(110, 93, 207, 0.8)",
+                            pointRadius: 4,
                             data: data,
                         },
                     ],
