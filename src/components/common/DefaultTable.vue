@@ -421,7 +421,7 @@ tr:hover {
 .pagination-area {
     display: flex;
     justify-content: center;
-    margin-top: 35px;
+    margin-top: 30px;
 }
 
 .pagination-button {

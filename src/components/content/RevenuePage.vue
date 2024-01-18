@@ -102,28 +102,12 @@ export default {
 
     computed: {
         filteredRevenue() {
-            if (
-                this.currentMonth === "Todos os meses" &&
-                this.currentStatus === "Todos"
-            ) {
-                return this.revenue.filter((e) => e.year === this.currentYear);
-            } else if (
-                this.currentMonth !== "Todos os meses" &&
-                this.currentStatus === "Todos"
-            ) {
-                return this.revenue.filter(
-                    (e) =>
-                        e.month === this.currentMonth &&
-                        e.year === this.currentYear
-                );
-            } else {
-                return this.revenue.filter(
-                    (e) =>
-                        e.month === this.currentMonth &&
-                        e.year === this.currentYear &&
-                        e.paid === this.currentStatus
-                );
-            }
+            return this.$computed.filteredData(
+                this.revenue,
+                this.currentMonth,
+                this.currentYear,
+                this.currentStatus
+            );
         },
     },
 
@@ -133,7 +117,8 @@ export default {
         },
 
         getYear(year) {
-            this.currentYear = Number(year);
+            this.currentYear = year;
+            console.log("currentYear", this.currentYear);
         },
 
         getStatus(status) {

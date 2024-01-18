@@ -18,6 +18,7 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import { globalVariablesMixin } from './utils/variables.js';
 import { globalMethods } from './utils/methods.js';
+import { globalComputed } from './utils/computed.js';
 
 
 library.add(faHeart)
@@ -38,4 +39,5 @@ const app = createApp(App);
 app.mixin(globalVariablesMixin);
 app.component('font-awesome-icon', FontAwesomeIcon)
 app.config.globalProperties.$methods = globalMethods.methods;
+app.config.globalProperties.$computed = globalComputed.computed;
 app.mount('#app');
