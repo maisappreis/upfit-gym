@@ -28,7 +28,8 @@ export const postData = async (entity, newData) => {
 export const updateData = async (id, entity, updatedData) => {
     try {
         console.log('Atualizando os dados...', updatedData)
-        const response = await axios.patch(`${apiUrl}/${entity}/${id}`, updatedData);
+        // const response = await axios.patch(`${apiUrl}/${entity}/${id}`, updatedData);
+        const response = await axios.put(`${apiUrl}/${entity}/${id}`, updatedData);
         return response.data;
     } catch (error) {
         console.error('Erro ao atualizar os dados...', error);

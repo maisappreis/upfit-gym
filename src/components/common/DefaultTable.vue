@@ -210,7 +210,7 @@ export default {
             if (this.searchedField && this.searchedField.length > 0) {
                 return Math.ceil(this.filteredData.length / this.itemsPerPage);
             } else {
-                return Math.ceil(this.data.length / this.itemsPerPage);
+                return Math.ceil(this.orderedData.length / this.itemsPerPage);
             }
         },
 
@@ -218,13 +218,13 @@ export default {
             if (this.searchedField && this.searchedField.length > 0) {
                 return this.filteredData.length;
             } else {
-                return this.data.length;
+                return this.orderedData.length;
             }
         },
 
         filteredList() {
             if (this.searchedField && this.searchedField.length > 0) {
-                return this.data.reduce((filteredData, item) => {
+                return this.orderedData.reduce((filteredData, item) => {
                     const matched = this.searchedField.some((element) => {
                         const searchedFieldName = element.toLowerCase();
                         const listedFieldName = item.name.toLowerCase();
@@ -238,8 +238,13 @@ export default {
                     return filteredData;
                 }, []);
             } else {
-                return this.data;
+                return this.orderedData;
             }
+        },
+
+        orderedData () {
+            let orderedList = this.orderData(this.data)
+            return orderedList
         },
     },
 
@@ -348,6 +353,21 @@ export default {
             if (this.currentPage !== this.totalPages) {
                 this.currentPage = this.totalPages;
             }
+        },
+
+        orderData(list) {
+            return list.sort((a, b) => {
+                const nameA = a.name.toLowerCase();
+                const nameB = b.name.toLowerCase();
+
+                if (nameA < nameB) {
+                    return -1;
+                } else if (nameA > nameB) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            });
         },
     },
 
