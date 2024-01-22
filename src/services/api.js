@@ -1,12 +1,11 @@
 import axios from "axios";
 
-// const apiUrl = "/data.json";
-const apiUrl = "/realData.json";
+const apiUrl = "http://localhost:3001";
 
 export const fetchData = async () => {
     try {
         console.log('Requisitando os dados...')
-        const response = await axios.get(apiUrl);
+        const response = await axios.get('/db.json');
         return response.data;
     } catch (error) {
         console.error('Erro ao requisitar os dados...', error);
@@ -28,7 +27,6 @@ export const postData = async (entity, newData) => {
 export const updateData = async (id, entity, updatedData) => {
     try {
         console.log('Atualizando os dados...', updatedData)
-        // const response = await axios.patch(`${apiUrl}/${entity}/${id}`, updatedData);
         const response = await axios.put(`${apiUrl}/${entity}/${id}`, updatedData);
         return response.data;
     } catch (error) {

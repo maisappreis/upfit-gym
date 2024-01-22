@@ -22,6 +22,11 @@ To run in the desktop:
 npm run electron:serve
 ```
 
+To run JSON server:
+```
+cd public/json-server --watch db.json --port 3001
+```
+
 ## 💻 On Production
 ```
 npm run build

@@ -74,7 +74,7 @@
                     type="radio"
                     id="active"
                     name="status"
-                    value="active"
+                    value="Ativo"
                     v-model="status"
                 />
                 <label class="form-label" for="active">Ativo</label>
@@ -83,7 +83,7 @@
                     type="radio"
                     id="inactive"
                     name="status"
-                    value="inactive"
+                    value="Inativo"
                     v-model="status"
                 />
                 <label class="form-label" for="inactive">Inativo</label>
@@ -216,12 +216,6 @@ export default {
             this.value = this.item.value;
             this.status = this.item.status;
             this.notes = this.item.notes;
-
-            if (this.item.status === "Ativo") {
-                this.status = "active";
-            } else {
-                this.status = "inactive";
-            }
         },
     },
 
