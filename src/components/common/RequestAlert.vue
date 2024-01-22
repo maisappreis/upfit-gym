@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div v-if="showAlert" class="alert-area success">
+        <div v-if="showSuccessAlert" class="alert-area success">
             <div class="marker green"></div>
             <div class="message-area">
                 <font-awesome-icon icon="fa-solid fa-check" class="icon" />
@@ -26,8 +26,8 @@ export default {
     },
 
     computed: {
-        showAlert() {
-            return this.responseMessage.includes("success");
+        showSuccessAlert() {
+            return this.responseMessage.includes("sucesso");
         },
     },
     
