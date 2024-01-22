@@ -83,13 +83,17 @@ export default {
 
     watch: {
         revenue() {
-            let paidRevenue = this.revenue.filter(e => e.paid === "Pago");
-            let paidExpenses = this.expenses.filter(e => e.paid === "Pago");
+            if (this.revenue && this.revenue.length > 0) {
+                let paidRevenue = this.revenue.filter((e) => e.paid === "Pago");
+                let paidExpenses = this.expenses.filter(
+                    (e) => e.paid === "Pago"
+                );
 
-            this.monthlyRevenue = this.sumMonthlyAmounts(paidRevenue);
-            this.monthlyExpenses = this.sumMonthlyAmounts(paidExpenses);
+                this.monthlyRevenue = this.sumMonthlyAmounts(paidRevenue);
+                this.monthlyExpenses = this.sumMonthlyAmounts(paidExpenses);
 
-            this.calculateProfit();
+                this.calculateProfit();
+            }
         },
     },
 

@@ -123,7 +123,10 @@ export default {
 
     watch: {
         customers() {
-            let activeCustomers = this.calculateActiveCustomersPerMonth();
+            let activeCustomers
+            if (this.revenue && this.revenue.length > 0 && this.customers && this.customers.length > 0) {
+                activeCustomers = this.calculateActiveCustomersPerMonth();
+            }
 
             if (activeCustomers && activeCustomers.length > 0) {
                 let activeCustomersLast12Months =

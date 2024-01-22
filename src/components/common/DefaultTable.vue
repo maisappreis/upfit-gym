@@ -243,8 +243,12 @@ export default {
         },
 
         orderedData () {
-            let orderedList = this.orderData(this.data)
-            return orderedList
+            if (this.data && this.data.length > 0) {
+                let orderedList = this.orderData(this.data)
+                return orderedList
+            } else {
+                return []
+            }
         },
     },
 
