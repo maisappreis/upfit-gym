@@ -24,7 +24,8 @@ npm run electron:serve
 
 To run JSON server:
 ```
-cd public/json-server --watch db.json --port 3001
+cd public
+json-server --watch db_test.json --port 3001
 ```
 
 ## 💻 On Production

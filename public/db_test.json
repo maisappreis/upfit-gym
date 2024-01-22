@@ -1,7 +1,7 @@
 {
   "customers": [
     {
-      "id": 1,
+      "id": "1",
       "name": "John Doe",
       "frequency": "2x",
       "start": "2024-08-01",
@@ -12,7 +12,7 @@
       "actions": ""
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "Maria Jones",
       "frequency": "2x",
       "start": "2024-08-01",
@@ -23,7 +23,7 @@
       "actions": ""
     },
     {
-      "id": 3,
+      "id": "3",
       "name": "Julia Hills",
       "frequency": "2x",
       "start": "2024-08-01",
@@ -34,7 +34,7 @@
       "actions": ""
     },
     {
-      "id": 4,
+      "id": "4",
       "name": "Jane Doe",
       "frequency": "2x",
       "start": "2024-08-01",
@@ -45,7 +45,7 @@
       "actions": ""
     },
     {
-      "id": 5,
+      "id": "5",
       "name": "Gery Bob",
       "frequency": "2x",
       "start": "2024-08-01",
@@ -56,7 +56,7 @@
       "actions": ""
     },
     {
-      "id": 6,
+      "id": "6",
       "name": "Tom wells",
       "frequency": "2x",
       "start": "2024-08-01",
@@ -67,18 +67,17 @@
       "actions": ""
     },
     {
-      "id": 7,
-      "name": "Duff Beer",
+      "name": "Duff Beer 12",
       "frequency": "2x",
       "start": "2024-08-01",
       "plan": "Mensal",
       "value": 250,
       "status": "Ativo",
-      "notes": "Anotações",
-      "actions": ""
+      "notes": "Testando anotações.",
+      "id": "7"
     },
     {
-      "id": 8,
+      "id": "8",
       "name": "Luna Garrett",
       "frequency": "2x",
       "start": "2024-08-01",
@@ -89,7 +88,7 @@
       "actions": ""
     },
     {
-      "id": 9,
+      "id": "9",
       "name": "Tony Boo",
       "frequency": "2x",
       "start": "2024-08-01",
@@ -100,7 +99,7 @@
       "actions": ""
     },
     {
-      "id": 10,
+      "id": "10",
       "name": "Jenny Mono",
       "frequency": "2x",
       "start": "2024-08-01",
@@ -113,18 +112,18 @@
   ],
   "revenue": [
     {
-      "id": 1,
+      "id": "1",
       "customer_id": "1",
       "year": 2024,
       "month": "Janeiro",
       "payment_day": 5,
-      "value": 5000,
+      "value": 1500,
       "notes": "Anotações",
       "paid": "Pago",
       "actions": ""
     },
     {
-      "id": 2,
+      "id": "2",
       "customer_id": "2",
       "year": 2024,
       "month": "Janeiro",
@@ -135,7 +134,7 @@
       "actions": ""
     },
     {
-      "id": 3,
+      "id": "3",
       "customer_id": "3",
       "year": 2024,
       "month": "Janeiro",
@@ -146,7 +145,7 @@
       "actions": ""
     },
     {
-      "id": 4,
+      "id": "4",
       "customer_id": "4",
       "year": 2024,
       "month": "Fevereiro",
@@ -157,7 +156,7 @@
       "actions": ""
     },
     {
-      "id": 5,
+      "id": "5",
       "customer_id": "1",
       "year": 2024,
       "month": "Março",
@@ -168,7 +167,7 @@
       "actions": ""
     },
     {
-      "id": 6,
+      "id": "6",
       "customer_id": "2",
       "year": 2024,
       "month": "Abril",
@@ -179,7 +178,7 @@
       "actions": ""
     },
     {
-      "id": 7,
+      "id": "7",
       "customer_id": "3",
       "year": 2024,
       "month": "Maio",
@@ -190,7 +189,7 @@
       "actions": ""
     },
     {
-      "id": 8,
+      "id": "8",
       "customer_id": "4",
       "year": 2024,
       "month": "Junho",
@@ -201,7 +200,7 @@
       "actions": ""
     },
     {
-      "id": 9,
+      "id": "9",
       "customer_id": "3",
       "year": 2024,
       "month": "Julho",
@@ -212,7 +211,7 @@
       "actions": ""
     },
     {
-      "id": 10,
+      "id": "10",
       "customer_id": "4",
       "year": 2024,
       "month": "Agosto",
@@ -223,7 +222,7 @@
       "actions": ""
     },
     {
-      "id": 11,
+      "id": "11",
       "customer_id": "4",
       "year": 2024,
       "month": "Setembro",
@@ -234,7 +233,7 @@
       "actions": ""
     },
     {
-      "id": 12,
+      "id": "12",
       "customer_id": "3",
       "year": 2024,
       "month": "Outubro",
@@ -245,7 +244,7 @@
       "actions": ""
     },
     {
-      "id": 13,
+      "id": "13",
       "customer_id": "4",
       "year": 2024,
       "month": "Novembro",
@@ -256,7 +255,7 @@
       "actions": ""
     },
     {
-      "id": 14,
+      "id": "14",
       "customer_id": "3",
       "year": 2024,
       "month": "Dezembro",
@@ -267,7 +266,7 @@
       "actions": ""
     },
     {
-      "id": 15,
+      "id": "15",
       "customer_id": "4",
       "year": 2025,
       "month": "Janeiro",
@@ -280,7 +279,7 @@
   ],
   "expenses": [
     {
-      "id": 1,
+      "id": "1",
       "year": 2024,
       "month": "Janeiro",
       "name": "Aluguel",
@@ -290,7 +289,7 @@
       "actions": ""
     },
     {
-      "id": 2,
+      "id": "2",
       "year": 2024,
       "month": "Janeiro",
       "name": "Condomínio",
@@ -300,7 +299,7 @@
       "actions": ""
     },
     {
-      "id": 3,
+      "id": "3",
       "year": 2024,
       "month": "Janeiro",
       "name": "Energia elétrica",
@@ -310,7 +309,7 @@
       "actions": ""
     },
     {
-      "id": 4,
+      "id": "4",
       "year": 2024,
       "month": "Fevereiro",
       "name": "Aluguel",
@@ -320,7 +319,7 @@
       "actions": ""
     },
     {
-      "id": 5,
+      "id": "5",
       "year": 2024,
       "month": "Fevereiro",
       "name": "Condomínio",
@@ -330,7 +329,7 @@
       "actions": ""
     },
     {
-      "id": 6,
+      "id": "6",
       "year": 2024,
       "month": "Fevereiro",
       "name": "Energia elétrica",
@@ -338,8 +337,9 @@
       "value": 100.51,
       "paid": "À pagar",
       "actions": ""
-    },{
-      "id": 7,
+    },
+    {
+      "id": "7",
       "year": 2024,
       "month": "Março",
       "name": "Aluguel",
@@ -349,7 +349,7 @@
       "actions": ""
     },
     {
-      "id": 8,
+      "id": "8",
       "year": 2024,
       "month": "Abril",
       "name": "Condomínio",
@@ -359,7 +359,7 @@
       "actions": ""
     },
     {
-      "id": 9,
+      "id": "9",
       "year": 2024,
       "month": "Maio",
       "name": "Energia elétrica",
@@ -369,7 +369,7 @@
       "actions": ""
     },
     {
-      "id": 10,
+      "id": "10",
       "year": 2024,
       "month": "Junho",
       "name": "Aluguel",
@@ -379,7 +379,7 @@
       "actions": ""
     },
     {
-      "id": 11,
+      "id": "11",
       "year": 2024,
       "month": "Julho",
       "name": "Condomínio",
@@ -389,7 +389,7 @@
       "actions": ""
     },
     {
-      "id": 12,
+      "id": "12",
       "year": 2024,
       "month": "Agosto",
       "name": "Energia elétrica",
@@ -397,8 +397,9 @@
       "value": 100.51,
       "paid": "À pagar",
       "actions": ""
-    },    {
-      "id": 13,
+    },
+    {
+      "id": "13",
       "year": 2024,
       "month": "Setembro",
       "name": "Condomínio",
@@ -408,7 +409,7 @@
       "actions": ""
     },
     {
-      "id": 14,
+      "id": "14",
       "year": 2024,
       "month": "Outubro",
       "name": "Energia elétrica",
@@ -418,7 +419,7 @@
       "actions": ""
     },
     {
-      "id": 15,
+      "id": "15",
       "year": 2024,
       "month": "Novembro",
       "name": "Aluguel",
@@ -428,7 +429,7 @@
       "actions": ""
     },
     {
-      "id": 16,
+      "id": "16",
       "year": 2024,
       "month": "Dezembro",
       "name": "Condomínio",
@@ -438,7 +439,7 @@
       "actions": ""
     },
     {
-      "id": 17,
+      "id": "17",
       "year": 2025,
       "month": "Janeiro",
       "name": "Energia elétrica",
