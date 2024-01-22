@@ -92,9 +92,9 @@ export default {
                     const year = revenueRecord.year;
                     const month = revenueRecord.month;
                     const customerId = revenueRecord.customer_id;
-
+        
                     const customer = this.customers.find(
-                        (cust) => cust.id === parseInt(customerId)
+                        (cust) => cust.id === customerId
                     );
 
                     if (customer && customer.status === "Ativo") {
@@ -123,7 +123,7 @@ export default {
 
     watch: {
         customers() {
-            let activeCustomers
+            let activeCustomers = []
             if (this.revenue && this.revenue.length > 0 && this.customers && this.customers.length > 0) {
                 activeCustomers = this.calculateActiveCustomersPerMonth();
             }

@@ -160,7 +160,7 @@ export default {
                     value: this.value,
                     payment_day: this.dueDate,
                     notes: this.notes,
-                    paid: false,
+                    paid: "À pagar",
                     actions: "",
                 };
 
