@@ -110,15 +110,14 @@ export default {
         async createExpense() {
             try {
                 let date = this.getYearAndMonth(this.dueDate);
-                let formatedDueDate = this.$methods.formatDate(this.dueDate)
 
                 let newExpense = {
                     year: date.year,
                     month: date.month,
                     name: this.bill,
-                    due_date: formatedDueDate,
+                    due_date: this.dueDate,
                     value: this.value,
-                    paid: false,
+                    paid: "À pagar",
                     notes: "",
                 };
 

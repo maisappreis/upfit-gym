@@ -69,6 +69,9 @@
                                         .replace(/\./g, ",")
                                 }}
                             </span>
+                            <span v-else-if="column.key === 'start' || column.key === 'due_date'">
+                                {{ this.formatDate(item[column.key]) }}
+                            </span>
                             <span
                                 v-else-if="column.key === 'paid'"
                                 class="status paid"
@@ -373,6 +376,12 @@ export default {
                 }
             });
         },
+        formatDate (date) {
+            const [year, month, day] = date.split('-');
+
+            const formattedDateString = `${day}/${month}/${year}`;
+            return formattedDateString
+        }
     },
 
     watch: {
