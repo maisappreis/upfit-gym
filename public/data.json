@@ -67,7 +67,7 @@
       "actions": ""
     },
     {
-      "name": "Duff Beer 12",
+      "name": "Duff Beer 14",
       "frequency": "2x",
       "start": "2024-08-01",
       "plan": "Mensal",
@@ -108,6 +108,17 @@
       "status": "Ativo",
       "notes": "Anotações",
       "actions": ""
+    },
+    {
+      "id": "38f6",
+      "name": "ooo",
+      "frequency": "2x",
+      "start": "2024-01-03",
+      "plan": "Trimestral",
+      "value": 457,
+      "status": "Ativo",
+      "notes": "",
+      "actions": ""
     }
   ],
   "revenue": [
@@ -119,7 +130,7 @@
       "payment_day": 5,
       "value": 1500,
       "notes": "Anotações",
-      "paid": "Pago",
+      "paid": "Link enviado",
       "actions": ""
     },
     {
@@ -275,6 +286,17 @@
       "notes": "Anotações",
       "paid": "Pago",
       "actions": ""
+    },
+    {
+      "id": "188b",
+      "customer_id": "1",
+      "year": 2024,
+      "month": "Março",
+      "value": 345,
+      "payment_day": 12,
+      "notes": "juju",
+      "paid": false,
+      "actions": ""
     }
   ],
   "expenses": [
@@ -285,7 +307,7 @@
       "name": "Aluguel",
       "due_date": "2024-08-01",
       "value": 1000,
-      "paid": "À pagar",
+      "paid": "Pago",
       "actions": ""
     },
     {
@@ -447,6 +469,26 @@
       "value": 200,
       "paid": "À pagar",
       "actions": ""
+    },
+    {
+      "id": "03ea",
+      "year": 2024,
+      "month": "Janeiro",
+      "name": "Teste 1",
+      "due_date": "2024-01-10",
+      "value": 234,
+      "paid": "À pagar",
+      "notes": ""
+    },
+    {
+      "id": "4005",
+      "year": 2024,
+      "month": "Janeiro",
+      "name": "Teste 2",
+      "due_date": "2024-01-06",
+      "value": 156,
+      "paid": "À pagar",
+      "notes": ""
     }
   ]
 }
