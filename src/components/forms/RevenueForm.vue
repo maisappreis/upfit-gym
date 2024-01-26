@@ -154,7 +154,7 @@ export default {
         async createRevenue() {
             try {
                 let newRevenue = {
-                    customer_id: this.customer.id,
+                    customer: this.customer.id,
                     year: this.year,
                     month: this.month,
                     value: this.value,
@@ -191,7 +191,7 @@ export default {
         },
 
         fillModal() {
-            let customerID = Number(this.item.customer_id);
+            let customerID = Number(this.item.customer);
 
             this.customer = this.customers.find((e) => e.id === customerID);
             this.value = this.item.value;

@@ -117,18 +117,15 @@
                 >
                     &laquo;
                 </button>
-                <template
+                <button
                     v-for="pageNumber in getPageNumbers()"
                     :key="pageNumber"
-                >
-                    <button
                         class="pagination-button"
                         @click="goToPage(pageNumber)"
                         :class="{ active: pageNumber === currentPage }"
                     >
                         {{ pageNumber }}
-                    </button>
-                </template>
+                </button>
                 <button
                     class="pagination-button"
                     @click="nextPage"

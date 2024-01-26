@@ -91,7 +91,7 @@ export default {
                 if (revenueRecord.paid === "Pago") {
                     const year = revenueRecord.year;
                     const month = revenueRecord.month;
-                    const customerId = revenueRecord.customer_id;
+                    const customerId = revenueRecord.customer;
         
                     const customer = this.customers.find(
                         (cust) => cust.id === customerId

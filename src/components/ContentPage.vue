@@ -34,7 +34,7 @@ import MetricsPage from "./content/MetricsPage.vue";
 import CustomersPage from "./content/CustomersPage.vue";
 import RevenuePage from "./content/RevenuePage.vue";
 import ExpensesPage from "./content/ExpensesPage.vue";
-import { fetchData } from "../services/api.js";
+import axios from "axios";
 
 export default {
     name: "ContentPage",
@@ -59,15 +59,39 @@ export default {
     },
 
     methods: {
-        async getData() {
+        async getCustomers() {
             try {
-                const data = await fetchData();
-                this.customers = data.customers;
-                this.revenue = data.revenue;
-                this.expenses = data.expenses;
+                let response = await axios.get('http://localhost:8000/api/customer/');
+                this.customers = response.data;
             } catch (error) {
-                console.error("Erro ao requisitar os dados...", error);
+                console.error("Erro ao requisitar a lista de clientes.", error);
             }
+        },
+
+        async getRevenue() {
+            try {
+                let response = await axios.get('http://localhost:8000/api/revenue/');
+                this.revenue = response.data;
+
+                console.log('revenue', this.revenue)
+            } catch (error) {
+                console.error("Erro ao requisitar a lista de receitas.", error);
+            }
+        },
+
+        async getExpenses() {
+            try {
+                let response = await axios.get('http://localhost:8000/api/expense/');
+                this.expenses = response.data;
+            } catch (error) {
+                console.error("Erro ao requisitar a lista de despesas.", error);
+            }
+        },
+
+        getData() {
+            this.getCustomers();
+            this.getRevenue();
+            this.getExpenses();
         },
     },
 
