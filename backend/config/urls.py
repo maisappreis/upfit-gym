@@ -16,9 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from customer.views import CustomerListView
+from revenue.views import RevenueListView
+from expense.views import ExpenseListView
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/custumer/', CustomerListView.as_view(), name='custumer-list'),
+    path('api/customer/', CustomerListView.as_view(), name='customer-list'),
+    path('api/revenue/', RevenueListView.as_view(), name='revenue-list'),
+    path('api/expense/', ExpenseListView.as_view(), name='expense-list'),
 ]
