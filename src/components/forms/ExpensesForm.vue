@@ -33,7 +33,7 @@
                 <label class="form-label" for="value">Valor:</label>
                 <input
                     class="form-input"
-                    type="number"
+                    type="text"
                     id="value"
                     name="value"
                     v-model="value"
@@ -108,6 +108,7 @@ export default {
 
         async createExpense() {
             try {
+                this.validateFloat();
                 let date = this.getYearAndMonth(this.dueDate);
 
                 let newExpense = {
@@ -133,6 +134,7 @@ export default {
 
         async updateExpense() {
             try {
+                this.validateFloat();
                 let date = this.getYearAndMonth(this.dueDate);
 
                 let updatedExpense = {
@@ -140,6 +142,8 @@ export default {
                     month: date.month,
                     name: this.bill,
                     due_date: this.dueDate,
+                    value: this.value,
+                    notes: this.notes,
                 };
 
                 await axios.patch(`${this.apiURL}/expense/${this.item.id}/`, updatedExpense);
@@ -167,6 +171,17 @@ export default {
             this.dueDate = this.item.due_date;
             this.value = this.item.value;
             this.notes = this.item.notes;
+        },
+
+        validateFloat() {
+            const cleanedValue = this.value.replace(',', '.');
+            const floatValue = parseFloat(cleanedValue);
+
+            if (!isNaN(floatValue)) {
+                this.value = floatValue;
+            } else {
+                this.value = null;
+            }
         },
     },
 

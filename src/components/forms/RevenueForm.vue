@@ -24,7 +24,7 @@
                 <label class="form-label" for="value">Valor:</label>
                 <input
                     class="form-input"
-                    type="number"
+                    type="text"
                     id="value"
                     name="value"
                     v-model="value"
@@ -152,6 +152,8 @@ export default {
 
         async createRevenue() {
             try {
+                this.validateFloat();
+
                 let newRevenue = {
                     customer: this.customer.id,
                     year: this.year,
@@ -175,8 +177,9 @@ export default {
         },
 
         async updateRevenue() {
-            console.log('item', this.item)
             try {
+                this.validateFloat();
+
                 let updatedRevenue = {
                     customer: this.item.customer,
                     year: this.year,
@@ -216,6 +219,17 @@ export default {
                 this.dueDate = this.item.payment_day;
                 this.year = this.item.year;
                 this.month = this.item.month;
+            }
+        },
+
+        validateFloat() {
+            const cleanedValue = this.value.replace(',', '.');
+            const floatValue = parseFloat(cleanedValue);
+
+            if (!isNaN(floatValue)) {
+                this.value = floatValue;
+            } else {
+                this.value = null;
             }
         },
     },

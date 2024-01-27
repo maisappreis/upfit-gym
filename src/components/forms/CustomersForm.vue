@@ -59,7 +59,7 @@
                 <label class="form-label" for="value">Valor:</label>
                 <input
                     class="form-input"
-                    type="number"
+                    type="text"
                     id="value"
                     name="value"
                     v-model="value"
@@ -158,6 +158,8 @@ export default {
 
         async createCustomer() {
             try {
+                this.validateFloat();
+
                 let newCustomer = {
                     name: this.customerName,
                     frequency: this.frequency,
@@ -181,6 +183,8 @@ export default {
 
         async updateCustomer() {
             try {
+                this.validateFloat();
+
                 let updatedCustomer = {
                     name: this.customerName,
                     frequency: this.frequency,
@@ -223,6 +227,17 @@ export default {
                 this.value = this.item.value;
                 this.status = this.item.status;
                 this.notes = this.item.notes;
+            }
+        },
+
+        validateFloat() {
+            const cleanedValue = this.value.replace(',', '.');
+            const floatValue = parseFloat(cleanedValue);
+
+            if (!isNaN(floatValue)) {
+                this.value = floatValue;
+            } else {
+                this.value = null;
             }
         },
     },
