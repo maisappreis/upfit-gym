@@ -154,8 +154,6 @@ export default {
             } else {
                 this.updateCustomer();
             }
-            this.$emit('closeModal');
-            this.$emit("updateTable");
         },
 
         async createCustomer() {
@@ -172,6 +170,9 @@ export default {
 
                 await axios.post(`${this.apiURL}/customer/create/`, newCustomer);
                 this.$emit("showMessage", "Cliente criado com sucesso!");
+
+                this.$emit('closeModal');
+                this.$emit("updateTable");
             } catch (error) {
                 console.error("Erro ao criar cliente.", error);
                 this.$emit("showMessage", "Erro ao criar cliente.");
@@ -192,6 +193,9 @@ export default {
 
                 await axios.put(`${this.apiURL}/customer/${this.item.id}/`, updatedCustomer);
                 this.$emit("showMessage", "Cliente atualizado com sucesso!");
+
+                this.$emit('closeModal');
+                this.$emit("updateTable");
             } catch (error) {
                 console.error("Erro ao atualizar cliente.", error);
                 this.$emit("showMessage", "Erro ao atualizar cliente.");

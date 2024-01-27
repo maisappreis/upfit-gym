@@ -148,8 +148,6 @@ export default {
             } else {
                 this.updateRevenue();
             }
-            this.$emit('closeModal');
-            this.$emit("updateTable");
         },
 
         async createRevenue() {
@@ -167,6 +165,9 @@ export default {
 
                 await axios.post(`${this.apiURL}/revenue/create/`, newRevenue);
                 this.$emit("showMessage", "Receita criada com sucesso!");
+
+                this.$emit('closeModal');
+                this.$emit("updateTable");
             } catch (error) {
                 console.error("Erro ao criar receita.", error);
                 this.$emit("showMessage", "Erro ao criar receita.");
@@ -186,6 +187,9 @@ export default {
                 };
                 await axios.put(`${this.apiURL}/revenue/${this.item.id}/`, updatedRevenue);
                 this.$emit("showMessage", "Receita atualizada com sucesso!");
+
+                this.$emit('closeModal');
+                this.$emit("updateTable");
             } catch (error) {
                 console.error("Erro ao atualizar receita.", error);
                 this.$emit("showMessage", "Erro ao atualizar receita.");

@@ -104,8 +104,6 @@ export default {
             } else {
                 this.updateExpense();
             }
-            this.$emit('closeModal');
-            this.$emit("updateTable");
         },
 
         async createExpense() {
@@ -124,6 +122,9 @@ export default {
 
                 await axios.post(`${this.apiURL}/expense/create/`, newExpense);
                 this.$emit("showMessage", "Despesa criada com sucesso!");
+
+                this.$emit('closeModal');
+                this.$emit("updateTable");
             } catch (error) {
                 console.error("Erro ao criar despesa.", error);
                 this.$emit("showMessage", "Erro ao criar despesa.");
@@ -143,6 +144,9 @@ export default {
 
                 await axios.patch(`${this.apiURL}/expense/${this.item.id}/`, updatedExpense);
                 this.$emit("showMessage", "Despesa atualizada com sucesso!");
+
+                this.$emit('closeModal');
+                this.$emit("updateTable");
             } catch (error) {
                 console.error("Erro ao atualizar despesa.", error);
                 this.$emit("showMessage", "Erro ao atualizar despesa.");

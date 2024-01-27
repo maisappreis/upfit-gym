@@ -38,7 +38,7 @@ export default {
 .search-area {
     margin: 20px 20px 0px 20px;
     padding: 12px;
-    width: 400px;
+    width: 25vw;
 
     font-weight: bold;
     font-size: 15px;
