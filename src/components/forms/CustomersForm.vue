@@ -203,20 +203,32 @@ export default {
         },
 
         fillModal() {
-            this.customerName = this.item.name;
-            this.frequency = this.item.frequency;
-            this.start = this.item.start;
-            this.plan = this.item.plan;
-            this.value = this.item.value;
-            this.status = this.item.status;
-            this.notes = this.item.notes;
+            if (this.action === "create") {
+                let today = new Date();
+                let year = today.getFullYear();
+                let month = (today.getMonth() + 1).toString().padStart(2, '0');
+                let day = today.getDate().toString().padStart(2, '0');
+                let formattedDate = year + '-' + month + '-' + day;
+
+                this.start = formattedDate;
+                this.plan = "Mensal";
+                this.status = "Ativo";
+            }
+
+            if (this.action === "update") {
+                this.customerName = this.item.name;
+                this.frequency = this.item.frequency;
+                this.start = this.item.start;
+                this.plan = this.item.plan;
+                this.value = this.item.value;
+                this.status = this.item.status;
+                this.notes = this.item.notes;
+            }
         },
     },
 
     mounted() {
-        if (this.action === "update") {
-            this.fillModal();
-        }
+        this.fillModal();
     },
 };
 </script>

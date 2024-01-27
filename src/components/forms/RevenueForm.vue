@@ -197,21 +197,31 @@ export default {
         },
 
         fillModal() {
-            let customerID = Number(this.item.customer);
+            if (this.action === "create") {
+                let currentDate = new Date();
+                let currentMonth = currentDate.getMonth();
+                let year = currentDate.getFullYear();
+                let month = this.months[currentMonth]
 
-            this.customer = this.customers.find((e) => e.id === customerID);
-            this.value = this.item.value;
-            this.notes = this.item.notes;
-            this.dueDate = this.item.payment_day;
-            this.year = this.item.year;
-            this.month = this.item.month;
+                this.year = year
+                this.month = month
+            }
+
+            if (this.action === "update") {
+                let customerID = Number(this.item.customer);
+
+                this.customer = this.customers.find((e) => e.id === customerID);
+                this.value = this.item.value;
+                this.notes = this.item.notes;
+                this.dueDate = this.item.payment_day;
+                this.year = this.item.year;
+                this.month = this.item.month;
+            }
         },
     },
 
     mounted() {
-        if (this.action === "update") {
-            this.fillModal();
-        }
+        this.fillModal();
     },
 };
 </script>
