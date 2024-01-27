@@ -53,10 +53,13 @@ import DefaultModal from "../common/DefaultModal.vue";
 import MonthFilter from "../common/MonthFilter.vue";
 import RevenueForm from "../forms/RevenueForm.vue";
 import DeleteMessage from "../common/DeleteMessage.vue";
-import { deleteData } from "../../services/api.js";
+import { globalVariablesMixin } from "@/utils/variables.js";
+import axios from "axios";
 
 export default {
     name: "RevenuePage",
+    mixins: [globalVariablesMixin],
+
     components: {
         DefaultTable,
         DefaultButton,
@@ -143,8 +146,7 @@ export default {
 
         async deleteRevenue() {
             try {
-                await deleteData(this.item.id, "revenue");
-
+                await axios.delete(`${this.apiURL}/revenue/${this.item.id}/`);
                 this.showMessage("Receita excluída com sucesso!");
             } catch (error) {
                 console.error("Erro ao excluir receita.", error);

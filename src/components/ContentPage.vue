@@ -34,10 +34,12 @@ import MetricsPage from "./content/MetricsPage.vue";
 import CustomersPage from "./content/CustomersPage.vue";
 import RevenuePage from "./content/RevenuePage.vue";
 import ExpensesPage from "./content/ExpensesPage.vue";
+import { globalVariablesMixin } from "@/utils/variables.js";
 import axios from "axios";
 
 export default {
     name: "ContentPage",
+    mixins: [globalVariablesMixin],
 
     components: {
         RevenuePage,
@@ -61,7 +63,7 @@ export default {
     methods: {
         async getCustomers() {
             try {
-                let response = await axios.get('http://localhost:8000/api/customer/');
+                let response = await axios.get(`${this.apiURL}/customer/`);
                 this.customers = response.data;
             } catch (error) {
                 console.error("Erro ao requisitar a lista de clientes.", error);
@@ -70,10 +72,8 @@ export default {
 
         async getRevenue() {
             try {
-                let response = await axios.get('http://localhost:8000/api/revenue/');
+                let response = await axios.get(`${this.apiURL}/revenue/`);
                 this.revenue = response.data;
-
-                console.log('revenue', this.revenue)
             } catch (error) {
                 console.error("Erro ao requisitar a lista de receitas.", error);
             }
@@ -81,7 +81,7 @@ export default {
 
         async getExpenses() {
             try {
-                let response = await axios.get('http://localhost:8000/api/expense/');
+                let response = await axios.get(`${this.apiURL}/expense/`);
                 this.expenses = response.data;
             } catch (error) {
                 console.error("Erro ao requisitar a lista de despesas.", error);

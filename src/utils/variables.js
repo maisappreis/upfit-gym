@@ -2,6 +2,7 @@
 export const globalVariablesMixin = {
     data() {
         return {
+            apiURL: "http://localhost:8000/api",
             months: [
                 "Janeiro",
                 "Fevereiro",

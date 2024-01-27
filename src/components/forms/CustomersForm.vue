@@ -1,8 +1,7 @@
 <template>
     <div>
         <h2>{{ modalTitle }}</h2>
-        <!-- <form action="/submit_form" method="post" class="form-area"> -->
-        <div class="form-area">
+        <form class="form-area" @submit.prevent="saveCustomer">
             <div class="form-item">
                 <label class="form-label" for="name">Nome:</label>
                 <input
@@ -101,36 +100,30 @@
             <div class="form-buttons-area">
                 <DefaultButton
                     style="background-color: green"
-                    @executeAction="saveCustomer"
+                    type="submit"
                 >
                     Salvar
                 </DefaultButton>
                 <DefaultButton
                     style="background-color: red"
+                    type="button"
                     @executeAction="$emit('closeModal')"
                 >
                     Cancelar
                 </DefaultButton>
             </div>
-
-            <!-- Email Input -->
-            <!-- <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required> -->
-
-            <!-- Checkbox -->
-            <!-- <input type="checkbox" id="subscribe" name="subscribe">
-            <label for="subscribe">Subscribe to our newsletter</label> -->
-            <!-- </form> -->
-        </div>
+        </form>
     </div>
 </template>
 
 <script>
 import DefaultButton from "../common/DefaultButton.vue";
-import { postData, updateData } from "../../services/api.js";
+import { globalVariablesMixin } from "@/utils/variables.js";
+import axios from "axios";
 
 export default {
     name: "CustomersForm",
+    mixins: [globalVariablesMixin],
 
     components: {
         DefaultButton,
@@ -161,26 +154,23 @@ export default {
             } else {
                 this.updateCustomer();
             }
-
+            this.$emit('closeModal');
             this.$emit("updateTable");
         },
 
         async createCustomer() {
             try {
-                let formatedStartDate = this.$methods.formatDate(this.start)
-                
                 let newCustomer = {
                     name: this.customerName,
                     frequency: this.frequency,
-                    start: formatedStartDate,
+                    start: this.start,
                     plan: this.plan,
                     value: this.value,
                     status: this.status,
                     notes: this.notes,
-                    actions: ""
                 };
 
-                await postData("customers", newCustomer);
+                await axios.post(`${this.apiURL}/customer/create/`, newCustomer);
                 this.$emit("showMessage", "Cliente criado com sucesso!");
             } catch (error) {
                 console.error("Erro ao criar cliente.", error);
@@ -200,7 +190,7 @@ export default {
                     notes: this.notes,
                 };
 
-                await updateData(this.item.id, "customers", updatedCustomer);
+                await axios.put(`${this.apiURL}/customer/${this.item.id}/`, updatedCustomer);
                 this.$emit("showMessage", "Cliente atualizado com sucesso!");
             } catch (error) {
                 console.error("Erro ao atualizar cliente.", error);

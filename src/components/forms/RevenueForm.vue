@@ -1,7 +1,7 @@
 <template>
     <div>
         <h2>{{ modalTitle }}</h2>
-        <div class="form-area">
+        <form class="form-area" @submit.prevent="saveRevenue">
             <div class="form-item">
                 <label class="form-label" for="plan">Cliente:</label>
                 <select
@@ -94,25 +94,26 @@
             <div class="form-buttons-area">
                 <DefaultButton
                     style="background-color: green"
-                    @executeAction="saveRevenue"
+                    type="submit"
                 >
                     Salvar
                 </DefaultButton>
                 <DefaultButton
                     style="background-color: red"
+                    type="button"
                     @executeAction="$emit('closeModal')"
                 >
                     Cancelar
                 </DefaultButton>
             </div>
-        </div>
+        </form>
     </div>
 </template>
 
 <script>
 import DefaultButton from "../common/DefaultButton.vue";
-import { postData, updateData } from "../../services/api.js";
 import { globalVariablesMixin } from "../../utils/variables.js";
+import axios from "axios";
 
 export default {
     name: "RevenueForm",
@@ -147,7 +148,7 @@ export default {
             } else {
                 this.updateRevenue();
             }
-
+            this.$emit('closeModal');
             this.$emit("updateTable");
         },
 
@@ -164,7 +165,7 @@ export default {
                     actions: "",
                 };
 
-                await postData("revenue", newRevenue);
+                await axios.post(`${this.apiURL}/revenue/create/`, newRevenue);
                 this.$emit("showMessage", "Receita criada com sucesso!");
             } catch (error) {
                 console.error("Erro ao criar receita.", error);
@@ -173,16 +174,17 @@ export default {
         },
 
         async updateRevenue() {
+            console.log('item', this.item)
             try {
-                let newRevenue = {
-                    customerID: "1",
+                let updatedRevenue = {
+                    customer: this.item.customer,
                     year: this.year,
                     month: this.month,
                     value: this.value,
                     payment_day: this.dueDate,
                     notes: this.notes,
                 };
-                await updateData(this.item.id, "revenue", newRevenue);
+                await axios.put(`${this.apiURL}/revenue/${this.item.id}/`, updatedRevenue);
                 this.$emit("showMessage", "Receita atualizada com sucesso!");
             } catch (error) {
                 console.error("Erro ao atualizar receita.", error);

@@ -52,10 +52,12 @@ import DefaultModal from "../common/DefaultModal.vue";
 import MonthFilter from "../common/MonthFilter.vue";
 import ExpensesForm from "../forms/ExpensesForm.vue";
 import DeleteMessage from "../common/DeleteMessage.vue";
-import { deleteData } from "../../services/api.js";
+import { globalVariablesMixin } from "@/utils/variables.js";
+import axios from "axios";
 
 export default {
     name: "ExpensesPage",
+    mixins: [globalVariablesMixin],
 
     components: {
         DefaultTable,
@@ -140,8 +142,7 @@ export default {
 
         async deleteExpense() {
             try {
-                await deleteData(this.item.id, "expenses");
-
+                await axios.delete(`${this.apiURL}/expense/${this.item.id}/`);
                 this.showMessage("Despesa excluída com sucesso!");
             } catch (error) {
                 console.error("Erro ao excluir despesa.", error);

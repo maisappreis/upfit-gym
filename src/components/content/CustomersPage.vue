@@ -43,10 +43,13 @@ import DefaultSearch from "../common/DefaultSearch.vue";
 import DefaultModal from "../common/DefaultModal.vue";
 import CustomersForm from "../forms/CustomersForm.vue";
 import DeleteMessage from "../common/DeleteMessage.vue";
-import { deleteData } from "../../services/api.js";
+import { globalVariablesMixin } from "@/utils/variables.js";
+import axios from "axios";
 
 export default {
     name: "CustomersPage",
+    mixins: [globalVariablesMixin],
+
     components: {
         DefaultTable,
         DefaultButton,
@@ -101,8 +104,7 @@ export default {
 
         async deleteCustomer() {
             try {
-                await deleteData(this.item.id, "customers");
-
+                await axios.delete(`${this.apiURL}/customer/${this.item.id}/`);
                 this.showMessage("Cliente excluído com sucesso!");
             } catch (error) {
                 console.error("Erro ao excluir cliente.", error);

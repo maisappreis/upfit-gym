@@ -1,7 +1,7 @@
 <template>
     <div>
         <h2>{{ modalTitle }}</h2>
-        <div class="form-area">
+        <form class="form-area" @submit.prevent="saveExpense">
             <div class="form-item">
                 <label class="form-label" for="name">Nome:</label>
                 <input
@@ -53,25 +53,26 @@
             <div class="form-buttons-area">
                 <DefaultButton
                     style="background-color: green"
-                    @executeAction="saveExpense"
+                    type="submit"
                 >
                     Salvar
                 </DefaultButton>
                 <DefaultButton
                     style="background-color: red"
+                    type="button"
                     @executeAction="$emit('closeModal')"
                 >
                     Cancelar
                 </DefaultButton>
             </div>
-        </div>
+        </form>
     </div>
 </template>
 
 <script>
 import DefaultButton from "../common/DefaultButton.vue";
-import { postData, updateData } from "../../services/api.js";
 import { globalVariablesMixin } from "../../utils/variables.js";
+import axios from "axios";
 
 export default {
     name: "ExpensesForm",
@@ -103,7 +104,7 @@ export default {
             } else {
                 this.updateExpense();
             }
-
+            this.$emit('closeModal');
             this.$emit("updateTable");
         },
 
@@ -121,7 +122,7 @@ export default {
                     notes: "",
                 };
 
-                await postData("expenses", newExpense);
+                await axios.post(`${this.apiURL}/expense/create/`, newExpense);
                 this.$emit("showMessage", "Despesa criada com sucesso!");
             } catch (error) {
                 console.error("Erro ao criar despesa.", error);
@@ -133,14 +134,14 @@ export default {
             try {
                 let date = this.getYearAndMonth(this.dueDate);
 
-                let newExpense = {
+                let updatedExpense = {
                     year: date.year,
                     month: date.month,
                     name: this.bill,
                     due_date: this.dueDate,
                 };
 
-                await updateData(this.item.id, "expenses", newExpense);
+                await axios.patch(`${this.apiURL}/expense/${this.item.id}/`, updatedExpense);
                 this.$emit("showMessage", "Despesa atualizada com sucesso!");
             } catch (error) {
                 console.error("Erro ao atualizar despesa.", error);
