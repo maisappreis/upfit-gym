@@ -171,7 +171,7 @@
 <script>
 import DefaultTooltip from "./DefaultTooltip.vue";
 import RequestAlert from "./RequestAlert.vue";
-import { updateData } from "../../services/api.js";
+import axios from "axios";
 
 export default {
     name: "DefaultTable",
@@ -195,6 +195,7 @@ export default {
             mouseX: 0,
             mouseY: 0,
             responseMessage: "",
+            entity: "",
         };
     },
 
@@ -276,10 +277,11 @@ export default {
         },
 
         async changePaidStatus(item) {
-            let updatedPaidStatus = {};
-
             try {
+                let updatedPaidStatus = {};
+
                 if (this.page === "expenses") {
+                    this.entity = "expense";
                     if (item.paid === "À pagar") {
                         updatedPaidStatus = {
                             paid: "Pago",
@@ -290,6 +292,7 @@ export default {
                         };
                     }
                 } else if (this.page === "revenue") {
+                    this.entity = "revenue";
                     if (item.paid === "À pagar") {
                         updatedPaidStatus = {
                             paid: "Link enviado",
@@ -305,7 +308,7 @@ export default {
                     }
                 }
 
-                await updateData(item.id, this.page, updatedPaidStatus);
+                await axios.patch(`${this.apiURL}/${this.entity}/${item.id}/`, updatedPaidStatus);
                 this.$emit("updateData");
 
                 this.responseMessage = "Status do pagamento salvo com sucesso!";
