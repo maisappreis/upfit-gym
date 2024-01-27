@@ -5,11 +5,14 @@
                 <font-awesome-icon icon="fa-solid fa-plus" class="icon-add" />
                 Novo Cliente
             </DefaultButton>
-            <DefaultSearch @applySearch="applySearch" />
+            <div style="display: flex; justify-content: flex-end">
+                <StatusFilter @get-status="getStatus" />
+                <DefaultSearch @applySearch="applySearch" />
+            </div>
         </div>
         <DefaultTable
             :columns="columns"
-            :data="customers"
+            :data="filteredCustomers"
             :searchedField="searchedField"
             :requestMessage="requestMessage"
             @updateItem="updateCustomer"
@@ -43,6 +46,7 @@ import DefaultSearch from "../common/DefaultSearch.vue";
 import DefaultModal from "../common/DefaultModal.vue";
 import CustomersForm from "../forms/CustomersForm.vue";
 import DeleteMessage from "../common/DeleteMessage.vue";
+import StatusFilter from "../common/StatusFilter.vue";
 import { globalVariablesMixin } from "@/utils/variables.js";
 import axios from "axios";
 
@@ -57,6 +61,7 @@ export default {
         DefaultModal,
         CustomersForm,
         DeleteMessage,
+        StatusFilter,
     },
 
     props: {
@@ -81,7 +86,24 @@ export default {
             deleteMessage: "",
             modalTitle: "",
             requestMessage: "",
+            currentStatus: "",
         };
+    },
+
+    computed: {
+        filteredCustomers() {
+            if (this.customers && this.customers.length > 0) {
+                if (this.currentStatus === "Todos") {
+                    return this.customers;
+                } else {
+                    return this.customers.filter(
+                        (e) => e.status === this.currentStatus
+                    );
+                }
+            } else {
+                return [];
+            }
+        },
     },
 
     methods: {
@@ -130,6 +152,10 @@ export default {
 
         showMessage(msg) {
             this.requestMessage = msg;
+        },
+
+        getStatus(status) {
+            this.currentStatus = status;
         },
     },
 };

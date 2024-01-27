@@ -98,10 +98,7 @@
                 ></textarea>
             </div>
             <div class="form-buttons-area">
-                <DefaultButton
-                    style="background-color: green"
-                    type="submit"
-                >
+                <DefaultButton style="background-color: green" type="submit">
                     Salvar
                 </DefaultButton>
                 <DefaultButton
@@ -170,10 +167,13 @@ export default {
                     notes: this.notes,
                 };
 
-                await axios.post(`${this.apiURL}/customer/create/`, newCustomer);
+                await axios.post(
+                    `${this.apiURL}/customer/create/`,
+                    newCustomer
+                );
                 this.$emit("showMessage", "Cliente criado com sucesso!");
 
-                this.$emit('closeModal');
+                this.$emit("closeModal");
                 this.$emit("updateTable");
             } catch (error) {
                 console.error("Erro ao criar cliente.", error);
@@ -195,10 +195,13 @@ export default {
                     notes: this.notes,
                 };
 
-                await axios.put(`${this.apiURL}/customer/${this.item.id}/`, updatedCustomer);
+                await axios.put(
+                    `${this.apiURL}/customer/${this.item.id}/`,
+                    updatedCustomer
+                );
                 this.$emit("showMessage", "Cliente atualizado com sucesso!");
 
-                this.$emit('closeModal');
+                this.$emit("closeModal");
                 this.$emit("updateTable");
             } catch (error) {
                 console.error("Erro ao atualizar cliente.", error);
@@ -210,9 +213,9 @@ export default {
             if (this.action === "create") {
                 let today = new Date();
                 let year = today.getFullYear();
-                let month = (today.getMonth() + 1).toString().padStart(2, '0');
-                let day = today.getDate().toString().padStart(2, '0');
-                let formattedDate = year + '-' + month + '-' + day;
+                let month = (today.getMonth() + 1).toString().padStart(2, "0");
+                let day = today.getDate().toString().padStart(2, "0");
+                let formattedDate = year + "-" + month + "-" + day;
 
                 this.start = formattedDate;
                 this.plan = "Mensal";
@@ -220,18 +223,21 @@ export default {
             }
 
             if (this.action === "update") {
+                let value = this.item.value;
+                let formatedValue = value.toString().replace(/\./g, ",");
+
                 this.customerName = this.item.name;
                 this.frequency = this.item.frequency;
                 this.start = this.item.start;
                 this.plan = this.item.plan;
-                this.value = this.item.value;
+                this.value = formatedValue;
                 this.status = this.item.status;
                 this.notes = this.item.notes;
             }
         },
 
         validateFloat() {
-            const cleanedValue = this.value.replace(',', '.');
+            const cleanedValue = this.value.replace(",", ".");
             const floatValue = parseFloat(cleanedValue);
 
             if (!isNaN(floatValue)) {

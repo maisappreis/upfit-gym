@@ -5,13 +5,15 @@
                 <font-awesome-icon icon="fa-solid fa-plus" class="icon-add" />
                 Nova Despesa
             </DefaultButton>
-            <MonthFilter
-                @get-month="getMonth"
-                @get-year="getYear"
-                @get-status="getStatus"
-                :statusList="statusList"
-            />
-            <DefaultSearch @applySearch="applySearch" />
+            <div style="display: flex; justify-content: flex-end">
+                <MonthFilter
+                    @get-month="getMonth"
+                    @get-year="getYear"
+                    @get-status="getStatus"
+                    :statusList="statusList"
+                />
+                <DefaultSearch @applySearch="applySearch" />
+            </div>
         </div>
         <DefaultTable
             :columns="columns"
