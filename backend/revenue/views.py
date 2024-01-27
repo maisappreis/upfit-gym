@@ -1,13 +1,21 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework import generics
 from .models import Revenue
 from .serializers import RevenueSerializer
 
 
-class RevenueListView(APIView):
+class RevenueListView(generics.ListAPIView):
+    queryset = Revenue.objects.all()
+    serializer_class = RevenueSerializer
 
-    def get(self, request, *args, **kwargs):
-        revenues = Revenue.objects.all()
-        serializer = RevenueSerializer(revenues, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+
+class RevenueCreateView(generics.ListCreateAPIView):
+    queryset = Revenue.objects.all()
+    serializer_class = RevenueSerializer
+
+
+class RevenueUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Revenue.objects.all()
+    serializer_class = RevenueSerializer
