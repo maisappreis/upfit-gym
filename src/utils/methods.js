@@ -69,6 +69,22 @@ export const globalMethods = {
         }
         return monthOrder[a.month] - monthOrder[b.month];
       });
+    },
+
+    getCurrentYearAndMonth() {
+      const currentDate = new Date();
+      const currentYear = currentDate.getFullYear();
+      const currentMonthIndex = currentDate.getMonth();
+
+      const months = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+        "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"]
+
+      let data = {
+        year: currentYear,
+        month: months[currentMonthIndex]
+      }
+
+      return data
     }
   },
 };

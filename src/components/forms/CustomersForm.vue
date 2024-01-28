@@ -180,14 +180,19 @@ export default {
                     notes: this.notes,
                 };
 
-                await axios.post(
+                let response = await axios.post(
                     `${this.apiURL}/customer/create/`,
                     newCustomer
                 );
+
                 this.$emit("showMessage", "Cliente criado com sucesso!");
 
                 this.$emit("closeModal");
                 this.$emit("updateTable");
+
+                setTimeout(() => {
+                    this.createRevenue(response.data.id)
+                }, 500)
             } catch (error) {
                 console.error("Erro ao criar cliente.", error);
                 this.$emit("showMessage", "Erro ao criar cliente.");
@@ -219,6 +224,26 @@ export default {
             } catch (error) {
                 console.error("Erro ao atualizar cliente.", error);
                 this.$emit("showMessage", "Erro ao atualizar cliente.");
+            }
+        },
+
+        async createRevenue(id) {
+            try {
+                let date = this.$methods.getCurrentYearAndMonth();
+
+                let newRevenue = {
+                    customer: id,
+                    year: date.year,
+                    month: date.month,
+                    value: this.value,
+                    payment_day: 10,
+                    notes: this.notes,
+                    paid: "À pagar",
+                };
+
+                await axios.post(`${this.apiURL}/revenue/create/`, newRevenue);
+            } catch (error) {
+                console.error("Erro ao criar receita.", error);
             }
         },
 

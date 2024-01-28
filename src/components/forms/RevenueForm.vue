@@ -173,7 +173,6 @@ export default {
                     payment_day: this.dueDate,
                     notes: this.notes,
                     paid: "À pagar",
-                    actions: "",
                 };
 
                 await axios.post(`${this.apiURL}/revenue/create/`, newRevenue);
