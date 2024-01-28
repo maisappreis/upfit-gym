@@ -167,9 +167,12 @@ export default {
         },
 
         fillModal() {
+            let value = this.item.value;
+            let formatedValue = value.toString().replace(/\./g, ",");
+    
             this.bill = this.item.name;
             this.dueDate = this.item.due_date;
-            this.value = this.item.value;
+            this.value = formatedValue;
             this.notes = this.item.notes;
         },
 

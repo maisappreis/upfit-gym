@@ -41,6 +41,8 @@
                     id="dueDate"
                     name="dueDate"
                     v-model="dueDate"
+                    min="1"
+                    max="31"
                     required
                 />
             </div>
@@ -211,10 +213,12 @@ export default {
             }
 
             if (this.action === "update") {
+                let value = this.item.value;
+                let formatedValue = value.toString().replace(/\./g, ",");
                 let customerID = Number(this.item.customer);
 
                 this.customer = this.customers.find((e) => e.id === customerID);
-                this.value = this.item.value;
+                this.value = formatedValue;
                 this.notes = this.item.notes;
                 this.dueDate = this.item.payment_day;
                 this.year = this.item.year;
