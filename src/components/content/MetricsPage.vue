@@ -1,8 +1,8 @@
 <template>
     <div class="content-area">
         <RevenueExpensesChart
-            :monthlyRevenue="monthlyRevenue"
-            :monthlyExpenses="monthlyExpenses"
+            :monthlyRevenue="monthlyRevenueOrdered"
+            :monthlyExpenses="monthlyExpensesOrdered"
         />
         <div style="display: flex">
             <ActiveCustomersChart :customers="customers" :revenue="revenue" />
@@ -33,8 +33,8 @@ export default {
 
     data() {
         return {
-            monthlyRevenue: [],
-            monthlyExpenses: [],
+            monthlyRevenueOrdered: [],
+            monthlyExpensesOrdered: [],
             monthlyProfit: [],
         };
     },
@@ -61,8 +61,8 @@ export default {
         calculateProfit() {
             const resultArray = [];
 
-            this.monthlyRevenue.forEach((revenueItem) => {
-                const expenseItem = this.monthlyExpenses.find(
+            this.monthlyRevenueOrdered.forEach((revenueItem) => {
+                const expenseItem = this.monthlyExpensesOrdered.find(
                     (expense) =>
                         expense.year === revenueItem.year &&
                         expense.month === revenueItem.month
@@ -89,8 +89,13 @@ export default {
                     (e) => e.paid === "Pago"
                 );
 
-                this.monthlyRevenue = this.sumMonthlyAmounts(paidRevenue);
-                this.monthlyExpenses = this.sumMonthlyAmounts(paidExpenses);
+                let monthlyRevenue = this.sumMonthlyAmounts(paidRevenue);
+                let monthlyExpenses = this.sumMonthlyAmounts(paidExpenses);
+
+                this.monthlyRevenueOrdered =
+                    this.$methods.sortData(monthlyRevenue);
+                this.monthlyExpensesOrdered =
+                    this.$methods.sortData(monthlyExpenses);
 
                 this.calculateProfit();
             }
