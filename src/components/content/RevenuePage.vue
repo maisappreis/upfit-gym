@@ -26,9 +26,9 @@
             @deleteItem="showDeleteModal"
         />
         <DefaultModal v-if="showModal">
-            <DeleteMessage
+            <ModalMessage
                 v-if="action === 'delete'"
-                :deleteMessage="deleteMessage"
+                :data="messageData"
                 @deleteItem="deleteRevenue"
                 @closeModal="closeModal"
             />
@@ -54,7 +54,7 @@ import DefaultSearch from "../common/DefaultSearch.vue";
 import DefaultModal from "../common/DefaultModal.vue";
 import MonthFilter from "../common/MonthFilter.vue";
 import RevenueForm from "../forms/RevenueForm.vue";
-import DeleteMessage from "../common/DeleteMessage.vue";
+import ModalMessage from "../common/ModalMessage.vue";
 import { globalVariablesMixin } from "@/utils/variables.js";
 import axios from "axios";
 
@@ -68,7 +68,7 @@ export default {
         DefaultSearch,
         DefaultModal,
         RevenueForm,
-        DeleteMessage,
+        ModalMessage,
         MonthFilter,
     },
 
@@ -96,7 +96,7 @@ export default {
             showModal: false,
             item: {},
             action: "",
-            deleteMessage: "",
+            messageData: {},
             modalTitle: "",
             requestMessage: "",
             currentMonth: "",
@@ -164,9 +164,13 @@ export default {
             this.item = item;
             this.showModal = true;
             this.action = "delete";
+            let date = `${item.month}/${item.year}`;
 
-            this.deleteMessage = `Tem certeza que deseja excluir o recebimento da mensalidade do 
-                                    cliente ${item.name} referente ao mês de ${item.month}/${item.year}?`;
+            this.messageData = {
+                name: item.name,
+                date: date,
+                view: "revenue"
+            };
         },
 
         closeModal() {

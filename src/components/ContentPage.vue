@@ -10,6 +10,7 @@
         <CustomersPage
             v-if="selectedPage === 'customers'"
             :customers="customers"
+            :revenue="revenue"
             :selectedPage="selectedPage"
             @updateData="getData"
         />

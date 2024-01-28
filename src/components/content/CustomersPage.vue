@@ -19,11 +19,13 @@
             @deleteItem="showDeleteModal"
         />
         <DefaultModal v-if="showModal">
-            <DeleteMessage
+            <ModalMessage
                 v-if="action === 'delete'"
-                :deleteMessage="deleteMessage"
+                :data="messageData"
+                :blockDelete="blockDelete"
                 @deleteItem="deleteCustomer"
                 @closeModal="closeModal"
+                @inactiveCustomer="inactiveCustomer"
             />
             <CustomersForm
                 v-else
@@ -45,7 +47,7 @@ import DefaultButton from "../common/DefaultButton.vue";
 import DefaultSearch from "../common/DefaultSearch.vue";
 import DefaultModal from "../common/DefaultModal.vue";
 import CustomersForm from "../forms/CustomersForm.vue";
-import DeleteMessage from "../common/DeleteMessage.vue";
+import ModalMessage from "../common/ModalMessage.vue";
 import StatusFilter from "../common/StatusFilter.vue";
 import { globalVariablesMixin } from "@/utils/variables.js";
 import axios from "axios";
@@ -60,12 +62,13 @@ export default {
         DefaultSearch,
         DefaultModal,
         CustomersForm,
-        DeleteMessage,
+        ModalMessage,
         StatusFilter,
     },
 
     props: {
         customers: Array,
+        revenue: Array,
     },
 
     data() {
@@ -83,7 +86,7 @@ export default {
             showModal: false,
             item: {},
             action: "",
-            deleteMessage: "",
+            messageData: {},
             modalTitle: "",
             requestMessage: "",
             currentStatus: "",
@@ -138,12 +141,43 @@ export default {
             this.$emit("updateData");
         },
 
+        async inactiveCustomer() {
+            try {
+                let data = { status: "Inativo" };
+
+                await axios.patch(
+                    `${this.apiURL}/customer/${this.item.id}/`,
+                    data
+                );
+                this.showMessage("Cliente inativado com sucesso!");
+            } catch (error) {
+                console.error("Erro ao inativar cliente.", error);
+
+                this.showMessage("Erro ao inativar cliente.");
+            }
+
+            this.showModal = false;
+            this.$emit("updateData");
+        },
+
         showDeleteModal(item) {
             this.item = item;
             this.showModal = true;
             this.action = "delete";
+            let revenueHistory = this.revenue.filter(
+                (e) => e.customer === this.item.id
+            );
 
-            this.deleteMessage = `Tem certeza que deseja excluir o cliente ${item.name}?`;
+            this.messageData = {
+                name: item.name,
+                view: "customer",
+            };
+
+            if (revenueHistory.length > 0) {
+                this.blockDelete = true;
+            } else {
+                this.blockDelete = false;
+            }
         },
 
         closeModal() {
