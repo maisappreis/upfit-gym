@@ -98,7 +98,7 @@
                 ></textarea>
             </div>
             <div class="form-buttons-area">
-                <DefaultButton style="background-color: green" type="submit">
+                <DefaultButton type="submit" :disable="disable">
                     Salvar
                 </DefaultButton>
                 <DefaultButton
@@ -142,6 +142,19 @@ export default {
             status: "",
             notes: "",
         };
+    },
+
+    computed: {
+        disable() {
+            return (
+                this.customerName === "" ||
+                this.frequency === "" ||
+                this.start === "" ||
+                this.plan === "" ||
+                this.value === 0 ||
+                this.status === ""
+            );
+        },
     },
 
     methods: {

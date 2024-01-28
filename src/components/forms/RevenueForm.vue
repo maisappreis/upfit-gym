@@ -94,10 +94,7 @@
                 ></textarea>
             </div>
             <div class="form-buttons-area">
-                <DefaultButton
-                    style="background-color: green"
-                    type="submit"
-                >
+                <DefaultButton type="submit" :disable="disable">
                     Salvar
                 </DefaultButton>
                 <DefaultButton
@@ -143,6 +140,18 @@ export default {
         };
     },
 
+    computed: {
+        disable() {
+            return (
+                this.customer === "" ||
+                this.year === 0 ||
+                this.month === "" ||
+                this.value === 0 ||
+                this.dueDate === 0
+            );
+        },
+    },
+
     methods: {
         saveRevenue() {
             if (this.action === "create") {
@@ -170,7 +179,7 @@ export default {
                 await axios.post(`${this.apiURL}/revenue/create/`, newRevenue);
                 this.$emit("showMessage", "Receita criada com sucesso!");
 
-                this.$emit('closeModal');
+                this.$emit("closeModal");
                 this.$emit("updateTable");
             } catch (error) {
                 console.error("Erro ao criar receita.", error);
@@ -190,10 +199,13 @@ export default {
                     payment_day: this.dueDate,
                     notes: this.notes,
                 };
-                await axios.put(`${this.apiURL}/revenue/${this.item.id}/`, updatedRevenue);
+                await axios.put(
+                    `${this.apiURL}/revenue/${this.item.id}/`,
+                    updatedRevenue
+                );
                 this.$emit("showMessage", "Receita atualizada com sucesso!");
 
-                this.$emit('closeModal');
+                this.$emit("closeModal");
                 this.$emit("updateTable");
             } catch (error) {
                 console.error("Erro ao atualizar receita.", error);
@@ -206,10 +218,10 @@ export default {
                 let currentDate = new Date();
                 let currentMonth = currentDate.getMonth();
                 let year = currentDate.getFullYear();
-                let month = this.months[currentMonth]
+                let month = this.months[currentMonth];
 
-                this.year = year
-                this.month = month
+                this.year = year;
+                this.month = month;
             }
 
             if (this.action === "update") {
@@ -227,7 +239,7 @@ export default {
         },
 
         validateFloat() {
-            const cleanedValue = this.value.replace(',', '.');
+            const cleanedValue = this.value.replace(",", ".");
             const floatValue = parseFloat(cleanedValue);
 
             if (!isNaN(floatValue)) {

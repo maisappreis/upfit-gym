@@ -51,10 +51,7 @@
                 ></textarea>
             </div>
             <div class="form-buttons-area">
-                <DefaultButton
-                    style="background-color: green"
-                    type="submit"
-                >
+                <DefaultButton type="submit" :disable="disable">
                     Salvar
                 </DefaultButton>
                 <DefaultButton
@@ -97,6 +94,12 @@ export default {
         };
     },
 
+    computed: {
+        disable() {
+            return this.bill === "" || this.dueDate === "" || this.value === 0;
+        },
+    },
+
     methods: {
         saveExpense() {
             if (this.action === "create") {
@@ -124,7 +127,7 @@ export default {
                 await axios.post(`${this.apiURL}/expense/create/`, newExpense);
                 this.$emit("showMessage", "Despesa criada com sucesso!");
 
-                this.$emit('closeModal');
+                this.$emit("closeModal");
                 this.$emit("updateTable");
             } catch (error) {
                 console.error("Erro ao criar despesa.", error);
@@ -146,10 +149,13 @@ export default {
                     notes: this.notes,
                 };
 
-                await axios.patch(`${this.apiURL}/expense/${this.item.id}/`, updatedExpense);
+                await axios.patch(
+                    `${this.apiURL}/expense/${this.item.id}/`,
+                    updatedExpense
+                );
                 this.$emit("showMessage", "Despesa atualizada com sucesso!");
 
-                this.$emit('closeModal');
+                this.$emit("closeModal");
                 this.$emit("updateTable");
             } catch (error) {
                 console.error("Erro ao atualizar despesa.", error);
@@ -169,7 +175,7 @@ export default {
         fillModal() {
             let value = this.item.value;
             let formatedValue = value.toString().replace(/\./g, ",");
-    
+
             this.bill = this.item.name;
             this.dueDate = this.item.due_date;
             this.value = formatedValue;
@@ -177,7 +183,7 @@ export default {
         },
 
         validateFloat() {
-            const cleanedValue = this.value.replace(',', '.');
+            const cleanedValue = this.value.replace(",", ".");
             const floatValue = parseFloat(cleanedValue);
 
             if (!isNaN(floatValue)) {
