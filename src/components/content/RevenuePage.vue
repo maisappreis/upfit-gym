@@ -1,7 +1,10 @@
 <template>
     <div class="content-area">
         <div style="display: flex; justify-content: space-between">
-            <DefaultButton @executeAction="addRevenue">
+            <DefaultButton
+                @executeAction="addRevenue"
+                style="background-color: var(--red-dark-color)"
+            >
                 <font-awesome-icon icon="fa-solid fa-plus" class="icon-add" />
                 Nova Receita
             </DefaultButton>
@@ -169,7 +172,7 @@ export default {
             this.messageData = {
                 name: item.name,
                 date: date,
-                view: "revenue"
+                view: "revenue",
             };
         },
 

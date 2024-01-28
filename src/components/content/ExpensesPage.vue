@@ -1,7 +1,10 @@
 <template>
     <div class="content-area">
         <div style="display: flex; justify-content: space-between">
-            <DefaultButton @executeAction="addExpense">
+            <DefaultButton
+                @executeAction="addExpense"
+                style="background-color: var(--red-dark-color)"
+            >
                 <font-awesome-icon icon="fa-solid fa-plus" class="icon-add" />
                 Nova Despesa
             </DefaultButton>
@@ -165,7 +168,7 @@ export default {
             this.messageData = {
                 name: item.name,
                 date: date,
-                view: "expense"
+                view: "expense",
             };
         },
 

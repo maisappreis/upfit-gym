@@ -1,7 +1,10 @@
 <template>
     <div class="content-area">
         <div style="display: flex; justify-content: space-between">
-            <DefaultButton @executeAction="addCustomer">
+            <DefaultButton
+                @executeAction="addCustomer"
+                style="background-color: var(--red-dark-color)"
+            >
                 <font-awesome-icon icon="fa-solid fa-plus" class="icon-add" />
                 Novo Cliente
             </DefaultButton>
