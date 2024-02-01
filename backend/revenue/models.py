@@ -20,3 +20,6 @@ class Revenue(models.Model):
 
     def __str__(self):
         return self.customer
+
+    class Meta:
+        unique_together = ['customer', 'year', 'month']
