@@ -77,7 +77,7 @@ export const globalMethods = {
       const currentMonthIndex = currentDate.getMonth();
 
       const months = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
-        "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"]
+        "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
 
       let data = {
         year: currentYear,
@@ -85,6 +85,29 @@ export const globalMethods = {
       }
 
       return data
+    },
+
+    getNextMonth(currentMonth, currentYear) {
+      const months = [
+        "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+        "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+      ];
+    
+      const currentMonthIndex = months.indexOf(currentMonth);
+    
+      let nextMonthIndex = (currentMonthIndex + 1) % 12;
+      let nextYear = currentYear;
+    
+      if (nextMonthIndex === 0) {
+        nextYear++;
+      }
+    
+      const response = {
+        month: months[nextMonthIndex],
+        year: nextYear
+      };
+    
+      return response;
     }
   },
 };

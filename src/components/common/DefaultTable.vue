@@ -69,7 +69,12 @@
                                         .replace(/\./g, ",")
                                 }}
                             </span>
-                            <span v-else-if="column.key === 'start' || column.key === 'due_date'">
+                            <span
+                                v-else-if="
+                                    column.key === 'start' ||
+                                    column.key === 'due_date'
+                                "
+                            >
                                 {{ this.formatDate(item[column.key]) }}
                             </span>
                             <span
@@ -120,11 +125,11 @@
                 <button
                     v-for="pageNumber in getPageNumbers()"
                     :key="pageNumber"
-                        class="pagination-button"
-                        @click="goToPage(pageNumber)"
-                        :class="{ active: pageNumber === currentPage }"
-                    >
-                        {{ pageNumber }}
+                    class="pagination-button"
+                    @click="goToPage(pageNumber)"
+                    :class="{ active: pageNumber === currentPage }"
+                >
+                    {{ pageNumber }}
                 </button>
                 <button
                     class="pagination-button"
@@ -243,12 +248,12 @@ export default {
             }
         },
 
-        orderedData () {
+        orderedData() {
             if (this.data && this.data.length > 0) {
-                let orderedList = this.orderData(this.data)
-                return orderedList
+                let orderedList = this.orderData(this.data);
+                return orderedList;
             } else {
-                return []
+                return [];
             }
         },
     },
@@ -308,10 +313,21 @@ export default {
                     }
                 }
 
-                await axios.patch(`${this.apiURL}/${this.entity}/${item.id}/`, updatedPaidStatus);
+                await axios.patch(
+                    `${this.apiURL}/${this.entity}/${item.id}/`,
+                    updatedPaidStatus
+                );
                 this.$emit("updateData");
 
                 this.responseMessage = "Status do pagamento salvo com sucesso!";
+
+                if (
+                    this.page === "revenue" &&
+                    updatedPaidStatus.paid === "Pago" &&
+                    item.status === "Ativo"
+                ) {
+                    this.createRevenueForNextMonth(item);
+                }
             } catch (error) {
                 console.error(
                     "Erro ao atualizar o status de pagamento...",
@@ -376,12 +392,37 @@ export default {
                 }
             });
         },
-        formatDate (date) {
-            const [year, month, day] = date.split('-');
+
+        formatDate(date) {
+            const [year, month, day] = date.split("-");
 
             const formattedDateString = `${day}/${month}/${year}`;
-            return formattedDateString
-        }
+            return formattedDateString;
+        },
+
+        async createRevenueForNextMonth(item) {
+            try {
+                let nextMonth = this.$methods.getNextMonth(
+                    item.month,
+                    item.year
+                );
+
+                let newRevenue = {
+                    customer: item.customer,
+                    year: nextMonth.year,
+                    month: nextMonth.month,
+                    value: item.value,
+                    payment_day: item.payment_day,
+                    notes: item.notes,
+                    paid: "À pagar",
+                };
+                await axios.post(`${this.apiURL}/revenue/create/`, newRevenue);
+
+                this.$emit("updateTable");
+            } catch (error) {
+                console.error("Erro ao criar receita.", error);
+            }
+        },
     },
 
     watch: {

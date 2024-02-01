@@ -27,6 +27,7 @@
             @updateData="$emit('updateData')"
             @updateItem="updateRevenue"
             @deleteItem="showDeleteModal"
+            @updateTable="$emit('updateData')"
         />
         <DefaultModal v-if="showModal">
             <ModalMessage
@@ -194,6 +195,7 @@ export default {
                     matchingRevenue.name = customer.name;
                     matchingRevenue.start = customer.start;
                     matchingRevenue.plan = customer.plan;
+                    matchingRevenue.status = customer.status;
                 });
             });
         },
@@ -209,6 +211,7 @@ export default {
         if (this.customers && this.customers.length > 0) {
             this.incrementData();
         }
+        this.$emit('updateData');
     },
 };
 </script>
