@@ -321,12 +321,12 @@ export default {
 
                 this.responseMessage = "Status do pagamento salvo com sucesso!";
 
-                if (
-                    this.page === "revenue" &&
-                    updatedPaidStatus.paid === "Pago" &&
-                    item.status === "Ativo"
-                ) {
-                    this.createRevenueForNextMonth(item);
+                if (updatedPaidStatus.paid === "Pago") {
+                    if (this.page === "revenue" && item.status === "Ativo") {
+                        this.createRevenueForNextMonth(item);
+                    } else if (this.page === "expenses") {
+                        this.createExpenseForNextMonth(item);
+                    }
                 }
             } catch (error) {
                 console.error(
@@ -421,6 +421,30 @@ export default {
                 this.$emit("updateTable");
             } catch (error) {
                 console.error("Erro ao criar receita.", error);
+            }
+        },
+
+        async createExpenseForNextMonth(item) {
+            try {
+                let nextMonth = this.$methods.getNextMonth(
+                    item.month,
+                    item.year
+                );
+
+                let newExpense = {
+                    year: nextMonth.year,
+                    month: nextMonth.month,
+                    name: item.name,
+                    due_date: item.due_date,
+                    value: item.value,
+                    paid: "À pagar",
+                    notes: item.notes,
+                };
+
+                await axios.post(`${this.apiURL}/expense/create/`, newExpense);
+                this.$emit("updateTable");
+            } catch (error) {
+                console.error("Erro ao criar despesa.", error);
             }
         },
     },

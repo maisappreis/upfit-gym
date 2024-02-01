@@ -121,7 +121,7 @@ export default {
                     due_date: this.dueDate,
                     value: this.value,
                     paid: "À pagar",
-                    notes: "",
+                    notes: this.notes,
                 };
 
                 await axios.post(`${this.apiURL}/expense/create/`, newExpense);
