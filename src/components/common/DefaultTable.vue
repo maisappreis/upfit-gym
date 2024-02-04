@@ -430,12 +430,14 @@ export default {
                     item.month,
                     item.year
                 );
+                let paymentDay = parseInt(item.due_date.slice(-2));
+                let dueDate = `${nextMonth.year}-${nextMonth.monthNumber}-${paymentDay}`;
 
                 let newExpense = {
                     year: nextMonth.year,
                     month: nextMonth.month,
                     name: item.name,
-                    due_date: item.due_date,
+                    due_date: dueDate,
                     value: item.value,
                     paid: "À pagar",
                     notes: item.notes,

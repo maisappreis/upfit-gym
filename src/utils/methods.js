@@ -104,7 +104,8 @@ export const globalMethods = {
     
       const response = {
         month: months[nextMonthIndex],
-        year: nextYear
+        year: nextYear,
+        monthNumber: nextMonthIndex + 1
       };
     
       return response;

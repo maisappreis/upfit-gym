@@ -1,5 +1,5 @@
 <template>
-    <div class="modal-area">
+    <div class="modal-area" :class="{ 'top-up': isForm, 'top-down': !isForm }">
         <slot></slot>
         <div v-if="!isForm" class="form-buttons-area">
             <DefaultButton
@@ -32,12 +32,12 @@ export default {
         buttonMessage: {
             type: String,
             required: false,
-            default: 'Confirmar'
+            default: "Confirmar",
         },
         isForm: {
             type: Boolean,
             required: false,
-            default: false
+            default: false,
         },
     },
 };
@@ -46,12 +46,20 @@ export default {
 <style scoped>
 .modal-area {
     position: absolute;
-    top: 30px;
+
     left: 20vw;
     background-color: white;
     height: max-content;
     width: 40vw;
     z-index: 12;
     border-radius: 10px;
+}
+
+.top-up {
+    top: 30px;
+}
+
+.top-down {
+    top: 25vh;
 }
 </style>
