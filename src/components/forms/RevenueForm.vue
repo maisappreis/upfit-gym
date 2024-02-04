@@ -206,6 +206,8 @@ export default {
 
                 this.$emit("closeModal");
                 this.$emit("updateTable");
+
+                this.checkChangesInValue();
             } catch (error) {
                 console.error("Erro ao atualizar receita.", error);
                 this.$emit("showMessage", "Erro ao atualizar receita.");
@@ -247,6 +249,25 @@ export default {
                 this.value = null;
             }
         },
+
+        checkChangesInValue() {
+            let customer = this.customers.filter(e => e.id === this.item.customer);
+            let customerValue = customer.map(e => e.value);
+            let customerName = customer.map(e => e.name);
+
+            let data = {
+                id: this.item.customer,
+                month: this.item.month,
+                year: this.item.year,
+                name: customerName[0],
+                currentValue: customerValue[0],
+                updatedValue: this.value
+            }
+
+            if (customerValue[0] !== this.value) {
+                this.$emit("getConfirmation", data);
+            }
+        }
     },
 
     mounted() {

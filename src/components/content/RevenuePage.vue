@@ -29,13 +29,33 @@
             @deleteItem="showDeleteModal"
             @updateTable="$emit('updateData')"
         />
-        <DefaultModal v-if="showModal">
-            <ModalMessage
-                v-if="action === 'delete'"
-                :data="messageData"
-                @deleteItem="deleteRevenue"
-                @closeModal="closeModal"
-            />
+        <DefaultModal
+            v-if="showModal"
+            :isForm="isForm"
+            @executeAction="getModalAction"
+            @closeModal="closeModal"
+        >
+            <h3 v-if="action === 'delete'" class="message-area">
+                Tem certeza que deseja excluir o recebimento da mensalidade do
+                cliente
+                <strong class="highlight">{{ messageData.name }}</strong>
+                referente ao mês de
+                <strong class="highlight">{{ messageData.date }}</strong
+                >?
+            </h3>
+            <h3 v-else-if="showConfirmation" class="message-area">
+                O valor atual da mensalidade do cliente
+                <strong class="highlight">{{ confirmationData.name }}</strong> é
+                de
+                <strong class="highlight"
+                    >R${{ formatValue(confirmationData.currentValue) }}</strong
+                >
+                segundo o seu cadastro. Você gostaria de atualizar todos os
+                futuros pagamentos deste cliente para este novo valor de
+                <strong class="highlight"
+                    >R${{ formatValue(confirmationData.updatedValue) }}</strong
+                >?
+            </h3>
             <RevenueForm
                 v-else
                 :item="item"
@@ -45,6 +65,7 @@
                 @updateTable="$emit('updateData')"
                 @closeModal="closeModal"
                 @showMessage="showMessage"
+                @getConfirmation="getConfirmation"
             />
         </DefaultModal>
         <div v-if="showModal" class="defocus"></div>
@@ -58,7 +79,6 @@ import DefaultSearch from "../common/DefaultSearch.vue";
 import DefaultModal from "../common/DefaultModal.vue";
 import MonthFilter from "../common/MonthFilter.vue";
 import RevenueForm from "../forms/RevenueForm.vue";
-import ModalMessage from "../common/ModalMessage.vue";
 import { globalVariablesMixin } from "@/utils/variables.js";
 import axios from "axios";
 
@@ -72,7 +92,6 @@ export default {
         DefaultSearch,
         DefaultModal,
         RevenueForm,
-        ModalMessage,
         MonthFilter,
     },
 
@@ -106,6 +125,9 @@ export default {
             currentMonth: "",
             currentYear: 0,
             currentStatus: "",
+            showConfirmation: false,
+            confirmationData: {},
+            isForm: false,
         };
     },
 
@@ -139,12 +161,14 @@ export default {
 
         addRevenue() {
             this.showModal = true;
+            this.isForm = true;
             this.action = "create";
             this.modalTitle = "Adicionar Receita";
         },
 
         updateRevenue(item) {
             this.showModal = true;
+            this.isForm = true;
             this.item = item;
             this.action = "update";
             this.modalTitle = "Atualizar Receita";
@@ -173,16 +197,81 @@ export default {
             this.messageData = {
                 name: item.name,
                 date: date,
-                view: "revenue",
             };
         },
 
         closeModal() {
             this.showModal = false;
+            this.isForm = false;
+            this.showConfirmation = false;
+            this.action = "";
         },
 
         showMessage(msg) {
             this.requestMessage = msg;
+        },
+
+        getConfirmation(data) {
+            this.confirmationData = data;
+            this.showModal = true;
+            this.showConfirmation = true;
+        },
+
+        getModalAction() {
+            if (this.showConfirmation) {
+                this.updateCustomerValue();
+                this.updateFutureRevenue();
+
+                this.closeModal();
+                this.$emit("updateTable");
+            } else {
+                this.deleteRevenue();
+            }
+        },
+
+        updateFutureRevenue() {
+            let nextMonth = this.$methods.getNextMonth(
+                this.confirmationData.month,
+                this.confirmationData.year
+            );
+            let nextRevenues = this.revenue.filter(
+                (e) => e.month === nextMonth.month && e.year === nextMonth.year
+            );
+
+            for (let i = 0; i < nextRevenues.length; i++) {
+                this.updateRevenueValue(nextRevenues[i].id);
+            }
+        },
+
+        async updateCustomerValue() {
+            try {
+                let updatedCustomer = {
+                    value: this.confirmationData.updatedValue,
+                };
+
+                await axios.patch(
+                    `${this.apiURL}/customer/${this.confirmationData.id}/`,
+                    updatedCustomer
+                );
+                this.$emit("showMessage", "Cliente atualizado com sucesso!");
+            } catch (error) {
+                console.error("Erro ao atualizar cliente.", error);
+                this.$emit("showMessage", "Erro ao atualizar cliente.");
+            }
+        },
+
+        async updateRevenueValue(id) {
+            try {
+                let updatedRevenue = {
+                    value: this.confirmationData.updatedValue,
+                };
+                await axios.patch(
+                    `${this.apiURL}/revenue/${id}/`,
+                    updatedRevenue
+                );
+            } catch (error) {
+                console.error("Erro ao atualizar receita.", error);
+            }
         },
 
         incrementData() {
@@ -199,6 +288,10 @@ export default {
                 });
             });
         },
+
+        formatValue(value) {
+            return value.toFixed(2).toString().replace(/\./g, ",");
+        },
     },
 
     watch: {
@@ -211,7 +304,7 @@ export default {
         if (this.customers && this.customers.length > 0) {
             this.incrementData();
         }
-        this.$emit('updateData');
+        this.$emit("updateData");
     },
 };
 </script>
