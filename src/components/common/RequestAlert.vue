@@ -2,14 +2,14 @@
     <div>
         <div v-if="showSuccessAlert" class="alert-area success">
             <div class="marker green"></div>
-            <div class="message-area">
+            <div class="message">
                 <font-awesome-icon icon="fa-solid fa-check" class="icon" />
                 <slot></slot>
             </div>
         </div>
         <div v-else class="alert-area error">
             <div class="marker red"></div>
-            <div class="message-area">
+            <div class="message">
                 <font-awesome-icon icon="fa-solid fa-xmark" class="icon" />
                 <slot></slot>
             </div>
@@ -81,7 +81,7 @@ export default {
     background-color: rgb(19, 163, 0);
 }
 
-.message-area {
+.message {
     width: 97%;
     font-size: 18px;
 }

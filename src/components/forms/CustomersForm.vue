@@ -190,9 +190,11 @@ export default {
                 this.$emit("closeModal");
                 this.$emit("updateTable");
 
-                setTimeout(() => {
-                    this.createRevenue(response.data.id)
-                }, 500)
+                if (this.status === "Ativo") {
+                    setTimeout(() => {
+                        this.createRevenue(response.data.id)
+                    }, 500)
+                }
             } catch (error) {
                 console.error("Erro ao criar cliente.", error);
                 this.$emit("showMessage", "Erro ao criar cliente.");

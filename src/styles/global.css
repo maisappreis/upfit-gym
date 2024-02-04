@@ -21,6 +21,16 @@
     border-radius: 10px;
 }
 
+.highlight {
+    color: red;
+    text-decoration-line: underline;
+}
+
+.message-area {
+    padding: 20px 40px 0 20px;
+    line-height: 1.5;
+}
+
 /* ----------- Form Styles ------------*/
 
 .form-area {

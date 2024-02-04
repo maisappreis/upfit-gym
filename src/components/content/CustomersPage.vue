@@ -21,15 +21,20 @@
             @updateItem="updateCustomer"
             @deleteItem="showDeleteModal"
         />
-        <DefaultModal v-if="showModal">
-            <ModalMessage
-                v-if="action === 'delete'"
-                :data="messageData"
-                :blockDelete="blockDelete"
-                @deleteItem="deleteCustomer"
-                @closeModal="closeModal"
-                @inactiveCustomer="inactiveCustomer"
-            />
+        <DefaultModal v-if="showModal"
+            :isForm="isForm"
+            :buttonMessage="buttonMessage"
+            @executeAction="getModalAction"
+            @closeModal="closeModal"
+        >
+            <h3 v-if="action === 'delete' && blockDelete" class="message-area">
+                Não é possível excluir o cliente <strong class="highlight">{{ customerName }}</strong>,
+                pois isso excluiria todo o seu histórico de receitas. Ao invés de excluí-lo, mude seu
+                status para <strong class="highlight">Inativo</strong>.
+            </h3>
+            <h3 v-else-if="action === 'delete' && !blockDelete" class="message-area">
+                Tem certeza que deseja excluir o cliente <strong class="highlight">{{ customerName }}</strong>?
+            </h3>
             <CustomersForm
                 v-else
                 :item="item"
@@ -50,7 +55,6 @@ import DefaultButton from "../common/DefaultButton.vue";
 import DefaultSearch from "../common/DefaultSearch.vue";
 import DefaultModal from "../common/DefaultModal.vue";
 import CustomersForm from "../forms/CustomersForm.vue";
-import ModalMessage from "../common/ModalMessage.vue";
 import StatusFilter from "../common/StatusFilter.vue";
 import { globalVariablesMixin } from "@/utils/variables.js";
 import axios from "axios";
@@ -65,7 +69,6 @@ export default {
         DefaultSearch,
         DefaultModal,
         CustomersForm,
-        ModalMessage,
         StatusFilter,
     },
 
@@ -89,10 +92,12 @@ export default {
             showModal: false,
             item: {},
             action: "",
-            messageData: {},
+            customerName: "",
             modalTitle: "",
             requestMessage: "",
             currentStatus: "",
+            buttonMessage: "Confirmar",
+            isForm: false,
         };
     },
 
@@ -119,15 +124,25 @@ export default {
 
         addCustomer() {
             this.showModal = true;
+            this.isForm = true;
             this.action = "create";
             this.modalTitle = "Adicionar Cliente";
         },
 
         updateCustomer(item) {
             this.showModal = true;
+            this.isForm = true;
             this.item = item;
             this.action = "update";
             this.modalTitle = "Atualizar Cliente";
+        },
+
+        getModalAction() {
+            if (this.blockDelete) {
+                this.inactiveCustomer();
+            } else {
+                this.deleteCustomer();
+            }
         },
 
         async deleteCustomer() {
@@ -171,13 +186,11 @@ export default {
                 (e) => e.customer === this.item.id
             );
 
-            this.messageData = {
-                name: item.name,
-                view: "customer",
-            };
+            this.customerName = item.name;
 
             if (revenueHistory.length > 0) {
                 this.blockDelete = true;
+                this.buttonMessage = "Inativar cliente";
             } else {
                 this.blockDelete = false;
             }
@@ -185,6 +198,8 @@ export default {
 
         closeModal() {
             this.showModal = false;
+            this.isForm = false;
+            this.buttonMessage = "Confirmar";
         },
 
         showMessage(msg) {

@@ -28,13 +28,16 @@
             @updateItem="updateExpense"
             @deleteItem="showDeleteModal"
         />
-        <DefaultModal v-if="showModal">
-            <ModalMessage
-                v-if="action === 'delete'"
-                :data="messageData"
-                @deleteItem="deleteExpense"
-                @closeModal="closeModal"
-            />
+        <DefaultModal v-if="showModal"
+            :isForm="isForm"
+            @executeAction="deleteExpense"
+            @closeModal="closeModal"
+        >
+            <h3 v-if="action === 'delete'" class="message-area">
+                Tem certeza que deseja excluir o pagamento da despesa
+                de <strong class="highlight">{{ messageData.name }}</strong> referente ao mês de
+                <strong class="highlight">{{ messageData.date }}</strong>?
+            </h3>
             <ExpensesForm
                 v-else
                 :item="item"
@@ -56,7 +59,6 @@ import DefaultSearch from "../common/DefaultSearch.vue";
 import DefaultModal from "../common/DefaultModal.vue";
 import MonthFilter from "../common/MonthFilter.vue";
 import ExpensesForm from "../forms/ExpensesForm.vue";
-import ModalMessage from "../common/ModalMessage.vue";
 import { globalVariablesMixin } from "@/utils/variables.js";
 import axios from "axios";
 
@@ -70,7 +72,6 @@ export default {
         DefaultSearch,
         DefaultModal,
         ExpensesForm,
-        ModalMessage,
         MonthFilter,
     },
 
@@ -101,6 +102,7 @@ export default {
             currentMonth: "",
             currentYear: 0,
             currentStatus: "",
+            isForm: false,
         };
     },
 
@@ -134,12 +136,14 @@ export default {
 
         addExpense() {
             this.showModal = true;
+            this.isForm = true;
             this.action = "create";
             this.modalTitle = "Adicionar Despesa";
         },
 
         updateExpense(item) {
             this.showModal = true;
+            this.isForm = true;
             this.item = item;
             this.action = "update";
             this.modalTitle = "Atualizar Despesa";
@@ -174,6 +178,7 @@ export default {
 
         closeModal() {
             this.showModal = false;
+            this.isForm = false;
         },
 
         showMessage(msg) {
