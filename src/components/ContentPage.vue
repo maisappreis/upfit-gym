@@ -112,4 +112,11 @@ export default {
     height: 83vh;
     background-color: var(--gray-light-color);
 }
+
+@media only screen and (max-width: 1300px) {
+    .content {
+        left: 100px;
+        width: 92vw;
+    }
+}
 </style>

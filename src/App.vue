@@ -42,7 +42,7 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: black;
+  background-color: var(--gray-light-color);
 }
 
 .app-area {

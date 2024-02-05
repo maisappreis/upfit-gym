@@ -1,5 +1,5 @@
 <template>
-    <div class="logo-area">
+    <div>
       <img src="@/assets/logo.png" alt="Logo">
     </div>
 </template>
@@ -11,10 +11,6 @@ export default {
 </script>
 
 <style scoped>
-.logo-area {
-  height: 150px;
-}
-
 img {
   height: 100%;
 }
