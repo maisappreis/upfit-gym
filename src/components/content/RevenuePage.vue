@@ -27,7 +27,6 @@
             @updateData="$emit('updateData')"
             @updateItem="updateRevenue"
             @deleteItem="showDeleteModal"
-            @updateTable="$emit('updateData')"
         />
         <DefaultModal
             v-if="showModal"
@@ -223,7 +222,7 @@ export default {
                 this.updateFutureRevenue();
 
                 this.closeModal();
-                this.$emit("updateTable");
+                this.$emit("updateData");
             } else {
                 this.deleteRevenue();
             }

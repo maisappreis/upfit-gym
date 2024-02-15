@@ -193,7 +193,6 @@ export default {
         return {
             itemsPerPage: 8,
             currentPage: 1,
-            filteredData: [],
             checkboxState: false,
             showingTooltip: false,
             tooltip: "",
@@ -206,15 +205,19 @@ export default {
 
     computed: {
         paginatedData() {
-            const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-            const endIndex = startIndex + Number(this.itemsPerPage);
+            if (this.searchedField && this.searchedField.length == 0) {
+                const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+                const endIndex = startIndex + Number(this.itemsPerPage);
 
-            return this.filteredList.slice(startIndex, endIndex);
+                return this.filteredList.slice(startIndex, endIndex);
+            } else {
+                return this.filteredList
+            }
         },
 
         totalPages() {
             if (this.searchedField && this.searchedField.length > 0) {
-                return Math.ceil(this.filteredData.length / this.itemsPerPage);
+                return Math.ceil(this.filteredList.length / this.itemsPerPage);
             } else {
                 return Math.ceil(this.orderedData.length / this.itemsPerPage);
             }
@@ -222,7 +225,7 @@ export default {
 
         totalItems() {
             if (this.searchedField && this.searchedField.length > 0) {
-                return this.filteredData.length;
+                return this.filteredList.length;
             } else {
                 return this.orderedData.length;
             }
@@ -240,7 +243,6 @@ export default {
                     if (matched) {
                         filteredData.push(item);
                     }
-                    this.filteredData = filteredData;
                     return filteredData;
                 }, []);
             } else {
@@ -318,7 +320,6 @@ export default {
                     updatedPaidStatus
                 );
                 this.$emit("updateData");
-
                 this.responseMessage = "Status do pagamento salvo com sucesso!";
 
                 if (updatedPaidStatus.paid === "Pago") {
@@ -333,7 +334,6 @@ export default {
                     "Erro ao atualizar o status de pagamento...",
                     error
                 );
-
                 this.responseMessage = "Erro ao salvar o status do pagamento.";
             }
         },
@@ -417,8 +417,7 @@ export default {
                     paid: "À pagar",
                 };
                 await axios.post(`${this.apiURL}/revenue/create/`, newRevenue);
-
-                this.$emit("updateTable");
+                this.$emit("updateData");
             } catch (error) {
                 console.error("Erro ao criar receita.", error);
             }
@@ -444,7 +443,7 @@ export default {
                 };
 
                 await axios.post(`${this.apiURL}/expense/create/`, newExpense);
-                this.$emit("updateTable");
+                this.$emit("updateData");
             } catch (error) {
                 console.error("Erro ao criar despesa.", error);
             }
