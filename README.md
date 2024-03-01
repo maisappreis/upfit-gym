@@ -7,7 +7,8 @@ This desktop application was developed to manage the company's customers, income
 - Electron
 - Django
 
-![image](https://github.com/maisappreis/upfit-project/assets/113925909/4a9613bf-02ed-4974-9925-ceec864d1f46)
+![image](https://github.com/maisappreis/upfit-project/assets/113925909/19bf81ff-c51e-4e69-9245-bedb1d20478d)
+
 
 ## 🌱 On Frontend Development
 
