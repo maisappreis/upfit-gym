@@ -1,0 +1,1280 @@
+{
+  "customers": [
+    {
+      "id": "1",
+      "name": "ALEXANDRE DULLIUS",
+      "frequency": "5x",
+      "start": "2023-03-15",
+      "plan": "Mensal",
+      "value": 330,
+      "status": "Ativo",
+      "notes": ""
+    },
+    {
+      "id": "2",
+      "name": "ALISON COLOMBO",
+      "frequency": "5x",
+      "start": "2023-01-09",
+      "plan": "Mensal",
+      "value": 336,
+      "status": "Ativo",
+      "notes": ""
+    },
+    {
+      "id": "3",
+      "name": "ARTHUR",
+      "frequency": "2x",
+      "start": "2023-02-06",
+      "plan": "Mensal",
+      "value": 220,
+      "status": "Ativo",
+      "notes": ""
+    },
+    {
+      "id": "4",
+      "name": "BARBARA",
+      "frequency": "3x",
+      "start": "2023-08-03",
+      "plan": "Mensal",
+      "value": 270,
+      "status": "Ativo",
+      "notes": ""
+    },
+    {
+      "id": "5",
+      "name": "BIANCA G. AGUIAR",
+      "frequency": "5x",
+      "start": "2023-04-19",
+      "plan": "Mensal",
+      "value": 270,
+      "status": "Ativo",
+      "notes": ""
+    },
+    {
+      "id": "6",
+      "name": "CAMILA G. AGUIAR",
+      "frequency": "5x",
+      "start": "2023-10-26",
+      "plan": "Mensal",
+      "value": 270,
+      "status": "Ativo",
+      "notes": ""
+    },
+    {
+      "id": "7",
+      "name": "CAMILA NATAL",
+      "frequency": "3x",
+      "start": "2023-12-10",
+      "plan": "Mensal",
+      "value": 270,
+      "status": "Ativo",
+      "notes": "Acrescenta mensalidade fernando app"
+    },
+    {
+      "id": "8",
+      "name": "CRIS (JAISON)",
+      "frequency": "3x",
+      "start": "2023-06-30",
+      "plan": "Mensal",
+      "value": 320,
+      "status": "Ativo",
+      "notes": ""
+    },
+    {
+      "id": "9",
+      "name": "CRISTIANE",
+      "frequency": "2x",
+      "start": "2023-11-21",
+      "plan": "Mensal",
+      "value": 220,
+      "status": "Ativo",
+      "notes": ""
+    },
+    {
+      "id": "10",
+      "name": "DAILANE | GABRIEL",
+      "frequency": "3x",
+      "start": "2023-01-05",
+      "plan": "Mensal",
+      "value": 700,
+      "status": "Ativo",
+      "notes": "PERSONAL EM DUPLA: Média 13 aulas mensais - R$70 Hora-Aula"
+    },
+    {
+      "id": "11",
+      "name": "DARLEN",
+      "frequency": "3x",
+      "start": "2023-07-27",
+      "plan": "Mensal",
+      "value": 270,
+      "status": "Ativo",
+      "notes": ""
+    },
+    {
+      "id": "12",
+      "name": "DAY",
+      "frequency": "3x",
+      "start": "2023-01-09",
+      "plan": "Mensal",
+      "value": 250,
+      "status": "Ativo",
+      "notes": ""
+    },
+    {
+      "id": "13",
+      "name": "DÉBORA MARCELINO",
+      "frequency": "3x",
+      "start": "2023-08-10",
+      "plan": "Mensal",
+      "value": 270,
+      "status": "Ativo",
+      "notes": ""
+    },
+    {
+      "id": "14",
+      "name": "DUDU",
+      "frequency": "5x",
+      "start": "2023-02-06",
+      "plan": "Mensal",
+      "value": 270,
+      "status": "Ativo",
+      "notes": ""
+    },
+    {
+      "id": "15",
+      "name": "FELIPE",
+      "frequency": "3x",
+      "start": "2023-10-01",
+      "plan": "Mensal",
+      "value": 270,
+      "status": "Ativo",
+      "notes": ""
+    },
+    {
+      "id": "16",
+      "name": "FERNANDO NATAL",
+      "frequency": "3x",
+      "start": "2023-12-10",
+      "plan": "Mensal",
+      "value": 270,
+      "status": "Ativo",
+      "notes": "RENOVAR PLANO + APP"
+    },
+    {
+      "id": "17",
+      "name": "GABRIELA (esposa Northon)",
+      "frequency": "3x",
+      "start": "2023-01-19",
+      "plan": "Mensal",
+      "value": 0,
+      "status": "Ativo",
+      "notes": "Permuta Eliptico 12 meses, inicio dia 09-05-2024"
+    },
+    {
+      "id": "18",
+      "name": "GABY FREITAS BOXE",
+      "frequency": "3x",
+      "start": "2023-06-09",
+      "plan": "Mensal",
+      "value": 390,
+      "status": "Ativo",
+      "notes": ""
+    },
+    {
+      "id": "19",
+      "name": "IZA KULKAMP",
+      "frequency": "5x",
+      "start": "2023-10-24",
+      "plan": "Mensal",
+      "value": 336,
+      "status": "Ativo",
+      "notes": ""
+    },
+    {
+      "id": "20",
+      "name": "JAISON BOXE",
+      "frequency": "3x",
+      "start": "2023-06-30",
+      "plan": "Mensal",
+      "value": 390,
+      "status": "Ativo",
+      "notes": ""
+    },
+    {
+      "id": "21",
+      "name": "JANICE PAIM (fISIO)",
+      "frequency": "2x",
+      "start": "2023-08-08",
+      "plan": "Mensal",
+      "value": 220,
+      "status": "Ativo",
+      "notes": ""
+    },
+    {
+      "id": "22",
+      "name": "JULIA",
+      "frequency": "3x",
+      "start": "2023-01-09",
+      "plan": "Mensal",
+      "value": 250,
+      "status": "Ativo",
+      "notes": ""
+    },
+    {
+      "id": "23",
+      "name": "JULSANE GOES",
+      "frequency": "2x",
+      "start": "2023-10-13",
+      "plan": "Mensal",
+      "value": 220,
+      "status": "Ativo",
+      "notes": ""
+    },
+    {
+      "id": "24",
+      "name": "JUSSARA",
+      "frequency": "4x",
+      "start": "2023-10-02",
+      "plan": "Mensal",
+      "value": 290,
+      "status": "Ativo",
+      "notes": ""
+    },
+    {
+      "id": "25",
+      "name": "KELI",
+      "frequency": "3x",
+      "start": "2023-03-08",
+      "plan": "Mensal",
+      "value": 250,
+      "status": "Ativo",
+      "notes": ""
+    },
+    {
+      "id": "26",
+      "name": "LU PETSHOP",
+      "frequency": "3x",
+      "start": "2023-03-28",
+      "plan": "Mensal",
+      "value": 270,
+      "status": "Ativo",
+      "notes": ""
+    },
+    {
+      "id": "27",
+      "name": "LUCAS",
+      "frequency": "3x",
+      "start": "2023-01-25",
+      "plan": "Mensal",
+      "value": 243,
+      "status": "Ativo",
+      "notes": ""
+    },
+    {
+      "id": "28",
+      "name": "MAINAR",
+      "frequency": "2x",
+      "start": "2023-10-02",
+      "plan": "Mensal",
+      "value": 240,
+      "status": "Ativo",
+      "notes": ""
+    },
+    {
+      "id": "29",
+      "name": "MARI SAMUEL",
+      "frequency": "3x",
+      "start": "2023-04-08",
+      "plan": "Mensal",
+      "value": 280,
+      "status": "Ativo",
+      "notes": ""
+    },
+    {
+      "id": "30",
+      "name": "MATEUS",
+      "frequency": "3x",
+      "start": "2023-03-08",
+      "plan": "Mensal",
+      "value": 250,
+      "status": "Ativo",
+      "notes": ""
+    },
+    {
+      "id": "31",
+      "name": "MICHELE",
+      "frequency": "3x",
+      "start": "2023-01-16",
+      "plan": "Mensal",
+      "value": 270,
+      "status": "Ativo",
+      "notes": ""
+    },
+    {
+      "id": "32",
+      "name": "MÔNICA",
+      "frequency": "2x",
+      "start": "2023-04-03",
+      "plan": "Mensal",
+      "value": 320,
+      "status": "Ativo",
+      "notes": "PERSONAL"
+    },
+    {
+      "id": "33",
+      "name": "NALI",
+      "frequency": "2x",
+      "start": "2023-02-09",
+      "plan": "Mensal",
+      "value": 220,
+      "status": "Ativo",
+      "notes": ""
+    },
+    {
+      "id": "34",
+      "name": "NORTHON",
+      "frequency": "3x",
+      "start": "2023-01-19",
+      "plan": "Mensal",
+      "value": 0,
+      "status": "Ativo",
+      "notes": "Permuta Eliptico 12 meses, inicio dia 09/05/2023"
+    },
+    {
+      "id": "35",
+      "name": "RAFA VENZKE",
+      "frequency": "3x",
+      "start": "2023-10-10",
+      "plan": "Mensal",
+      "value": 270,
+      "status": "Ativo",
+      "notes": ""
+    },
+    {
+      "id": "36",
+      "name": "RODRIGO",
+      "frequency": "3x",
+      "start": "2023-08-03",
+      "plan": "Mensal",
+      "value": 270,
+      "status": "Ativo",
+      "notes": ""
+    },
+    {
+      "id": "37",
+      "name": "ROGÉRIA DULLIUS",
+      "frequency": "2x",
+      "start": "2023-04-15",
+      "plan": "Mensal",
+      "value": 220,
+      "status": "Ativo",
+      "notes": ""
+    },
+    {
+      "id": "38",
+      "name": "SAMUEL",
+      "frequency": "3x",
+      "start": "2023-04-08",
+      "plan": "Mensal",
+      "value": 280,
+      "status": "Ativo",
+      "notes": ""
+    },
+    {
+      "id": "39",
+      "name": "SUELEN",
+      "frequency": "3x",
+      "start": "2023-07-27",
+      "plan": "Mensal",
+      "value": 270,
+      "status": "Ativo",
+      "notes": ""
+    },
+    {
+      "id": "40",
+      "name": "VITORIA TRENTO GOIS",
+      "frequency": "5x",
+      "start": "2023-01-09",
+      "plan": "Mensal",
+      "value": 336,
+      "status": "Ativo",
+      "notes": ""
+    },
+    {
+      "id": "41",
+      "name": "VIVI",
+      "frequency": "5x",
+      "start": "2023-02-06",
+      "plan": "Mensal",
+      "value": 270,
+      "status": "Ativo",
+      "notes": ""
+    },
+    {
+      "id": "40ff",
+      "name": "aaaa",
+      "frequency": "2x",
+      "start": "2024-01-03",
+      "plan": "Mensal",
+      "value": 345,
+      "status": "Ativo",
+      "notes": "frfrfrf",
+      "actions": ""
+    }
+  ],
+  "revenue": [
+    {
+      "id": "1",
+      "customer_id": "15",
+      "year": 2023,
+      "month": "Novembro",
+      "payment_day": 1,
+      "value": 270,
+      "paid": "Pago",
+      "notes": ""
+    },
+    {
+      "id": "2",
+      "customer_id": "24",
+      "year": 2023,
+      "month": "Novembro",
+      "payment_day": 2,
+      "value": 290,
+      "paid": "Pago",
+      "notes": ""
+    },
+    {
+      "id": "3",
+      "customer_id": "28",
+      "year": 2023,
+      "month": "Novembro",
+      "payment_day": 2,
+      "value": 240,
+      "paid": "Pago",
+      "notes": ""
+    },
+    {
+      "id": "4",
+      "customer_id": "32",
+      "year": 2023,
+      "month": "Novembro",
+      "payment_day": 3,
+      "value": 320,
+      "paid": "Pago",
+      "notes": "PERSONAL"
+    },
+    {
+      "id": "5",
+      "customer_id": "4",
+      "year": 2023,
+      "month": "Novembro",
+      "payment_day": 5,
+      "value": 270,
+      "paid": "Pago",
+      "notes": ""
+    },
+    {
+      "id": "6",
+      "customer_id": "36",
+      "year": 2023,
+      "month": "Novembro",
+      "payment_day": 5,
+      "value": 270,
+      "paid": "Pago",
+      "notes": ""
+    },
+    {
+      "id": "7",
+      "customer_id": "10",
+      "year": 2023,
+      "month": "Novembro",
+      "payment_day": 5,
+      "value": 840,
+      "paid": "Pago",
+      "notes": "PERSONAL EM DUPLA: Média 13 aulas mensais - R$70 Hora-Aula"
+    },
+    {
+      "id": "8",
+      "customer_id": "14",
+      "year": 2023,
+      "month": "Novembro",
+      "payment_day": 6,
+      "value": 270,
+      "paid": "Pago",
+      "notes": ""
+    },
+    {
+      "id": "9",
+      "customer_id": "41",
+      "year": 2023,
+      "month": "Novembro",
+      "payment_day": 6,
+      "value": 270,
+      "paid": "Pago",
+      "notes": ""
+    },
+    {
+      "id": "10",
+      "customer_id": "3",
+      "year": 2023,
+      "month": "Novembro",
+      "payment_day": 6,
+      "value": 220,
+      "paid": "Pago",
+      "notes": ""
+    },
+    {
+      "id": "11",
+      "customer_id": "30",
+      "year": 2023,
+      "month": "Novembro",
+      "payment_day": 8,
+      "value": 250,
+      "paid": "Pago",
+      "notes": ""
+    },
+    {
+      "id": "12",
+      "customer_id": "25",
+      "year": 2023,
+      "month": "Novembro",
+      "payment_day": 8,
+      "value": 250,
+      "paid": "Pago",
+      "notes": ""
+    },
+    {
+      "id": "13",
+      "customer_id": "21",
+      "year": 2023,
+      "month": "Novembro",
+      "payment_day": 8,
+      "value": 220,
+      "paid": "Pago",
+      "notes": ""
+    },
+    {
+      "id": "14",
+      "customer_id": "34",
+      "year": 2023,
+      "month": "Novembro",
+      "payment_day": 9,
+      "value": 0,
+      "paid": "Pago",
+      "notes": "Permuta Eliptico 12 meses, inicio dia 09-05-2023"
+    },
+    {
+      "id": "15",
+      "customer_id": "17",
+      "year": 2023,
+      "month": "Novembro",
+      "payment_day": 9,
+      "value": 0,
+      "paid": "Pago",
+      "notes": "Permuta Eliptico 12 meses, inicio dia 09-05-2024"
+    },
+    {
+      "id": "16",
+      "customer_id": "22",
+      "year": 2023,
+      "month": "Novembro",
+      "payment_day": 9,
+      "value": 250,
+      "paid": "Pago",
+      "notes": ""
+    },
+    {
+      "id": "17",
+      "customer_id": "12",
+      "year": 2023,
+      "month": "Novembro",
+      "payment_day": 9,
+      "value": 250,
+      "paid": "Pago",
+      "notes": ""
+    },
+    {
+      "id": "18",
+      "customer_id": "18",
+      "year": 2023,
+      "month": "Novembro",
+      "payment_day": 9,
+      "value": 390,
+      "paid": "Pago",
+      "notes": ""
+    },
+    {
+      "id": "19",
+      "customer_id": "33",
+      "year": 2023,
+      "month": "Novembro",
+      "payment_day": 9,
+      "value": 220,
+      "paid": "Pago",
+      "notes": ""
+    },
+    {
+      "id": "20",
+      "customer_id": "13",
+      "year": 2023,
+      "month": "Novembro",
+      "payment_day": 10,
+      "value": 270,
+      "paid": "Pago",
+      "notes": ""
+    },
+    {
+      "id": "21",
+      "customer_id": "38",
+      "year": 2023,
+      "month": "Novembro",
+      "payment_day": 10,
+      "value": 280,
+      "paid": "Pago",
+      "notes": ""
+    },
+    {
+      "id": "22",
+      "customer_id": "29",
+      "year": 2023,
+      "month": "Novembro",
+      "payment_day": 10,
+      "value": 280,
+      "paid": "Pago",
+      "notes": ""
+    },
+    {
+      "id": "23",
+      "customer_id": "7",
+      "year": 2023,
+      "month": "Novembro",
+      "payment_day": 10,
+      "value": 270,
+      "paid": "Pago",
+      "notes": "Acrescenta mensalidade fernando app"
+    },
+    {
+      "id": "24",
+      "customer_id": "35",
+      "year": 2023,
+      "month": "Novembro",
+      "payment_day": 10,
+      "value": 270,
+      "paid": "Pago",
+      "notes": ""
+    },
+    {
+      "id": "25",
+      "customer_id": "23",
+      "year": 2023,
+      "month": "Novembro",
+      "payment_day": 13,
+      "value": 220,
+      "paid": "Pago",
+      "notes": ""
+    },
+    {
+      "id": "26",
+      "customer_id": "37",
+      "year": 2023,
+      "month": "Novembro",
+      "payment_day": 15,
+      "value": 220,
+      "paid": "Pago",
+      "notes": ""
+    },
+    {
+      "id": "27",
+      "customer_id": "2",
+      "year": 2023,
+      "month": "Novembro",
+      "payment_day": 15,
+      "value": 336,
+      "paid": "Pago",
+      "notes": ""
+    },
+    {
+      "id": "28",
+      "customer_id": "1",
+      "year": 2023,
+      "month": "Novembro",
+      "payment_day": 15,
+      "value": 330,
+      "paid": "Pago",
+      "notes": ""
+    },
+    {
+      "id": "29",
+      "customer_id": "40",
+      "year": 2023,
+      "month": "Novembro",
+      "payment_day": 15,
+      "value": 336,
+      "paid": "Pago",
+      "notes": ""
+    },
+    {
+      "id": "30",
+      "customer_id": "19",
+      "year": 2023,
+      "month": "Novembro",
+      "payment_day": 15,
+      "value": 336,
+      "paid": "Link enviado",
+      "notes": ""
+    },
+    {
+      "id": "31",
+      "customer_id": "31",
+      "year": 2023,
+      "month": "Novembro",
+      "payment_day": 16,
+      "value": 270,
+      "paid": "Pago",
+      "notes": ""
+    },
+    {
+      "id": "32",
+      "customer_id": "5",
+      "year": 2023,
+      "month": "Novembro",
+      "payment_day": 19,
+      "value": 270,
+      "paid": "À pagar",
+      "notes": ""
+    },
+    {
+      "id": "33",
+      "customer_id": "9",
+      "year": 2023,
+      "month": "Novembro",
+      "payment_day": 21,
+      "value": 220,
+      "paid": "Pago",
+      "notes": ""
+    },
+    {
+      "id": "34",
+      "customer_id": "6",
+      "year": 2023,
+      "month": "Novembro",
+      "payment_day": 26,
+      "value": 270,
+      "paid": "Pago",
+      "notes": ""
+    },
+    {
+      "id": "35",
+      "customer_id": "11",
+      "year": 2023,
+      "month": "Novembro",
+      "payment_day": 27,
+      "value": 270,
+      "paid": "Pago",
+      "notes": ""
+    },
+    {
+      "id": "36",
+      "customer_id": "39",
+      "year": 2023,
+      "month": "Novembro",
+      "payment_day": 27,
+      "value": 270,
+      "paid": "Pago",
+      "notes": ""
+    },
+    {
+      "id": "37",
+      "customer_id": "16",
+      "year": 2023,
+      "month": "Novembro",
+      "payment_day": 28,
+      "value": 0,
+      "paid": "Pago",
+      "notes": "1-4 MESES HAVER: RENOVAÇÃO DIA 10-12"
+    },
+    {
+      "id": "38",
+      "customer_id": "26",
+      "year": 2023,
+      "month": "Novembro",
+      "payment_day": 28,
+      "value": 270,
+      "paid": "Pago",
+      "notes": ""
+    },
+    {
+      "id": "39",
+      "customer_id": "20",
+      "year": 2023,
+      "month": "Novembro",
+      "payment_day": 30,
+      "value": 390,
+      "paid": "Pago",
+      "notes": ""
+    },
+    {
+      "id": "40",
+      "customer_id": "8",
+      "year": 2023,
+      "month": "Novembro",
+      "payment_day": 30,
+      "value": 320,
+      "paid": "Pago",
+      "notes": ""
+    },
+    {
+      "id": "41",
+      "customer_id": "15",
+      "year": 2023,
+      "month": "Dezembro",
+      "payment_day": 1,
+      "value": 270,
+      "paid": "Pago",
+      "notes": ""
+    },
+    {
+      "id": "42",
+      "customer_id": "24",
+      "year": 2023,
+      "month": "Dezembro",
+      "payment_day": 2,
+      "value": 290,
+      "paid": "Pago",
+      "notes": ""
+    },
+    {
+      "id": "43",
+      "customer_id": "32",
+      "year": 2023,
+      "month": "Dezembro",
+      "payment_day": 3,
+      "value": 320,
+      "paid": "Pago",
+      "notes": "PERSONAL"
+    },
+    {
+      "id": "44",
+      "customer_id": "10",
+      "year": 2023,
+      "month": "Dezembro",
+      "payment_day": 5,
+      "value": 700,
+      "paid": "Pago",
+      "notes": "PERSONAL EM DUPLA: Média 13 aulas mensais - R$70 Hora-Aula"
+    },
+    {
+      "id": "45",
+      "customer_id": "14",
+      "year": 2023,
+      "month": "Dezembro",
+      "payment_day": 6,
+      "value": 270,
+      "paid": "Link enviado",
+      "notes": ""
+    },
+    {
+      "id": "46",
+      "customer_id": "41",
+      "year": 2023,
+      "month": "Dezembro",
+      "payment_day": 6,
+      "value": 270,
+      "paid": "Link enviado",
+      "notes": ""
+    },
+    {
+      "id": "47",
+      "customer_id": "3",
+      "year": 2023,
+      "month": "Dezembro",
+      "payment_day": 6,
+      "value": 220,
+      "paid": "Link enviado",
+      "notes": ""
+    },
+    {
+      "id": "48",
+      "customer_id": "30",
+      "year": 2023,
+      "month": "Dezembro",
+      "payment_day": 8,
+      "value": 250,
+      "paid": "Link enviado",
+      "notes": ""
+    },
+    {
+      "id": "49",
+      "customer_id": "25",
+      "year": 2023,
+      "month": "Dezembro",
+      "payment_day": 8,
+      "value": 250,
+      "paid": "Link enviado",
+      "notes": ""
+    },
+    {
+      "id": "50",
+      "customer_id": "34",
+      "year": 2023,
+      "month": "Dezembro",
+      "payment_day": 9,
+      "value": 0,
+      "paid": "Pago",
+      "notes": "Permuta Eliptico 12 meses, inicio dia 09-05-2023"
+    },
+    {
+      "id": "51",
+      "customer_id": "17",
+      "year": 2023,
+      "month": "Dezembro",
+      "payment_day": 9,
+      "value": 0,
+      "paid": "Pago",
+      "notes": "Permuta Eliptico 12 meses, inicio dia 09-05-2024"
+    },
+    {
+      "id": "52",
+      "customer_id": "22",
+      "year": 2023,
+      "month": "Dezembro",
+      "payment_day": 9,
+      "value": 250,
+      "paid": "Pago",
+      "notes": ""
+    },
+    {
+      "id": "53",
+      "customer_id": "12",
+      "year": 2023,
+      "month": "Dezembro",
+      "payment_day": 9,
+      "value": 250,
+      "paid": "Pago",
+      "notes": ""
+    },
+    {
+      "id": "54",
+      "customer_id": "13",
+      "year": 2023,
+      "month": "Dezembro",
+      "payment_day": 10,
+      "value": 270,
+      "paid": "Link enviado",
+      "notes": ""
+    },
+    {
+      "id": "55",
+      "customer_id": "38",
+      "year": 2023,
+      "month": "Dezembro",
+      "payment_day": 10,
+      "value": 280,
+      "paid": "Link enviado",
+      "notes": ""
+    },
+    {
+      "id": "56",
+      "customer_id": "29",
+      "year": 2023,
+      "month": "Dezembro",
+      "payment_day": 10,
+      "value": 280,
+      "paid": "Link enviado",
+      "notes": ""
+    },
+    {
+      "id": "57",
+      "customer_id": "7",
+      "year": 2023,
+      "month": "Dezembro",
+      "payment_day": 10,
+      "value": 270,
+      "paid": "Link enviado",
+      "notes": "Acrescenta mensalidade fernando app"
+    },
+    {
+      "id": "58",
+      "customer_id": "35",
+      "year": 2023,
+      "month": "Dezembro",
+      "payment_day": 10,
+      "value": 270,
+      "paid": "Pago",
+      "notes": ""
+    },
+    {
+      "id": "59",
+      "customer_id": "16",
+      "year": 2023,
+      "month": "Dezembro",
+      "payment_day": 10,
+      "value": 270,
+      "paid": "Link enviado",
+      "notes": "RENOVAR PLANO + APP"
+    },
+    {
+      "id": "60",
+      "customer_id": "23",
+      "year": 2023,
+      "month": "Dezembro",
+      "payment_day": 13,
+      "value": 220,
+      "paid": "Pago",
+      "notes": ""
+    },
+    {
+      "id": "61",
+      "customer_id": "37",
+      "year": 2023,
+      "month": "Dezembro",
+      "payment_day": 15,
+      "value": 220,
+      "paid": "À pagar",
+      "notes": ""
+    },
+    {
+      "id": "62",
+      "customer_id": "2",
+      "year": 2023,
+      "month": "Dezembro",
+      "payment_day": 15,
+      "value": 336,
+      "paid": "Link enviado",
+      "notes": ""
+    },
+    {
+      "id": "63",
+      "customer_id": "1",
+      "year": 2023,
+      "month": "Dezembro",
+      "payment_day": 15,
+      "value": 330,
+      "paid": "À pagar",
+      "notes": ""
+    },
+    {
+      "id": "64",
+      "customer_id": "40",
+      "year": 2023,
+      "month": "Dezembro",
+      "payment_day": 15,
+      "value": 336,
+      "paid": "Link enviado",
+      "notes": ""
+    },
+    {
+      "id": "65",
+      "customer_id": "31",
+      "year": 2023,
+      "month": "Dezembro",
+      "payment_day": 16,
+      "value": 270,
+      "paid": "À pagar",
+      "notes": ""
+    },
+    {
+      "id": "67",
+      "customer_id": "5",
+      "year": 2023,
+      "month": "Dezembro",
+      "payment_day": 19,
+      "value": 270,
+      "paid": "À pagar",
+      "notes": ""
+    },
+    {
+      "id": "68",
+      "customer_id": "9",
+      "year": 2023,
+      "month": "Dezembro",
+      "payment_day": 21,
+      "value": 220,
+      "paid": "À pagar",
+      "notes": ""
+    },
+    {
+      "id": "69",
+      "customer_id": "27",
+      "year": 2023,
+      "month": "Dezembro",
+      "payment_day": 22,
+      "value": 243,
+      "paid": "À pagar",
+      "notes": ""
+    },
+    {
+      "id": "70",
+      "customer_id": "6",
+      "year": 2023,
+      "month": "Dezembro",
+      "payment_day": 26,
+      "value": 270,
+      "paid": "À pagar",
+      "notes": ""
+    },
+    {
+      "id": "71",
+      "customer_id": "11",
+      "year": 2023,
+      "month": "Dezembro",
+      "payment_day": 27,
+      "value": 270,
+      "paid": "À pagar",
+      "notes": ""
+    },
+    {
+      "id": "72",
+      "customer_id": "39",
+      "year": 2023,
+      "month": "Dezembro",
+      "payment_day": 27,
+      "value": 270,
+      "paid": "À pagar",
+      "notes": ""
+    },
+    {
+      "id": "73",
+      "customer_id": "26",
+      "year": 2023,
+      "month": "Dezembro",
+      "payment_day": 28,
+      "value": 270,
+      "paid": "À pagar",
+      "notes": ""
+    },
+    {
+      "id": "74",
+      "customer_id": "20",
+      "year": 2023,
+      "month": "Dezembro",
+      "payment_day": 30,
+      "value": 390,
+      "paid": "À pagar",
+      "notes": ""
+    },
+    {
+      "id": "75",
+      "customer_id": "8",
+      "year": 2023,
+      "month": "Dezembro",
+      "payment_day": 30,
+      "value": 320,
+      "paid": "À pagar",
+      "notes": ""
+    },
+    {
+      "id": "76",
+      "customer_id": "27",
+      "year": 2023,
+      "month": "Novembro",
+      "payment_day": 22,
+      "value": 243,
+      "paid": "Pago",
+      "notes": ""
+    },
+    {
+      "id": "d564",
+      "customer_id": "40ff",
+      "year": 2024,
+      "month": "Janeiro",
+      "value": 425,
+      "payment_day": 14,
+      "notes": "oooo",
+      "paid": "À pagar",
+      "actions": ""
+    }
+  ],
+  "expenses": [
+    {
+      "id": "1",
+      "year": 2024,
+      "month": "Dezembro",
+      "name": "Aluguel",
+      "due_date": "2023-12-12",
+      "value": 1000,
+      "paid": "À pagar",
+      "notes": ""
+    },
+    {
+      "id": "2",
+      "year": 2024,
+      "month": "Dezembro",
+      "name": "Condomínio",
+      "due_date": "2023-12-12",
+      "value": 300,
+      "paid": "Pago",
+      "notes": "Teste"
+    },
+    {
+      "id": "3",
+      "year": 2024,
+      "month": "Dezembro",
+      "name": "Energia elétrica",
+      "due_date": "2023-12-12",
+      "value": 150,
+      "paid": "À pagar",
+      "notes": ""
+    },
+    {
+      "id": "1",
+      "year": 2024,
+      "month": "Janeiro",
+      "name": "Aluguel",
+      "due_date": "2024-01-12",
+      "value": 1000,
+      "paid": "À pagar",
+      "notes": ""
+    },
+    {
+      "id": "2",
+      "year": 2024,
+      "month": "Janeiro",
+      "name": "Condomínio",
+      "due_date": "2024-01-12",
+      "value": 300,
+      "paid": "Pago",
+      "notes": "Teste"
+    },
+    {
+      "id": "3",
+      "year": 2024,
+      "month": "Janeiro",
+      "name": "Energia elétrica",
+      "due_date": "2024-01-12",
+      "value": 150,
+      "paid": "À pagar",
+      "notes": ""
+    },
+    {
+      "id": "1",
+      "year": 2024,
+      "month": "Fevereiro",
+      "name": "Aluguel",
+      "due_date": "2024-02-12",
+      "value": 1000,
+      "paid": "À pagar",
+      "notes": ""
+    },
+    {
+      "id": "2",
+      "year": 2024,
+      "month": "Fevereiro",
+      "name": "Energia elétrica",
+      "due_date": "2024-02-12",
+      "value": 300,
+      "paid": "Pago",
+      "notes": "Teste"
+    },
+    {
+      "id": "3",
+      "year": 2024,
+      "month": "Fevereiro",
+      "name": "Condomínio",
+      "due_date": "2024-02-12",
+      "value": 150,
+      "paid": "À pagar",
+      "notes": ""
+    }
+  ]
+}
