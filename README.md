@@ -44,7 +44,7 @@ Create a virtual environment
 Activate the virtual environment:
 ```
 cd backend
-python -m venv venv
+python -m venv .venv
 .\.venv\Scripts\Activate.ps1 (On Windows)
 or
 source venv/bin/activate (On macOS/Linux)

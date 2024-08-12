@@ -58,7 +58,7 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8081",  # Replace with the origin of your frontend
+    "http://localhost:8080", "http://localhost:8081" # Replace with the origin of your frontend
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -95,6 +95,17 @@ DATABASES = {
         'PORT': os.getenv('DB_PORT'),
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / "db.sqlite3",
+#         'USER': os.getenv('DB_USER_MYSQL'),
+#         'PASSWORD': os.getenv('DB_PASSWORD_MYSQL'),
+#         'HOST': os.getenv('DB_HOST_MYSQL'),
+#         'PORT': os.getenv('DB_PORT_MYSQL'),
+#     }
+# }
 
 
 # Password validation
