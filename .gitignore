@@ -35,3 +35,6 @@ coverage
 
 # Privete Notes
 notes.txt
+
+# Data
+database.json
