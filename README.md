@@ -1,84 +1,72 @@
-# Desktop Application for a Gym Company
+# Web Application for a Gym Company
 
-This desktop application was developed to manage the company's customers, income and expenses.
+A web application developed to manage the company's customers, income and expenses.
+The back-end is on: ....
 
 ## Technologies:
 - Vue.js 3
-- Electron
-- Django
+- Vite
 
 ![image](https://github.com/maisappreis/upfit-project/assets/113925909/93fb4995-d68e-4aee-a6ba-abe8e9b105ab)
-
 
 
 ## 🌱 On Frontend Development
 
 ### 🛠️ Installation
-```
+```sh
 npm install
 ```
 
-### 🛠️ Running just the Frontend
-
-To run in the browser:
-```
-npm run serve
-```
-
-To run in the desktop:
-```
-npm run electron:serve
+### 🛠️ Running
+Compile and Hot-Reload for Development
+```sh
+npm run dev
 ```
 
-To run JSON server:
-```
-cd public
-json-server --watch db_test.json --port 3001
+### Compile and Hot-Reload for Development
+
+```sh
+npm run dev
 ```
 
-## 🌱 On Backend Development
+### Type-Check, Compile and Minify for Production
 
-### 🛠️ Installation
-
-Create a virtual environment
-Activate the virtual environment:
-```
-cd backend
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1 (On Windows)
-or
-source venv/bin/activate (On macOS/Linux)
-```
-
-```
-pip install -r requirements.txt
-```
-
-### 🛠️ Running just the backend
-```
-python manage.py runserver
-```
-
-To run migrations:
-```
-python manage.py makemigrations
-python manage.py migrate
-```
-
-# 🛠️ Running both: Frontend and Backend
-```
-npm start
-```
-
-## 💻 On Production
-```
+```sh
 npm run build
 ```
 
-### Lints and fixes files
+### Run Unit Tests with [Vitest](https://vitest.dev/)
+
+```sh
+npm run test:unit
 ```
+
+### Run End-to-End Tests with [Cypress](https://www.cypress.io/)
+
+```sh
+npm run test:e2e:dev
+```
+
+This runs the end-to-end tests against the Vite development server.
+It is much faster than the production build.
+
+But it's still recommended to test the production build with `test:e2e` before deploying (e.g. in CI environments):
+
+```sh
+npm run build
+npm run test:e2e
+```
+
+### Lint with [ESLint](https://eslint.org/)
+
+```sh
 npm run lint
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## Type Support for `.vue` Imports in TS
+
+TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+
+## Customize configuration
+
+See [Vite Configuration Reference](https://vitejs.dev/config/).
