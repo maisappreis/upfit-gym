@@ -1,7 +1,7 @@
 # Web Application for a Gym Company
 
 A web application developed to manage the company's customers, income and expenses.
-The back-end is on: ....
+Back-end on: https://github.com/maisappreis/django-APIs
 
 ## Technologies:
 - Vue.js 3

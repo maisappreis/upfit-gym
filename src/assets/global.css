@@ -42,7 +42,7 @@
 
 .form-item {
     display: flex;
-    margin: 10px 0;
+    margin: 5px 0;
 }
 
 .radio-item {
@@ -70,5 +70,5 @@
 .form-buttons-area {
     display: flex;
     justify-content: center;
-    margin-bottom: 25px;
+    margin-bottom: 15px;
 }

@@ -102,7 +102,10 @@ import FooterPage from './components/FooterPage.vue'
 export default {
   name: 'App',
   components: {
-    HeaderPage, SideBar, ContentPage, FooterPage
+    HeaderPage,
+    SideBar,
+    ContentPage,
+    FooterPage
   },
 
   data: function () {
@@ -112,7 +115,7 @@ export default {
   },
 
   methods: {
-    openContent (page) {
+    openContent(page) {
       this.selectedPage = page
     }
   }
@@ -144,9 +147,8 @@ export default {
 
   margin: 30px;
   width: 92%;
-  height: 90%;  
+  height: 90%;
   background-color: white;
   box-shadow: 2px 2px 20px rgb(148, 148, 148);
 }
-
 </style>
