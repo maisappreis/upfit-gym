@@ -46,7 +46,7 @@ export default {
   top: 0;
   background-color: rgb(235, 235, 235);
   box-shadow: 0 8px 6px -6px rgb(99, 99, 99);
-  height: 90px;
+  height: fit-content;
   width: 100%;
   z-index: 9;
 }
@@ -61,16 +61,17 @@ export default {
 }
 
 .title {
-  margin: 15px 0 6px 0;
+  margin: 15px 0 0 0;
 }
 
 .icon {
-  margin: 15px;
+  margin: 15px 15px 10px 15px;
   font-size: 25px;
 }
 
 .subtitle {
-  margin: 2px 5px 5px 15px;
+  margin: 0 5px 5px 15px;
+  padding-bottom: 5px;
 }
 
 @media only screen and (max-width: 1300px) {
@@ -80,13 +81,25 @@ export default {
   }
 }
 
-@media screen and (max-width: 800px) {
-  .hearder-area {
-    height: fit-content;
+@media only screen and (max-width: 900px) {
+  .text-box {
+    margin-left: 60px;
   }
 
-  .text-box {
-    margin-left: 90px;
+  .title {
+    margin: 6px 6px 0 6px;
+    font-size: 20px;
+  }
+
+  .subtitle {
+    margin: 5px 5px 5px 15px;
+    padding-bottom: 0;
+    font-size: 15px;
+  }
+
+  .icon {
+    margin: 10px 5px 0 10px;
+    font-size: 20px;
   }
 }
 </style>

@@ -4,7 +4,7 @@
       :monthlyRevenue="monthlyRevenueOrdered"
       :monthlyExpenses="monthlyExpensesOrdered"
     />
-    <div style="display: flex">
+    <div style="display: flex; justify-content: space-between">
       <ActiveCustomersChart :customers="customers" :revenue="revenue" />
       <ProfitChart :monthlyProfit="monthlyProfit" />
     </div>

@@ -23,7 +23,7 @@ export default {
 
 <style scoped>
 .button-area {
-  margin: 10px 20px 0px 20px;
+  margin: 15px 20px 0px 20px;
   border: none;
   padding: 12px 20px;
   color: white;
@@ -43,5 +43,14 @@ export default {
 .disabled {
   background-color: rgba(3, 144, 3, 0.579);
   cursor: not-allowed;
+}
+
+@media only screen and (max-width: 900px) {
+  .button-area {
+    margin: 10px 5px 0px 5px;
+    height: 30px;
+    padding: 5px 20px;
+    width: 110px;
+  }
 }
 </style>

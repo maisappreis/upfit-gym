@@ -7,11 +7,6 @@
     background-color: rgba(0, 0, 0, 0.611);
 }
 
-.icon-add {
-    margin-right: 10px;
-    font-size: 18px;
-}
-
 .not-found {
     font-size: 20px;
     background-color: var(--red-light-color);
@@ -29,6 +24,34 @@
 .message-area {
     padding: 20px 40px 0 20px;
     line-height: 1.5;
+}
+
+@media only screen and (max-width: 900px) {
+    .message-area {
+        padding: 0 20px;
+        font-size: 16px;
+    }
+}
+
+/* ----------- Button Styles ------------*/
+
+.button-text {
+    margin-left: 10px;
+}
+
+ .icon-add {
+    font-size: 18px;
+}
+
+@media only screen and (max-width: 900px) {
+    .button-text {
+      display: none;
+    }
+
+    .icon-add {
+        margin-right: 0 auto;
+        font-size: 18px;
+    }
 }
 
 /* ----------- Form Styles ------------*/
@@ -67,8 +90,36 @@
     font-size: 16px;
 }
 
+.form-textarea {
+    height: 50px;
+}
+
 .form-buttons-area {
     display: flex;
     justify-content: center;
     margin-bottom: 15px;
+}
+
+@media only screen and (max-width: 900px) {
+    .form-area {
+        margin: 0 30px;
+    }
+
+    .form-select {
+        height: 30px;
+    }
+
+    .modal-title {
+        margin: 15px 0;
+        font-size: 18px;
+    }
+
+    .form-label {
+        font-size: 14px;
+        margin: 5px 15px 0 0;
+    }
+
+    .form-input {   
+        height: 20px;
+    }
 }

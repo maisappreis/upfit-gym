@@ -109,4 +109,10 @@ export default {
   margin: 20px;
   width: 45%;
 }
+
+@media only screen and (max-width: 900px) {
+  .chart-area {
+    margin: 0 10px 0 0;
+  }
+}
 </style>

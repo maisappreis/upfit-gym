@@ -13,11 +13,13 @@ export default {
 <style scoped>
 img {
   height: 100%;
+  width: 100%;
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 900px) {
   img {
-    height: 85%;
+    width: 100%;
+    max-height: 100px;
   }
 }
 </style>

@@ -87,7 +87,7 @@ export default {
 <style scoped>
 .filter-area {
   display: flex;
-  margin-top: 20px;
+  margin-top: 15px;
   font-size: 20px;
 }
 
@@ -106,5 +106,28 @@ export default {
 
 .status {
   min-width: 140px;
+}
+
+@media only screen and (max-width: 900px) {
+  .filter-area {
+    margin-top: 10px;
+  }
+
+  .font {
+    font-size: 14px;
+    margin-left: 5px;
+  }
+
+  .month {
+    min-width: 80px;
+  }
+
+  .year {
+    max-width: 80px;
+  }
+
+  .status {
+    min-width: 80px;
+  }
 }
 </style>
