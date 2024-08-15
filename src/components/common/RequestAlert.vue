@@ -91,7 +91,7 @@ export default {
   font-size: 20px;
 }
 
-@media only screen and (max-width: 900px) {
+@media only screen and (max-width: 1000px) {
   .alert-area {
     top: 25px;
     right: 25px;

@@ -122,7 +122,7 @@ export default {
   }
 }
 
-@media only screen and (max-width: 900px) {
+@media only screen and (max-width: 1000px) {
   .content {
     top: 25px;
     left: 58px;

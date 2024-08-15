@@ -162,7 +162,7 @@ ul {
   }
 }
 
-@media only screen and (max-width: 900px) {
+@media only screen and (max-width: 1000px) {
   .sidebar-area {
     min-width: 20px;
     max-width: 70px;

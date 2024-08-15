@@ -518,7 +518,7 @@ tr:hover {
   margin-right: 15px;
 }
 
-@media only screen and (max-width: 900px) {
+@media only screen and (max-width: 1000px) {
   .table-overflow {
     max-height: 45vh;
     overflow: auto;

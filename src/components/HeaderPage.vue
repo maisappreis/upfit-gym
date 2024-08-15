@@ -81,7 +81,7 @@ export default {
   }
 }
 
-@media only screen and (max-width: 900px) {
+@media only screen and (max-width: 1000px) {
   .text-box {
     margin-left: 60px;
   }

@@ -56,7 +56,7 @@ export default {
   top: 25vh;
 }
 
-@media only screen and (max-width: 900px) {
+@media only screen and (max-width: 1000px) {
   .modal-area {
     left: 10vw;
     width: 75vw;

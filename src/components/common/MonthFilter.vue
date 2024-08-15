@@ -108,7 +108,7 @@ export default {
   min-width: 140px;
 }
 
-@media only screen and (max-width: 900px) {
+@media only screen and (max-width: 1000px) {
   .filter-area {
     margin-top: 10px;
   }

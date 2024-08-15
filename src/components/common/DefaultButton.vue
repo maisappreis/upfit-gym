@@ -45,7 +45,7 @@ export default {
   cursor: not-allowed;
 }
 
-@media only screen and (max-width: 900px) {
+@media only screen and (max-width: 1000px) {
   .button-area {
     margin: 10px 5px 0px 5px;
     height: 30px;

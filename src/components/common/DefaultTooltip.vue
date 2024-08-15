@@ -27,7 +27,7 @@ export default {
   margin-right: 30px;
 }
 
-@media only screen and (max-width: 900px) {
+@media only screen and (max-width: 1000px) {
   .tooltip-area {
     padding: 5px 10px;
     max-height: 40px;

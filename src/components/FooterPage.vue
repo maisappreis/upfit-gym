@@ -45,7 +45,7 @@ export default {
   }
 }
 
-@media only screen and (max-width: 900px) {
+@media only screen and (max-width: 1000px) {
   .footer-area {
     top: 92vh;
     left: 50px;

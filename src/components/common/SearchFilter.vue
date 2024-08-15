@@ -53,7 +53,7 @@ export default {
   border: 2px solid #b4b4b4;
 }
 
-@media only screen and (max-width: 900px) {
+@media only screen and (max-width: 1000px) {
   .search-area {
     margin: 10px 5px 0px 5px;
     padding: 2px;
