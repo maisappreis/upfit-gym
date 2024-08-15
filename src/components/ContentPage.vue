@@ -124,7 +124,7 @@ export default {
 
 @media only screen and (max-width: 900px) {
   .content {
-    top: 40px;
+    top: 25px;
     left: 58px;
     width: 92vw;
     height: 90vh;

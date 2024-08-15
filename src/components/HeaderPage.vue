@@ -87,14 +87,12 @@ export default {
   }
 
   .title {
-    margin: 6px 6px 0 6px;
+    margin: 6px 6px 10px 6px;
     font-size: 20px;
   }
 
   .subtitle {
-    margin: 5px 5px 5px 15px;
-    padding-bottom: 0;
-    font-size: 15px;
+    display: none;
   }
 
   .icon {

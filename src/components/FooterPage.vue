@@ -51,7 +51,7 @@ export default {
     left: 50px;
     width: 92vw;
     height: 20px;
-    padding: 5px;
+    padding: 0 5px 5px 5px;
   }
 
   .red {
