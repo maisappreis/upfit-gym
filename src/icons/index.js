@@ -11,6 +11,7 @@ import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
+import { faRightToBracket } from '@fortawesome/free-solid-svg-icons';
 
 library.add(faHeart)
 library.add(faUsers)
@@ -23,6 +24,6 @@ library.add(faPenToSquare)
 library.add(faTrashCan)
 library.add(faCheck)
 library.add(faXmark)
-library.add(faCircleInfo)
+library.add(faCircleInfo, faRightToBracket)
 
 export { library };

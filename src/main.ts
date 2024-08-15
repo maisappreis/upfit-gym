@@ -1,5 +1,6 @@
 import { createApp } from 'vue';
 import App from './App.vue';
+import router from './router/index';
 import './assets/variables.css';
 import './assets/global.css';
 
@@ -16,5 +17,6 @@ app.component('font-awesome-icon', FontAwesomeIcon)
 app.config.globalProperties.$methods = globalMethods.methods;
 app.config.globalProperties.$computed = globalComputed.computed;
 app.use(library);
+app.use(router);
 
 app.mount('#app');

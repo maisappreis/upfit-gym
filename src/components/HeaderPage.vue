@@ -28,12 +28,22 @@
       </div>
       <p class="subtitle">Controle do pagamento das contas</p>
     </div>
+    <RouterLink to="/login">
+      <font-awesome-icon icon="fa-solid fa-right-to-bracket" id="login-icon" />
+    </RouterLink>
   </div>
+  <RouterView />
 </template>
 
 <script>
+import { RouterLink, RouterView } from 'vue-router'
+
 export default {
   name: 'HeaderPage',
+  components: {
+    RouterLink,
+    RouterView
+  },
   props: {
     selectedPage: String
   }
@@ -49,6 +59,9 @@ export default {
   height: 80px;
   width: 100%;
   z-index: 9;
+
+  display: flex;
+  justify-content: space-between;
 }
 
 .text-box {
@@ -72,6 +85,12 @@ export default {
 .subtitle {
   margin: 0 5px 5px 15px;
   padding-bottom: 5px;
+}
+
+#login-icon {
+  margin: 20px 20px 0 0;
+  zoom: 1.5;
+  color: black;
 }
 
 @media only screen and (max-width: 1300px) {
@@ -102,6 +121,10 @@ export default {
   .icon {
     margin: 10px 5px 0 10px;
     font-size: 20px;
+  }
+
+  #login-icon {
+    margin: 5px 20px 0 0;
   }
 }
 </style>
