@@ -87,7 +87,6 @@ export default {
 <style scoped>
 .filter-area {
   display: flex;
-  margin-top: 15px;
   font-size: 20px;
 }
 
@@ -109,10 +108,6 @@ export default {
 }
 
 @media only screen and (max-width: 1000px) {
-  .filter-area {
-    margin-top: 10px;
-  }
-
   .font {
     font-size: 14px;
     margin-left: 5px;

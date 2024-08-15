@@ -46,7 +46,7 @@ export default {
   top: 0;
   background-color: rgb(235, 235, 235);
   box-shadow: 0 8px 6px -6px rgb(99, 99, 99);
-  height: fit-content;
+  height: 80px;
   width: 100%;
   z-index: 9;
 }
@@ -82,8 +82,12 @@ export default {
 }
 
 @media only screen and (max-width: 1000px) {
+  .hearder-area {
+    height: 40px;
+  }
+
   .text-box {
-    margin-left: 60px;
+    margin-left: 75px;
   }
 
   .title {

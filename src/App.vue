@@ -127,16 +127,32 @@ export default {
   font-family: 'Montserrat', sans-serif;
 }
 
+body {
+  margin: 0;
+  background-color: var(--gray-light-color);
+}
+
 #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  background-color: var(--gray-light-color);
+  width: 100vw;
+  height: 90vh;
 }
 
 .app-area {
   display: flex;
   flex-direction: column;
+}
+
+.content {
+  position: absolute;
+  top: 80px;
+  left: 230px;
+
+  width: 87vw;
+  height: 80vh;
+  background-color: var(--gray-light-color);
 }
 
 .content-area {
@@ -145,9 +161,38 @@ export default {
   justify-content: left;
 
   margin: 30px;
-  width: 92%;
-  height: 90%;
+  width: 90%;
+  height: fit-content;
+  max-height: 470px;
+  padding: 20px;
   background-color: white;
   box-shadow: 2px 2px 20px rgb(148, 148, 148);
+}
+
+@media only screen and (max-width: 1300px) {
+  .content {
+    left: 100px;
+    width: 92vw;
+  }
+}
+
+@media only screen and (max-width: 1000px) {
+  #app {
+    overflow-y: auto;
+  }
+
+  .content {
+    top: 25px;
+    left: 58px;
+    width: 92vw;
+    height: fit-content;
+
+    flex: 1;
+  }
+
+  .content-area {
+    width: 80vw;
+    height: fit-content;
+  }
 }
 </style>

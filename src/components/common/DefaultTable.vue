@@ -24,15 +24,11 @@
                     icon="fa-solid fa-pen-to-square"
                     class="icon"
                     @click="$emit('updateItem', item)"
-                    @mouseover="showTooltip('Atualizar', $event)"
-                    @mouseout="hideTooltip()"
                   />
                   <font-awesome-icon
                     icon="fa-solid fa-trash-can"
                     class="icon"
                     @click="$emit('deleteItem', item)"
-                    @mouseover="showTooltip('Excluir', $event)"
-                    @mouseout="hideTooltip()"
                   />
                 </span>
                 <span
@@ -105,6 +101,8 @@
           <option value="3">3</option>
           <option value="5">5</option>
           <option value="8">8</option>
+          <option value="15">15</option>
+          <option value="30">30</option>
         </select>
         <span class="pagination-items">Total de {{ totalItems }} itens</span>
       </div>
@@ -404,10 +402,14 @@ export default {
 </script>
 
 <style scoped>
+.table-overflow {
+  max-height: 360px;
+  overflow: auto;
+}
+
 .table-area {
-  width: 97%;
+  width: 100%;
   border-collapse: collapse;
-  margin: 0 20px 20px 20px;
 }
 
 thead {
@@ -466,7 +468,7 @@ tr:hover {
 .pagination-area {
   display: flex;
   justify-content: center;
-  margin-top: 30px;
+  margin-top: 15px;
 }
 
 .pagination-button {
@@ -520,16 +522,7 @@ tr:hover {
 
 @media only screen and (max-width: 1000px) {
   .table-overflow {
-    max-height: 45vh;
-    overflow: auto;
-    width: 100%;
-  }
-
-  .table-area {
-    margin: 0 5px;
-    width: 98%;
-    max-height: 50vh;
-    overflow: auto;
+    max-height: 280px;
   }
 
   th,

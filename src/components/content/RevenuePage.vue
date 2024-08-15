@@ -1,6 +1,6 @@
 <template>
   <div class="content-area">
-    <div style="display: flex; justify-content: space-between; margin-bottom: 10px">
+    <div class="flex-between mb-normal">
       <DefaultButton @executeAction="addRevenue" style="background-color: var(--red-dark-color)">
         <font-awesome-icon icon="fa-solid fa-plus" class="icon-add" />
         <span class="button-text">Nova Receita</span>

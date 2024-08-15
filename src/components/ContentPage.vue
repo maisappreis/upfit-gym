@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <div>
     <MetricsPage
       v-if="selectedPage === 'metrics'"
       :customers="customers"
@@ -101,33 +101,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.content {
-  position: fixed;
-  top: 80px;
-  left: 230px;
-
-  width: 87vw;
-  height: 83vh;
-  background-color: var(--gray-light-color);
-
-  overflow: auto;
-}
-
-@media only screen and (max-width: 1300px) {
-  .content {
-    left: 100px;
-    width: 92vw;
-  }
-}
-
-@media only screen and (max-width: 1000px) {
-  .content {
-    top: 25px;
-    left: 58px;
-    width: 92vw;
-    height: 90vh;
-  }
-}
-</style>

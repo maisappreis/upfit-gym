@@ -16,12 +16,12 @@ export default {
 <style scoped>
 .footer-area {
   position: fixed;
-  top: 94vh;
+  bottom: 0;
   left: 230px;
 
-  width: 83vw;
-  height: 30px;
-  padding: 10px;
+  width: 85vw;
+  height: 25px;
+  padding: 5px;
   text-align: center;
   background-color: var(--gray-dark-color);
 }
@@ -41,16 +41,16 @@ export default {
 @media only screen and (max-width: 1300px) {
   .footer-area {
     left: 100px;
-    width: 90vw;
+    width: 100%;
   }
 }
 
 @media only screen and (max-width: 1000px) {
   .footer-area {
-    top: 92vh;
-    left: 50px;
-    width: 92vw;
-    height: 20px;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    height: 25px;
     padding: 0 5px 5px 5px;
   }
 

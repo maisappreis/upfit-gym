@@ -43,7 +43,7 @@ export default {
 
 <style scoped>
 .search-area {
-  margin: 15px 20px 0px 20px;
+  margin-left: 20px;
   padding: 12px;
   width: 25vw;
 
@@ -55,7 +55,7 @@ export default {
 
 @media only screen and (max-width: 1000px) {
   .search-area {
-    margin: 10px 5px 0px 5px;
+    margin-left: 5px;
     padding: 2px;
     font-weight: lighter;
     font-size: 14px;

@@ -46,6 +46,7 @@ export default {
   width: 40vw;
   z-index: 12;
   border-radius: 10px;
+  padding: 30px;
 }
 
 .top-up {
@@ -58,10 +59,11 @@ export default {
 
 @media only screen and (max-width: 1000px) {
   .modal-area {
-    left: 10vw;
-    width: 75vw;
+    left: 17vw;
+    width: 50vw;
     overflow: auto;
     max-height: 240px;
+    padding: 20px 30px;
   }
 }
 </style>

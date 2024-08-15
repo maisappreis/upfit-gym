@@ -1,8 +1,17 @@
+.flex-between {
+    display: flex;
+    justify-content: space-between
+}
+
+.mb-normal {
+    margin-bottom: 15px;
+}
+
 .defocus {
     position: absolute;
     top: 0;
     left: 0px;
-    height: 100vh;
+    height: 100%;
     width: 100vw;
     background-color: rgba(0, 0, 0, 0.611);
 }
@@ -22,13 +31,12 @@
 }
 
 .message-area {
-    padding: 20px 40px 0 20px;
     line-height: 1.5;
 }
 
 @media only screen and (max-width: 1000px) {
     .message-area {
-        padding: 0 20px;
+        margin: 0;
         font-size: 16px;
     }
 }
@@ -60,7 +68,6 @@
     display: flex;
     flex-direction: column;
     justify-content: left;
-    margin: 0 40px;
 }
 
 .form-item {
@@ -96,21 +103,20 @@
 
 .form-buttons-area {
     display: flex;
-    justify-content: center;
-    margin-bottom: 15px;
+    justify-content: space-around;
+    margin-top: 15px;
+}
+
+.modal-title {
+    margin: 0 0 15px 0;
 }
 
 @media only screen and (max-width: 1000px) {
-    .form-area {
-        margin: 0 30px;
-    }
-
     .form-select {
         height: 30px;
     }
 
     .modal-title {
-        margin: 15px 0;
         font-size: 18px;
     }
 
