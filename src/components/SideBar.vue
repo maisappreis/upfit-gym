@@ -87,7 +87,9 @@ export default {
   z-index: 10;
 
   background-color: var(--black-color);
+  height: 100vh;
   min-height: 100vh;
+  overflow: auto;
 }
 
 .logo-area {

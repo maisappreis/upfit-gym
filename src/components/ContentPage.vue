@@ -111,6 +111,8 @@ export default {
   width: 87vw;
   height: 83vh;
   background-color: var(--gray-light-color);
+
+  overflow: auto;
 }
 
 @media only screen and (max-width: 1300px) {
