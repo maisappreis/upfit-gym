@@ -40,4 +40,4 @@ coverage
 notes.txt
 
 # Data
-database.json
+db-data.json
