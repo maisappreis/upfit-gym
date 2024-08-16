@@ -124,6 +124,8 @@
 <script>
 import DefaultTooltip from './DefaultTooltip.vue'
 import RequestAlert from './RequestAlert.vue'
+import { mapStores } from 'pinia'
+import { useApiStore } from '@/stores/api'
 import axios from 'axios'
 
 export default {
@@ -152,6 +154,7 @@ export default {
   },
 
   computed: {
+    ...mapStores(useApiStore),
     paginatedData() {
       if (this.searchedField && this.searchedField.length == 0) {
         const startIndex = (this.currentPage - 1) * this.itemsPerPage
@@ -268,7 +271,13 @@ export default {
           }
         }
 
-        await axios.patch(`${this.apiURL}/${this.entity}/${item.id}/`, updatedPaidStatus)
+        await axios.patch(`${this.apiStore.apiURL}/${this.entity}/${item.id}/`, updatedPaidStatus, {
+          headers: {
+            'X-CSRFToken': this.apiStore.getCSRFToken(),
+            'content-type': 'application/x-www-form-urlencoded'
+          },
+          withCredentials: true
+        })
         this.$emit('updateData')
         this.responseMessage = 'Status do pagamento salvo com sucesso!'
 
@@ -360,7 +369,13 @@ export default {
           notes: item.notes,
           paid: 'À pagar'
         }
-        await axios.post(`${this.apiURL}/revenue/create/`, newRevenue)
+        await axios.post(`${this.apiStore.apiURL}/revenue/create/`, newRevenue, {
+          headers: {
+            'X-CSRFToken': this.apiStore.getCSRFToken(),
+            'content-type': 'application/x-www-form-urlencoded'
+          },
+          withCredentials: true
+        })
         this.$emit('updateData')
       } catch (error) {
         console.error('Erro ao criar receita.', error)
@@ -383,7 +398,13 @@ export default {
           notes: item.notes
         }
 
-        await axios.post(`${this.apiURL}/expense/create/`, newExpense)
+        await axios.post(`${this.apiStore.apiURL}/expense/create/`, newExpense, {
+          headers: {
+            'X-CSRFToken': this.apiStore.getCSRFToken(),
+            'content-type': 'application/x-www-form-urlencoded'
+          },
+          withCredentials: true
+        })
         this.$emit('updateData')
       } catch (error) {
         console.error('Erro ao criar despesa.', error)

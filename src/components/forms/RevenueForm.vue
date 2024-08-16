@@ -75,6 +75,8 @@
 <script>
 import DefaultButton from '../common/DefaultButton.vue'
 import { globalVariablesMixin } from '../../utils/variables.js'
+import { mapStores } from 'pinia'
+import { useApiStore } from '@/stores/api'
 import axios from 'axios'
 
 export default {
@@ -104,6 +106,7 @@ export default {
   },
 
   computed: {
+    ...mapStores(useApiStore),
     disable() {
       return (
         this.customer === '' ||
@@ -138,7 +141,13 @@ export default {
           paid: 'À pagar'
         }
 
-        await axios.post(`${this.apiURL}/revenue/create/`, newRevenue)
+        await axios.post(`${this.apiStore.apiURL}/revenue/create/`, newRevenue, {
+          headers: {
+            'X-CSRFToken': this.apiStore.getCSRFToken(),
+            'content-type': 'application/x-www-form-urlencoded'
+          },
+          withCredentials: true
+        })
         this.$emit('showMessage', 'Receita criada com sucesso!')
 
         this.$emit('closeModal')
@@ -161,7 +170,13 @@ export default {
           payment_day: this.dueDate,
           notes: this.notes
         }
-        await axios.put(`${this.apiURL}/revenue/${this.item.id}/`, updatedRevenue)
+        await axios.put(`${this.apiStore.apiURL}/revenue/${this.item.id}/`, updatedRevenue, {
+          headers: {
+            'X-CSRFToken': this.apiStore.getCSRFToken(),
+            'content-type': 'application/x-www-form-urlencoded'
+          },
+          withCredentials: true
+        })
         this.$emit('showMessage', 'Receita atualizada com sucesso!')
 
         this.$emit('closeModal')

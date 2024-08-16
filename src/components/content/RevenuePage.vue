@@ -71,6 +71,8 @@ import DefaultModal from '../common/DefaultModal.vue'
 import MonthFilter from '../common/MonthFilter.vue'
 import RevenueForm from '../forms/RevenueForm.vue'
 import { globalVariablesMixin } from '@/utils/variables.js'
+import { mapStores } from 'pinia'
+import { useApiStore } from '@/stores/api'
 import axios from 'axios'
 
 export default {
@@ -123,6 +125,7 @@ export default {
   },
 
   computed: {
+    ...mapStores(useApiStore),
     filteredRevenue() {
       return this.$computed.filteredData(
         this.revenue,
@@ -167,7 +170,13 @@ export default {
 
     async deleteRevenue() {
       try {
-        await axios.delete(`${this.apiURL}/revenue/${this.item.id}/`)
+        await axios.delete(`${this.apiStore.apiURL}/revenue/${this.item.id}/`, {
+          headers: {
+            'X-CSRFToken': this.apiStore.getCSRFToken(),
+            'content-type': 'application/x-www-form-urlencoded'
+          },
+          withCredentials: true
+        })
         this.showMessage('Receita excluída com sucesso!')
       } catch (error) {
         console.error('Erro ao excluir receita.', error)
@@ -240,7 +249,17 @@ export default {
           value: this.confirmationData.updatedValue
         }
 
-        await axios.patch(`${this.apiURL}/customer/${this.confirmationData.id}/`, updatedCustomer)
+        await axios.patch(
+          `${this.apiStore.apiURL}/customer/${this.confirmationData.id}/`,
+          updatedCustomer,
+          {
+            headers: {
+              'X-CSRFToken': this.apiStore.getCSRFToken(),
+              'content-type': 'application/x-www-form-urlencoded'
+            },
+            withCredentials: true
+          }
+        )
         this.$emit('showMessage', 'Cliente atualizado com sucesso!')
       } catch (error) {
         console.error('Erro ao atualizar cliente.', error)
@@ -253,7 +272,13 @@ export default {
         let updatedRevenue = {
           value: this.confirmationData.updatedValue
         }
-        await axios.patch(`${this.apiURL}/revenue/${id}/`, updatedRevenue)
+        await axios.patch(`${this.apiStore.apiURL}/revenue/${id}/`, updatedRevenue, {
+          headers: {
+            'X-CSRFToken': this.apiStore.getCSRFToken(),
+            'content-type': 'application/x-www-form-urlencoded'
+          },
+          withCredentials: true
+        })
       } catch (error) {
         console.error('Erro ao atualizar receita.', error)
       }

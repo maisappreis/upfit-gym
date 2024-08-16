@@ -82,6 +82,8 @@
 <script>
 import DefaultButton from '../common/DefaultButton.vue'
 import { globalVariablesMixin } from '@/utils/variables.js'
+import { mapStores } from 'pinia'
+import { useApiStore } from '@/stores/api'
 import axios from 'axios'
 
 export default {
@@ -111,6 +113,7 @@ export default {
   },
 
   computed: {
+    ...mapStores(useApiStore),
     disable() {
       return (
         this.customerName === '' ||
@@ -146,7 +149,13 @@ export default {
           notes: this.notes
         }
 
-        let response = await axios.post(`${this.apiURL}/customer/create/`, newCustomer)
+        let response = await axios.post(`${this.apiStore.apiURL}/customer/create/`, newCustomer, {
+          headers: {
+            'X-CSRFToken': this.apiStore.getCSRFToken(),
+            'content-type': 'application/x-www-form-urlencoded'
+          },
+          withCredentials: true
+        })
 
         this.$emit('showMessage', 'Cliente criado com sucesso!')
 
@@ -178,7 +187,13 @@ export default {
           notes: this.notes
         }
 
-        await axios.put(`${this.apiURL}/customer/${this.item.id}/`, updatedCustomer)
+        await axios.put(`${this.apiStore.apiURL}/customer/${this.item.id}/`, updatedCustomer, {
+          headers: {
+            'X-CSRFToken': this.apiStore.getCSRFToken(),
+            'content-type': 'application/x-www-form-urlencoded'
+          },
+          withCredentials: true
+        })
         this.$emit('showMessage', 'Cliente atualizado com sucesso!')
 
         this.$emit('closeModal')
@@ -203,7 +218,13 @@ export default {
           paid: 'À pagar'
         }
 
-        await axios.post(`${this.apiURL}/revenue/create/`, newRevenue)
+        await axios.post(`${this.apiStore.apiURL}/revenue/create/`, newRevenue, {
+          headers: {
+            'X-CSRFToken': this.apiStore.getCSRFToken(),
+            'content-type': 'application/x-www-form-urlencoded'
+          },
+          withCredentials: true
+        })
       } catch (error) {
         console.error('Erro ao criar receita.', error)
       }

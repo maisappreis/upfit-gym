@@ -59,6 +59,8 @@ import DefaultModal from '../common/DefaultModal.vue'
 import MonthFilter from '../common/MonthFilter.vue'
 import ExpensesForm from '../forms/ExpensesForm.vue'
 import { globalVariablesMixin } from '@/utils/variables.js'
+import { mapStores } from 'pinia'
+import { useApiStore } from '@/stores/api'
 import axios from 'axios'
 
 export default {
@@ -106,6 +108,7 @@ export default {
   },
 
   computed: {
+    ...mapStores(useApiStore),
     filteredExpenses() {
       return this.$computed.filteredData(
         this.expenses,
@@ -150,7 +153,13 @@ export default {
 
     async deleteExpense() {
       try {
-        await axios.delete(`${this.apiURL}/expense/${this.item.id}/`)
+        await axios.delete(`${this.apiStore.apiURL}/expense/${this.item.id}/`, {
+          headers: {
+            'X-CSRFToken': this.apiStore.getCSRFToken(),
+            'content-type': 'application/x-www-form-urlencoded'
+          },
+          withCredentials: true
+        })
         this.showMessage('Despesa excluída com sucesso!')
       } catch (error) {
         console.error('Erro ao excluir despesa.', error)

@@ -35,12 +35,12 @@ import MetricsPage from './content/MetricsPage.vue'
 import CustomersPage from './content/CustomersPage.vue'
 import RevenuePage from './content/RevenuePage.vue'
 import ExpensesPage from './content/ExpensesPage.vue'
-import { globalVariablesMixin } from '@/utils/variables.js'
+import { mapStores } from 'pinia'
+import { useApiStore } from '@/stores/api'
 import axios from 'axios'
 
 export default {
   name: 'ContentPage',
-  mixins: [globalVariablesMixin],
 
   components: {
     RevenuePage,
@@ -61,10 +61,14 @@ export default {
     selectedPage: String
   },
 
+  computed: {
+    ...mapStores(useApiStore)
+  },
+
   methods: {
     async getCustomers() {
       try {
-        let response = await axios.get(`${this.apiURL}/customer/`)
+        let response = await axios.get(`${this.apiStore.apiURL}/customer/`)
         this.customers = response.data
       } catch (error) {
         console.error('Erro ao requisitar a lista de clientes.', error)
@@ -73,7 +77,7 @@ export default {
 
     async getRevenue() {
       try {
-        let response = await axios.get(`${this.apiURL}/revenue/`)
+        let response = await axios.get(`${this.apiStore.apiURL}/revenue/`)
         this.revenue = response.data
       } catch (error) {
         console.error('Erro ao requisitar a lista de receitas.', error)
@@ -82,7 +86,7 @@ export default {
 
     async getExpenses() {
       try {
-        let response = await axios.get(`${this.apiURL}/expense/`)
+        let response = await axios.get(`${this.apiStore.apiURL}/expense/`)
         this.expenses = response.data
       } catch (error) {
         console.error('Erro ao requisitar a lista de despesas.', error)

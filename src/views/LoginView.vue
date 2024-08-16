@@ -4,8 +4,8 @@
       <img class="logo-area" :src="logoUpfit" alt="Logotype company" />
       <form class="form-area" @submit.prevent="loginUser">
         <div class="form-field">
-          <label for="name">E-mail:</label>
-          <input type="text" id="email" name="email" v-model="email" required />
+          <label for="name">Username:</label>
+          <input type="text" id="username" name="username" v-model="username" required />
         </div>
         <div class="form-field">
           <label for="password">Senha:</label>
@@ -27,42 +27,76 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { useRouter } from 'vue-router'
-import { globalVariablesMixin } from '../utils/variables'
+import { ref, computed, onMounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import { useApiStore } from '@/stores/api'
 import axios from 'axios'
 import DefaultButton from '../components/common/DefaultButton.vue'
 import RequestAlert from '../components/common/RequestAlert.vue'
 import logoUpfit from '../assets/logo-upfit.png'
 
-const email = ref('')
+const username = ref('')
 const password = ref('')
+const csrfToken = ref('')
 const responseMessage = ref('')
 const router = useRouter()
-const apiURL = globalVariablesMixin.data().apiURL
+const apiStore = useApiStore()
 
 const disable = computed(() => {
-  return email.value == '' || password.value == ''
+  return username.value == '' || password.value == ''
 })
+
+const fetchCsrfToken = async () => {
+  const response = await axios.get(`${apiStore.apiURL}/accounts/csrf/`, {
+    withCredentials: true
+  })
+  const csrfToken = response.data.csrfToken || document.cookie.match(/csrftoken=([^;]+)/)[1]
+  return csrfToken
+}
 
 const loginUser = async () => {
   try {
     let login = {
-      email: email,
-      password: password
+      username: username.value,
+      password: password.value
     }
 
-    await axios.post(`${apiURL}/login/`, login)
-    responseMessage.value = 'Login realizado com sucesso!'
+    const response = await axios.post(`${apiStore.apiURL}/accounts/login/`, login, {
+      headers: {
+        'X-CSRFToken': csrfToken.value,
+        'content-type': 'application/x-www-form-urlencoded'
+      },
+      withCredentials: true
+    })
 
-    setTimeout(() => {
-      router.push('/')
-    }, 800)
+    const token = response.data.token
+
+    if (token) {
+      localStorage.setItem('authToken', token)
+
+      responseMessage.value = 'Login realizado com sucesso!'
+
+      setTimeout(() => {
+        router.push('/')
+      }, 800)
+      apiStore.checkAuthentication()
+    }
   } catch (error) {
     console.error(error)
     responseMessage.value = 'Erro ao fazer login.'
   }
 }
+
+onMounted(async () => {
+  const route = useRoute()
+
+  apiStore.getPath(route.path)
+
+  if (route.path == '/login') {
+    apiStore.checkAuthentication()
+    csrfToken.value = await fetchCsrfToken()
+  }
+})
 </script>
 
 <style scoped>

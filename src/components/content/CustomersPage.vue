@@ -56,12 +56,12 @@ import SearchFilter from '../common/SearchFilter.vue'
 import DefaultModal from '../common/DefaultModal.vue'
 import CustomersForm from '../forms/CustomersForm.vue'
 import StatusFilter from '../common/StatusFilter.vue'
-import { globalVariablesMixin } from '@/utils/variables.js'
+import { mapStores } from 'pinia'
+import { useApiStore } from '@/stores/api'
 import axios from 'axios'
 
 export default {
   name: 'CustomersPage',
-  mixins: [globalVariablesMixin],
 
   components: {
     DefaultTable,
@@ -102,6 +102,7 @@ export default {
   },
 
   computed: {
+    ...mapStores(useApiStore),
     filteredCustomers() {
       if (this.customers && this.customers.length > 0) {
         if (this.currentStatus === 'Todos') {
@@ -145,7 +146,13 @@ export default {
 
     async deleteCustomer() {
       try {
-        await axios.delete(`${this.apiURL}/customer/${this.item.id}/`)
+        await axios.delete(`${this.apiStore.apiURL}/customer/${this.item.id}/`, {
+          headers: {
+            'X-CSRFToken': this.apiStore.getCSRFToken(),
+            'content-type': 'application/x-www-form-urlencoded'
+          },
+          withCredentials: true
+        })
         this.showMessage('Cliente excluído com sucesso!')
       } catch (error) {
         console.error('Erro ao excluir cliente.', error)
@@ -161,7 +168,13 @@ export default {
       try {
         let data = { status: 'Inativo' }
 
-        await axios.patch(`${this.apiURL}/customer/${this.item.id}/`, data)
+        await axios.patch(`${this.apiStore.apiURL}/customer/${this.item.id}/`, data, {
+          headers: {
+            'X-CSRFToken': this.apiStore.getCSRFToken(),
+            'content-type': 'application/x-www-form-urlencoded'
+          },
+          withCredentials: true
+        })
         this.showMessage('Cliente inativado com sucesso!')
       } catch (error) {
         console.error('Erro ao inativar cliente.', error)

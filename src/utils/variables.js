@@ -2,7 +2,6 @@
 export const globalVariablesMixin = {
     data() {
         return {
-            apiURL: import.meta.env.VITE_API_URL,
             months: [
                 "Janeiro",
                 "Fevereiro",

@@ -44,6 +44,8 @@
 <script>
 import DefaultButton from '../common/DefaultButton.vue'
 import { globalVariablesMixin } from '../../utils/variables.js'
+import { mapStores } from 'pinia'
+import { useApiStore } from '@/stores/api'
 import axios from 'axios'
 
 export default {
@@ -70,6 +72,7 @@ export default {
   },
 
   computed: {
+    ...mapStores(useApiStore),
     disable() {
       return this.bill === '' || this.dueDate === '' || this.value === 0
     }
@@ -99,7 +102,13 @@ export default {
           notes: this.notes
         }
 
-        await axios.post(`${this.apiURL}/expense/create/`, newExpense)
+        await axios.post(`${this.apiStore.apiURL}/expense/create/`, newExpense, {
+          headers: {
+            'X-CSRFToken': this.apiStore.getCSRFToken(),
+            'content-type': 'application/x-www-form-urlencoded'
+          },
+          withCredentials: true
+        })
         this.$emit('showMessage', 'Despesa criada com sucesso!')
 
         this.$emit('closeModal')
@@ -124,7 +133,13 @@ export default {
           notes: this.notes
         }
 
-        await axios.patch(`${this.apiURL}/expense/${this.item.id}/`, updatedExpense)
+        await axios.patch(`${this.apiStore.apiURL}/expense/${this.item.id}/`, updatedExpense, {
+          headers: {
+            'X-CSRFToken': this.apiStore.getCSRFToken(),
+            'content-type': 'application/x-www-form-urlencoded'
+          },
+          withCredentials: true
+        })
         this.$emit('showMessage', 'Despesa atualizada com sucesso!')
 
         this.$emit('closeModal')
