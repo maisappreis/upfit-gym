@@ -37,7 +37,6 @@ export default {
   },
   watch: {
     currentPage(newVal) {
-      console.log('newVal', newVal)
       switch (newVal) {
         case 'metrics':
           this.icon = 'fa-solid fa-chart-line'
