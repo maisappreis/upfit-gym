@@ -6,7 +6,7 @@
       :options="chartOptions"
       :style="myStyles"
     />
-    <h4 v-else>Sem dados para exibição do gráfico de Receitas x Despesas</h4>
+    <div v-else class="not-found">Sem dados para exibição do gráfico de Receitas x Despesas</div>
   </div>
 </template>
 

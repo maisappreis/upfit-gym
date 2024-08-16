@@ -7,7 +7,7 @@
       :data="chartData"
       :style="myStyles"
     />
-    <h4 v-else>Sem dados para exibição do gráfico de Lucros</h4>
+    <div v-else class="not-found">Sem dados para exibição do gráfico de Lucros</div>
   </div>
 </template>
 
