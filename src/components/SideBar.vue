@@ -4,49 +4,49 @@
     <ul>
       <li
         class="option pad"
-        :class="{ selectedOption: selectedPage === 'metrics' }"
-        @click="openContent('metrics')"
+        :class="{ selectedOption: pageStore.currentPage === 'metrics' }"
+        @click="pageStore.openPage('metrics')"
       >
         <font-awesome-icon
           icon="fa-solid fa-chart-line"
           class="icon"
-          :class="{ selectedIcon: selectedPage === 'metrics' }"
+          :class="{ selectedIcon: pageStore.currentPage === 'metrics' }"
         />
         <span class="option-text">Métricas</span>
       </li>
       <li
         class="option pad"
-        :class="{ selectedOption: selectedPage === 'customers' }"
-        @click="openContent('customers')"
+        :class="{ selectedOption: pageStore.currentPage === 'customers' }"
+        @click="pageStore.openPage('customers')"
       >
         <font-awesome-icon
           icon="fa-solid fa-users"
           class="icon"
-          :class="{ selectedIcon: selectedPage === 'customers' }"
+          :class="{ selectedIcon: pageStore.currentPage === 'customers' }"
         />
         <span class="option-text">Clientes</span>
       </li>
       <li
         class="option pad"
-        :class="{ selectedOption: selectedPage === 'revenue' }"
-        @click="openContent('revenue')"
+        :class="{ selectedOption: pageStore.currentPage === 'revenue' }"
+        @click="pageStore.openPage('revenue')"
       >
         <font-awesome-icon
           icon="fa-solid fa-hand-holding-dollar"
           class="icon"
-          :class="{ selectedIcon: selectedPage === 'revenue' }"
+          :class="{ selectedIcon: pageStore.currentPage === 'revenue' }"
         />
         <span class="option-text">Receitas</span>
       </li>
       <li
         class="option pad"
-        :class="{ selectedOption: selectedPage === 'expenses' }"
-        @click="openContent('expenses')"
+        :class="{ selectedOption: pageStore.currentPage === 'expenses' }"
+        @click="pageStore.openPage('expenses')"
       >
         <font-awesome-icon
           icon="fa-solid fa-money-bill-transfer"
           class="icon"
-          :class="{ selectedIcon: selectedPage === 'expenses' }"
+          :class="{ selectedIcon: pageStore.currentPage === 'expenses' }"
         />
         <span class="option-text">Despesas</span>
       </li>
@@ -56,22 +56,15 @@
 
 <script>
 import LogoType from './LogoType.vue'
+import { mapStores } from 'pinia'
+import { usePageStore } from '@/stores/page'
 
 export default {
   name: 'SideBar',
   components: { LogoType },
 
-  data: function () {
-    return {
-      selectedPage: 'metrics'
-    }
-  },
-
-  methods: {
-    openContent(page) {
-      this.selectedPage = page
-      this.$emit('showContent', page)
-    }
+  computed: {
+    ...mapStores(usePageStore)
   }
 }
 </script>

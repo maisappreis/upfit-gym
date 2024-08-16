@@ -126,6 +126,7 @@ import DefaultTooltip from './DefaultTooltip.vue'
 import RequestAlert from './RequestAlert.vue'
 import { mapStores } from 'pinia'
 import { useApiStore } from '@/stores/api'
+import { usePageStore } from '@/stores/page'
 import axios from 'axios'
 
 export default {
@@ -135,7 +136,6 @@ export default {
     columns: Array,
     data: Array,
     searchedField: Array,
-    page: String,
     requestMessage: String
   },
 
@@ -154,7 +154,7 @@ export default {
   },
 
   computed: {
-    ...mapStores(useApiStore),
+    ...mapStores(useApiStore, usePageStore),
     paginatedData() {
       if (this.searchedField && this.searchedField.length == 0) {
         const startIndex = (this.currentPage - 1) * this.itemsPerPage
@@ -243,7 +243,7 @@ export default {
       try {
         let updatedPaidStatus = {}
 
-        if (this.page === 'expenses') {
+        if (this.pageStore.currentPage === 'expenses') {
           this.entity = 'expense'
           if (item.paid === 'À pagar') {
             updatedPaidStatus = {
@@ -254,7 +254,7 @@ export default {
               paid: 'À pagar'
             }
           }
-        } else if (this.page === 'revenue') {
+        } else if (this.pageStore.currentPage === 'revenue') {
           this.entity = 'revenue'
           if (item.paid === 'À pagar') {
             updatedPaidStatus = {
@@ -282,9 +282,9 @@ export default {
         this.responseMessage = 'Status do pagamento salvo com sucesso!'
 
         if (updatedPaidStatus.paid === 'Pago') {
-          if (this.page === 'revenue' && item.status === 'Ativo') {
+          if (this.pageStore.currentPage === 'revenue' && item.status === 'Ativo') {
             this.createRevenueForNextMonth(item)
-          } else if (this.page === 'expenses') {
+          } else if (this.pageStore.currentPage === 'expenses') {
             this.createExpenseForNextMonth(item)
           }
         }

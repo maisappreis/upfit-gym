@@ -1,30 +1,27 @@
 <template>
   <div>
     <MetricsPage
-      v-if="selectedPage === 'metrics'"
+      v-if="pageStore.currentPage === 'metrics'"
       :customers="customers"
       :revenue="revenue"
       :expenses="expenses"
       @updateData="getData"
     />
     <CustomersPage
-      v-if="selectedPage === 'customers'"
+      v-if="pageStore.currentPage === 'customers'"
       :customers="customers"
       :revenue="revenue"
-      :selectedPage="selectedPage"
       @updateData="getData"
     />
     <RevenuePage
-      v-if="selectedPage === 'revenue'"
+      v-if="pageStore.currentPage === 'revenue'"
       :revenue="revenue"
       :customers="customers"
-      :selectedPage="selectedPage"
       @updateData="getData"
     />
     <ExpensesPage
-      v-if="selectedPage === 'expenses'"
+      v-if="pageStore.currentPage === 'expenses'"
       :expenses="expenses"
-      :selectedPage="selectedPage"
       @updateData="getData"
     />
   </div>
@@ -37,6 +34,7 @@ import RevenuePage from './content/RevenuePage.vue'
 import ExpensesPage from './content/ExpensesPage.vue'
 import { mapStores } from 'pinia'
 import { useApiStore } from '@/stores/api'
+import { usePageStore } from '@/stores/page'
 import axios from 'axios'
 
 export default {
@@ -57,12 +55,8 @@ export default {
     }
   },
 
-  props: {
-    selectedPage: String
-  },
-
   computed: {
-    ...mapStores(useApiStore)
+    ...mapStores(useApiStore, usePageStore)
   },
 
   methods: {

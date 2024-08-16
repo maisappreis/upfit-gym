@@ -1,32 +1,11 @@
 <template>
-  <div class="hearder-area">
-    <div class="text-box" v-if="selectedPage === 'metrics'">
+  <div class="header-area">
+    <div class="text-box">
       <div class="header-title">
-        <font-awesome-icon icon="fa-solid fa-chart-line" class="icon" />
-        <h2 class="title">Métricas</h2>
+        <font-awesome-icon :icon="icon" class="icon" />
+        <h2 class="title">{{ title }}</h2>
       </div>
-      <p class="subtitle">Visualização gráfica de receita, despesas, lucro e clientes</p>
-    </div>
-    <div class="text-box" v-if="selectedPage === 'customers'">
-      <div class="header-title">
-        <font-awesome-icon icon="fa-solid fa-users" class="icon" />
-        <h2 class="title">Clientes</h2>
-      </div>
-      <p class="subtitle">Cadastramento dos clientes</p>
-    </div>
-    <div class="text-box" v-if="selectedPage === 'revenue'">
-      <div class="header-title">
-        <font-awesome-icon icon="fa-solid fa-hand-holding-dollar" class="icon" />
-        <h2 class="title">Receitas</h2>
-      </div>
-      <p class="subtitle">Controle do recebimento das mensalidades dos clientes</p>
-    </div>
-    <div class="text-box" v-if="selectedPage === 'expenses'">
-      <div class="header-title">
-        <font-awesome-icon icon="fa-solid fa-money-bill-transfer" class="icon" />
-        <h2 class="title">Despesas</h2>
-      </div>
-      <p class="subtitle">Controle do pagamento das contas</p>
+      <p class="subtitle">{{ subtitle }}</p>
     </div>
     <RouterLink to="/login">
       <font-awesome-icon icon="fa-solid fa-right-to-bracket" id="login-icon" />
@@ -37,6 +16,8 @@
 
 <script>
 import { RouterLink, RouterView } from 'vue-router'
+import { mapState } from 'pinia'
+import { usePageStore } from '@/stores/page'
 
 export default {
   name: 'HeaderPage',
@@ -44,14 +25,52 @@ export default {
     RouterLink,
     RouterView
   },
-  props: {
-    selectedPage: String
+  data() {
+    return {
+      icon: '',
+      title: '',
+      subtitle: ''
+    }
+  },
+  computed: {
+    ...mapState(usePageStore, ['currentPage'])
+  },
+  watch: {
+    currentPage(newVal) {
+      console.log('newVal', newVal)
+      switch (newVal) {
+        case 'metrics':
+          this.icon = 'fa-solid fa-chart-line'
+          this.title = 'Métricas'
+          this.subtitle = 'Visualização gráfica de receita, despesas, lucro e clientes'
+          break
+        case 'customers':
+          this.icon = 'fa-solid fa-users'
+          this.title = 'Clientes'
+          this.subtitle = 'Cadastramento dos clientes'
+          break
+        case 'revenue':
+          this.icon = 'fa-solid fa-hand-holding-dollar'
+          this.title = 'Receitas'
+          this.subtitle = 'Controle do recebimento das mensalidades dos clientes'
+          break
+        case 'expenses':
+          this.icon = 'fa-solid fa-money-bill-transfer'
+          this.title = 'Despesas'
+          this.subtitle = 'Controle do pagamento das contas'
+          break
+        default:
+          this.icon = ''
+          this.title = ''
+          this.subtitle = ''
+      }
+    }
   }
 }
 </script>
 
 <style scoped>
-.hearder-area {
+.header-area {
   position: fixed;
   top: 0;
   background-color: rgb(235, 235, 235);
@@ -101,7 +120,7 @@ export default {
 }
 
 @media only screen and (max-width: 1000px) {
-  .hearder-area {
+  .header-area {
     height: 40px;
   }
 

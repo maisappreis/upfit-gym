@@ -20,7 +20,6 @@
       :data="filteredExpenses"
       :searchedField="searchedField"
       :requestMessage="requestMessage"
-      :page="selectedPage"
       @updateData="$emit('updateData')"
       @updateItem="updateExpense"
       @deleteItem="showDeleteModal"
@@ -77,8 +76,7 @@ export default {
   },
 
   props: {
-    expenses: Array,
-    selectedPage: String
+    expenses: Array
   },
 
   data() {

@@ -20,7 +20,6 @@
       :data="filteredRevenue"
       :searchedField="searchedField"
       :requestMessage="requestMessage"
-      :page="selectedPage"
       @updateData="$emit('updateData')"
       @updateItem="updateRevenue"
       @deleteItem="showDeleteModal"
@@ -90,8 +89,7 @@ export default {
 
   props: {
     revenue: Array,
-    customers: Array,
-    selectedPage: String
+    customers: Array
   },
 
   data() {

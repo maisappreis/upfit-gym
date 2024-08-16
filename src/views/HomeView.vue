@@ -1,9 +1,9 @@
 <template>
   <div class="app-area">
-    <HeaderPage class="header" :selectedPage="selectedPage" />
-    <SideBar class="sidebar" @showContent="openContent" />
-    <ContentPage class="content" :selectedPage="selectedPage" />
-    <FooterPage class="footer" />
+    <HeaderPage />
+    <SideBar />
+    <ContentPage class="content" />
+    <FooterPage />
   </div>
 </template>
 
@@ -20,18 +20,6 @@ export default {
     SideBar,
     ContentPage,
     FooterPage
-  },
-
-  data: function () {
-    return {
-      selectedPage: 'metrics'
-    }
-  },
-
-  methods: {
-    openContent(page) {
-      this.selectedPage = page
-    }
   }
 }
 </script>
