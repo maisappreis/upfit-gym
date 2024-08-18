@@ -306,9 +306,9 @@ export default {
 
         if (updatedPaidStatus.paid === 'Pago') {
           if (this.pageStore.currentPage === 'revenue' && this.selectedItem.status === 'Ativo') {
-            this.createRevenueForNextMonth(this.status)
+            this.createRevenueForNextMonth(this.selectedItem)
           } else if (this.pageStore.currentPage === 'expenses') {
-            this.createExpenseForNextMonth(this.status)
+            this.createExpenseForNextMonth(this.selectedItem)
           }
         }
         this.closeModal()

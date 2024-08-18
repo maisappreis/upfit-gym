@@ -18,22 +18,24 @@ export const useApiStore = defineStore('api', () => {
 
   const checkAuthentication = async () => {
     axios.defaults.withCredentials = true
+    const apiBase = import.meta.env.VITE_API_URL
 
     if (currentPath.value === '/login' && tokenCSRF.value == null) {
-      apiURL.value = `${import.meta.env.VITE_API_URL}`
+      apiURL.value = apiBase
     } else {
       if (tokenCSRF.value) {
         isAuthenticated.value = true
-        apiURL.value = `${import.meta.env.VITE_API_URL}`
+        apiURL.value = apiBase
       } else {
         isAuthenticated.value = false
-        apiURL.value = `${import.meta.env.VITE_API_URL}/test`
+        apiURL.value = `${apiBase}/test`
       }
     }
   }
 
   const getCSRFToken = async () => {
-    const response = await axios.get(`${import.meta.env.VITE_API_URL}/accounts/get-csrf-token/`, { withCredentials: true });
+    const apiBase = import.meta.env.VITE_API_URL
+    const response = await axios.get(`${apiBase}/accounts/get-csrf-token/`, { withCredentials: true });
     tokenCSRF.value = response.data.csrfToken !== undefined ? response.data.csrfToken : null;
   }
 
