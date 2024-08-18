@@ -48,7 +48,7 @@ export default {
   .button-area {
     height: 30px;
     padding: 5px 20px;
-    width: 110px;
+    width: 120px;
   }
 }
 </style>

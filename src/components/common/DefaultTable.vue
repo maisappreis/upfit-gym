@@ -18,7 +18,7 @@
                     v-if="item.notes"
                     icon="fa-solid fa-circle-info"
                     class="icon"
-                    @click="showTooltip('notas', $event, item)"
+                    @click="showNotes($event, item)"
                   />
                   <font-awesome-icon
                     icon="fa-solid fa-pen-to-square"
@@ -56,9 +56,7 @@
                     inactive: item[column.key] === 'À pagar',
                     sent: item[column.key] === 'Link enviado'
                   }"
-                  @click="changePaidStatus(item)"
-                  @mouseover="showTooltip('status', $event, item[column.key])"
-                  @mouseout="hideTooltip()"
+                  @click="confirmPaidStatus(item)"
                 >
                   {{ item[column.key] }}
                 </span>
@@ -118,12 +116,20 @@
     >
       {{ responseMessage }}
     </RequestAlert>
+    <DefaultModal v-if="showModal" @executeAction="changePaidStatus" @closeModal="closeModal">
+      <span class="message-area" style="font-size: 20px"
+        >Marcar como <strong>{{ statusMessage }}</strong
+        >?</span
+      >
+    </DefaultModal>
+    <div v-if="showModal" class="defocus"></div>
   </div>
 </template>
 
 <script>
 import DefaultTooltip from './DefaultTooltip.vue'
 import RequestAlert from './RequestAlert.vue'
+import DefaultModal from '../common/DefaultModal.vue'
 import { mapStores } from 'pinia'
 import { useApiStore } from '@/stores/api'
 import { usePageStore } from '@/stores/page'
@@ -131,7 +137,7 @@ import axios from 'axios'
 
 export default {
   name: 'DefaultTable',
-  components: { DefaultTooltip, RequestAlert },
+  components: { DefaultTooltip, RequestAlert, DefaultModal },
   props: {
     columns: Array,
     data: Array,
@@ -149,7 +155,10 @@ export default {
       mouseX: 0,
       mouseY: 0,
       responseMessage: '',
-      entity: ''
+      entity: '',
+      showModal: false,
+      selectedItem: {},
+      statusMessage: ''
     }
   },
 
@@ -212,83 +221,97 @@ export default {
   },
 
   methods: {
-    showTooltip(tooltip, event, item) {
+    showNotes(event, item) {
       this.showingTooltip = !this.showingTooltip
+      this.tooltip = item.notes
+      this.mouseX = event.clientX - 40
+      this.mouseY = event.clientY + 15
+    },
 
-      if (this.showingTooltip) {
-        if (tooltip === 'status') {
-          if (item) {
-            this.tooltip = 'Marcar como à pagar'
-          } else {
-            this.tooltip = 'Marcar como pago'
-          }
-        } else if (tooltip === 'notas') {
-          this.tooltip = item.notes
-        } else {
-          this.tooltip = tooltip
+    confirmPaidStatus(item) {
+      this.selectedItem = item
+
+      if (this.pageStore.currentPage === 'revenue') {
+        if (this.selectedItem.paid == 'À pagar') {
+          this.statusMessage = 'link enviado'
+        } else if (this.selectedItem.paid == 'Link enviado') {
+          this.statusMessage = 'pago'
+        } else if (this.selectedItem.paid == 'Pago') {
+          this.statusMessage = 'à pagar'
         }
-
-        this.mouseX = event.clientX - 40
-        this.mouseY = event.clientY + 15
-      } else {
-        this.hideTooltip()
       }
+
+      if (this.pageStore.currentPage === 'expenses') {
+        if (this.selectedItem.paid == 'À pagar') {
+          this.statusMessage = 'pago'
+        } else if (this.selectedItem.paid == 'Pago') {
+          this.statusMessage = 'à pagar'
+        }
+      }
+
+      this.showModal = true
     },
 
-    hideTooltip() {
-      this.showingTooltip = false
+    closeModal() {
+      this.showModal = false
+      this.statusMessage = ''
     },
 
-    async changePaidStatus(item) {
+    async changePaidStatus() {
       try {
         let updatedPaidStatus = {}
 
         if (this.pageStore.currentPage === 'expenses') {
           this.entity = 'expense'
-          if (item.paid === 'À pagar') {
+          if (this.selectedItem.paid === 'À pagar') {
             updatedPaidStatus = {
               paid: 'Pago'
             }
-          } else if (item.paid === 'Pago') {
+          } else if (this.selectedItem.paid === 'Pago') {
             updatedPaidStatus = {
               paid: 'À pagar'
             }
           }
         } else if (this.pageStore.currentPage === 'revenue') {
           this.entity = 'revenue'
-          if (item.paid === 'À pagar') {
+          if (this.selectedItem.paid === 'À pagar') {
             updatedPaidStatus = {
               paid: 'Link enviado'
             }
-          } else if (item.paid === 'Link enviado') {
+          } else if (this.selectedItem.paid === 'Link enviado') {
             updatedPaidStatus = {
               paid: 'Pago'
             }
-          } else if (item.paid === 'Pago') {
+          } else if (this.selectedItem.paid === 'Pago') {
             updatedPaidStatus = {
               paid: 'À pagar'
             }
           }
         }
 
-        await axios.patch(`${this.apiStore.apiURL}/${this.entity}/${item.id}/`, updatedPaidStatus, {
-          headers: {
-            'X-CSRFToken': this.apiStore.tokenCSRF,
-            'content-type': 'application/x-www-form-urlencoded'
-          },
-          withCredentials: true
-        })
+        await axios.patch(
+          `${this.apiStore.apiURL}/${this.entity}/${this.selectedItem.id}/`,
+          updatedPaidStatus,
+          {
+            headers: {
+              'X-CSRFToken': this.apiStore.tokenCSRF,
+              'content-type': 'application/x-www-form-urlencoded'
+            },
+            withCredentials: true
+          }
+        )
         if (this.entity === 'revenue') await this.apiStore.fetchRevenue()
         if (this.entity === 'expense') await this.apiStore.fetchExpenses()
         this.responseMessage = 'Status do pagamento salvo com sucesso!'
 
         if (updatedPaidStatus.paid === 'Pago') {
-          if (this.pageStore.currentPage === 'revenue' && item.status === 'Ativo') {
-            this.createRevenueForNextMonth(item)
+          if (this.pageStore.currentPage === 'revenue' && this.selectedItem.status === 'Ativo') {
+            this.createRevenueForNextMonth(this.status)
           } else if (this.pageStore.currentPage === 'expenses') {
-            this.createExpenseForNextMonth(item)
+            this.createExpenseForNextMonth(this.status)
           }
         }
+        this.closeModal()
       } catch (error) {
         console.error('Erro ao atualizar o status de pagamento...', error)
         this.responseMessage = 'Erro ao salvar o status do pagamento.'

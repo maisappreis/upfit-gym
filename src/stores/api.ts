@@ -39,7 +39,7 @@ export const useApiStore = defineStore('api', () => {
 
   const fetchCustomers = async () => {
     try {
-      const response = await axios.get(`${apiURL.value}/customer/`) // TODO: está chamando isso 4x, corrigir.
+      const response = await axios.get(`${apiURL.value}/customer/`)
       customers.value = response.data
     } catch (error) {
       console.error('Erro ao requisitar a lista de clientes.', error)
@@ -48,7 +48,7 @@ export const useApiStore = defineStore('api', () => {
 
   const fetchRevenue = async () => {
     try {
-      const response = await axios.get(`${apiURL.value}/revenue/`) // TODO: está chamando isso 4x, corrigir.
+      const response = await axios.get(`${apiURL.value}/revenue/`)
       revenue.value = response.data
     } catch (error) {
       console.error('Erro ao requisitar a lista de receitas.', error)
@@ -57,7 +57,7 @@ export const useApiStore = defineStore('api', () => {
 
   const fetchExpenses = async () => {
     try {
-      const response = await axios.get(`${apiURL.value}/expense/`) // TODO: está chamando isso 4x, corrigir.
+      const response = await axios.get(`${apiURL.value}/expense/`)
       expenses.value = response.data
     } catch (error) {
       console.error('Erro ao requisitar a lista de despesas.', error)

@@ -175,5 +175,9 @@ ul {
   .icon {
     font-size: 20px;
   }
+
+  .selectedOption {
+    width: 100%;
+  }
 }
 </style>
