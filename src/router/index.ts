@@ -1,23 +1,23 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router';
 
 const router = createRouter({
-  history: createWebHistory('/upfit-gym'),
+  history: createWebHashHistory(),
   routes: [
     {
       path: '/',
       name: 'home',
-      component: () => import ('@/views/HomeView.vue')
+      component: () => import('@/views/HomeView.vue')
     },
     {
       path: '/login',
       name: 'login',
-      component: () => import ('@/views/LoginView.vue')
+      component: () => import('@/views/LoginView.vue')
     },
     {
       path: '/:pathMatch(.*)*',
       redirect: '/'
     }
   ]
-})
+});
 
-export default router
+export default router;
