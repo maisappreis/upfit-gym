@@ -2,7 +2,10 @@
   <div v-if="isLoaded" class="app-area">
     <component :is="layoutComponent" />
   </div>
-  <h2 class="loading" v-else>Carregando...</h2>
+  <h2 class="loading" v-else>
+    <font-awesome-icon icon="fa-solid fa-spinner" style="margin-right: 20px" />
+    Carregando...
+  </h2>
 </template>
 
 <script setup lang="ts">
@@ -23,6 +26,7 @@ const layoutComponent = computed(() => {
 onMounted(async () => {
   await apiStore.getCSRFToken()
   await apiStore.checkAuthentication()
+  await apiStore.getData()
 
   isLoaded.value = true
 })

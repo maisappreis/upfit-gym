@@ -1,6 +1,6 @@
 <template>
   <div class="chart-area">
-    <Line
+    <LineChart
       v-if="chartData.datasets.length > 0"
       :data="chartData"
       :options="chartOptions"
@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { Line } from 'vue-chartjs'
+import { Line as LineChart } from 'vue-chartjs'
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -22,13 +22,15 @@ import {
   Tooltip,
   Legend
 } from 'chart.js'
+import { mapStores } from 'pinia'
+import { useApiStore } from '@/stores/api'
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
 
 export default {
   name: 'ActiveCustomersChart',
 
-  components: { Line },
+  components: { LineChart },
 
   props: {
     customers: Array,
@@ -73,6 +75,7 @@ export default {
   },
 
   computed: {
+    ...mapStores(useApiStore),
     myStyles() {
       return {
         height: `100%`,
@@ -85,13 +88,13 @@ export default {
     calculateActiveCustomersPerMonth() {
       const activeCustomersPerMonth = []
 
-      this.revenue.forEach((revenueRecord) => {
+      this.apiStore.revenue.forEach((revenueRecord) => {
         if (revenueRecord.paid === 'Pago') {
           const year = revenueRecord.year
           const month = revenueRecord.month
           const customerId = revenueRecord.customer
 
-          const customer = this.customers.find((cust) => cust.id === customerId)
+          const customer = this.apiStore.customers.find((cust) => cust.id === customerId)
 
           if (customer && customer.status === 'Ativo') {
             const existingEntryIndex = activeCustomersPerMonth.findIndex(
@@ -112,13 +115,16 @@ export default {
       })
 
       return activeCustomersPerMonth
-    }
-  },
+    },
 
-  watch: {
-    customers() {
+    drawChart() {
       let activeCustomers = []
-      if (this.revenue && this.revenue.length > 0 && this.customers && this.customers.length > 0) {
+      if (
+        this.apiStore.revenue &&
+        this.apiStore.revenue.length > 0 &&
+        this.apiStore.customers &&
+        this.apiStore.customers.length > 0
+      ) {
         activeCustomers = this.calculateActiveCustomersPerMonth()
       }
 
@@ -141,6 +147,10 @@ export default {
         }
       }
     }
+  },
+
+  mounted() {
+    this.drawChart()
   }
 }
 </script>

@@ -151,7 +151,7 @@ export default {
         this.$emit('showMessage', 'Receita criada com sucesso!')
 
         this.$emit('closeModal')
-        this.$emit('updateTable')
+        await this.apiStore.fetchRevenue()
       } catch (error) {
         console.error('Erro ao criar receita.', error)
         this.$emit('showMessage', 'Erro ao criar receita.')
@@ -180,7 +180,7 @@ export default {
         this.$emit('showMessage', 'Receita atualizada com sucesso!')
 
         this.$emit('closeModal')
-        this.$emit('updateTable')
+        await this.apiStore.fetchRevenue()
 
         this.checkChangesInValue()
       } catch (error) {

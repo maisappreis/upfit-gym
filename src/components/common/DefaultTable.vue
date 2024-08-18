@@ -278,7 +278,8 @@ export default {
           },
           withCredentials: true
         })
-        this.$emit('updateData')
+        if (this.entity === 'revenue') await this.apiStore.fetchRevenue()
+        if (this.entity === 'expense') await this.apiStore.fetchExpenses()
         this.responseMessage = 'Status do pagamento salvo com sucesso!'
 
         if (updatedPaidStatus.paid === 'Pago') {
@@ -376,7 +377,7 @@ export default {
           },
           withCredentials: true
         })
-        this.$emit('updateData')
+        await this.apiStore.fetchRevenue()
       } catch (error) {
         console.error('Erro ao criar receita.', error)
       }
@@ -405,7 +406,7 @@ export default {
           },
           withCredentials: true
         })
-        this.$emit('updateData')
+        await this.apiStore.fetchExpenses()
       } catch (error) {
         console.error('Erro ao criar despesa.', error)
       }

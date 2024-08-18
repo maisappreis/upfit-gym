@@ -40,7 +40,6 @@
         :item="item"
         :action="action"
         :modalTitle="modalTitle"
-        @updateTable="$emit('updateData')"
         @closeModal="closeModal"
         @showMessage="showMessage"
       />
@@ -72,10 +71,10 @@ export default {
     StatusFilter
   },
 
-  props: {
-    customers: Array,
-    revenue: Array
-  },
+  // props: {
+  //   customers: Array,
+  //   revenue: Array
+  // },
 
   data() {
     return {
@@ -104,11 +103,11 @@ export default {
   computed: {
     ...mapStores(useApiStore),
     filteredCustomers() {
-      if (this.customers && this.customers.length > 0) {
+      if (this.apiStore.customers && this.apiStore.customers.length > 0) {
         if (this.currentStatus === 'Todos') {
-          return this.customers
+          return this.apiStore.customers
         } else {
-          return this.customers.filter((e) => e.status === this.currentStatus)
+          return this.apiStore.customers.filter((e) => e.status === this.currentStatus)
         }
       } else {
         return []
@@ -161,7 +160,7 @@ export default {
       }
 
       this.showModal = false
-      this.$emit('updateData')
+      await this.apiStore.fetchCustomers()
     },
 
     async inactiveCustomer() {
@@ -183,14 +182,14 @@ export default {
       }
 
       this.showModal = false
-      this.$emit('updateData')
+      await this.apiStore.fetchCustomers()
     },
 
     showDeleteModal(item) {
       this.item = item
       this.showModal = true
       this.action = 'delete'
-      let revenueHistory = this.revenue.filter((e) => e.customer === this.item.id)
+      let revenueHistory = this.apiStore.revenue.filter((e) => e.customer === this.item.id)
 
       this.customerName = item.name
 

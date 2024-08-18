@@ -112,7 +112,7 @@ export default {
         this.$emit('showMessage', 'Despesa criada com sucesso!')
 
         this.$emit('closeModal')
-        this.$emit('updateTable')
+        await this.apiStore.fetchExpenses()
       } catch (error) {
         console.error('Erro ao criar despesa.', error)
         this.$emit('showMessage', 'Erro ao criar despesa.')
@@ -143,7 +143,7 @@ export default {
         this.$emit('showMessage', 'Despesa atualizada com sucesso!')
 
         this.$emit('closeModal')
-        this.$emit('updateTable')
+        await this.apiStore.fetchExpenses()
       } catch (error) {
         console.error('Erro ao atualizar despesa.', error)
         this.$emit('showMessage', 'Erro ao atualizar despesa.')

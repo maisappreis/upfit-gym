@@ -20,7 +20,6 @@
       :data="filteredExpenses"
       :searchedField="searchedField"
       :requestMessage="requestMessage"
-      @updateData="$emit('updateData')"
       @updateItem="updateExpense"
       @deleteItem="showDeleteModal"
     />
@@ -41,7 +40,6 @@
         :item="item"
         :action="action"
         :modalTitle="modalTitle"
-        @updateTable="$emit('updateData')"
         @closeModal="closeModal"
         @showMessage="showMessage"
       />
@@ -109,7 +107,7 @@ export default {
     ...mapStores(useApiStore),
     filteredExpenses() {
       return this.$computed.filteredData(
-        this.expenses,
+        this.apiStore.expenses,
         this.currentMonth,
         this.currentYear,
         this.currentStatus
@@ -166,7 +164,7 @@ export default {
       }
 
       this.showModal = false
-      this.$emit('updateData')
+      await this.apiStore.fetchExpenses()
     },
 
     showDeleteModal(item) {

@@ -160,7 +160,7 @@ export default {
         this.$emit('showMessage', 'Cliente criado com sucesso!')
 
         this.$emit('closeModal')
-        this.$emit('updateTable')
+        await this.apiStore.fetchCustomers()
 
         if (this.status === 'Ativo') {
           setTimeout(() => {
@@ -197,7 +197,8 @@ export default {
         this.$emit('showMessage', 'Cliente atualizado com sucesso!')
 
         this.$emit('closeModal')
-        this.$emit('updateTable')
+        await this.apiStore.fetchCustomers()
+        await this.apiStore.fetchRevenue()
       } catch (error) {
         console.error('Erro ao atualizar cliente.', error)
         this.$emit('showMessage', 'Erro ao atualizar cliente.')
@@ -225,6 +226,7 @@ export default {
           },
           withCredentials: true
         })
+        await this.apiStore.fetchRevenue()
       } catch (error) {
         console.error('Erro ao criar receita.', error)
       }

@@ -5,7 +5,7 @@
       :monthlyExpenses="monthlyExpensesOrdered"
     />
     <div style="display: flex; justify-content: space-between">
-      <ActiveCustomersChart :customers="customers" :revenue="revenue" />
+      <ActiveCustomersChart />
       <ProfitChart :monthlyProfit="monthlyProfit" />
     </div>
   </div>
@@ -15,6 +15,8 @@
 import RevenueExpensesChart from '../charts/RevenueExpensesChart.vue'
 import ActiveCustomersChart from '../charts/ActiveCustomersChart.vue'
 import ProfitChart from '../charts/ProfitChart.vue'
+import { mapState } from 'pinia'
+import { useApiStore } from '@/stores/api'
 
 export default {
   name: 'MetricsPage',
@@ -25,18 +27,16 @@ export default {
     ProfitChart
   },
 
-  props: {
-    customers: Array,
-    revenue: Array,
-    expenses: Array
-  },
-
   data() {
     return {
       monthlyRevenueOrdered: [],
       monthlyExpensesOrdered: [],
       monthlyProfit: []
     }
+  },
+
+  computed: {
+    ...mapState(useApiStore, ['revenue', 'expenses'])
   },
 
   methods: {
@@ -79,25 +79,19 @@ export default {
     }
   },
 
-  watch: {
-    revenue() {
-      if (this.revenue && this.revenue.length > 0) {
-        let paidRevenue = this.revenue.filter((e) => e.paid === 'Pago')
-        let paidExpenses = this.expenses.filter((e) => e.paid === 'Pago')
-
-        let monthlyRevenue = this.sumMonthlyAmounts(paidRevenue)
-        let monthlyExpenses = this.sumMonthlyAmounts(paidExpenses)
-
-        this.monthlyRevenueOrdered = this.$methods.sortData(monthlyRevenue)
-        this.monthlyExpensesOrdered = this.$methods.sortData(monthlyExpenses)
-
-        this.calculateProfit()
-      }
-    }
-  },
-
   mounted() {
-    this.$emit('updateData')
+    if (this.revenue && this.revenue.length > 0) {
+      let paidRevenue = this.revenue.filter((e) => e.paid === 'Pago')
+      let paidExpenses = this.expenses.filter((e) => e.paid === 'Pago')
+
+      let monthlyRevenue = this.sumMonthlyAmounts(paidRevenue)
+      let monthlyExpenses = this.sumMonthlyAmounts(paidExpenses)
+
+      this.monthlyRevenueOrdered = this.$methods.sortData(monthlyRevenue)
+      this.monthlyExpensesOrdered = this.$methods.sortData(monthlyExpenses)
+
+      this.calculateProfit()
+    }
   }
 }
 </script>

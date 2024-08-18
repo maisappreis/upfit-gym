@@ -20,7 +20,6 @@
       :data="filteredRevenue"
       :searchedField="searchedField"
       :requestMessage="requestMessage"
-      @updateData="$emit('updateData')"
       @updateItem="updateRevenue"
       @deleteItem="showDeleteModal"
     />
@@ -49,10 +48,9 @@
       <RevenueForm
         v-else
         :item="item"
-        :customers="customers"
+        :customers="apiStore.customers"
         :action="action"
         :modalTitle="modalTitle"
-        @updateTable="$emit('updateData')"
         @closeModal="closeModal"
         @showMessage="showMessage"
         @getConfirmation="getConfirmation"
@@ -70,7 +68,7 @@ import DefaultModal from '../common/DefaultModal.vue'
 import MonthFilter from '../common/MonthFilter.vue'
 import RevenueForm from '../forms/RevenueForm.vue'
 import { globalVariablesMixin } from '@/utils/variables.js'
-import { mapStores } from 'pinia'
+import { mapStores, mapState } from 'pinia'
 import { useApiStore } from '@/stores/api'
 import axios from 'axios'
 
@@ -87,10 +85,10 @@ export default {
     MonthFilter
   },
 
-  props: {
-    revenue: Array,
-    customers: Array
-  },
+  // props: {
+  //   revenue: Array,
+  //   customers: Array
+  // },
 
   data() {
     return {
@@ -124,9 +122,10 @@ export default {
 
   computed: {
     ...mapStores(useApiStore),
+    ...mapState(useApiStore, ['revenue']),
     filteredRevenue() {
       return this.$computed.filteredData(
-        this.revenue,
+        this.apiStore.revenue,
         this.currentMonth,
         this.currentYear,
         this.currentStatus
@@ -183,7 +182,7 @@ export default {
       }
 
       this.showModal = false
-      this.$emit('updateData')
+      await this.apiStore.fetchRevenue()
     },
 
     showDeleteModal(item) {
@@ -215,13 +214,13 @@ export default {
       this.showConfirmation = true
     },
 
-    getModalAction() {
+    async getModalAction() {
       if (this.showConfirmation) {
         this.updateCustomerValue()
         this.updateFutureRevenue()
 
         this.closeModal()
-        this.$emit('updateData')
+        await this.apiStore.getData()
       } else {
         this.deleteRevenue()
       }
@@ -232,7 +231,7 @@ export default {
         this.confirmationData.month,
         this.confirmationData.year
       )
-      let nextRevenues = this.revenue.filter(
+      let nextRevenues = this.apiStore.revenue.filter(
         (e) => e.month === nextMonth.month && e.year === nextMonth.year
       )
 
@@ -283,8 +282,10 @@ export default {
     },
 
     incrementData() {
-      this.customers.forEach((customer) => {
-        const matchingRevenues = this.revenue.filter((revenue) => revenue.customer === customer.id)
+      this.apiStore.customers.forEach((customer) => {
+        const matchingRevenues = this.apiStore.revenue.filter(
+          (revenue) => revenue.customer === customer.id
+        )
 
         matchingRevenues.forEach((matchingRevenue) => {
           matchingRevenue.name = customer.name
@@ -307,10 +308,9 @@ export default {
   },
 
   mounted() {
-    if (this.customers && this.customers.length > 0) {
+    if (this.apiStore.customers && this.apiStore.customers.length > 0) {
       this.incrementData()
     }
-    this.$emit('updateData')
   }
 }
 </script>

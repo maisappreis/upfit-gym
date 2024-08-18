@@ -1,6 +1,6 @@
 <template>
   <div class="chart-area">
-    <Line
+    <LineChart
       v-if="chartData.datasets.length > 0"
       :data="chartData"
       :options="chartOptions"
@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { Line } from 'vue-chartjs'
+import { Line as LineChart } from 'vue-chartjs'
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -28,7 +28,7 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, T
 export default {
   name: 'RevenueExpensesChart',
 
-  components: { Line },
+  components: { LineChart },
 
   props: {
     monthlyRevenue: Array,

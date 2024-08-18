@@ -1,58 +1,89 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import axios from 'axios'
 
 export const useApiStore = defineStore('api', () => {
   const isAuthenticated = ref(false)
   const apiURL = ref('')
   const currentPath = ref('')
+  const tokenCSRF = ref('')
+
+  const customers = ref([])
+  const revenue = ref([])
+  const expenses = ref([])
 
   const getPath = (path: string) => {
     currentPath.value = path
   }
 
-  const checkAuthentication = () => {
-    const token = localStorage.getItem('authToken')
- 
-    if (currentPath.value === '/login' && token == null) {
-      // apiURL.value = `${import.meta.env.VITE_API_URL}`
-      apiURL.value = `https://django-apis-two.vercel.app/api`
+  const checkAuthentication = async () => {
+    axios.defaults.withCredentials = true
+
+    if (currentPath.value === '/login' && tokenCSRF.value == null) {
+      apiURL.value = `${import.meta.env.VITE_API_URL}`
     } else {
-      if (token) {
+      if (tokenCSRF.value) {
         isAuthenticated.value = true
-        // apiURL.value = `${import.meta.env.VITE_API_URL}`
-        apiURL.value = `https://django-apis-two.vercel.app/api`
+        apiURL.value = `${import.meta.env.VITE_API_URL}`
       } else {
         isAuthenticated.value = false
-        // apiURL.value = `${import.meta.env.VITE_API_URL}/test`
-        apiURL.value = `https://django-apis-two.vercel.app/api/test`
+        apiURL.value = `${import.meta.env.VITE_API_URL}/test`
       }
     }
   }
 
-  const getCSRFToken = () => {
-    console.log('document.cookie', document.cookie)
-    const csrfCookie = document.cookie
-      .split('; ')
-      .find(row => row.startsWith('csrftoken'));
-    console.log('csrfCookie', csrfCookie)
-    return csrfCookie ? csrfCookie.split('=')[1] : null;
-  };
+  const getCSRFToken = async () => {
+    const response = await axios.get(`https://django-apis-two.vercel.app/api/accounts/get-csrf-token/`, { withCredentials: true });
+    tokenCSRF.value = response.data.csrfToken !== undefined ? response.data.csrfToken : null;
+  }
 
-  // const getCSRFToken = () => {
-  //   console.log('document', document)
-  //   const csrfCookie = document.cookie
-  //     .split('; ')
-  //     .find(row => row.startsWith('csrftoken='));
-  //   return csrfCookie ? csrfCookie.split('=')[1] : null;
-  // };
+  const fetchCustomers = async () => {
+    try {
+      const response = await axios.get(`${apiURL.value}/customer/`) // TODO: está chamando isso 4x, corrigir.
+      customers.value = response.data
+    } catch (error) {
+      console.error('Erro ao requisitar a lista de clientes.', error)
+    }
+  }
 
-  checkAuthentication()
+  const fetchRevenue = async () => {
+    try {
+      const response = await axios.get(`${apiURL.value}/revenue/`) // TODO: está chamando isso 4x, corrigir.
+      revenue.value = response.data
+    } catch (error) {
+      console.error('Erro ao requisitar a lista de receitas.', error)
+    }
+  }
 
+  const fetchExpenses = async () => {
+    try {
+      const response = await axios.get(`${apiURL.value}/expense/`) // TODO: está chamando isso 4x, corrigir.
+      expenses.value = response.data
+    } catch (error) {
+      console.error('Erro ao requisitar a lista de despesas.', error)
+    }
+  }
+
+  const getData = async () => {
+    await fetchCustomers()
+    await fetchRevenue()
+    await fetchExpenses()
+  }
+
+  
   return {
     isAuthenticated,
     apiURL,
     checkAuthentication,
     getPath,
-    getCSRFToken
+    getCSRFToken,
+    tokenCSRF,
+    getData,
+    fetchCustomers,
+    fetchRevenue,
+    fetchExpenses,
+    customers,
+    revenue,
+    expenses
   }
 })
