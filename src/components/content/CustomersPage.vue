@@ -148,7 +148,7 @@ export default {
       try {
         await axios.delete(`${this.apiStore.apiURL}/customer/${this.item.id}/`, {
           headers: {
-            'X-CSRFToken': this.apiStore.getCSRFToken(),
+            'X-CSRFToken': this.apiStore.tokenCSRF,
             'content-type': 'application/x-www-form-urlencoded'
           },
           withCredentials: true
@@ -170,7 +170,7 @@ export default {
 
         await axios.patch(`${this.apiStore.apiURL}/customer/${this.item.id}/`, data, {
           headers: {
-            'X-CSRFToken': this.apiStore.getCSRFToken(),
+            'X-CSRFToken': this.apiStore.tokenCSRF,
             'content-type': 'application/x-www-form-urlencoded'
           },
           withCredentials: true

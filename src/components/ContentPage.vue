@@ -62,7 +62,7 @@ export default {
   methods: {
     async getCustomers() {
       try {
-        let response = await axios.get(`${this.apiStore.apiURL}/customer/`)
+        let response = await axios.get(`${this.apiStore.apiURL}/customer/`) // TODO: está chamando isso 4x, corrigir.
         this.customers = response.data
       } catch (error) {
         console.error('Erro ao requisitar a lista de clientes.', error)

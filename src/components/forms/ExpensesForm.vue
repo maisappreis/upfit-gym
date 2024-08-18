@@ -104,7 +104,7 @@ export default {
 
         await axios.post(`${this.apiStore.apiURL}/expense/create/`, newExpense, {
           headers: {
-            'X-CSRFToken': this.apiStore.getCSRFToken(),
+            'X-CSRFToken': this.apiStore.tokenCSRF,
             'content-type': 'application/x-www-form-urlencoded'
           },
           withCredentials: true
@@ -135,7 +135,7 @@ export default {
 
         await axios.patch(`${this.apiStore.apiURL}/expense/${this.item.id}/`, updatedExpense, {
           headers: {
-            'X-CSRFToken': this.apiStore.getCSRFToken(),
+            'X-CSRFToken': this.apiStore.tokenCSRF,
             'content-type': 'application/x-www-form-urlencoded'
           },
           withCredentials: true

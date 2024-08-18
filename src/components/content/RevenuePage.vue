@@ -170,7 +170,7 @@ export default {
       try {
         await axios.delete(`${this.apiStore.apiURL}/revenue/${this.item.id}/`, {
           headers: {
-            'X-CSRFToken': this.apiStore.getCSRFToken(),
+            'X-CSRFToken': this.apiStore.tokenCSRF,
             'content-type': 'application/x-www-form-urlencoded'
           },
           withCredentials: true
@@ -252,7 +252,7 @@ export default {
           updatedCustomer,
           {
             headers: {
-              'X-CSRFToken': this.apiStore.getCSRFToken(),
+              'X-CSRFToken': this.apiStore.tokenCSRF,
               'content-type': 'application/x-www-form-urlencoded'
             },
             withCredentials: true
@@ -272,7 +272,7 @@ export default {
         }
         await axios.patch(`${this.apiStore.apiURL}/revenue/${id}/`, updatedRevenue, {
           headers: {
-            'X-CSRFToken': this.apiStore.getCSRFToken(),
+            'X-CSRFToken': this.apiStore.tokenCSRF,
             'content-type': 'application/x-www-form-urlencoded'
           },
           withCredentials: true

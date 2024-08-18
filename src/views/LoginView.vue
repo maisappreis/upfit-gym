@@ -47,12 +47,10 @@ const disable = computed(() => {
 })
 
 const fetchCsrfToken = async () => {
-  const response = await axios.get(`${apiStore.apiURL}/accounts/csrf/`, {
+  const response = await axios.get(`${apiStore.apiURL}/accounts/set-csrf-token/`, {
     withCredentials: true
   })
-  console.log('response', response)
   const csrfToken = response.data.csrfToken || document.cookie.match(/csrftoken=([^;]+)/)[1]
-  console.log('csrfToken ANTES Login', csrfToken)
   return csrfToken
 }
 
@@ -62,7 +60,6 @@ const loginUser = async () => {
       username: username.value,
       password: password.value
     }
-    console.log('csrfToken PARA O Login', csrfToken.value)
     const response = await axios.post(`${apiStore.apiURL}/accounts/login/`, login, {
       headers: {
         'X-CSRFToken': csrfToken.value,
@@ -90,13 +87,20 @@ const loginUser = async () => {
 }
 
 onMounted(async () => {
-  const route = useRoute()
-
-  apiStore.getPath(route.path)
-
-  if (route.path == '/login') {
-    apiStore.checkAuthentication()
-    csrfToken.value = await fetchCsrfToken()
+  // Check if the user is already logged in.
+  apiStore.getCSRFToken()
+  if (apiStore.tokenCSRF) {
+    responseMessage.value = 'Você já está logado! Redirecionando...'
+    setTimeout(() => {
+      router.push('/')
+    }, 2000)
+  } else {
+    const route = useRoute()
+    apiStore.getPath(route.path)
+    if (route.path == '/login') {
+      apiStore.checkAuthentication()
+      csrfToken.value = await fetchCsrfToken()
+    }
   }
 })
 </script>

@@ -1,23 +1,30 @@
 <template>
-  <div class="app-area">
+  <div v-if="isLoaded" class="app-area">
     <component :is="layoutComponent" />
   </div>
+  <h2 class="loading" v-else>Carregando...</h2>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
+import { useApiStore } from '@/stores/api'
 import HomeView from './views/HomeView.vue'
 import LoginView from './views/LoginView.vue'
 
+const isLoaded = ref(false)
 const route = useRoute()
+const apiStore = useApiStore()
 
 const layoutComponent = computed(() => {
-  if (route.path === '/login') {
-    return LoginView
-  } else {
-    return HomeView
-  }
+  return route.path === '/login' ? LoginView : HomeView
+})
+
+onMounted(async () => {
+  await apiStore.getCSRFToken()
+  await apiStore.checkAuthentication()
+
+  isLoaded.value = true
 })
 </script>
 
@@ -42,5 +49,9 @@ body {
 .app-area {
   display: flex;
   flex-direction: column;
+}
+
+.loading {
+  padding: 30px 15px;
 }
 </style>

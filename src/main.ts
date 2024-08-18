@@ -4,7 +4,6 @@ import App from './App.vue';
 import router from './router/index';
 import './assets/variables.css';
 import './assets/global.css';
-import axios from 'axios';
 
 import { library } from './icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -15,8 +14,6 @@ import { globalComputed } from './utils/computed.js';
 
 const app = createApp(App);
 const pinia = createPinia();
-
-axios.defaults.withCredentials = true
 
 app.mixin(globalVariablesMixin);
 app.component('font-awesome-icon', FontAwesomeIcon)

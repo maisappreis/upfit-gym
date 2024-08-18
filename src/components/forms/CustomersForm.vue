@@ -151,7 +151,7 @@ export default {
 
         let response = await axios.post(`${this.apiStore.apiURL}/customer/create/`, newCustomer, {
           headers: {
-            'X-CSRFToken': this.apiStore.getCSRFToken(),
+            'X-CSRFToken': this.apiStore.tokenCSRF,
             'content-type': 'application/x-www-form-urlencoded'
           },
           withCredentials: true
@@ -189,7 +189,7 @@ export default {
 
         await axios.put(`${this.apiStore.apiURL}/customer/${this.item.id}/`, updatedCustomer, {
           headers: {
-            'X-CSRFToken': this.apiStore.getCSRFToken(),
+            'X-CSRFToken': this.apiStore.tokenCSRF,
             'content-type': 'application/x-www-form-urlencoded'
           },
           withCredentials: true
@@ -220,7 +220,7 @@ export default {
 
         await axios.post(`${this.apiStore.apiURL}/revenue/create/`, newRevenue, {
           headers: {
-            'X-CSRFToken': this.apiStore.getCSRFToken(),
+            'X-CSRFToken': this.apiStore.tokenCSRF,
             'content-type': 'application/x-www-form-urlencoded'
           },
           withCredentials: true
