@@ -33,7 +33,7 @@ export const useApiStore = defineStore('api', () => {
   }
 
   const getCSRFToken = async () => {
-    const response = await axios.get(`https://django-apis-two.vercel.app/api/accounts/get-csrf-token/`, { withCredentials: true });
+    const response = await axios.get(`${import.meta.env.VITE_API_URL}/accounts/get-csrf-token/`, { withCredentials: true });
     tokenCSRF.value = response.data.csrfToken !== undefined ? response.data.csrfToken : null;
   }
 

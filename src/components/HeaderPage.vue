@@ -7,7 +7,11 @@
       </div>
       <p class="subtitle">{{ subtitle }}</p>
     </div>
-    <RouterLink to="/login">
+    <div v-if="apiStore.isAuthenticated" id="login">
+      <span>Olá, <strong>Renan</strong></span>
+      <font-awesome-icon icon="fa-solid fa-circle-user" style="margin-left: 10px; zoom: 1.3" />
+    </div>
+    <RouterLink v-else to="/login">
       <font-awesome-icon icon="fa-solid fa-right-to-bracket" id="login-icon" />
     </RouterLink>
   </div>
@@ -16,8 +20,9 @@
 
 <script>
 import { RouterLink, RouterView } from 'vue-router'
-import { mapState } from 'pinia'
+import { mapStores, mapState } from 'pinia'
 import { usePageStore } from '@/stores/page'
+import { useApiStore } from '@/stores/api'
 
 export default {
   name: 'HeaderPage',
@@ -33,6 +38,7 @@ export default {
     }
   },
   computed: {
+    ...mapStores(useApiStore),
     ...mapState(usePageStore, ['currentPage'])
   },
   watch: {
@@ -105,6 +111,12 @@ export default {
   padding-bottom: 5px;
 }
 
+#login {
+  margin: 25px 20px 0 0;
+  font-size: 20px;
+  color: black;
+}
+
 #login-icon {
   margin: 20px 20px 0 0;
   zoom: 1.5;
@@ -139,6 +151,12 @@ export default {
   .icon {
     margin: 10px 5px 0 10px;
     font-size: 20px;
+  }
+
+  #login {
+    margin: 6px 20px 0 0;
+    font-size: 18px;
+    color: black;
   }
 
   #login-icon {
