@@ -27,7 +27,7 @@ export default {
 
   computed: {
     showSuccessAlert() {
-      return this.responseMessage.includes('sucesso')
+      return !this.responseMessage.trim().toLowerCase().includes('erro')
     }
   },
 

@@ -27,9 +27,9 @@ export default {
   },
   data() {
     return {
-      icon: '',
-      title: '',
-      subtitle: ''
+      icon: 'fa-solid fa-chart-line',
+      title: 'Métricas',
+      subtitle: 'Visualização gráfica de receita, despesas, lucro e clientes'
     }
   },
   computed: {
