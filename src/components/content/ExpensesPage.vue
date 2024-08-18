@@ -151,8 +151,13 @@ export default {
 
     async deleteExpense() {
       try {
+        console.log('document.cookie >>>>>>>>>>>>>>', document.cookie)
+        // const csrfToken = this.apiStore.getCSRFToken()
+        console.log('getCSRFToken', this.apiStore.getCSRFToken())
         await axios.delete(`${this.apiStore.apiURL}/expense/${this.item.id}/`, {
           headers: {
+            // 'X-CSRFToken': 'QNNBHxvTv4svgZlFIr08ZgRfZUsKmuEI',
+            // 'X-CSRFToken': 'LgTrw6wb8tgnpLSWW4mbjNu4CgHk4W3O', // antes login
             'X-CSRFToken': this.apiStore.getCSRFToken(),
             'content-type': 'application/x-www-form-urlencoded'
           },

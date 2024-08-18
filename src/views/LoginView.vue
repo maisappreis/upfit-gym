@@ -50,7 +50,9 @@ const fetchCsrfToken = async () => {
   const response = await axios.get(`${apiStore.apiURL}/accounts/csrf/`, {
     withCredentials: true
   })
+  console.log('response', response)
   const csrfToken = response.data.csrfToken || document.cookie.match(/csrftoken=([^;]+)/)[1]
+  console.log('csrfToken ANTES Login', csrfToken)
   return csrfToken
 }
 
@@ -60,7 +62,7 @@ const loginUser = async () => {
       username: username.value,
       password: password.value
     }
-
+    console.log('csrfToken PARA O Login', csrfToken.value)
     const response = await axios.post(`${apiStore.apiURL}/accounts/login/`, login, {
       headers: {
         'X-CSRFToken': csrfToken.value,
