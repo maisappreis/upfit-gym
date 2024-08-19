@@ -28,7 +28,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { useApiStore } from '@/stores/api'
 import axios from 'axios'
 import DefaultButton from '../components/common/DefaultButton.vue'
@@ -40,7 +40,6 @@ const password = ref('')
 const csrfToken = ref('')
 const responseMessage = ref('')
 
-const route = useRoute()
 const router = useRouter()
 const apiStore = useApiStore()
 
@@ -54,8 +53,6 @@ const fetchCsrfToken = async () => {
       withCredentials: true
     })
     const csrfToken = response.data.csrfToken || document.cookie.match(/csrftoken=([^;]+)/)[1]
-    // responseMessage.value = 'Token para o login requisitado com sucesso!'
-    responseMessage.value = `Set token: ${csrfToken} | Get token: ${apiStore.tokenCSRF}`
     return csrfToken
   } catch (error) {
     console.error(error)
@@ -68,6 +65,7 @@ const loginUser = async () => {
     const loginData = new URLSearchParams()
     loginData.append('username', username.value)
     loginData.append('password', password.value)
+
     const response = await axios.post(`${apiStore.apiBase}/accounts/login/`, loginData, {
       headers: {
         'X-CSRFToken': csrfToken.value,
@@ -92,31 +90,19 @@ const loginUser = async () => {
     }
   } catch (error) {
     console.error(error)
-    const tokenLogin = localStorage.getItem('authTokenLogin')
-    // responseMessage.value = 'Erro ao fazer login.'
-    responseMessage.value = `Set token: ${csrfToken.value} | Get token: ${apiStore.tokenCSRF} | authTokenLogin: ${tokenLogin}`
+    responseMessage.value = 'Erro ao fazer login.'
   }
 }
 
 onMounted(async () => {
-  csrfToken.value = await fetchCsrfToken()
-  // Check if the user is already logged in.
-  // await apiStore.getCSRFToken()
-  const tokenLogin = localStorage.getItem('authTokenLogin')
-  console.log(
-    `Set token: ${csrfToken.value} | Get token: ${apiStore.tokenCSRF} | authTokenLogin: ${tokenLogin}`
-  )
-  // if (apiStore.tokenCSRF && tokenLogin) {
-  //   responseMessage.value = 'Você já está logado! Redirecionando...'
-  //   setTimeout(() => {
-  //     router.push('/')
-  //   }, 2000)
-  // } else {
-  //   if (route.path == '/login') {
-  //     apiStore.checkAuthentication()
-  //     csrfToken.value = await fetchCsrfToken()
-  //   }
-  // }
+  if (apiStore.isAuthenticated) {
+    responseMessage.value = 'Você já está logado! Redirecionando...'
+    setTimeout(() => {
+      router.push('/')
+    }, 2000)
+  } else {
+    csrfToken.value = await fetchCsrfToken()
+  }
 })
 </script>
 

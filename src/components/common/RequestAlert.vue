@@ -38,7 +38,7 @@ export default {
   },
 
   mounted() {
-    setTimeout(this.closeMessage, 30000)
+    setTimeout(this.closeMessage, 1000)
   }
 }
 </script>
@@ -47,12 +47,10 @@ export default {
 .alert-area {
   position: absolute;
   top: 15px;
-  right: 75px;
-  min-height: 90px;
-  height: fit-content;
-  min-width: 500px;
-  max-width: 80vw;
+  right: 65px;
+  height: 90px;
   z-index: 99;
+  width: 500px;
   border-radius: 8px;
 
   display: flex;
@@ -85,7 +83,6 @@ export default {
 
 .message {
   width: 97%;
-  height: 100%;
   font-size: 18px;
 }
 
