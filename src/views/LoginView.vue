@@ -65,11 +65,10 @@ const fetchCsrfToken = async () => {
 
 const loginUser = async () => {
   try {
-    let login = {
-      username: username.value,
-      password: password.value
-    }
-    const response = await axios.post(`${apiStore.apiBase}/accounts/login/`, login, {
+    const loginData = new URLSearchParams()
+    loginData.append('username', username.value)
+    loginData.append('password', password.value)
+    const response = await axios.post(`${apiStore.apiBase}/accounts/login/`, loginData, {
       headers: {
         'X-CSRFToken': csrfToken.value,
         'content-type': 'application/x-www-form-urlencoded'
