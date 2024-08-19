@@ -14,11 +14,18 @@
     <RouterLink v-else to="/login">
       <font-awesome-icon icon="fa-solid fa-right-to-bracket" id="login-icon" />
     </RouterLink>
-    <div v-if="openDropdown" class="dropdown" @click="logout">
+    <div v-if="openDropdown" class="dropdown" @click="logoutUser">
       <font-awesome-icon icon="fa-solid fa-right-to-bracket" style="margin-right: 10px" />
       Logout
     </div>
   </div>
+  <RequestAlert
+    v-if="responseMessage"
+    :responseMessage="responseMessage"
+    @closeMessage="responseMessage = ''"
+  >
+    {{ responseMessage }}
+  </RequestAlert>
   <RouterView />
 </template>
 
@@ -27,19 +34,23 @@ import { RouterLink, RouterView } from 'vue-router'
 import { mapStores, mapState } from 'pinia'
 import { usePageStore } from '@/stores/page'
 import { useApiStore } from '@/stores/api'
+import RequestAlert from './common/RequestAlert.vue'
+import axios from 'axios'
 
 export default {
   name: 'HeaderPage',
   components: {
     RouterLink,
-    RouterView
+    RouterView,
+    RequestAlert
   },
   data() {
     return {
       icon: 'fa-solid fa-chart-line',
       title: 'Métricas',
       subtitle: 'Visualização gráfica de receita, despesas, lucro e clientes',
-      openDropdown: false
+      openDropdown: false,
+      responseMessage: ''
     }
   },
   computed: {
@@ -52,9 +63,20 @@ export default {
       this.openDropdown = !this.openDropdown
     },
 
-    logout() {
-      localStorage.removeItem('authTokenLogin')
-      location.reload()
+    async logoutUser() {
+      try {
+        await axios.post(`${this.apiStore.apiBase}/accounts/logout/`, null, {
+          headers: {
+            'X-CSRFToken': this.apiStore.tokenCSRF,
+            'content-type': 'application/x-www-form-urlencoded'
+          },
+          withCredentials: true
+        })
+        this.apiStore.clearAuthData()
+      } catch (error) {
+        console.error(error)
+        this.responseMessage = 'Erro ao fazer logout.'
+      }
     }
   },
   watch: {

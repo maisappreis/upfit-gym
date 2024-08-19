@@ -30,6 +30,12 @@ export const useApiStore = defineStore('api', () => {
     tokenCSRF.value = response.data.csrfToken !== undefined ? response.data.csrfToken : null;
   }
 
+  const clearAuthData = () => {
+    localStorage.removeItem('authTokenLogin')
+    tokenCSRF.value = ''
+    location.reload()
+  }
+
   const fetchCustomers = async () => {
     try {
       const response = await axios.get(`${apiURL.value}/customer/`)
@@ -70,6 +76,7 @@ export const useApiStore = defineStore('api', () => {
     apiURL,
     checkAuthentication,
     getCSRFToken,
+    clearAuthData,
     tokenCSRF,
     fetchData,
     fetchCustomers,
