@@ -7,16 +7,22 @@ export const useApiStore = defineStore('api', () => {
   const apiBase = ref(`${import.meta.env.VITE_API_URL}`)
   const apiURL = ref('')
   const tokenCSRF = ref('')
+  const tokenAuthentication = ref('')
 
   const customers = ref([])
   const revenue = ref([])
   const expenses = ref([])
 
+  const setTokenAuthentication = () => {
+    const tokenAuth = localStorage.getItem('authTokenLogin');
+    tokenAuthentication.value = tokenAuth;
+  }
+
   const checkAuthentication = async () => {
     axios.defaults.withCredentials = true
-    const tokenLogin = localStorage.getItem('authTokenLogin');
+    setTokenAuthentication()
 
-    if (tokenCSRF.value && tokenLogin) {
+    if (tokenCSRF.value && tokenAuthentication.value) {
       isAuthenticated.value = true
       apiURL.value = apiBase.value
     } else {
@@ -72,6 +78,8 @@ export const useApiStore = defineStore('api', () => {
   
   return {
     isAuthenticated,
+    setTokenAuthentication,
+    tokenAuthentication,
     apiBase,
     apiURL,
     checkAuthentication,

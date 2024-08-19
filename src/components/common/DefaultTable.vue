@@ -294,6 +294,7 @@ export default {
           updatedPaidStatus,
           {
             headers: {
+              // Authorization: `Token ${this.apiStore.tokenAuthentication}`,
               'X-CSRFToken': this.apiStore.tokenCSRF,
               'content-type': 'application/x-www-form-urlencoded'
             },

@@ -37,7 +37,6 @@ import logoUpfit from '../assets/logo-upfit.png'
 
 const username = ref('')
 const password = ref('')
-const csrfToken = ref('')
 const responseMessage = ref('')
 
 const router = useRouter()
@@ -47,19 +46,6 @@ const disable = computed(() => {
   return username.value == '' || password.value == ''
 })
 
-const fetchCsrfToken = async () => {
-  try {
-    const response = await axios.get(`${apiStore.apiBase}/accounts/set-csrf-token/`, {
-      withCredentials: true
-    })
-    const csrfToken = response.data.csrfToken || document.cookie.match(/csrftoken=([^;]+)/)[1]
-    return csrfToken
-  } catch (error) {
-    console.error(error)
-    responseMessage.value = `Erro ao requisitar o token para o login.`
-  }
-}
-
 const loginUser = async () => {
   try {
     const loginData = new URLSearchParams()
@@ -68,7 +54,7 @@ const loginUser = async () => {
 
     const response = await axios.post(`${apiStore.apiBase}/accounts/login/`, loginData, {
       headers: {
-        'X-CSRFToken': csrfToken.value,
+        'X-CSRFToken': apiStore.tokenCSRF,
         'content-type': 'application/x-www-form-urlencoded'
       },
       withCredentials: true
@@ -78,14 +64,12 @@ const loginUser = async () => {
 
     if (tokenLogin) {
       localStorage.setItem('authTokenLogin', tokenLogin)
-
+      apiStore.checkAuthentication()
       responseMessage.value = 'Login realizado com sucesso!'
 
       setTimeout(() => {
         router.push('/')
       }, 800)
-      await apiStore.getCSRFToken()
-      apiStore.checkAuthentication()
       await apiStore.fetchData()
     }
   } catch (error) {
@@ -100,8 +84,6 @@ onMounted(async () => {
     setTimeout(() => {
       router.push('/')
     }, 2000)
-  } else {
-    csrfToken.value = await fetchCsrfToken()
   }
 })
 </script>
