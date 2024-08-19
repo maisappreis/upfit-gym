@@ -49,11 +49,18 @@ const disable = computed(() => {
 })
 
 const fetchCsrfToken = async () => {
-  const response = await axios.get(`${apiStore.apiBase}/accounts/set-csrf-token/`, {
-    withCredentials: true
-  })
-  const csrfToken = response.data.csrfToken || document.cookie.match(/csrftoken=([^;]+)/)[1]
-  return csrfToken
+  try {
+    const response = await axios.get(`${apiStore.apiBase}/accounts/set-csrf-token/`, {
+      withCredentials: true
+    })
+    const csrfToken = response.data.csrfToken || document.cookie.match(/csrftoken=([^;]+)/)[1]
+    responseMessage.value = 'Token para o login requisitado com sucesso!'
+    return csrfToken
+  } catch (error) {
+    console.error(error)
+    // responseMessage.value = `Erro ao requisitar o token para o login.`
+    responseMessage.value = `Erro ao requisitar o token para o login. ${error.response.data}`
+  }
 }
 
 const loginUser = async () => {
@@ -86,7 +93,8 @@ const loginUser = async () => {
     }
   } catch (error) {
     console.error(error)
-    responseMessage.value = 'Erro ao fazer login.'
+    // responseMessage.value = 'Erro ao fazer login.'
+    responseMessage.value = `Erro ao fazer login. ${error.response.data}`
   }
 }
 

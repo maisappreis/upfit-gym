@@ -38,7 +38,7 @@ export default {
   },
 
   mounted() {
-    setTimeout(this.closeMessage, 5000)
+    setTimeout(this.closeMessage, 30000)
   }
 }
 </script>
@@ -48,8 +48,10 @@ export default {
   position: absolute;
   top: 15px;
   right: 75px;
-  height: 90px;
-  width: 500px;
+  min-height: 90px;
+  height: fit-content;
+  min-width: 500px;
+  max-width: 80vw;
   z-index: 99;
   border-radius: 8px;
 
@@ -83,6 +85,7 @@ export default {
 
 .message {
   width: 97%;
+  height: 100%;
   font-size: 18px;
 }
 
