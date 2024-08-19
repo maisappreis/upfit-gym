@@ -54,12 +54,12 @@ const fetchCsrfToken = async () => {
       withCredentials: true
     })
     const csrfToken = response.data.csrfToken || document.cookie.match(/csrftoken=([^;]+)/)[1]
-    responseMessage.value = 'Token para o login requisitado com sucesso!'
+    // responseMessage.value = 'Token para o login requisitado com sucesso!'
+    responseMessage.value = `${csrfToken}`
     return csrfToken
   } catch (error) {
     console.error(error)
-    // responseMessage.value = `Erro ao requisitar o token para o login.`
-    responseMessage.value = `Erro ao requisitar o token para o login. ${error.response.data}`
+    responseMessage.value = `Erro ao requisitar o token para o login.`
   }
 }
 
@@ -94,7 +94,7 @@ const loginUser = async () => {
   } catch (error) {
     console.error(error)
     // responseMessage.value = 'Erro ao fazer login.'
-    responseMessage.value = `Erro ao fazer login. ${error.response.data}`
+    responseMessage.value = `Erro ao fazer login. ${csrfToken.value}`
   }
 }
 
