@@ -55,7 +55,7 @@ const fetchCsrfToken = async () => {
     })
     const csrfToken = response.data.csrfToken || document.cookie.match(/csrftoken=([^;]+)/)[1]
     // responseMessage.value = 'Token para o login requisitado com sucesso!'
-    responseMessage.value = `${csrfToken}`
+    responseMessage.value = `Set token: ${csrfToken} | Get token: ${apiStore.tokenCSRF}`
     return csrfToken
   } catch (error) {
     console.error(error)
@@ -92,27 +92,31 @@ const loginUser = async () => {
     }
   } catch (error) {
     console.error(error)
+    const tokenLogin = localStorage.getItem('authTokenLogin')
     // responseMessage.value = 'Erro ao fazer login.'
-    responseMessage.value = `Erro ao fazer login. ${csrfToken.value}`
+    responseMessage.value = `Set token: ${csrfToken.value} | Get token: ${apiStore.tokenCSRF} | authTokenLogin: ${tokenLogin}`
   }
 }
 
 onMounted(async () => {
+  csrfToken.value = await fetchCsrfToken()
   // Check if the user is already logged in.
-  await apiStore.getCSRFToken()
+  // await apiStore.getCSRFToken()
   const tokenLogin = localStorage.getItem('authTokenLogin')
-
-  if (apiStore.tokenCSRF && tokenLogin) {
-    responseMessage.value = 'Você já está logado! Redirecionando...'
-    setTimeout(() => {
-      router.push('/')
-    }, 2000)
-  } else {
-    if (route.path == '/login') {
-      apiStore.checkAuthentication()
-      csrfToken.value = await fetchCsrfToken()
-    }
-  }
+  console.log(
+    `Set token: ${csrfToken.value} | Get token: ${apiStore.tokenCSRF} | authTokenLogin: ${tokenLogin}`
+  )
+  // if (apiStore.tokenCSRF && tokenLogin) {
+  //   responseMessage.value = 'Você já está logado! Redirecionando...'
+  //   setTimeout(() => {
+  //     router.push('/')
+  //   }, 2000)
+  // } else {
+  //   if (route.path == '/login') {
+  //     apiStore.checkAuthentication()
+  //     csrfToken.value = await fetchCsrfToken()
+  //   }
+  // }
 })
 </script>
 
