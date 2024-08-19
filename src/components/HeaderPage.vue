@@ -7,13 +7,17 @@
       </div>
       <p class="subtitle">{{ subtitle }}</p>
     </div>
-    <div v-if="apiStore.isAuthenticated" id="login">
+    <div v-if="apiStore.isAuthenticated" id="login" @click="showDropdown">
       <span>Olá, <strong>Renan</strong></span>
       <font-awesome-icon icon="fa-solid fa-circle-user" style="margin-left: 10px; zoom: 1.3" />
     </div>
     <RouterLink v-else to="/login">
       <font-awesome-icon icon="fa-solid fa-right-to-bracket" id="login-icon" />
     </RouterLink>
+    <div v-if="openDropdown" class="dropdown" @click="logout">
+      <font-awesome-icon icon="fa-solid fa-right-to-bracket" style="margin-right: 10px" />
+      Logout
+    </div>
   </div>
   <RouterView />
 </template>
@@ -34,12 +38,24 @@ export default {
     return {
       icon: 'fa-solid fa-chart-line',
       title: 'Métricas',
-      subtitle: 'Visualização gráfica de receita, despesas, lucro e clientes'
+      subtitle: 'Visualização gráfica de receita, despesas, lucro e clientes',
+      openDropdown: false
     }
   },
   computed: {
     ...mapStores(useApiStore),
     ...mapState(usePageStore, ['currentPage'])
+  },
+
+  methods: {
+    showDropdown() {
+      this.openDropdown = !this.openDropdown
+    },
+
+    logout() {
+      localStorage.removeItem('authTokenLogin')
+      location.reload()
+    }
   },
   watch: {
     currentPage(newVal) {
@@ -115,12 +131,25 @@ export default {
   margin: 25px 20px 0 0;
   font-size: 20px;
   color: black;
+  cursor: pointer;
 }
 
 #login-icon {
   margin: 20px 20px 0 0;
   zoom: 1.5;
   color: black;
+  cursor: pointer;
+}
+
+.dropdown {
+  position: absolute;
+  top: 70px;
+  right: 10px;
+  z-index: 10;
+  background-color: rgb(235, 235, 235);
+  padding: 20px 40px;
+  box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
 }
 
 @media only screen and (max-width: 1300px) {
@@ -161,6 +190,13 @@ export default {
 
   #login-icon {
     margin: 5px 20px 0 0;
+  }
+
+  .dropdown {
+    position: absolute;
+    top: 40px;
+    right: 15px;
+    padding: 10px 20px;
   }
 }
 </style>

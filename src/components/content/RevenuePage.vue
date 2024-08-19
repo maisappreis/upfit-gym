@@ -220,7 +220,7 @@ export default {
         this.updateFutureRevenue()
 
         this.closeModal()
-        await this.apiStore.getData()
+        await this.apiStore.fetchData()
       } else {
         this.deleteRevenue()
       }

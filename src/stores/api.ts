@@ -4,38 +4,29 @@ import axios from 'axios'
 
 export const useApiStore = defineStore('api', () => {
   const isAuthenticated = ref(false)
+  const apiBase = ref(`${import.meta.env.VITE_API_URL}`)
   const apiURL = ref('')
-  const currentPath = ref('')
   const tokenCSRF = ref('')
 
   const customers = ref([])
   const revenue = ref([])
   const expenses = ref([])
 
-  const getPath = (path: string) => {
-    currentPath.value = path
-  }
-
   const checkAuthentication = async () => {
     axios.defaults.withCredentials = true
-    const apiBase = import.meta.env.VITE_API_URL
+    const tokenLogin = localStorage.getItem('authTokenLogin');
 
-    if (currentPath.value === '/login' && tokenCSRF.value == null) {
-      apiURL.value = apiBase
+    if (tokenCSRF.value && tokenLogin) {
+      isAuthenticated.value = true
+      apiURL.value = apiBase.value
     } else {
-      if (tokenCSRF.value) {
-        isAuthenticated.value = true
-        apiURL.value = apiBase
-      } else {
-        isAuthenticated.value = false
-        apiURL.value = `${apiBase}/test`
-      }
+      isAuthenticated.value = false
+      apiURL.value = `${apiBase.value}/test`
     }
   }
 
   const getCSRFToken = async () => {
-    const apiBase = import.meta.env.VITE_API_URL
-    const response = await axios.get(`${apiBase}/accounts/get-csrf-token/`, { withCredentials: true });
+    const response = await axios.get(`${apiBase.value}/accounts/get-csrf-token/`, { withCredentials: true });
     tokenCSRF.value = response.data.csrfToken !== undefined ? response.data.csrfToken : null;
   }
 
@@ -66,7 +57,7 @@ export const useApiStore = defineStore('api', () => {
     }
   }
 
-  const getData = async () => {
+  const fetchData = async () => {
     await fetchCustomers()
     await fetchRevenue()
     await fetchExpenses()
@@ -75,12 +66,12 @@ export const useApiStore = defineStore('api', () => {
   
   return {
     isAuthenticated,
+    apiBase,
     apiURL,
     checkAuthentication,
-    getPath,
     getCSRFToken,
     tokenCSRF,
-    getData,
+    fetchData,
     fetchCustomers,
     fetchRevenue,
     fetchExpenses,

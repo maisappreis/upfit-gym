@@ -26,7 +26,7 @@ const layoutComponent = computed(() => {
 onMounted(async () => {
   await apiStore.getCSRFToken()
   await apiStore.checkAuthentication()
-  await apiStore.getData()
+  await apiStore.fetchData()
 
   isLoaded.value = true
 })
