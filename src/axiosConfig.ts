@@ -3,13 +3,13 @@ axios.defaults.headers.common['Content-Type'] = 'application/json';
 
 axios.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('accessToken');
-    console.log('token no axios', token)
+    const apiBase = `${import.meta.env.VITE_API_URL}`
+    const token = localStorage.getItem('accessToken')
     if (token) {
-      axios.defaults.baseURL = `${import.meta.env.VITE_API_URL}`
+      axios.defaults.baseURL = `${apiBase}`
       config.headers.Authorization = `Bearer ${token}`;
     } else {
-      axios.defaults.baseURL = `${import.meta.env.VITE_API_URL}/test`
+      axios.defaults.baseURL = `${apiBase}/test`
     }
     return config;
   },
