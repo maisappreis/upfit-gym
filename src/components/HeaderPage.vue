@@ -7,14 +7,14 @@
       </div>
       <p class="subtitle">{{ subtitle }}</p>
     </div>
-    <div v-if="apiStore.isAuthenticated" id="login" @click="showDropdown">
+    <div v-if="authStore.isAuthenticated" id="login" @click="showDropdown">
       <span>Olá, <strong>Renan</strong></span>
       <font-awesome-icon icon="fa-solid fa-circle-user" style="margin-left: 10px; zoom: 1.3" />
     </div>
     <RouterLink v-else to="/login">
       <font-awesome-icon icon="fa-solid fa-right-to-bracket" id="login-icon" />
     </RouterLink>
-    <div v-if="openDropdown" class="dropdown" @click="logoutUser">
+    <div v-if="openDropdown" class="dropdown" @click="authStore.logout">
       <font-awesome-icon icon="fa-solid fa-right-to-bracket" style="margin-right: 10px" />
       Logout
     </div>
@@ -34,8 +34,8 @@ import { RouterLink, RouterView } from 'vue-router'
 import { mapStores, mapState } from 'pinia'
 import { usePageStore } from '@/stores/page'
 import { useApiStore } from '@/stores/api'
+import { useAuthStore } from '@/stores/auth'
 import RequestAlert from './common/RequestAlert.vue'
-import axios from 'axios'
 
 export default {
   name: 'HeaderPage',
@@ -54,29 +54,13 @@ export default {
     }
   },
   computed: {
-    ...mapStores(useApiStore),
+    ...mapStores(useApiStore, useAuthStore),
     ...mapState(usePageStore, ['currentPage'])
   },
 
   methods: {
     showDropdown() {
       this.openDropdown = !this.openDropdown
-    },
-
-    async logoutUser() {
-      try {
-        await axios.post(`${this.apiStore.apiBase}/accounts/logout/`, null, {
-          headers: {
-            'X-CSRFToken': this.apiStore.tokenCSRF,
-            'content-type': 'application/x-www-form-urlencoded'
-          },
-          withCredentials: true
-        })
-        this.apiStore.clearAuthData()
-      } catch (error) {
-        console.error(error)
-        this.responseMessage = 'Erro ao fazer logout.'
-      }
     }
   },
   watch: {

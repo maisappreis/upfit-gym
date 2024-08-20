@@ -12,20 +12,21 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useApiStore } from '@/stores/api'
+import { useAuthStore } from '@/stores/auth'
 import HomeView from './views/HomeView.vue'
 import LoginView from './views/LoginView.vue'
 
 const isLoaded = ref(false)
 const route = useRoute()
 const apiStore = useApiStore()
+const authStore = useAuthStore()
 
 const layoutComponent = computed(() => {
   return route.path === '/login' ? LoginView : HomeView
 })
 
 onMounted(async () => {
-  await apiStore.getCSRFToken()
-  apiStore.checkAuthentication()
+  authStore.checkAuthentication()
   await apiStore.fetchData()
 
   isLoaded.value = true

@@ -1,45 +1,17 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import axios from 'axios'
+import axios from '../axiosConfig';
 
 export const useApiStore = defineStore('api', () => {
-  const isAuthenticated = ref(false)
   const apiBase = ref(`${import.meta.env.VITE_API_URL}`)
   const apiURL = ref('')
-  const tokenCSRF = ref('')
-  const tokenAuthentication = ref('')
 
   const customers = ref([])
   const revenue = ref([])
   const expenses = ref([])
 
-  const setTokenAuthentication = () => {
-    const tokenAuth = localStorage.getItem('authTokenLogin');
-    tokenAuthentication.value = tokenAuth;
-  }
-
-  const checkAuthentication = async () => {
-    axios.defaults.withCredentials = true
-    setTokenAuthentication()
-
-    if (tokenCSRF.value && tokenAuthentication.value) {
-      isAuthenticated.value = true
-      apiURL.value = apiBase.value
-    } else {
-      isAuthenticated.value = false
-      apiURL.value = `${apiBase.value}/test`
-    }
-  }
-
-  const getCSRFToken = async () => {
-    const response = await axios.get(`${apiBase.value}/accounts/get-csrf-token/`, { withCredentials: true });
-    tokenCSRF.value = response.data.csrfToken !== undefined ? response.data.csrfToken : null;
-  }
-
-  const clearAuthData = () => {
-    localStorage.removeItem('authTokenLogin')
-    tokenCSRF.value = ''
-    location.reload()
+  const setApiURL = (url) => {
+    apiURL.value = url
   }
 
   const fetchCustomers = async () => {
@@ -77,15 +49,9 @@ export const useApiStore = defineStore('api', () => {
 
   
   return {
-    isAuthenticated,
-    setTokenAuthentication,
-    tokenAuthentication,
+    setApiURL,
     apiBase,
     apiURL,
-    checkAuthentication,
-    getCSRFToken,
-    clearAuthData,
-    tokenCSRF,
     fetchData,
     fetchCustomers,
     fetchRevenue,

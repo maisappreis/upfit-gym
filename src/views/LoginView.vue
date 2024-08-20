@@ -30,6 +30,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useApiStore } from '@/stores/api'
+import { useAuthStore } from '@/stores/auth'
 import axios from 'axios'
 import DefaultButton from '../components/common/DefaultButton.vue'
 import RequestAlert from '../components/common/RequestAlert.vue'
@@ -41,6 +42,7 @@ const responseMessage = ref('')
 
 const router = useRouter()
 const apiStore = useApiStore()
+const authStore = useAuthStore()
 
 const disable = computed(() => {
   return username.value == '' || password.value == ''
@@ -48,23 +50,18 @@ const disable = computed(() => {
 
 const loginUser = async () => {
   try {
-    const loginData = new URLSearchParams()
-    loginData.append('username', username.value)
-    loginData.append('password', password.value)
+    const loginData = {
+      username: username.value,
+      password: password.value
+    }
 
-    const response = await axios.post(`${apiStore.apiBase}/accounts/login/`, loginData, {
-      headers: {
-        'X-CSRFToken': apiStore.tokenCSRF,
-        'content-type': 'application/x-www-form-urlencoded'
-      },
-      withCredentials: true
-    })
+    const response = await axios.post(`${apiStore.apiBase}/accounts/token/`, loginData)
+    const accessToken = response.data.access
+    const refreshToken = response.data.refresh
 
-    const tokenLogin = response.data.token
-
-    if (tokenLogin) {
-      localStorage.setItem('authTokenLogin', tokenLogin)
-      apiStore.checkAuthentication()
+    if (accessToken && refreshToken) {
+      authStore.setTokens(accessToken, refreshToken)
+      authStore.checkAuthentication()
       responseMessage.value = 'Login realizado com sucesso!'
 
       setTimeout(() => {
@@ -79,7 +76,8 @@ const loginUser = async () => {
 }
 
 onMounted(async () => {
-  if (apiStore.isAuthenticated) {
+  authStore.checkAuthentication()
+  if (authStore.isAuthenticated) {
     responseMessage.value = 'Você já está logado! Redirecionando...'
     setTimeout(() => {
       router.push('/')
