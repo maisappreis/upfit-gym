@@ -36,8 +36,5 @@ coverage
 .env.development
 .env.production
 
-# Privete Notes
-notes.txt
-
 # Data
 db-data.json
