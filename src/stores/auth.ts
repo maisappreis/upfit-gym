@@ -45,10 +45,10 @@ export const useAuthStore = defineStore('auth', () => {
         
         if (token) {
         isAuthenticated.value = true
-        apiStore.setApiURL(apiStore.apiBase)
+        apiStore.setApiURL(apiStore.apiURL)
         } else {
         isAuthenticated.value = false
-        apiStore.setApiURL(`${apiStore.apiBase}/test`)
+        apiStore.setApiURL(`${apiStore.apiURL}/test`)
         }
     }
 

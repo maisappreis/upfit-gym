@@ -4,8 +4,8 @@ import axios from '../axiosConfig';
 
 export const useApiStore = defineStore('api', () => {
   // const apiBase = ref(`${import.meta.env.VITE_API_URL}`)
-  const apiBase = ref('https://django-apis-two.vercel.app/api/upfit')
-  const apiURL = ref('')
+  const apiBase = ref('https://django-apis-two.vercel.app/api')
+  const apiURL = ref(`${apiBase.value}/upfit`)
 
   const customers = ref([])
   const revenue = ref([])
