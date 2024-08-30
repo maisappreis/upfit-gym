@@ -31,10 +31,10 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useApiStore } from '@/stores/api'
 import { useAuthStore } from '@/stores/auth'
-import axios from 'axios'
 import DefaultButton from '../components/common/DefaultButton.vue'
 import RequestAlert from '../components/common/RequestAlert.vue'
 import logoUpfit from '../assets/logo-upfit.png'
+import axios from 'axios'
 
 const username = ref('')
 const password = ref('')
@@ -61,13 +61,11 @@ const loginUser = async () => {
 
     if (accessToken && refreshToken) {
       authStore.setTokens(accessToken, refreshToken)
-      authStore.checkAuthentication()
       responseMessage.value = 'Login realizado com sucesso!'
 
       setTimeout(() => {
         router.push('/')
       }, 800)
-      await apiStore.fetchData()
     }
   } catch (error) {
     console.error(error)

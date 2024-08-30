@@ -27,7 +27,8 @@
           name="has-installments"
           :checked="hasInstallments"
           v-model="hasInstallments"
-          @change="hasInstallments == !hasInstallments"
+          @change="setInstallments"
+          :disabled="disableInstallments"
         />
       </div>
       <div v-if="hasInstallments" class="form-item">
@@ -38,8 +39,11 @@
           id="installments"
           name="installments"
           v-model="installments"
+          @change="checkIsValid"
+          :disabled="disableInstallments"
         />
       </div>
+      <p v-if="!validInstallment" class="invalid">Parcelas inválidas.</p>
       <div class="form-item">
         <label class="form-label" for="value">Valor:</label>
         <input class="form-input" type="text" id="value" name="value" v-model="value" required />
@@ -90,7 +94,9 @@ export default {
       value: null,
       notes: '',
       hasInstallments: false,
-      installments: ''
+      installments: '',
+      disableInstallments: false,
+      validInstallment: true
     }
   },
 
@@ -153,7 +159,6 @@ export default {
           month: date.month,
           name: this.bill,
           date: this.dueDate,
-          installments: this.installments,
           value: this.value,
           notes: this.notes
         }
@@ -191,7 +196,13 @@ export default {
       this.bill = this.item.name
       this.dueDate = this.item.date
       this.value = formatedValue
+      this.installments = this.item.installments
       this.notes = this.item.notes
+
+      if (this.item.installments !== '') {
+        this.hasInstallments = true
+        this.disableInstallments = true
+      }
     },
 
     validateFloat() {
@@ -202,6 +213,36 @@ export default {
         this.value = floatValue
       } else {
         this.value = null
+      }
+    },
+
+    setInstallments() {
+      if (!this.hasInstallments) {
+        this.installments = ''
+        this.validInstallment = true
+      }
+
+      if (this.hasInstallments && this.installments === '') {
+        this.validInstallment = false
+      }
+      this.hasInstallments == !this.hasInstallments
+    }
+  },
+
+  watch: {
+    installments() {
+      const integerNumber = parseInt(this.installments)
+
+      if (Number.isInteger(integerNumber) && this.hasInstallments) {
+        this.validInstallment = Number.isInteger(integerNumber)
+      }
+
+      if (!Number.isInteger(integerNumber)) {
+        this.validInstallment = false
+      }
+
+      if (this.installments === '' && !this.hasInstallments) {
+        this.validInstallment = true
       }
     }
   },
@@ -215,4 +256,11 @@ export default {
 </script>
 
 <style scoped>
+.invalid {
+  color: red;
+  margin: 0;
+  font-size: 13px;
+  text-align: right;
+  font-weight: bold;
+}
 </style>

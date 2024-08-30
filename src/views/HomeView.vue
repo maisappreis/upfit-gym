@@ -1,10 +1,14 @@
 <template>
-  <div class="app-area">
+  <div v-if="isLoaded" class="app-area">
     <HeaderPage />
     <SideBar />
     <ContentPage class="content" />
     <FooterPage />
   </div>
+  <h2 class="loading" v-else>
+    <font-awesome-icon icon="fa-solid fa-spinner" style="margin-right: 20px" />
+    Carregando...
+  </h2>
 </template>
 
 <script>
@@ -12,6 +16,9 @@ import HeaderPage from '@/components/HeaderPage.vue'
 import SideBar from '@/components/SideBar.vue'
 import ContentPage from '@/components/ContentPage.vue'
 import FooterPage from '@/components/FooterPage.vue'
+import { mapStores } from 'pinia'
+import { useAuthStore } from '@/stores/auth'
+import { useApiStore } from '@/stores/api'
 
 export default {
   name: 'App',
@@ -20,6 +27,24 @@ export default {
     SideBar,
     ContentPage,
     FooterPage
+  },
+
+  data: function () {
+    return {
+      isLoaded: false
+    }
+  },
+
+  computed: {
+    ...mapStores(useAuthStore, useApiStore)
+  },
+
+  async mounted() {
+    this.authStore.checkAuthentication()
+    this.apiStore.configureAxios()
+    await this.apiStore.fetchData()
+
+    this.isLoaded = true
   }
 }
 </script>

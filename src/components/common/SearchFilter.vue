@@ -4,7 +4,7 @@
     type="text"
     placeholder="Pesquisar nomes separados por vírgula..."
     v-model="search"
-    @keyup.enter="applyFilter"
+    @input="applyFilter"
   />
 </template>
 
