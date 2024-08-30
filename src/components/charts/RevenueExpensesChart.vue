@@ -76,7 +76,7 @@ export default {
     myStyles() {
       return {
         height: `100%`,
-        width: '100%',
+        width: '85%',
         position: 'relative'
       }
     }
@@ -119,14 +119,15 @@ export default {
 
 <style scoped>
 .chart-area {
-  margin: 20px;
-  height: 40%;
+  width: 100%;
+  height: 50%;
+  min-height: 200px;
 }
 
 @media only screen and (max-width: 1000px) {
   .chart-area {
-    margin: 10px 10px 0 10px;
-    height: 35%;
+    height: fit-content;
+    min-height: 400px;
   }
 }
 </style>

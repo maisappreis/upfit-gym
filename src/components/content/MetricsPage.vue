@@ -4,7 +4,7 @@
       :monthlyRevenue="monthlyRevenueOrdered"
       :monthlyExpenses="monthlyExpensesOrdered"
     />
-    <div style="display: flex; justify-content: space-between">
+    <div class="chart-area">
       <ActiveCustomersChart />
       <ProfitChart :monthlyProfit="monthlyProfit" />
     </div>
@@ -97,4 +97,15 @@ export default {
 </script>
 
 <style scoped>
+.chart-area {
+  display: flex;
+  justify-content: space-around;
+}
+
+@media only screen and (max-width: 1000px) {
+  .chart-area {
+    flex-direction: column;
+    justify-content: center;
+  }
+}
 </style>

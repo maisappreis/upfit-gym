@@ -36,5 +36,8 @@ coverage
 .env.development
 .env.production
 
+# Notes
+TODO.md
+
 # Data
 db-data.json

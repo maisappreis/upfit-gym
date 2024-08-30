@@ -164,7 +164,7 @@ export default {
 
         if (this.status === 'Ativo') {
           setTimeout(() => {
-            this.createRevenue(response.data.id)
+            this.createRevenue(response.data.id, response.data.start)
           }, 500)
         }
       } catch (error) {
@@ -205,16 +205,16 @@ export default {
       }
     },
 
-    async createRevenue(id) {
+    async createRevenue(id, startDate) {
       try {
-        let date = this.$methods.getCurrentYearAndMonth()
+        let date = this.$methods.getCurrentYearMonthDay(startDate)
 
         let newRevenue = {
           customer: id,
           year: date.year,
           month: date.month,
           value: this.value,
-          payment_day: 10,
+          payment_day: date.day,
           notes: this.notes,
           paid: 'À pagar'
         }

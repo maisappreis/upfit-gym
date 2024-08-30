@@ -71,17 +71,19 @@ export const globalMethods = {
       });
     },
 
-    getCurrentYearAndMonth() {
-      const currentDate = new Date();
+    getCurrentYearMonthDay(startDate) {
+      const currentDate = new Date(startDate);
       const currentYear = currentDate.getFullYear();
       const currentMonthIndex = currentDate.getMonth();
+      const currentDay = currentDate.getDate();
 
       const months = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
         "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
 
       let data = {
         year: currentYear,
-        month: months[currentMonthIndex]
+        month: months[currentMonthIndex],
+        day: currentDay
       }
 
       return data

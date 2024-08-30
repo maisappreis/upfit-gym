@@ -157,13 +157,14 @@ export default {
 
 <style scoped>
 .chart-area {
-  margin: 20px;
-  width: 45%;
+  height: 50%;
+  min-height: 200px;
 }
 
 @media only screen and (max-width: 1000px) {
   .chart-area {
     margin: 0 0 0 10px;
+    height: fit-content;
   }
 }
 </style>

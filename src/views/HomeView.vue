@@ -42,8 +42,7 @@ export default {
 
   margin: 30px;
   width: 90%;
-  height: fit-content;
-  max-height: 470px;
+  height: 68vh;
   padding: 20px;
   background-color: white;
   box-shadow: 2px 2px 20px rgb(148, 148, 148);

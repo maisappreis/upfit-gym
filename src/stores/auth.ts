@@ -62,7 +62,6 @@ export const useAuthStore = defineStore('auth', () => {
 
         if (refreshInterval.value) clearInterval(refreshInterval.value);
         location.reload()
-        console.log('logout')
     }
 
     return {
