@@ -20,6 +20,27 @@
         />
       </div>
       <div class="form-item">
+        <label class="form-label" for="has-installments">Possui parcelas?</label>
+        <input
+          type="checkbox"
+          id="has-installments"
+          name="has-installments"
+          :checked="hasInstallments"
+          v-model="hasInstallments"
+          @change="hasInstallments == !hasInstallments"
+        />
+      </div>
+      <div v-if="hasInstallments" class="form-item">
+        <label class="form-label" for="installments">Número de parcelas:</label>
+        <input
+          class="form-input"
+          type="text"
+          id="installments"
+          name="installments"
+          v-model="installments"
+        />
+      </div>
+      <div class="form-item">
         <label class="form-label" for="value">Valor:</label>
         <input class="form-input" type="text" id="value" name="value" v-model="value" required />
       </div>
@@ -67,7 +88,9 @@ export default {
       bill: '',
       dueDate: '',
       value: null,
-      notes: ''
+      notes: '',
+      hasInstallments: false,
+      installments: ''
     }
   },
 
@@ -96,7 +119,8 @@ export default {
           year: date.year,
           month: date.month,
           name: this.bill,
-          due_date: this.dueDate,
+          date: this.dueDate,
+          installments: this.installments,
           value: this.value,
           paid: 'À pagar',
           notes: this.notes
@@ -128,7 +152,8 @@ export default {
           year: date.year,
           month: date.month,
           name: this.bill,
-          due_date: this.dueDate,
+          date: this.dueDate,
+          installments: this.installments,
           value: this.value,
           notes: this.notes
         }
@@ -164,7 +189,7 @@ export default {
       let formatedValue = value.toString().replace(/\./g, ',')
 
       this.bill = this.item.name
-      this.dueDate = this.item.due_date
+      this.dueDate = this.item.date
       this.value = formatedValue
       this.notes = this.item.notes
     },

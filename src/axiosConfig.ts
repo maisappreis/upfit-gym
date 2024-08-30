@@ -3,9 +3,11 @@ axios.defaults.headers.common['Content-Type'] = 'application/json';
 
 axios.interceptors.request.use(
   (config) => {
-    // const apiBase = `${import.meta.env.VITE_API_URL}`
+    // const apiBase = 'http://localhost:8000/api'
     const apiBase = 'https://django-apis-two.vercel.app/api'
+    
     const token = localStorage.getItem('accessToken')
+    axios.defaults.baseURL = `${apiBase}/upfit`;
     if (token) {
       axios.defaults.baseURL = `${apiBase}/upfit`
       config.headers.Authorization = `Bearer ${token}`;

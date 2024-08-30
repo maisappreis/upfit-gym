@@ -45,7 +45,7 @@
                   R$
                   {{ item[column.key].toFixed(2).toString().replace(/\./g, ',') }}
                 </span>
-                <span v-else-if="column.key === 'start' || column.key === 'due_date'">
+                <span v-else-if="column.key === 'start' || column.key === 'date'">
                   {{ this.formatDate(item[column.key]) }}
                 </span>
                 <span
@@ -308,7 +308,10 @@ export default {
         if (updatedPaidStatus.paid === 'Pago') {
           if (this.pageStore.currentPage === 'revenue' && this.selectedItem.status === 'Ativo') {
             this.createRevenueForNextMonth(this.selectedItem)
-          } else if (this.pageStore.currentPage === 'expenses') {
+          } else if (
+            this.pageStore.currentPage === 'expenses' &&
+            this.selectedItem.installments === ''
+          ) {
             this.createExpenseForNextMonth(this.selectedItem)
           }
         }
@@ -410,14 +413,14 @@ export default {
     async createExpenseForNextMonth(item) {
       try {
         let nextMonth = this.$methods.getNextMonth(item.month, item.year)
-        let paymentDay = parseInt(item.due_date.slice(-2))
+        let paymentDay = parseInt(item.date.slice(-2))
         let dueDate = `${nextMonth.year}-${nextMonth.monthNumber}-${paymentDay}`
 
         let newExpense = {
           year: nextMonth.year,
           month: nextMonth.month,
           name: item.name,
-          due_date: dueDate,
+          date: dueDate,
           value: item.value,
           paid: 'À pagar',
           notes: item.notes

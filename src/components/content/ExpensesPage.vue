@@ -83,7 +83,8 @@ export default {
         { key: 'year', name: 'Ano' },
         { key: 'month', name: 'Mês' },
         { key: 'name', name: 'Nome' },
-        { key: 'due_date', name: 'Vencimento' },
+        { key: 'date', name: 'Vencimento' },
+        { key: 'installments', name: 'Parcelas' },
         { key: 'value', name: 'Valor' },
         { key: 'paid', name: 'Status' },
         { key: 'actions', name: '' }
