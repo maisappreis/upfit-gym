@@ -150,13 +150,7 @@ export default {
 
     async deleteExpense() {
       try {
-        await axios.delete(`${this.apiStore.apiURL}/expense/${this.item.id}/`, {
-          headers: {
-            'X-CSRFToken': this.apiStore.tokenCSRF,
-            'content-type': 'application/x-www-form-urlencoded'
-          },
-          withCredentials: true
-        })
+        await axios.delete(`${this.apiStore.apiURL}/expense/${this.item.id}/`)
         this.showMessage('Despesa excluída com sucesso!')
       } catch (error) {
         console.error('Erro ao excluir despesa.', error)

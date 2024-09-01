@@ -138,9 +138,10 @@ export default {
     async createCustomer() {
       try {
         this.validateFloat()
+        const customerCapitalized = this.$methods.capitalize(this.customerName)
 
         let newCustomer = {
-          name: this.customerName,
+          name: customerCapitalized,
           frequency: this.frequency,
           start: this.start,
           plan: this.plan,
@@ -149,16 +150,9 @@ export default {
           notes: this.notes
         }
 
-        let response = await axios.post(`${this.apiStore.apiURL}/customer/create/`, newCustomer, {
-          headers: {
-            'X-CSRFToken': this.apiStore.tokenCSRF,
-            'content-type': 'application/x-www-form-urlencoded'
-          },
-          withCredentials: true
-        })
+        let response = await axios.post(`${this.apiStore.apiURL}/customer/create/`, newCustomer)
 
         this.$emit('showMessage', 'Cliente criado com sucesso!')
-
         this.$emit('closeModal')
         await this.apiStore.fetchCustomers()
 
@@ -176,9 +170,10 @@ export default {
     async updateCustomer() {
       try {
         this.validateFloat()
+        let customerNameCapitalized = this.$methods.capitalize(this.customerName)
 
         let updatedCustomer = {
-          name: this.customerName,
+          name: customerNameCapitalized,
           frequency: this.frequency,
           start: this.start,
           plan: this.plan,
@@ -187,13 +182,7 @@ export default {
           notes: this.notes
         }
 
-        await axios.put(`${this.apiStore.apiURL}/customer/${this.item.id}/`, updatedCustomer, {
-          headers: {
-            'X-CSRFToken': this.apiStore.tokenCSRF,
-            'content-type': 'application/x-www-form-urlencoded'
-          },
-          withCredentials: true
-        })
+        await axios.patch(`${this.apiStore.apiURL}/customer/${this.item.id}/`, updatedCustomer)
         this.$emit('showMessage', 'Cliente atualizado com sucesso!')
 
         this.$emit('closeModal')
@@ -219,13 +208,7 @@ export default {
           paid: 'À pagar'
         }
 
-        await axios.post(`${this.apiStore.apiURL}/revenue/create/`, newRevenue, {
-          headers: {
-            'X-CSRFToken': this.apiStore.tokenCSRF,
-            'content-type': 'application/x-www-form-urlencoded'
-          },
-          withCredentials: true
-        })
+        await axios.post(`${this.apiStore.apiURL}/revenue/create/`, newRevenue)
         await this.apiStore.fetchRevenue()
       } catch (error) {
         console.error('Erro ao criar receita.', error)

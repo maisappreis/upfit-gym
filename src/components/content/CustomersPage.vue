@@ -145,13 +145,7 @@ export default {
 
     async deleteCustomer() {
       try {
-        await axios.delete(`${this.apiStore.apiURL}/customer/${this.item.id}/`, {
-          headers: {
-            'X-CSRFToken': this.apiStore.tokenCSRF,
-            'content-type': 'application/x-www-form-urlencoded'
-          },
-          withCredentials: true
-        })
+        await axios.delete(`${this.apiStore.apiURL}/customer/${this.item.id}/`)
         this.showMessage('Cliente excluído com sucesso!')
       } catch (error) {
         console.error('Erro ao excluir cliente.', error)
@@ -167,13 +161,7 @@ export default {
       try {
         let data = { status: 'Inativo' }
 
-        await axios.patch(`${this.apiStore.apiURL}/customer/${this.item.id}/`, data, {
-          headers: {
-            'X-CSRFToken': this.apiStore.tokenCSRF,
-            'content-type': 'application/x-www-form-urlencoded'
-          },
-          withCredentials: true
-        })
+        await axios.patch(`${this.apiStore.apiURL}/customer/${this.item.id}/`, data)
         this.showMessage('Cliente inativado com sucesso!')
       } catch (error) {
         console.error('Erro ao inativar cliente.', error)

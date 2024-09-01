@@ -141,13 +141,7 @@ export default {
           paid: 'À pagar'
         }
 
-        await axios.post(`${this.apiStore.apiURL}/revenue/create/`, newRevenue, {
-          headers: {
-            'X-CSRFToken': this.apiStore.tokenCSRF,
-            'content-type': 'application/x-www-form-urlencoded'
-          },
-          withCredentials: true
-        })
+        await axios.post(`${this.apiStore.apiURL}/revenue/create/`, newRevenue)
         this.$emit('showMessage', 'Receita criada com sucesso!')
 
         this.$emit('closeModal')
@@ -170,13 +164,7 @@ export default {
           payment_day: this.dueDate,
           notes: this.notes
         }
-        await axios.put(`${this.apiStore.apiURL}/revenue/${this.item.id}/`, updatedRevenue, {
-          headers: {
-            'X-CSRFToken': this.apiStore.tokenCSRF,
-            'content-type': 'application/x-www-form-urlencoded'
-          },
-          withCredentials: true
-        })
+        await axios.patch(`${this.apiStore.apiURL}/revenue/${this.item.id}/`, updatedRevenue)
         this.$emit('showMessage', 'Receita atualizada com sucesso!')
 
         this.$emit('closeModal')

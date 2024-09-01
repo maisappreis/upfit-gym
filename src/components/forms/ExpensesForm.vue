@@ -120,11 +120,12 @@ export default {
       try {
         this.validateFloat()
         let date = this.getYearAndMonth(this.dueDate)
+        let nameCapitalized = this.$methods.capitalize(this.bill)
 
         let newExpense = {
           year: date.year,
           month: date.month,
-          name: this.bill,
+          name: nameCapitalized,
           date: this.dueDate,
           installments: this.installments,
           value: this.value,
@@ -132,13 +133,7 @@ export default {
           notes: this.notes
         }
 
-        await axios.post(`${this.apiStore.apiURL}/expense/create/`, newExpense, {
-          headers: {
-            'X-CSRFToken': this.apiStore.tokenCSRF,
-            'content-type': 'application/x-www-form-urlencoded'
-          },
-          withCredentials: true
-        })
+        await axios.post(`${this.apiStore.apiURL}/expense/create/`, newExpense)
         this.$emit('showMessage', 'Despesa criada com sucesso!')
 
         this.$emit('closeModal')
@@ -153,23 +148,18 @@ export default {
       try {
         this.validateFloat()
         let date = this.getYearAndMonth(this.dueDate)
+        let nameCapitalized = this.$methods.capitalize(this.bill)
 
         let updatedExpense = {
           year: date.year,
           month: date.month,
-          name: this.bill,
+          name: nameCapitalized,
           date: this.dueDate,
           value: this.value,
           notes: this.notes
         }
 
-        await axios.patch(`${this.apiStore.apiURL}/expense/${this.item.id}/`, updatedExpense, {
-          headers: {
-            'X-CSRFToken': this.apiStore.tokenCSRF,
-            'content-type': 'application/x-www-form-urlencoded'
-          },
-          withCredentials: true
-        })
+        await axios.patch(`${this.apiStore.apiURL}/expense/${this.item.id}/`, updatedExpense)
         this.$emit('showMessage', 'Despesa atualizada com sucesso!')
 
         this.$emit('closeModal')

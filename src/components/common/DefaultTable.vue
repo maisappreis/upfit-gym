@@ -291,15 +291,7 @@ export default {
 
         await axios.patch(
           `${this.apiStore.apiURL}/${this.entity}/${this.selectedItem.id}/`,
-          updatedPaidStatus,
-          {
-            headers: {
-              // Authorization: `Token ${this.apiStore.tokenAuthentication}`,
-              'X-CSRFToken': this.apiStore.tokenCSRF,
-              'content-type': 'application/x-www-form-urlencoded'
-            },
-            withCredentials: true
-          }
+          updatedPaidStatus
         )
         if (this.entity === 'revenue') await this.apiStore.fetchRevenue()
         if (this.entity === 'expense') await this.apiStore.fetchExpenses()
@@ -397,13 +389,8 @@ export default {
           notes: item.notes,
           paid: 'À pagar'
         }
-        await axios.post(`${this.apiStore.apiURL}/revenue/create/`, newRevenue, {
-          headers: {
-            'X-CSRFToken': this.apiStore.tokenCSRF,
-            'content-type': 'application/x-www-form-urlencoded'
-          },
-          withCredentials: true
-        })
+
+        await axios.post(`${this.apiStore.apiURL}/revenue/create/`, newRevenue)
         await this.apiStore.fetchRevenue()
       } catch (error) {
         console.error('Erro ao criar receita.', error)
@@ -426,13 +413,7 @@ export default {
           notes: item.notes
         }
 
-        await axios.post(`${this.apiStore.apiURL}/expense/create/`, newExpense, {
-          headers: {
-            'X-CSRFToken': this.apiStore.tokenCSRF,
-            'content-type': 'application/x-www-form-urlencoded'
-          },
-          withCredentials: true
-        })
+        await axios.post(`${this.apiStore.apiURL}/expense/create/`, newExpense)
         await this.apiStore.fetchExpenses()
       } catch (error) {
         console.error('Erro ao criar despesa.', error)

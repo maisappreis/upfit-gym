@@ -75,7 +75,7 @@ export const globalMethods = {
       const currentDate = new Date(startDate);
       const currentYear = currentDate.getFullYear();
       const currentMonthIndex = currentDate.getMonth();
-      const currentDay = currentDate.getDate();
+      const currentDay = startDate.split('-')[2]
 
       const months = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
         "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
@@ -111,6 +111,13 @@ export const globalMethods = {
       };
     
       return response;
+    },
+    capitalize(string) {
+      return string
+        .toLowerCase()
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
     }
-  },
+  }
 };
