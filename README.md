@@ -1,7 +1,7 @@
 # Web Application for a Gym Company
 
 A web application developed to manage the company's customers, income and expenses. <br>
-Back-end on: https://github.com/maisappreis/django-APIs
+Back-end code on: https://github.com/maisappreis/django-APIs
 
 You can try it out in this production test version: https://maisappreis.github.io/upfit-gym/
 
