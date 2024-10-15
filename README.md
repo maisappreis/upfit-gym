@@ -1,16 +1,19 @@
 # Web Application for a Gym Company
 
-A web application developed to manage the company's customers, income and expenses.
-Back-end on: https://github.com/maisappreis/django-APIs
+A web application developed to manage the company's customers, income and expenses. <br>
+Back-end code on: https://github.com/maisappreis/django-APIs
+
+You can try it out in this production test version: https://maisappreis.github.io/upfit-gym/
 
 ## Technologies:
 - Vue.js 3
 - Vite
+- Typescript
 
 ![image](https://github.com/maisappreis/upfit-project/assets/113925909/93fb4995-d68e-4aee-a6ba-abe8e9b105ab)
 
 
-## 🌱 On Frontend Development
+## 🌱 On Development
 
 ### 🛠️ Installation
 ```sh
