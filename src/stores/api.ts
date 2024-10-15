@@ -3,8 +3,8 @@ import { ref } from 'vue'
 import axios from 'axios';
 
 export const useApiStore = defineStore('api', () => {
-  const apiBase = ref('https://django-apis-two.vercel.app/api')
-  // const apiBase = ref('http://localhost:8000/api')
+  // const apiBase = ref('https://django-apis-two.vercel.app/api')
+  const apiBase = ref('http://localhost:8000/api')
 
   const apiURL = ref('')
 
