@@ -1,52 +1,35 @@
 <template>
-  <div v-if="isLoaded" class="app-area">
+  <!-- <LoadingScreen v-if="loadingStore.isLoading">
+    Carregando...
+  </LoadingScreen> -->
+  <div class="app-area">
     <HeaderPage />
     <SideBar />
     <ContentPage class="content" />
     <FooterPage />
   </div>
-  <h2 class="loading" v-else>
-    <font-awesome-icon icon="fa-solid fa-spinner" style="margin-right: 20px" />
-    Carregando...
-  </h2>
 </template>
 
-<script>
-import HeaderPage from '@/components/HeaderPage.vue'
-import SideBar from '@/components/SideBar.vue'
-import ContentPage from '@/components/ContentPage.vue'
-import FooterPage from '@/components/FooterPage.vue'
-import { mapStores } from 'pinia'
-import { useAuthStore } from '@/stores/auth'
-import { useApiStore } from '@/stores/api'
+<script setup lang="ts">
+import HeaderPage from "@/components/HeaderPage.vue";
+import SideBar from "@/components/SideBar.vue";
+import ContentPage from "@/components/ContentPage.vue";
+import FooterPage from "@/components/FooterPage.vue";
+// import LoadingScreen from "@/components/common/LoadingScreen.vue";
+// import { useLoadingStore } from "@/stores/loading";
+import { useAuthStore } from "@/stores/auth";
+import { useApiStore } from "@/stores/api";
+import { onMounted } from "vue";
 
-export default {
-  name: 'App',
-  components: {
-    HeaderPage,
-    SideBar,
-    ContentPage,
-    FooterPage
-  },
+const authStore = useAuthStore();
+const apiStore = useApiStore();
+// const loadingStore = useLoadingStore();
 
-  data: function () {
-    return {
-      isLoaded: false
-    }
-  },
-
-  computed: {
-    ...mapStores(useAuthStore, useApiStore)
-  },
-
-  async mounted() {
-    this.authStore.checkAuthentication()
-    this.apiStore.configureAxios()
-    await this.apiStore.fetchData()
-
-    this.isLoaded = true
-  }
-}
+onMounted(async () => {
+  authStore.checkAuthentication();
+  apiStore.configureAxios();
+  await apiStore.fetchData();
+});
 </script>
 
 <style>
