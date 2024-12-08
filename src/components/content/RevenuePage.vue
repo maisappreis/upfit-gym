@@ -12,7 +12,7 @@
           @get-status="getStatus"
           :statusList="statusList"
         />
-        <SearchFilter @applySearch="applySearch" />
+        <SearchFilter @apply-search="applySearch" />
       </div>
     </div>
     <DefaultTable
@@ -23,7 +23,7 @@
       @updateItem="updateRevenue"
       @deleteItem="showDeleteModal"
     />
-    <DefaultModal
+    <ModalCard
       v-if="showModal"
       :isForm="isForm"
       @executeAction="getModalAction"
@@ -53,65 +53,60 @@
         @showMessage="showMessage"
         @getConfirmation="getConfirmation"
       />
-    </DefaultModal>
+    </ModalCard>
     <div v-if="showModal" class="defocus"></div>
   </div>
 </template>
 
 <script>
-import DefaultTable from '../common/DefaultTable.vue'
-import DefaultButton from '../common/DefaultButton.vue'
-import SearchFilter from '../common/SearchFilter.vue'
-import DefaultModal from '../common/DefaultModal.vue'
-import MonthFilter from '../common/MonthFilter.vue'
-import RevenueForm from '../forms/RevenueForm.vue'
-import { globalVariablesMixin } from '@/utils/variables.js'
-import { mapStores, mapState } from 'pinia'
-import { useApiStore } from '@/stores/api'
-import axios from 'axios'
+import DefaultTable from "../common/DefaultTable.vue";
+import DefaultButton from "../common/DefaultButton.vue";
+import SearchFilter from "../common/SearchFilter.vue";
+import ModalCard from "../common/ModalCard.vue";
+import MonthFilter from "../common/MonthFilter.vue";
+import RevenueForm from "../forms/RevenueForm.vue";
+import { globalVariablesMixin } from "@/utils/variables.js";
+import { mapStores, mapState } from "pinia";
+import { useApiStore } from "@/stores/api";
+import axios from "axios";
 
 export default {
-  name: 'RevenuePage',
+  name: "RevenuePage",
   mixins: [globalVariablesMixin],
 
   components: {
     DefaultTable,
     DefaultButton,
     SearchFilter,
-    DefaultModal,
+    ModalCard,
     RevenueForm,
     MonthFilter
   },
 
-  // props: {
-  //   revenue: Array,
-  //   customers: Array
-  // },
-
   data() {
     return {
       columns: [
-        { key: 'year', name: 'Ano' },
-        { key: 'month', name: 'Mês' },
-        { key: 'name', name: 'Nome' },
-        { key: 'start', name: 'Início' },
-        { key: 'plan', name: 'Plano' },
-        { key: 'payment_day', name: 'Venc.' },
-        { key: 'value', name: 'Valor' },
-        { key: 'paid', name: 'Status' },
-        { key: 'actions', name: '' }
+        { key: "year", name: "Ano" },
+        { key: "month", name: "Mês" },
+        { key: "name", name: "Nome" },
+        { key: "start", name: "Início" },
+        { key: "plan", name: "Plano" },
+        { key: "payment_day", name: "Venc." },
+        { key: "value", name: "Valor" },
+        { key: "paid", name: "Status" },
+        { key: "actions", name: "" }
       ],
-      statusList: ['Pago', 'À pagar', 'Link enviado', 'Todos'],
+      statusList: ["Pago", "À pagar", "Link enviado", "Todos"],
       searchedField: [],
       showModal: false,
       item: {},
-      action: '',
+      action: "",
       messageData: {},
-      modalTitle: '',
-      requestMessage: '',
-      currentMonth: '',
+      modalTitle: "",
+      requestMessage: "",
+      currentMonth: "",
       currentYear: 0,
-      currentStatus: '',
+      currentStatus: "",
       showConfirmation: false,
       confirmationData: {},
       isForm: false
@@ -120,7 +115,7 @@ export default {
 
   computed: {
     ...mapStores(useApiStore),
-    ...mapState(useApiStore, ['revenue']),
+    ...mapState(useApiStore, ["revenue"]),
     filteredRevenue() {
       return this.$computed.filteredData(
         this.apiStore.revenue,
@@ -133,88 +128,88 @@ export default {
 
   methods: {
     getMonth(month) {
-      this.currentMonth = month
+      this.currentMonth = month;
     },
 
     getYear(year) {
-      this.currentYear = year
+      this.currentYear = year;
     },
 
     getStatus(status) {
-      this.currentStatus = status
+      this.currentStatus = status;
     },
 
     applySearch(field) {
-      this.searchedField = field
+      this.searchedField = field;
     },
 
     addRevenue() {
-      this.showModal = true
-      this.isForm = true
-      this.action = 'create'
-      this.modalTitle = 'Adicionar Receita'
+      this.showModal = true;
+      this.isForm = true;
+      this.action = "create";
+      this.modalTitle = "Adicionar Receita";
     },
 
     updateRevenue(item) {
-      this.showModal = true
-      this.isForm = true
-      this.item = item
-      this.action = 'update'
-      this.modalTitle = 'Atualizar Receita'
+      this.showModal = true;
+      this.isForm = true;
+      this.item = item;
+      this.action = "update";
+      this.modalTitle = "Atualizar Receita";
     },
 
     async deleteRevenue() {
       try {
-        await axios.delete(`${this.apiStore.apiURL}/revenue/${this.item.id}/`)
-        this.showMessage('Receita excluída com sucesso!')
+        await axios.delete(`${this.apiStore.apiURL}/revenue/${this.item.id}/`);
+        this.showMessage("Receita excluída com sucesso!");
       } catch (error) {
-        console.error('Erro ao excluir receita.', error)
+        console.error("Erro ao excluir receita.", error);
 
-        this.showMessage('Erro ao excluir receita.')
+        this.showMessage("Erro ao excluir receita.");
       }
 
-      this.showModal = false
-      await this.apiStore.fetchRevenue()
+      this.showModal = false;
+      await this.apiStore.fetchRevenue();
     },
 
     showDeleteModal(item) {
-      this.item = item
-      this.showModal = true
-      this.action = 'delete'
-      let date = `${item.month}/${item.year}`
+      this.item = item;
+      this.showModal = true;
+      this.action = "delete";
+      let date = `${item.month}/${item.year}`;
 
       this.messageData = {
         name: item.name,
         date: date
-      }
+      };
     },
 
     closeModal() {
-      this.showModal = false
-      this.isForm = false
-      this.showConfirmation = false
-      this.action = ''
+      this.showModal = false;
+      this.isForm = false;
+      this.showConfirmation = false;
+      this.action = "";
     },
 
     showMessage(msg) {
-      this.requestMessage = msg
+      this.requestMessage = msg;
     },
 
     getConfirmation(data) {
-      this.confirmationData = data
-      this.showModal = true
-      this.showConfirmation = true
+      this.confirmationData = data;
+      this.showModal = true;
+      this.showConfirmation = true;
     },
 
     async getModalAction() {
       if (this.showConfirmation) {
-        this.updateCustomerValue()
-        this.updateFutureRevenue()
+        this.updateCustomerValue();
+        this.updateFutureRevenue();
 
-        this.closeModal()
-        await this.apiStore.fetchData()
+        this.closeModal();
+        await this.apiStore.fetchData();
       } else {
-        this.deleteRevenue()
+        this.deleteRevenue();
       }
     },
 
@@ -222,13 +217,13 @@ export default {
       let nextMonth = this.$methods.getNextMonth(
         this.confirmationData.month,
         this.confirmationData.year
-      )
+      );
       let nextRevenues = this.apiStore.revenue.filter(
         (e) => e.month === nextMonth.month && e.year === nextMonth.year
-      )
+      );
 
       for (let i = 0; i < nextRevenues.length; i++) {
-        this.updateRevenueValue(nextRevenues[i].id)
+        this.updateRevenueValue(nextRevenues[i].id);
       }
     },
 
@@ -236,16 +231,16 @@ export default {
       try {
         let updatedCustomer = {
           value: this.confirmationData.updatedValue
-        }
+        };
 
         await axios.patch(
           `${this.apiStore.apiURL}/customer/${this.confirmationData.id}/`,
           updatedCustomer
-        )
-        this.$emit('showMessage', 'Cliente atualizado com sucesso!')
+        );
+        this.$emit("showMessage", "Cliente atualizado com sucesso!");
       } catch (error) {
-        console.error('Erro ao atualizar cliente.', error)
-        this.$emit('showMessage', 'Erro ao atualizar cliente.')
+        console.error("Erro ao atualizar cliente.", error);
+        this.$emit("showMessage", "Erro ao atualizar cliente.");
       }
     },
 
@@ -253,10 +248,10 @@ export default {
       try {
         let updatedRevenue = {
           value: this.confirmationData.updatedValue
-        }
-        await axios.patch(`${this.apiStore.apiURL}/revenue/${id}/`, updatedRevenue)
+        };
+        await axios.patch(`${this.apiStore.apiURL}/revenue/${id}/`, updatedRevenue);
       } catch (error) {
-        console.error('Erro ao atualizar receita.', error)
+        console.error("Erro ao atualizar receita.", error);
       }
     },
 
@@ -264,31 +259,31 @@ export default {
       this.apiStore.customers.forEach((customer) => {
         const matchingRevenues = this.apiStore.revenue.filter(
           (revenue) => revenue.customer === customer.id
-        )
+        );
 
         matchingRevenues.forEach((matchingRevenue) => {
           matchingRevenue.name = customer.name
           matchingRevenue.start = customer.start
           matchingRevenue.plan = customer.plan
           matchingRevenue.status = customer.status
-        })
-      })
+        });
+      });
     },
 
     formatValue(value) {
-      return value.toFixed(2).toString().replace(/\./g, ',')
+      return value.toFixed(2).toString().replace(/\./g, ",");
     }
   },
 
   watch: {
     revenue() {
-      this.incrementData()
+      this.incrementData();
     }
   },
 
   mounted() {
     if (this.apiStore.customers && this.apiStore.customers.length > 0) {
-      this.incrementData()
+      this.incrementData();
     }
   }
 }

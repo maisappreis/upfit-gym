@@ -14,7 +14,7 @@ import { ref, watch } from "vue";
 const search = ref<string>("");
 const searchedField = ref<string[]>([]);
 
-const emit = defineEmits(["applySearch"]);
+const emit = defineEmits(["apply-search"]);
 
 const applyFilter = () => {
   searchedField.value = search.value
@@ -22,13 +22,13 @@ const applyFilter = () => {
     .filter((value) => value)
     .map((value) => value.trim());
 
-  emit("applySearch", searchedField.value);
+  emit("apply-search", searchedField.value);
 };
 
 watch(search, () => {
   if (search.value === "") {
     searchedField.value = [];
-    emit("applySearch", searchedField.value);
+    emit("apply-search", searchedField.value);
   }
 });
 </script>

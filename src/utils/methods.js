@@ -121,3 +121,27 @@ export const globalMethods = {
     }
   }
 };
+
+export const sortData = (data) => {
+  const monthOrder = {
+    Janeiro: 1,
+    Fevereiro: 2,
+    Março: 3,
+    Abril: 4,
+    Maio: 5,
+    Junho: 6,
+    Julho: 7,
+    Agosto: 8,
+    Setembro: 9,
+    Outubro: 10,
+    Novembro: 11,
+    Dezembro: 12,
+  };
+
+  return data.sort((a, b) => {
+    if (a.year !== b.year) {
+      return a.year - b.year;
+    }
+    return monthOrder[a.month] - monthOrder[b.month];
+  });
+};

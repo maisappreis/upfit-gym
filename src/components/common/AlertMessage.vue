@@ -24,7 +24,7 @@ const props = defineProps({
   responseMessage: String
 });
 
-const emit = defineEmits(["closeMessage"]);
+const emit = defineEmits(["close-message"]);
 
 const showSuccessAlert = computed(() => {
   if (!props.responseMessage) return false;
@@ -32,7 +32,7 @@ const showSuccessAlert = computed(() => {
 });
 
 const closeMessage = () => {
-  emit("closeMessage");
+  emit("close-message");
 };
 
 onMounted(() => {

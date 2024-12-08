@@ -12,7 +12,7 @@
           @get-status="getStatus"
           :statusList="statusList"
         />
-        <SearchFilter @applySearch="applySearch" />
+        <SearchFilter @apply-search="applySearch" />
       </div>
     </div>
     <DefaultTable
@@ -23,7 +23,7 @@
       @updateItem="updateExpense"
       @deleteItem="showDeleteModal"
     />
-    <DefaultModal
+    <ModalCard
       v-if="showModal"
       :isForm="isForm"
       @executeAction="deleteExpense"
@@ -43,7 +43,7 @@
         @closeModal="closeModal"
         @showMessage="showMessage"
       />
-    </DefaultModal>
+    </ModalCard>
     <div v-if="showModal" class="defocus"></div>
   </div>
 </template>
@@ -52,7 +52,7 @@
 import DefaultTable from '../common/DefaultTable.vue'
 import DefaultButton from '../common/DefaultButton.vue'
 import SearchFilter from '../common/SearchFilter.vue'
-import DefaultModal from '../common/DefaultModal.vue'
+import ModalCard from '../common/ModalCard.vue'
 import MonthFilter from '../common/MonthFilter.vue'
 import ExpensesForm from '../forms/ExpensesForm.vue'
 import { globalVariablesMixin } from '@/utils/variables.js'
@@ -68,7 +68,7 @@ export default {
     DefaultTable,
     DefaultButton,
     SearchFilter,
-    DefaultModal,
+    ModalCard,
     ExpensesForm,
     MonthFilter
   },

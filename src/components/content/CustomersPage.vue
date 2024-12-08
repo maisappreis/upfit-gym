@@ -7,7 +7,7 @@
       </DefaultButton>
       <div style="display: flex; justify-content: flex-end">
         <StatusFilter @get-status="getStatus" />
-        <SearchFilter @applySearch="applySearch" />
+        <SearchFilter @apply-search="applySearch" />
       </div>
     </div>
     <DefaultTable
@@ -18,7 +18,7 @@
       @updateItem="updateCustomer"
       @deleteItem="showDeleteModal"
     />
-    <DefaultModal
+    <ModalCard
       v-if="showModal"
       :isForm="isForm"
       :buttonMessage="buttonMessage"
@@ -42,7 +42,7 @@
         @closeModal="closeModal"
         @showMessage="showMessage"
       />
-    </DefaultModal>
+    </ModalCard>
     <div v-if="showModal" class="defocus"></div>
   </div>
 </template>
@@ -51,7 +51,7 @@
 import DefaultTable from '../common/DefaultTable.vue'
 import DefaultButton from '../common/DefaultButton.vue'
 import SearchFilter from '../common/SearchFilter.vue'
-import DefaultModal from '../common/DefaultModal.vue'
+import ModalCard from '../common/ModalCard.vue'
 import CustomersForm from '../forms/CustomersForm.vue'
 import StatusFilter from '../common/StatusFilter.vue'
 import { mapStores } from 'pinia'
@@ -65,7 +65,7 @@ export default {
     DefaultTable,
     DefaultButton,
     SearchFilter,
-    DefaultModal,
+    ModalCard,
     CustomersForm,
     StatusFilter
   },

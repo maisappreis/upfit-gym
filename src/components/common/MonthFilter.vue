@@ -42,7 +42,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { months, years } from "@/utils/variables.js";
+import { months, years } from "@/utils/variablesTs";
 
 const month = ref<string>("");
 const year = ref<number>(0);

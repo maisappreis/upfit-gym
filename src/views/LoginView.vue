@@ -16,13 +16,13 @@
         </div>
       </form>
     </div>
-    <RequestAlert
+    <AlertMessage
       v-if="responseMessage"
       :responseMessage="responseMessage"
-      @closeMessage="responseMessage = ''"
+      @close-message="responseMessage = ''"
     >
       {{ responseMessage }}
-    </RequestAlert>
+    </AlertMessage>
   </div>
 </template>
 
@@ -32,7 +32,7 @@ import { useRouter } from 'vue-router'
 import { useApiStore } from '@/stores/api'
 import { useAuthStore } from '@/stores/auth'
 import DefaultButton from '../components/common/DefaultButton.vue'
-import RequestAlert from '../components/common/RequestAlert.vue'
+import AlertMessage from '../components/common/AlertMessage.vue'
 import logoUpfit from '../assets/logo-upfit.png'
 import axios from 'axios'
 

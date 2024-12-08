@@ -109,27 +109,27 @@
       </DefaultTooltip>
     </div>
     <div v-else class="not-found">Nenhum resultado foi encontrado.</div>
-    <RequestAlert
+    <AlertMessage
       v-if="responseMessage"
       :responseMessage="responseMessage"
-      @closeMessage="responseMessage = ''"
+      @close-message="responseMessage = ''"
     >
       {{ responseMessage }}
-    </RequestAlert>
-    <DefaultModal v-if="showModal" @executeAction="changePaidStatus" @closeModal="closeModal">
+    </AlertMessage>
+    <ModalCard v-if="showModal" @executeAction="changePaidStatus" @closeModal="closeModal">
       <span class="message-area" style="font-size: 20px"
         >Marcar como <strong>{{ statusMessage }}</strong
         >?</span
       >
-    </DefaultModal>
+    </ModalCard>
     <div v-if="showModal" class="defocus"></div>
   </div>
 </template>
 
 <script>
 import DefaultTooltip from './DefaultTooltip.vue'
-import RequestAlert from './RequestAlert.vue'
-import DefaultModal from '../common/DefaultModal.vue'
+import AlertMessage from './AlertMessage.vue'
+import ModalCard from './ModalCard.vue'
 import { mapStores } from 'pinia'
 import { useApiStore } from '@/stores/api'
 import { usePageStore } from '@/stores/page'
@@ -137,7 +137,7 @@ import axios from 'axios'
 
 export default {
   name: 'DefaultTable',
-  components: { DefaultTooltip, RequestAlert, DefaultModal },
+  components: { DefaultTooltip, AlertMessage, ModalCard },
   props: {
     columns: Array,
     data: Array,

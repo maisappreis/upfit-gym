@@ -19,13 +19,13 @@
       Logout
     </div>
   </div>
-  <RequestAlert
+  <AlertMessage
     v-if="responseMessage"
     :responseMessage="responseMessage"
-    @closeMessage="responseMessage = ''"
+    @close-message="responseMessage = ''"
   >
     {{ responseMessage }}
-  </RequestAlert>
+  </AlertMessage>
   <RouterView />
 </template>
 
@@ -35,14 +35,14 @@ import { mapStores, mapState } from 'pinia'
 import { usePageStore } from '@/stores/page'
 import { useApiStore } from '@/stores/api'
 import { useAuthStore } from '@/stores/auth'
-import RequestAlert from './common/RequestAlert.vue'
+import AlertMessage from './common/AlertMessage.vue'
 
 export default {
   name: 'HeaderPage',
   components: {
     RouterLink,
     RouterView,
-    RequestAlert
+    AlertMessage
   },
   data() {
     return {
