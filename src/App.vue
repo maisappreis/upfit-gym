@@ -5,21 +5,21 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
-import HomeView from './views/HomeView.vue'
-import LoginView from './views/LoginView.vue'
+import { computed } from "vue";
+import { useRoute } from "vue-router";
+import HomeView from "@/views/HomeView.vue";
+import LoginView from "@/views/LoginView.vue";
 
-const route = useRoute()
+const route = useRoute();
 
 const layoutComponent = computed(() => {
-  return route.path === '/login' ? LoginView : HomeView
-})
+  return route.path === "/login" ? LoginView : HomeView
+});
 </script>
 
 <style>
 * {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 
 body {

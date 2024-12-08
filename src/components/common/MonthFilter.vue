@@ -5,7 +5,7 @@
       id="month"
       name="month"
       v-model="month"
-      @change="$emit('get-month', this.month)"
+      @change="$emit('get-month', month)"
       required
     >
       <option v-for="(month, index) in months" :key="index" :value="month">
@@ -17,7 +17,7 @@
       id="year"
       name="year"
       v-model="year"
-      @change="$emit('get-year', this.year)"
+      @change="$emit('get-year', year)"
       required
     >
       <option v-for="(year, index) in years" :key="index" :value="year">
@@ -29,7 +29,7 @@
       id="status"
       name="status"
       v-model="paymentStatus"
-      @change="$emit('get-status', this.paymentStatus)"
+      @change="$emit('get-status', paymentStatus)"
       required
     >
       <option disabled selected value="Todos">Status:</option>
@@ -40,48 +40,40 @@
   </div>
 </template>
 
-<script>
-import { globalVariablesMixin } from '../../utils/variables.js'
+<script setup lang="ts">
+import { ref, onMounted } from "vue";
+import { months, years } from "@/utils/variables.js";
 
-export default {
-  name: 'MonthFilter',
-  mixins: [globalVariablesMixin],
+const month = ref<string>("");
+const year = ref<number>(0);
+const paymentStatus = ref<string>("");
 
-  props: {
-    statusList: Array
-  },
+const emit = defineEmits(["get-month", "get-year", "get-status"]);
 
-  data() {
-    return {
-      month: '',
-      year: 0,
-      paymentStatus: ''
-    }
-  },
+defineProps({
+  statusList: Array
+});
 
-  methods: {
-    getDate() {
-      let currentDate = new Date()
-      let currentMonth = currentDate.getMonth()
-      this.year = currentDate.getFullYear()
-      this.month = this.months[currentMonth]
+const getDate = () => {
+  let currentDate = new Date();
+  let currentMonth = currentDate.getMonth();
+  year.value = currentDate.getFullYear();
+  month.value = months[currentMonth];
 
-      this.$emit('get-month', this.month)
-      this.$emit('get-year', this.year)
-    },
+  emit("get-month", month.value);
+  emit("get-year", year.value);
+};
 
-    getStatus() {
-      this.paymentStatus = 'Todos'
+const getStatus = () => {
+  paymentStatus.value = "Todos";
 
-      this.$emit('get-status', this.paymentStatus)
-    }
-  },
+  emit("get-status", paymentStatus.value);
+};
 
-  mounted() {
-    this.getDate()
-    this.getStatus()
-  }
-}
+onMounted(() => {
+  getDate();
+  getStatus();
+});
 </script>
 
 <style scoped>

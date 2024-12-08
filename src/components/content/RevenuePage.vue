@@ -33,8 +33,7 @@
         Tem certeza que deseja excluir o recebimento da mensalidade do cliente
         <strong class="highlight">{{ messageData.name }}</strong>
         referente ao mês de
-        <strong class="highlight">{{ messageData.date }}</strong
-        >?
+        <strong class="highlight">{{ messageData.date }}</strong>?
       </h3>
       <h3 v-else-if="showConfirmation" class="message-area">
         O valor atual da mensalidade do cliente
@@ -42,8 +41,7 @@
         <strong class="highlight">R${{ formatValue(confirmationData.currentValue) }}</strong>
         segundo o seu cadastro. Você gostaria de atualizar todos os futuros pagamentos deste cliente
         para este novo valor de
-        <strong class="highlight">R${{ formatValue(confirmationData.updatedValue) }}</strong
-        >?
+        <strong class="highlight">R${{ formatValue(confirmationData.updatedValue) }}</strong>?
       </h3>
       <RevenueForm
         v-else
@@ -295,6 +293,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-</style>

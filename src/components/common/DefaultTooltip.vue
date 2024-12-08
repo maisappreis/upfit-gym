@@ -4,15 +4,11 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'DefaultTooltip',
-
-  props: {
-    mouseX: Number,
-    mouseY: Number
-  }
-}
+<script setup lang="ts">
+defineProps({
+  mouseX: Number,
+  mouseY: Number
+});
 </script>
 
 <style scoped>

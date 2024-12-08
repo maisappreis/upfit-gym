@@ -5,7 +5,7 @@
       id="status"
       name="status"
       v-model="customerStatus"
-      @change="$emit('get-status', this.customerStatus)"
+      @change="$emit('get-status', customerStatus)"
       required
     >
       <option v-for="(status, index) in statusList" :key="index" :value="status">
@@ -15,28 +15,22 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'StatusFilter',
+<script setup lang="ts">
+import { ref, onMounted } from "vue";
 
-  data() {
-    return {
-      customerStatus: '',
-      statusList: ['Ativo', 'Inativo', 'Todos']
-    }
-  },
+const customerStatus = ref<string>("");
+const statusList = ref<string[]>(["Ativo", "Inativo", "Todos"]);
 
-  methods: {
-    getStatus() {
-      this.customerStatus = 'Ativo'
-      this.$emit('get-status', this.customerStatus)
-    }
-  },
+const emit = defineEmits(["get-status"]);
 
-  mounted() {
-    this.getStatus()
-  }
-}
+const getStatus = () => {
+  customerStatus.value = "Ativo";
+  emit("get-status", customerStatus.value);
+};
+
+onMounted(() => {
+  getStatus();
+});
 </script>
 
 <style scoped>

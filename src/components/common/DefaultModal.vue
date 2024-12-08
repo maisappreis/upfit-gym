@@ -12,29 +12,21 @@
   </div>
 </template>
 
-<script>
-import DefaultButton from './DefaultButton.vue'
+<script setup lang="ts">
+import DefaultButton from "./DefaultButton.vue";
 
-export default {
-  name: 'DefaultModal',
-
-  components: {
-    DefaultButton
+defineProps({
+  buttonMessage: {
+    type: String,
+    required: false,
+    default: 'Confirmar'
   },
-
-  props: {
-    buttonMessage: {
-      type: String,
-      required: false,
-      default: 'Confirmar'
-    },
-    isForm: {
-      type: Boolean,
-      required: false,
-      default: false
-    }
+  isForm: {
+    type: Boolean,
+    required: false,
+    default: false
   }
-}
+});
 </script>
 
 <style scoped>

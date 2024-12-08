@@ -2,23 +2,19 @@
   <button
     class="button-area"
     @click="$emit('executeAction')"
-    :class="{ green: !disable, disabled: disable }"
-  >
+    :class="{ green: !disable, disabled: disable }">
     <slot></slot>
   </button>
 </template>
 
-<script>
-export default {
-  name: 'DefaultButton',
+<script setup lang="ts">
 
-  props: {
-    disable: {
-      type: Boolean,
-      default: false
-    }
+defineProps({
+  disable: {
+    type: Boolean,
+    default: false
   }
-}
+})
 </script>
 
 <style scoped>

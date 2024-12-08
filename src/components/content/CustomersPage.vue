@@ -26,14 +26,13 @@
       @closeModal="closeModal"
     >
       <h3 v-if="action === 'delete' && blockDelete" class="message-area">
-        Não é possível excluir o cliente <strong class="highlight">{{ customerName }}</strong
-        >, pois isso excluiria todo o seu histórico de receitas. Ao invés de excluí-lo, mude seu
+        Não é possível excluir o cliente <strong class="highlight">{{ customerName }}</strong>, pois isso excluiria todo
+        o seu histórico de receitas. Ao invés de excluí-lo, mude seu
         status para <strong class="highlight">Inativo</strong>.
       </h3>
       <h3 v-else-if="action === 'delete' && !blockDelete" class="message-area">
         Tem certeza que deseja excluir o cliente
-        <strong class="highlight">{{ customerName }}</strong
-        >?
+        <strong class="highlight">{{ customerName }}</strong>?
       </h3>
       <CustomersForm
         v-else
@@ -70,11 +69,6 @@ export default {
     CustomersForm,
     StatusFilter
   },
-
-  // props: {
-  //   customers: Array,
-  //   revenue: Array
-  // },
 
   data() {
     return {
@@ -206,5 +200,4 @@ export default {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

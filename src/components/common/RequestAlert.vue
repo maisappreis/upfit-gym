@@ -17,30 +17,27 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'RequestAlert',
+<script setup lang="ts">
+import { computed, onMounted } from "vue";
 
-  props: {
-    responseMessage: String
-  },
+const props = defineProps({
+  responseMessage: String
+});
 
-  computed: {
-    showSuccessAlert() {
-      return !this.responseMessage.trim().toLowerCase().includes('erro')
-    }
-  },
+const emit = defineEmits(["closeMessage"]);
 
-  methods: {
-    closeMessage() {
-      this.$emit('closeMessage')
-    }
-  },
+const showSuccessAlert = computed(() => {
+  if (!props.responseMessage) return false;
+  return !props.responseMessage.trim().toLowerCase().includes("erro");
+});
 
-  mounted() {
-    setTimeout(this.closeMessage, 1000)
-  }
-}
+const closeMessage = () => {
+  emit("closeMessage");
+};
+
+onMounted(() => {
+  setTimeout(closeMessage, 1000);
+});
 </script>
 
 <style scoped>

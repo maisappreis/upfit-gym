@@ -8,37 +8,29 @@
   />
 </template>
 
-<script>
-export default {
-  name: 'SearchFilter',
+<script setup lang="ts">
+import { ref, watch } from "vue";
 
-  data: function () {
-    return {
-      search: '',
-      searchedField: []
-    }
-  },
+const search = ref<string>("");
+const searchedField = ref<string[]>([]);
 
-  methods: {
-    applyFilter() {
-      this.searchedField = this.search
-        .split(',')
-        .filter((value) => value)
-        .map((value) => value.trim())
+const emit = defineEmits(["applySearch"]);
 
-      this.$emit('applySearch', this.searchedField)
-    }
-  },
+const applyFilter = () => {
+  searchedField.value = search.value
+    .split(",")
+    .filter((value) => value)
+    .map((value) => value.trim());
 
-  watch: {
-    search() {
-      if (this.search === '') {
-        this.searchedField = []
-        this.$emit('applySearch', this.searchedField)
-      }
-    }
+  emit("applySearch", searchedField.value);
+};
+
+watch(search, () => {
+  if (search.value === "") {
+    searchedField.value = [];
+    emit("applySearch", searchedField.value);
   }
-}
+});
 </script>
 
 <style scoped>

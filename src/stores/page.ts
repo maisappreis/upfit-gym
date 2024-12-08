@@ -1,15 +1,15 @@
-import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { defineStore } from "pinia";
+import { ref } from "vue";
 
-export const usePageStore = defineStore('page', () => {
-    const currentPage = ref('metrics')
+export const usePageStore = defineStore("page", () => {
+    const currentPage = ref<string>("metrics");
 
     const openPage = (page: string) => {
-        currentPage.value = page
-    }
+        currentPage.value = page;
+    };
 
     return {
         currentPage,
         openPage,
-    }
-})
+    };
+});
