@@ -30,15 +30,15 @@
 </template>
 
 <script>
-import { RouterLink, RouterView } from 'vue-router'
-import { mapStores, mapState } from 'pinia'
-import { usePageStore } from '@/stores/page'
-import { useApiStore } from '@/stores/api'
-import { useAuthStore } from '@/stores/auth'
-import AlertMessage from './common/AlertMessage.vue'
+import { RouterLink, RouterView } from "vue-router"
+import { mapStores, mapState } from "pinia"
+import { usePageStore } from "@/stores/page"
+import { useApiStore } from "@/stores/api"
+import { useAuthStore } from "@/stores/auth"
+import AlertMessage from "@/components/common/AlertMessage.vue"
 
 export default {
-  name: 'HeaderPage',
+  name: "HeaderPage",
   components: {
     RouterLink,
     RouterView,
@@ -46,16 +46,16 @@ export default {
   },
   data() {
     return {
-      icon: 'fa-solid fa-chart-line',
-      title: 'Métricas',
-      subtitle: 'Visualização gráfica de receita, despesas, lucro e clientes',
+      icon: "fa-solid fa-chart-line",
+      title: "Métricas",
+      subtitle: "Visualização gráfica de receita, despesas, lucro e clientes",
       openDropdown: false,
-      responseMessage: ''
+      responseMessage: ""
     }
   },
   computed: {
     ...mapStores(useApiStore, useAuthStore),
-    ...mapState(usePageStore, ['currentPage'])
+    ...mapState(usePageStore, ["currentPage"])
   },
 
   methods: {
@@ -66,30 +66,30 @@ export default {
   watch: {
     currentPage(newVal) {
       switch (newVal) {
-        case 'metrics':
-          this.icon = 'fa-solid fa-chart-line'
-          this.title = 'Métricas'
-          this.subtitle = 'Visualização gráfica de receita, despesas, lucro e clientes'
+        case "metrics":
+          this.icon = "fa-solid fa-chart-line"
+          this.title = "Métricas"
+          this.subtitle = "Visualização gráfica de receita, despesas, lucro e clientes"
           break
-        case 'customers':
-          this.icon = 'fa-solid fa-users'
-          this.title = 'Clientes'
-          this.subtitle = 'Cadastramento dos clientes'
+        case "customers":
+          this.icon = "fa-solid fa-users"
+          this.title = "Clientes"
+          this.subtitle = "Cadastramento dos clientes"
           break
-        case 'revenue':
-          this.icon = 'fa-solid fa-hand-holding-dollar'
-          this.title = 'Receitas'
-          this.subtitle = 'Controle do recebimento das mensalidades dos clientes'
+        case "revenue":
+          this.icon = "fa-solid fa-hand-holding-dollar"
+          this.title = "Receitas"
+          this.subtitle = "Controle do recebimento das mensalidades dos clientes"
           break
-        case 'expenses':
-          this.icon = 'fa-solid fa-money-bill-transfer'
-          this.title = 'Despesas'
-          this.subtitle = 'Controle do pagamento das contas'
+        case "expenses":
+          this.icon = "fa-solid fa-money-bill-transfer"
+          this.title = "Despesas"
+          this.subtitle = "Controle do pagamento das contas"
           break
         default:
-          this.icon = ''
-          this.title = ''
-          this.subtitle = ''
+          this.icon = ""
+          this.title = ""
+          this.subtitle = ""
       }
     }
   }

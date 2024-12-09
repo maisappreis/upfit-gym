@@ -48,18 +48,18 @@
 </template>
 
 <script>
-import DefaultTable from '../common/DefaultTable.vue'
-import DefaultButton from '../common/DefaultButton.vue'
-import SearchFilter from '../common/SearchFilter.vue'
-import ModalCard from '../common/ModalCard.vue'
-import CustomersForm from '../forms/CustomersForm.vue'
-import StatusFilter from '../common/StatusFilter.vue'
-import { mapStores } from 'pinia'
-import { useApiStore } from '@/stores/api'
-import axios from 'axios'
+import DefaultTable from "@/components/common/DefaultTable.vue"
+import DefaultButton from "@/components/common/DefaultButton.vue";
+import SearchFilter from "@/components/common/SearchFilter.vue"
+import ModalCard from "@/components/common/ModalCard.vue"
+import CustomersForm from "@/components/forms/CustomersForm.vue"
+import StatusFilter from "@/components/common/StatusFilter.vue"
+import { mapStores } from "pinia"
+import { useApiStore } from "@/stores/api"
+import axios from "axios"
 
 export default {
-  name: 'CustomersPage',
+  name: "CustomersPage",
 
   components: {
     DefaultTable,
@@ -73,23 +73,23 @@ export default {
   data() {
     return {
       columns: [
-        { key: 'name', name: 'Nome' },
-        { key: 'frequency', name: 'Freq.' },
-        { key: 'start', name: 'Início' },
-        { key: 'plan', name: 'Plano' },
-        { key: 'value', name: 'Valor' },
-        { key: 'status', name: 'Status' },
-        { key: 'actions', name: '' }
+        { key: "name", name: "Nome" },
+        { key: "frequency", name: "Freq." },
+        { key: "start", name: "Início" },
+        { key: "plan", name: "Plano" },
+        { key: "value", name: "Valor" },
+        { key: "status", name: "Status" },
+        { key: "actions", name: "" }
       ],
       searchedField: [],
       showModal: false,
       item: {},
-      action: '',
-      customerName: '',
-      modalTitle: '',
-      requestMessage: '',
-      currentStatus: '',
-      buttonMessage: 'Confirmar',
+      action: "",
+      customerName: "",
+      modalTitle: "",
+      requestMessage: "",
+      currentStatus: "",
+      buttonMessage: "Confirmar",
       isForm: false
     }
   },
@@ -98,7 +98,7 @@ export default {
     ...mapStores(useApiStore),
     filteredCustomers() {
       if (this.apiStore.customers && this.apiStore.customers.length > 0) {
-        if (this.currentStatus === 'Todos') {
+        if (this.currentStatus === "Todos") {
           return this.apiStore.customers
         } else {
           return this.apiStore.customers.filter((e) => e.status === this.currentStatus)
@@ -117,16 +117,16 @@ export default {
     addCustomer() {
       this.showModal = true
       this.isForm = true
-      this.action = 'create'
-      this.modalTitle = 'Adicionar Cliente'
+      this.action = "create"
+      this.modalTitle = "Adicionar Cliente"
     },
 
     updateCustomer(item) {
       this.showModal = true
       this.isForm = true
       this.item = item
-      this.action = 'update'
-      this.modalTitle = 'Atualizar Cliente'
+      this.action = "update"
+      this.modalTitle = "Atualizar Cliente"
     },
 
     getModalAction() {
@@ -140,11 +140,11 @@ export default {
     async deleteCustomer() {
       try {
         await axios.delete(`${this.apiStore.apiURL}/customer/${this.item.id}/`)
-        this.showMessage('Cliente excluído com sucesso!')
+        this.showMessage("Cliente excluído com sucesso!")
       } catch (error) {
-        console.error('Erro ao excluir cliente.', error)
+        console.error("Erro ao excluir cliente.", error)
 
-        this.showMessage('Erro ao excluir cliente.')
+        this.showMessage("Erro ao excluir cliente.")
       }
 
       this.showModal = false
@@ -153,14 +153,14 @@ export default {
 
     async inactiveCustomer() {
       try {
-        let data = { status: 'Inativo' }
+        let data = { status: "Inativo" }
 
         await axios.patch(`${this.apiStore.apiURL}/customer/${this.item.id}/`, data)
-        this.showMessage('Cliente inativado com sucesso!')
+        this.showMessage("Cliente inativado com sucesso!")
       } catch (error) {
-        console.error('Erro ao inativar cliente.', error)
+        console.error("Erro ao inativar cliente.", error)
 
-        this.showMessage('Erro ao inativar cliente.')
+        this.showMessage("Erro ao inativar cliente.")
       }
 
       this.showModal = false
@@ -170,14 +170,14 @@ export default {
     showDeleteModal(item) {
       this.item = item
       this.showModal = true
-      this.action = 'delete'
+      this.action = "delete"
       let revenueHistory = this.apiStore.revenue.filter((e) => e.customer === this.item.id)
 
       this.customerName = item.name
 
       if (revenueHistory.length > 0) {
         this.blockDelete = true
-        this.buttonMessage = 'Inativar'
+        this.buttonMessage = "Inativar"
       } else {
         this.blockDelete = false
       }
@@ -186,7 +186,7 @@ export default {
     closeModal() {
       this.showModal = false
       this.isForm = false
-      this.buttonMessage = 'Confirmar'
+      this.buttonMessage = "Confirmar"
     },
 
     showMessage(msg) {

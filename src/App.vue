@@ -7,8 +7,8 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useRoute } from "vue-router";
-import HomeView from "@/views/HomeView.vue";
-import LoginView from "@/views/LoginView.vue";
+import HomeView from "@/components/views/HomeView.vue";
+import LoginView from "@/components/views/LoginView.vue";
 
 const route = useRoute();
 

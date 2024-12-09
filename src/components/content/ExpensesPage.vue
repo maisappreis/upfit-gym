@@ -49,19 +49,19 @@
 </template>
 
 <script>
-import DefaultTable from '../common/DefaultTable.vue'
-import DefaultButton from '../common/DefaultButton.vue'
-import SearchFilter from '../common/SearchFilter.vue'
-import ModalCard from '../common/ModalCard.vue'
-import MonthFilter from '../common/MonthFilter.vue'
-import ExpensesForm from '../forms/ExpensesForm.vue'
-import { globalVariablesMixin } from '@/utils/variables.js'
-import { mapStores } from 'pinia'
-import { useApiStore } from '@/stores/api'
-import axios from 'axios'
+import DefaultTable from "@/components/common/DefaultTable.vue";
+import DefaultButton from "@/components/common/DefaultButton.vue";
+import SearchFilter from "@/components/common/SearchFilter.vue";
+import ModalCard from "@/components/common/ModalCard.vue";
+import MonthFilter from "@/components/common/MonthFilter.vue";
+import ExpensesForm from "../forms/ExpensesForm.vue";
+import { globalVariablesMixin } from "@/utils/variables.js";
+import { mapStores } from "pinia";
+import { useApiStore } from "@/stores/api";
+import axios from "axios";
 
 export default {
-  name: 'ExpensesPage',
+  name: "ExpensesPage",
   mixins: [globalVariablesMixin],
 
   components: {
@@ -80,26 +80,26 @@ export default {
   data() {
     return {
       columns: [
-        { key: 'year', name: 'Ano' },
-        { key: 'month', name: 'Mês' },
-        { key: 'name', name: 'Nome' },
-        { key: 'date', name: 'Vencimento' },
-        { key: 'installments', name: 'Parcelas' },
-        { key: 'value', name: 'Valor' },
-        { key: 'paid', name: 'Status' },
-        { key: 'actions', name: '' }
+        { key: "year", name: "Ano" },
+        { key: "month", name: "Mês" },
+        { key: "name", name: "Nome" },
+        { key: "date", name: "Vencimento" },
+        { key: "installments", name: "Parcelas" },
+        { key: "value", name: "Valor" },
+        { key: "paid", name: "Status" },
+        { key: "actions", name: "" }
       ],
-      statusList: ['Pago', 'À pagar', 'Todos'],
+      statusList: ["Pago", "À pagar", "Todos"],
       searchedField: [],
       showModal: false,
       item: {},
-      action: '',
+      action: "",
       messageData: {},
-      modalTitle: '',
-      requestMessage: '',
-      currentMonth: '',
+      modalTitle: "",
+      requestMessage: "",
+      currentMonth: "",
       currentYear: 0,
-      currentStatus: '',
+      currentStatus: "",
       isForm: false
     }
   },
@@ -136,26 +136,26 @@ export default {
     addExpense() {
       this.showModal = true
       this.isForm = true
-      this.action = 'create'
-      this.modalTitle = 'Adicionar Despesa'
+      this.action = "create"
+      this.modalTitle = "Adicionar Despesa"
     },
 
     updateExpense(item) {
       this.showModal = true
       this.isForm = true
       this.item = item
-      this.action = 'update'
-      this.modalTitle = 'Atualizar Despesa'
+      this.action = "update"
+      this.modalTitle = "Atualizar Despesa"
     },
 
     async deleteExpense() {
       try {
         await axios.delete(`${this.apiStore.apiURL}/expense/${this.item.id}/`)
-        this.showMessage('Despesa excluída com sucesso!')
+        this.showMessage("Despesa excluída com sucesso!")
       } catch (error) {
-        console.error('Erro ao excluir despesa.', error)
+        console.error("Erro ao excluir despesa.", error)
 
-        this.showMessage('Erro ao excluir despesa.')
+        this.showMessage("Erro ao excluir despesa.")
       }
 
       this.showModal = false
@@ -165,13 +165,13 @@ export default {
     showDeleteModal(item) {
       this.item = item
       this.showModal = true
-      this.action = 'delete'
+      this.action = "delete"
       let date = `${item.month}/${item.year}`
 
       this.messageData = {
         name: item.name,
         date: date,
-        view: 'expense'
+        view: "expense"
       }
     },
 

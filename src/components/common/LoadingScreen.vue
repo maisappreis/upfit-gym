@@ -2,9 +2,9 @@
   <div class="overlay">
     <div class="conteiner">
       <div class="spinner" />
-      <h1 class="message">
+      <h3 class="message">
         <slot></slot>
-      </h1>
+      </h3>
     </div>
   </div>
 </template>

@@ -1,29 +1,25 @@
 <template>
-  <div class="login-area">
-    <div class="login-form">
-      <img class="logo-area" :src="logoUpfit" alt="Logotype company" />
-      <form class="form-area" @submit.prevent="loginUser">
-        <div class="form-field">
-          <label for="name">Username:</label>
-          <input type="text" id="username" name="username" v-model="username" required />
-        </div>
-        <div class="form-field">
-          <label for="password">Senha:</label>
-          <input type="password" id="password" name="password" v-model="password" required />
-        </div>
-        <div class="button-area">
-          <DefaultButton type="submit" :disable="disable">Entrar</DefaultButton>
-        </div>
-      </form>
-    </div>
-    <AlertMessage
-      v-if="responseMessage"
-      :responseMessage="responseMessage"
-      @close-message="responseMessage = ''"
-    >
-      {{ responseMessage }}
-    </AlertMessage>
+<div class="login-area">
+  <div class="login-form">
+    <img class="logo-area" :src="logoUpfit" alt="Logotype company" />
+    <form class="form-area" @submit.prevent="loginUser">
+      <div class="form-field">
+        <label for="name">Username:</label>
+        <input type="text" id="username" name="username" v-model="username" required />
+      </div>
+      <div class="form-field">
+        <label for="password">Senha:</label>
+        <input type="password" id="password" name="password" v-model="password" required />
+      </div>
+      <div class="button-area">
+        <DefaultButton type="submit" :disable="disable">Entrar</DefaultButton>
+      </div>
+    </form>
   </div>
+  <AlertMessage v-if="responseMessage" :responseMessage="responseMessage" @close-message="responseMessage = ''">
+    {{ responseMessage }}
+  </AlertMessage>
+</div>
 </template>
 
 <script setup lang="ts">
@@ -31,9 +27,9 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useApiStore } from '@/stores/api'
 import { useAuthStore } from '@/stores/auth'
-import DefaultButton from '../components/common/DefaultButton.vue'
-import AlertMessage from '../components/common/AlertMessage.vue'
-import logoUpfit from '../assets/logo-upfit.png'
+import DefaultButton from "@/components/common/DefaultButton.vue";
+import AlertMessage from '@/components/common//AlertMessage.vue'
+import logoUpfit from '@/assets/logo-upfit.png'
 import axios from 'axios'
 
 const username = ref('')

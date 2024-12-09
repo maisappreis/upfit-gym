@@ -13,13 +13,13 @@
 </template>
 
 <script setup lang="ts">
-import DefaultButton from "./DefaultButton.vue";
+import DefaultButton from "@/components/common/DefaultButton.vue";
 
 defineProps({
   buttonMessage: {
     type: String,
     required: false,
-    default: 'Confirmar'
+    default: "Confirmar"
   },
   isForm: {
     type: Boolean,

@@ -59,11 +59,11 @@
 </template>
 
 <script>
-import DefaultTable from "../common/DefaultTable.vue";
-import DefaultButton from "../common/DefaultButton.vue";
-import SearchFilter from "../common/SearchFilter.vue";
-import ModalCard from "../common/ModalCard.vue";
-import MonthFilter from "../common/MonthFilter.vue";
+import DefaultTable from "@/components/common/DefaultTable.vue";
+import DefaultButton from "@/components/common/DefaultButton.vue";
+import SearchFilter from "@/components/common/SearchFilter.vue";
+import ModalCard from "@/components/common/ModalCard.vue";
+import MonthFilter from "@/components/common/MonthFilter.vue";
 import RevenueForm from "../forms/RevenueForm.vue";
 import { globalVariablesMixin } from "@/utils/variables.js";
 import { mapStores, mapState } from "pinia";

@@ -73,7 +73,7 @@
 </template>
 
 <script>
-import DefaultButton from '../common/DefaultButton.vue'
+import DefaultButton from "@/components/common/DefaultButton.vue";
 import { globalVariablesMixin } from '../../utils/variables.js'
 import { mapStores } from 'pinia'
 import { useApiStore } from '@/stores/api'

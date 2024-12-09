@@ -1,7 +1,7 @@
 <template>
-  <!-- <LoadingScreen v-if="loadingStore.isLoading">
+  <LoadingScreen v-if="isLoading">
     Carregando...
-  </LoadingScreen> -->
+  </LoadingScreen>
   <div class="app-area">
     <HeaderPage />
     <SideBar />
@@ -11,24 +11,25 @@
 </template>
 
 <script setup lang="ts">
-import HeaderPage from "@/components/HeaderPage.vue";
-import SideBar from "@/components/SideBar.vue";
-import ContentPage from "@/components/ContentPage.vue";
-import FooterPage from "@/components/FooterPage.vue";
-// import LoadingScreen from "@/components/common/LoadingScreen.vue";
-// import { useLoadingStore } from "@/stores/loading";
+import { ref } from "vue";
+import HeaderPage from "@/components/layout/HeaderPage.vue";
+import SideBar from "@/components/layout/SideBar.vue";
+import ContentPage from "@/components/layout/ContentPage.vue";
+import FooterPage from "@/components/layout/FooterPage.vue";
+import LoadingScreen from "@/components/common/LoadingScreen.vue";
 import { useAuthStore } from "@/stores/auth";
 import { useApiStore } from "@/stores/api";
 import { onMounted } from "vue";
 
 const authStore = useAuthStore();
 const apiStore = useApiStore();
-// const loadingStore = useLoadingStore();
+const isLoading = ref<boolean>(true);
 
 onMounted(async () => {
   authStore.checkAuthentication();
   apiStore.configureAxios();
   await apiStore.fetchData();
+  isLoading.value = false;
 });
 </script>
 
