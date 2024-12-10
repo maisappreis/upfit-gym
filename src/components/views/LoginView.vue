@@ -23,61 +23,61 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import { useApiStore } from '@/stores/api'
-import { useAuthStore } from '@/stores/auth'
+import { ref, computed, onMounted } from "vue";
+import { useRouter } from "vue-router";
+import { useApiStore } from "@/stores/api";
+import { useAuthStore } from "@/stores/auth";
 import DefaultButton from "@/components/common/DefaultButton.vue";
-import AlertMessage from '@/components/common//AlertMessage.vue'
-import logoUpfit from '@/assets/logo-upfit.png'
-import axios from 'axios'
+import AlertMessage from "@/components/common//AlertMessage.vue";
+import logoUpfit from "@/assets/logo-upfit.png";
+import axios from "axios";
 
-const username = ref('')
-const password = ref('')
-const responseMessage = ref('')
+const username = ref("");
+const password = ref("");
+const responseMessage = ref("");
 
-const router = useRouter()
-const apiStore = useApiStore()
-const authStore = useAuthStore()
+const router = useRouter();
+const apiStore = useApiStore();
+const authStore = useAuthStore();
 
 const disable = computed(() => {
-  return username.value == '' || password.value == ''
-})
+  return username.value == "" || password.value == "";
+});
 
 const loginUser = async () => {
   try {
     const loginData = {
       username: username.value,
       password: password.value
-    }
+    };
 
-    const response = await axios.post(`${apiStore.apiBase}/accounts/token/`, loginData)
-    const accessToken = response.data.access
-    const refreshToken = response.data.refresh
+    const response = await axios.post(`${apiStore.apiBase}/accounts/token/`, loginData);
+    const accessToken = response.data.access;
+    const refreshToken = response.data.refresh;
 
     if (accessToken && refreshToken) {
-      authStore.setTokens(accessToken, refreshToken)
-      responseMessage.value = 'Login realizado com sucesso!'
+      authStore.setTokens(accessToken, refreshToken);
+      responseMessage.value = "Login realizado com sucesso!";
 
       setTimeout(() => {
-        router.push('/')
-      }, 800)
+        router.push("/")
+      }, 800);
     }
   } catch (error) {
-    console.error(error)
-    responseMessage.value = 'Erro ao fazer login.'
+    console.error(error);
+    responseMessage.value = "Erro ao fazer login.";
   }
 }
 
 onMounted(async () => {
-  authStore.checkAuthentication()
+  authStore.checkAuthentication();
   if (authStore.isAuthenticated) {
-    responseMessage.value = 'Você já está logado! Redirecionando...'
+    responseMessage.value = "Você já está logado! Redirecionando...";
     setTimeout(() => {
-      router.push('/')
-    }, 2000)
+      router.push("/")
+    }, 2000);
   }
-})
+});
 </script>
 
 <style scoped>

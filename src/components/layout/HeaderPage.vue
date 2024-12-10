@@ -29,71 +29,57 @@
   <RouterView />
 </template>
 
-<script>
-import { RouterLink, RouterView } from "vue-router"
-import { mapStores, mapState } from "pinia"
-import { usePageStore } from "@/stores/page"
-import { useApiStore } from "@/stores/api"
-import { useAuthStore } from "@/stores/auth"
-import AlertMessage from "@/components/common/AlertMessage.vue"
+<script setup lang="ts">
+import { ref, watch } from "vue";
+import { RouterLink, RouterView } from "vue-router";
+import { usePageStore } from "@/stores/page";
+import { useAuthStore } from "@/stores/auth";
+import AlertMessage from "@/components/common/AlertMessage.vue";
 
-export default {
-  name: "HeaderPage",
-  components: {
-    RouterLink,
-    RouterView,
-    AlertMessage
-  },
-  data() {
-    return {
-      icon: "fa-solid fa-chart-line",
-      title: "Métricas",
-      subtitle: "Visualização gráfica de receita, despesas, lucro e clientes",
-      openDropdown: false,
-      responseMessage: ""
-    }
-  },
-  computed: {
-    ...mapStores(useApiStore, useAuthStore),
-    ...mapState(usePageStore, ["currentPage"])
-  },
+const authStore = useAuthStore();
+const pageStore = usePageStore();
 
-  methods: {
-    showDropdown() {
-      this.openDropdown = !this.openDropdown
-    }
-  },
-  watch: {
-    currentPage(newVal) {
-      switch (newVal) {
-        case "metrics":
-          this.icon = "fa-solid fa-chart-line"
-          this.title = "Métricas"
-          this.subtitle = "Visualização gráfica de receita, despesas, lucro e clientes"
-          break
-        case "customers":
-          this.icon = "fa-solid fa-users"
-          this.title = "Clientes"
-          this.subtitle = "Cadastramento dos clientes"
-          break
-        case "revenue":
-          this.icon = "fa-solid fa-hand-holding-dollar"
-          this.title = "Receitas"
-          this.subtitle = "Controle do recebimento das mensalidades dos clientes"
-          break
-        case "expenses":
-          this.icon = "fa-solid fa-money-bill-transfer"
-          this.title = "Despesas"
-          this.subtitle = "Controle do pagamento das contas"
-          break
-        default:
-          this.icon = ""
-          this.title = ""
-          this.subtitle = ""
-      }
+const icon = ref<string>("fa-solid fa-chart-line");
+const title = ref<string>("Métricas");
+const subtitle = ref<string>("Visualização gráfica de receita, despesas, lucro e clientes");
+const openDropdown = ref<boolean>(false);
+const responseMessage = ref<string>("");
+
+const showDropdown = () => {
+  openDropdown.value = !openDropdown.value;
+};
+
+watch(
+  () => pageStore.currentPage,
+  (newVal) => {
+    switch (newVal) {
+      case "metrics":
+        icon.value = "fa-solid fa-chart-line";
+        title.value = "Métricas";
+        subtitle.value = "Visualização gráfica de receita, despesas, lucro e clientes";
+        break;
+      case "customers":
+        icon.value = "fa-solid fa-users";
+        title.value = "Clientes";
+        subtitle.value = "Cadastramento dos clientes";
+        break;
+      case "revenue":
+        icon.value = "fa-solid fa-hand-holding-dollar";
+        title.value = "Receitas";
+        subtitle.value = "Controle do recebimento das mensalidades dos clientes";
+        break;
+      case "expenses":
+        icon.value = "fa-solid fa-money-bill-transfer";
+        title.value = "Despesas";
+        subtitle.value = "Controle do pagamento das contas";
+        break;
+      default:
+        icon.value = "";
+        title.value = "";
+        subtitle.value = "";
     }
   }
-}
+);
 </script>
 
 <style scoped>

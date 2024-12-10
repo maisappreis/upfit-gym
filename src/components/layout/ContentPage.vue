@@ -7,26 +7,12 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import MetricsPage from "@/components/content/MetricsPage.vue";
 import CustomersPage from "@/components/content/CustomersPage.vue";
 import RevenuePage from "@/components/content/RevenuePage.vue";
 import ExpensesPage from "@/components/content/ExpensesPage.vue";
-import { mapStores } from "pinia";
 import { usePageStore } from "@/stores/page";
 
-export default {
-  name: 'ContentPage',
-
-  components: {
-    RevenuePage,
-    ExpensesPage,
-    MetricsPage,
-    CustomersPage
-  },
-
-  computed: {
-    ...mapStores(usePageStore)
-  }
-}
+const pageStore = usePageStore();
 </script>

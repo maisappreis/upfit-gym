@@ -54,19 +54,12 @@
   </aside>
 </template>
 
-<script>
-import LogoType from './LogoType.vue'
-import { mapStores } from 'pinia'
-import { usePageStore } from '@/stores/page'
+<script setup lang="ts">
+import LogoType from "./LogoType.vue";
+import { usePageStore } from "@/stores/page";
 
-export default {
-  name: 'SideBar',
-  components: { LogoType },
+const pageStore = usePageStore();
 
-  computed: {
-    ...mapStores(usePageStore)
-  }
-}
 </script>
 
 <style scoped>

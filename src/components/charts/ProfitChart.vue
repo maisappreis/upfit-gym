@@ -11,97 +11,80 @@
   </div>
 </template>
 
-<script>
-import { Bar } from 'vue-chartjs'
-import {
-  Chart as ChartJS,
-  Title,
-  Tooltip,
-  Legend,
-  BarElement,
-  CategoryScale,
-  LinearScale
-} from 'chart.js'
+<script setup lang="ts">
+import { ref, computed, watch } from "vue";
+import { Bar } from "vue-chartjs";
+import { Chart as ChartJS, Title, Tooltip, Legend,
+  BarElement, CategoryScale, LinearScale } from "chart.js";
+import { type Data, type Options } from "@/types/chart";
 
-ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
+ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
 
-export default {
-  name: 'ProfitChart',
+const props = defineProps({
+  monthlyProfit: Array
+});
 
-  components: { Bar },
-
-  props: {
-    monthlyProfit: Array
-  },
-
-  data() {
-    return {
-      chartData: {
-        labels: [],
-        datasets: []
-      },
-      chartOptions: {
-        responsive: true,
-        plugins: {
-          legend: {
-            display: true,
-            labels: {
-              color: 'gray',
-              boxHeight: 15,
-              boxWidth: 15,
-              font: {
-                size: '20px'
-              }
-            }
-          },
-          tooltip: {
-            enabled: true,
-            bodySpacing: 5,
-            padding: 15,
-            displayColors: false,
-            titleFont: {
-              size: 18
-            },
-            bodyFont: {
-              size: 15
-            }
+const chartData = ref<Data>({
+  labels: [],
+  datasets: []
+});
+const chartOptions = ref<Options>({
+  responsive: true,
+    plugins: {
+      legend: {
+        display: true,
+        labels: {
+          color: "gray",
+          boxHeight: 15,
+          boxWidth: 15,
+          font: {
+            size: 20
           }
         }
-      }
-    }
-  },
-
-  computed: {
-    myStyles() {
-      return {
-        height: `100%`,
-        position: 'relative'
-      }
-    }
-  },
-
-  watch: {
-    monthlyProfit() {
-      if (this.monthlyProfit && this.monthlyProfit.length > 0) {
-        let monthlyProfitLast12Months = this.$methods.filterLast12Months(this.monthlyProfit)
-
-        let labels = monthlyProfitLast12Months.map((e) => e.month)
-        let data = monthlyProfitLast12Months.map((e) => e.sum)
-
-        this.chartData = {
-          labels: labels,
-          datasets: [
-            {
-              label: 'Lucro',
-              backgroundColor: 'green',
-              data: data
-            }
-          ]
+      },
+      tooltip: {
+        enabled: true,
+        bodySpacing: 5,
+        padding: 15,
+        displayColors: false,
+        titleFont: {
+          size: 18
+        },
+        bodyFont: {
+          size: 15
         }
       }
     }
+});
+
+const myStyles = computed(() => {
+  return {
+    height: "100%",
+    position: "relative"
+  };
+});
+
+const drawChart = () => {
+  if (props.monthlyProfit && props.monthlyProfit.length > 0) {
+    let labels = props.monthlyProfit.map((e) => e.month);
+    let data = props.monthlyProfit.map((e) => e.sum);
+
+    chartData.value = {
+      labels: labels,
+      datasets: [
+        {
+          label: "Lucro",
+          backgroundColor: "green",
+          data: data
+        }
+      ]
+    };
   }
-}
+};
+
+watch(() => props.monthlyProfit, () => {
+  drawChart();
+});
 </script>
 
 <style scoped>
