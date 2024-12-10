@@ -104,9 +104,9 @@
         </select>
         <span class="pagination-items">Total de {{ totalItems }} itens</span>
       </div>
-      <DefaultTooltip v-if="showingTooltip" :mouseX="mouseX" :mouseY="mouseY">
+      <TooltipModal v-if="showingTooltip" :mouseX="mouseX" :mouseY="mouseY">
         <p class="tooltip-text">{{ this.tooltip }}</p>
-      </DefaultTooltip>
+      </TooltipModal>
     </div>
     <div v-else class="not-found">Nenhum resultado foi encontrado.</div>
     <AlertMessage
@@ -127,7 +127,7 @@
 </template>
 
 <script>
-import DefaultTooltip from './DefaultTooltip.vue'
+import TooltipModal from './TooltipModal.vue'
 import AlertMessage from './AlertMessage.vue'
 import ModalCard from './ModalCard.vue'
 import { mapStores } from 'pinia'
@@ -137,7 +137,7 @@ import axios from 'axios'
 
 export default {
   name: 'DefaultTable',
-  components: { DefaultTooltip, AlertMessage, ModalCard },
+  components: { TooltipModal, AlertMessage, ModalCard },
   props: {
     columns: Array,
     data: Array,
