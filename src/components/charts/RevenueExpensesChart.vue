@@ -16,13 +16,14 @@ import { Line as LineChart } from "vue-chartjs"
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement,
   LineElement, Title, Tooltip, Legend } from "chart.js";
 import { type Data, type Options } from "@/types/chart";
+import { type CustomerPerMonth } from "@/types/customer";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-const props = defineProps({
-  monthlyRevenue: Array,
-  monthlyExpenses: Array
-});
+const props = defineProps<{
+  monthlyRevenue: CustomerPerMonth[];
+  monthlyExpenses: CustomerPerMonth[];
+}>();
 
 const chartData = ref<Data>({
   labels: [],

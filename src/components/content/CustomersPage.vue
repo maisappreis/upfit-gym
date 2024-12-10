@@ -36,7 +36,7 @@
       </h3>
       <CustomersForm
         v-else
-        :item="item"
+        :item="selectedItem"
         :action="action"
         :modalTitle="modalTitle"
         @closeModal="closeModal"
@@ -47,157 +47,138 @@
   </div>
 </template>
 
-<script>
-import DefaultTable from "@/components/common/DefaultTable.vue"
+<script setup lang="ts">
+import { ref, computed } from "vue";
+import DefaultTable from "@/components/common/DefaultTable.vue";
 import DefaultButton from "@/components/common/DefaultButton.vue";
-import SearchFilter from "@/components/common/SearchFilter.vue"
-import ModalCard from "@/components/common/ModalCard.vue"
-import CustomersForm from "@/components/forms/CustomersForm.vue"
-import StatusFilter from "@/components/common/StatusFilter.vue"
-import { mapStores } from "pinia"
-import { useApiStore } from "@/stores/api"
-import axios from "axios"
+import SearchFilter from "@/components/common/SearchFilter.vue";
+import ModalCard from "@/components/common/ModalCard.vue";
+import CustomersForm from "@/components/forms/CustomersForm.vue";
+import StatusFilter from "@/components/common/StatusFilter.vue";
+import { useApiStore } from "@/stores/api";
+import { type Column } from "@/types/column";
+import { type Customer } from "@/types/customer";
+import axios from "axios";
 
-export default {
-  name: "CustomersPage",
+const apiStore = useApiStore();
 
-  components: {
-    DefaultTable,
-    DefaultButton,
-    SearchFilter,
-    ModalCard,
-    CustomersForm,
-    StatusFilter
-  },
+const columns = ref<Column[]>([
+  { key: "name", name: "Nome" },
+  { key: "frequency", name: "Freq." },
+  { key: "start", name: "Início" },
+  { key: "plan", name: "Plano" },
+  { key: "value", name: "Valor" },
+  { key: "status", name: "Status" },
+  { key: "actions", name: "" }
+]);
+const searchedField = ref<string[]>([]);
+const showModal = ref<boolean>(false);
+const selectedItem = ref<Customer>({} as Customer);
+const action = ref<string>("");
+const customerName = ref<string>("");
+const modalTitle = ref<string>("");
+const requestMessage = ref<string>("");
+const currentStatus = ref<string>("");
+const buttonMessage = ref<string>("Confirmar");
+const isForm = ref<boolean>(false);
+const blockDelete = ref<boolean>(false);
 
-  data() {
-    return {
-      columns: [
-        { key: "name", name: "Nome" },
-        { key: "frequency", name: "Freq." },
-        { key: "start", name: "Início" },
-        { key: "plan", name: "Plano" },
-        { key: "value", name: "Valor" },
-        { key: "status", name: "Status" },
-        { key: "actions", name: "" }
-      ],
-      searchedField: [],
-      showModal: false,
-      item: {},
-      action: "",
-      customerName: "",
-      modalTitle: "",
-      requestMessage: "",
-      currentStatus: "",
-      buttonMessage: "Confirmar",
-      isForm: false
+const filteredCustomers = computed(() => {
+  if (apiStore.customers && apiStore.customers.length > 0) {
+    if (currentStatus.value === "Todos") {
+      return apiStore.customers;
+    } else {
+      return apiStore.customers.filter((e) => e.status === currentStatus.value);
     }
-  },
-
-  computed: {
-    ...mapStores(useApiStore),
-    filteredCustomers() {
-      if (this.apiStore.customers && this.apiStore.customers.length > 0) {
-        if (this.currentStatus === "Todos") {
-          return this.apiStore.customers
-        } else {
-          return this.apiStore.customers.filter((e) => e.status === this.currentStatus)
-        }
-      } else {
-        return []
-      }
-    }
-  },
-
-  methods: {
-    applySearch(field) {
-      this.searchedField = field
-    },
-
-    addCustomer() {
-      this.showModal = true
-      this.isForm = true
-      this.action = "create"
-      this.modalTitle = "Adicionar Cliente"
-    },
-
-    updateCustomer(item) {
-      this.showModal = true
-      this.isForm = true
-      this.item = item
-      this.action = "update"
-      this.modalTitle = "Atualizar Cliente"
-    },
-
-    getModalAction() {
-      if (this.blockDelete) {
-        this.inactiveCustomer()
-      } else {
-        this.deleteCustomer()
-      }
-    },
-
-    async deleteCustomer() {
-      try {
-        await axios.delete(`${this.apiStore.apiURL}/customer/${this.item.id}/`)
-        this.showMessage("Cliente excluído com sucesso!")
-      } catch (error) {
-        console.error("Erro ao excluir cliente.", error)
-
-        this.showMessage("Erro ao excluir cliente.")
-      }
-
-      this.showModal = false
-      await this.apiStore.fetchCustomers()
-    },
-
-    async inactiveCustomer() {
-      try {
-        let data = { status: "Inativo" }
-
-        await axios.patch(`${this.apiStore.apiURL}/customer/${this.item.id}/`, data)
-        this.showMessage("Cliente inativado com sucesso!")
-      } catch (error) {
-        console.error("Erro ao inativar cliente.", error)
-
-        this.showMessage("Erro ao inativar cliente.")
-      }
-
-      this.showModal = false
-      await this.apiStore.fetchCustomers()
-    },
-
-    showDeleteModal(item) {
-      this.item = item
-      this.showModal = true
-      this.action = "delete"
-      let revenueHistory = this.apiStore.revenue.filter((e) => e.customer === this.item.id)
-
-      this.customerName = item.name
-
-      if (revenueHistory.length > 0) {
-        this.blockDelete = true
-        this.buttonMessage = "Inativar"
-      } else {
-        this.blockDelete = false
-      }
-    },
-
-    closeModal() {
-      this.showModal = false
-      this.isForm = false
-      this.buttonMessage = "Confirmar"
-    },
-
-    showMessage(msg) {
-      this.requestMessage = msg
-    },
-
-    getStatus(status) {
-      this.currentStatus = status
-    }
+  } else {
+    return [];
   }
-}
-</script>
+});
 
-<style scoped></style>
+const applySearch = (field: string[]) => {
+  searchedField.value = field;
+};
+
+const addCustomer = () => {
+  showModal.value = true;
+  isForm.value = true;
+  action.value = "create";
+  modalTitle.value = "Adicionar Cliente";
+};
+
+const updateCustomer = (item: Customer) => {
+  selectedItem.value = item;
+  showModal.value = true;
+  isForm.value = true;
+  action.value = "update";
+  modalTitle.value = "Atualizar Cliente";
+};
+
+const getModalAction = () => {
+  if (blockDelete.value) {
+    inactiveCustomer();
+  } else {
+    deleteCustomer();
+  }
+};
+
+const deleteCustomer = async () => {
+  try {
+    await axios.delete(`${apiStore.apiURL}/customer/${selectedItem.value.id}/`);
+    showMessage("Cliente excluído com sucesso!");
+  } catch (error) {
+    console.error("Erro ao excluir cliente.", error);
+
+    showMessage("Erro ao excluir cliente.");
+  }
+
+  showModal.value = false
+  await apiStore.fetchCustomers();
+};
+
+const inactiveCustomer = async () => {
+  try {
+    let data = { status: "Inativo" };
+
+    await axios.patch(`${apiStore.apiURL}/customer/${selectedItem.value.id}/`, data);
+    showMessage("Cliente inativado com sucesso!");
+  } catch (error) {
+    console.error("Erro ao inativar cliente.", error);
+
+    showMessage("Erro ao inativar cliente.");
+  }
+
+  showModal.value = false;
+  await apiStore.fetchCustomers();
+};
+
+const showDeleteModal = (item: Customer) => {
+  selectedItem.value = item;
+  showModal.value = true;
+  action.value = "delete";
+  let revenueHistory = apiStore.revenue.filter((e) => e.customer === item.id);
+
+  customerName.value = item.name;
+
+  if (revenueHistory.length > 0) {
+    blockDelete.value = true;
+    buttonMessage.value = "Inativar";
+  } else {
+    blockDelete.value = false;
+  }
+};
+
+const closeModal = () => {
+  showModal.value = false;
+  isForm.value = false;
+  buttonMessage.value = "Confirmar";
+};
+
+const showMessage = (msg: string) => {
+  requestMessage.value = msg;
+};
+
+const getStatus = (status: string) => {
+  currentStatus.value = status;
+};
+</script>

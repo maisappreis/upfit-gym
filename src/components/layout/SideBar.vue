@@ -59,7 +59,6 @@ import LogoType from "./LogoType.vue";
 import { usePageStore } from "@/stores/page";
 
 const pageStore = usePageStore();
-
 </script>
 
 <style scoped>

@@ -6,8 +6,8 @@ import { type Revenue } from "@/types/revenue";
 import { type Expense } from "@/types/expense";
 
 export const useApiStore = defineStore("api", () => {
-  // const apiBase = ref("https://django-apis-two.vercel.app/api");
-  const apiBase = ref<string>("http://localhost:8000/api");
+  const apiBase = ref("https://django-apis-two.vercel.app/api");
+  // const apiBase = ref<string>("http://localhost:8000/api");
 
   const apiURL = ref<string>("");
 

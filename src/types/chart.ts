@@ -6,9 +6,9 @@ export interface Data {
 interface Dataset {
   label: string;
   backgroundColor: string;
-  borderColor: string;
-  pointRadius: number;
   data: number[];
+  borderColor?: string;
+  pointRadius?: number;
 };
 
 export interface Options {
