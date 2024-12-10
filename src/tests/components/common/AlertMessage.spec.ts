@@ -3,18 +3,27 @@ import { render } from "@testing-library/vue";
 import { describe, it, expect, vi } from "vitest";
 import AlertMessage from "@/components/common/AlertMessage.vue";
 
-describe("AlertMessage", () => {
-  // it("renders success alert when responseMessage does not contain 'erro'", () => {
-  //   render(AlertMessage, {
-  //     props: {
-  //       responseMessage: "Operação realizada com sucesso!"
-  //     }
-  //   })
+const mockFontAwesomeIcon = {
+  template: `<span><slot /></span>`
+};
 
-  //   const successAlert = screen.getByText(/Operação realizada com sucesso!/i)
-  //   expect(successAlert).toBeInTheDocument()
-  //   expect(screen.getByRole("alert")).toHaveClass("success")
-  // });
+describe("AlertMessage", () => {
+//   it("renders success alert when responseMessage does not contain 'erro'", () => {
+//     render(AlertMessage, {
+//       props: {
+//         responseMessage: "Operação realizada com sucesso!"
+//       },
+//       global: {
+//         components: {
+//           "font-awesome-icon": mockFontAwesomeIcon
+//         }
+//       }
+//     })
+
+//     const successAlert = screen.getByText(/Operação realizada com sucesso!/i)
+//     expect(successAlert).toBeInTheDocument()
+//     expect(screen.getByRole("alert")).toHaveClass("success")
+//   });
 
   // it("renders error alert when responseMessage contains 'erro'", () => {
   //   render(AlertMessage, {
@@ -34,6 +43,11 @@ describe("AlertMessage", () => {
     const { emitted } = render(AlertMessage, {
       props: {
         responseMessage: "Operação realizada com sucesso!"
+      },
+      global: {
+        components: {
+          "font-awesome-icon": mockFontAwesomeIcon
+        }
       }
     });
 
