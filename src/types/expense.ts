@@ -9,3 +9,9 @@ export interface Expense {
   installments: string;
   notes: string;
 };
+
+export interface Message {
+  name: string;
+  date: string;
+  view: string;
+};

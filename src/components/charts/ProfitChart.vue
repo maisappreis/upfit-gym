@@ -17,12 +17,12 @@ import { Bar } from "vue-chartjs";
 import { Chart as ChartJS, Title, Tooltip, Legend,
   BarElement, CategoryScale, LinearScale } from "chart.js";
 import { type Data, type Options } from "@/types/chart";
-import { type CustomerPerMonth } from "@/types/customer";
+import { type SumPerMonth } from "@/types/chart";
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
 
 const props = defineProps<{
-  monthlyProfit: CustomerPerMonth[];
+  monthlyProfit: SumPerMonth[];
 }>();
 
 const chartData = ref<Data>({

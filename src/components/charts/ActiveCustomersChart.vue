@@ -17,7 +17,8 @@ import { Chart as ChartJS, CategoryScale, LinearScale,
   PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
 import { useApiStore } from "@/stores/api";
 import { type Data, type Options } from "@/types/chart";
-import { type Customer, type CustomerPerMonth } from "@/types/customer";
+import { type Customer } from "@/types/customer";
+import { type SumPerMonth } from "@/types/chart";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -63,8 +64,8 @@ const myStyles = computed(() => {
   };
 });
 
-const calculateActiveCustomersPerMonth = (): CustomerPerMonth[] => {
-  const activeCustomersPerMonth = [] as CustomerPerMonth[];
+const calculateActiveCustomersPerMonth = (): SumPerMonth[] => {
+  const activeCustomersPerMonth = [] as SumPerMonth[];
 
   apiStore.revenue.forEach((revenueRecord) => {
     if (revenueRecord.paid === "Pago") {
@@ -95,7 +96,7 @@ const calculateActiveCustomersPerMonth = (): CustomerPerMonth[] => {
 };
 
 const drawChart = () => {
-  let activeCustomers = [] as CustomerPerMonth[];
+  let activeCustomers = [] as SumPerMonth[];
   if (
     apiStore.revenue &&
     apiStore.revenue.length > 0 &&

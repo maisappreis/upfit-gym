@@ -56,8 +56,8 @@ import ModalCard from "@/components/common/ModalCard.vue";
 import CustomersForm from "@/components/forms/CustomersForm.vue";
 import StatusFilter from "@/components/common/StatusFilter.vue";
 import { useApiStore } from "@/stores/api";
-import { type Column } from "@/types/column";
 import { type Customer } from "@/types/customer";
+import { type Column } from "@/types/table";
 import axios from "axios";
 
 const apiStore = useApiStore();

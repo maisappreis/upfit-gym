@@ -8,9 +8,3 @@ export interface Customer {
   status: string;
   notes: string;
 };
-
-export interface CustomerPerMonth {
-  month: string;
-  sum: number;
-  year: number;
-};

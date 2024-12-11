@@ -45,7 +45,7 @@
       </h3>
       <RevenueForm
         v-else
-        :item="item"
+        :item="selectedItem"
         :customers="apiStore.customers"
         :action="action"
         :modalTitle="modalTitle"
@@ -58,233 +58,213 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { ref, computed, watch, onMounted } from "vue";
 import DefaultTable from "@/components/common/DefaultTable.vue";
 import DefaultButton from "@/components/common/DefaultButton.vue";
 import SearchFilter from "@/components/common/SearchFilter.vue";
 import ModalCard from "@/components/common/ModalCard.vue";
 import MonthFilter from "@/components/common/MonthFilter.vue";
 import RevenueForm from "../forms/RevenueForm.vue";
-import { globalVariablesMixin } from "@/utils/variables.js";
-import { mapStores, mapState } from "pinia";
+import { type Revenue, type UpdatedRevenue, type Message } from "@/types/revenue";
+import { type Column } from "@/types/table";
 import { useApiStore } from "@/stores/api";
+import { useUtils } from "@/utils/utils";
 import axios from "axios";
 
-export default {
-  name: "RevenuePage",
-  mixins: [globalVariablesMixin],
+const apiStore = useApiStore();
+const { filteredData, getNextMonth } = useUtils();
+const emit = defineEmits(["showMessage"]);
 
-  components: {
-    DefaultTable,
-    DefaultButton,
-    SearchFilter,
-    ModalCard,
-    RevenueForm,
-    MonthFilter
-  },
+const columns = ref<Column[]>([
+  { key: "year", name: "Ano" },
+  { key: "month", name: "Mês" },
+  { key: "name", name: "Nome" },
+  { key: "start", name: "Início" },
+  { key: "plan", name: "Plano" },
+  { key: "payment_day", name: "Venc." },
+  { key: "value", name: "Valor" },
+  { key: "paid", name: "Status" },
+  { key: "actions", name: "" }
+]);
+const statusList = ref<string[]>(["Pago", "À pagar", "Link enviado", "Todos"]);
+const searchedField = ref<string[]>([]);
+const showModal = ref<boolean>(false);
+const selectedItem = ref<Revenue>({} as Revenue);
+const action = ref<"create" | "update" | "delete" | "">("");
+const messageData = ref<Message>({} as Message);
+const modalTitle = ref<string>("");
+const requestMessage = ref<string>("");
+const currentMonth = ref<string>("");
+const currentYear = ref<number>(0);
+const currentStatus = ref<string>("");
+const showConfirmation = ref<boolean>(false);
+const confirmationData = ref<UpdatedRevenue>({} as UpdatedRevenue);
+const isForm = ref<boolean>(false);
 
-  data() {
-    return {
-      columns: [
-        { key: "year", name: "Ano" },
-        { key: "month", name: "Mês" },
-        { key: "name", name: "Nome" },
-        { key: "start", name: "Início" },
-        { key: "plan", name: "Plano" },
-        { key: "payment_day", name: "Venc." },
-        { key: "value", name: "Valor" },
-        { key: "paid", name: "Status" },
-        { key: "actions", name: "" }
-      ],
-      statusList: ["Pago", "À pagar", "Link enviado", "Todos"],
-      searchedField: [],
-      showModal: false,
-      item: {},
-      action: "",
-      messageData: {},
-      modalTitle: "",
-      requestMessage: "",
-      currentMonth: "",
-      currentYear: 0,
-      currentStatus: "",
-      showConfirmation: false,
-      confirmationData: {},
-      isForm: false
-    }
-  },
+const filteredRevenue = computed(() => {
+  return filteredData(
+    apiStore.revenue as Revenue[],
+    currentMonth.value,
+    currentYear.value,
+    currentStatus.value
+  );
+});
 
-  computed: {
-    ...mapStores(useApiStore),
-    ...mapState(useApiStore, ["revenue"]),
-    filteredRevenue() {
-      return this.$computed.filteredData(
-        this.apiStore.revenue,
-        this.currentMonth,
-        this.currentYear,
-        this.currentStatus
-      )
-    }
-  },
+const getMonth = (month: string) => {
+  currentMonth.value = month;
+};
 
-  methods: {
-    getMonth(month) {
-      this.currentMonth = month;
-    },
+const getYear = (year: number) => {
+  currentYear.value = year;
+};
 
-    getYear(year) {
-      this.currentYear = year;
-    },
+const getStatus = (status: string) => {
+  currentStatus.value = status;
+};
 
-    getStatus(status) {
-      this.currentStatus = status;
-    },
+const applySearch = (field: string[]) => {
+  searchedField.value = field;
+};
 
-    applySearch(field) {
-      this.searchedField = field;
-    },
+const addRevenue = () => {
+  showModal.value = true;
+  isForm.value = true;
+  action.value = "create";
+  modalTitle.value = "Adicionar Receita";
+};
 
-    addRevenue() {
-      this.showModal = true;
-      this.isForm = true;
-      this.action = "create";
-      this.modalTitle = "Adicionar Receita";
-    },
+const updateRevenue = (item: Revenue) => {
+  selectedItem.value = item;
+  showModal.value = true;
+  isForm.value = true;
+  action.value = "update";
+  modalTitle.value = "Atualizar Receita";
+};
 
-    updateRevenue(item) {
-      this.showModal = true;
-      this.isForm = true;
-      this.item = item;
-      this.action = "update";
-      this.modalTitle = "Atualizar Receita";
-    },
+const deleteRevenue = async () => {
+  try {
+    await axios.delete(`${apiStore.apiURL}/revenue/${selectedItem.value.id}/`);
+    showMessage("Receita excluída com sucesso!");
+  } catch (error) {
+    console.error("Erro ao excluir receita.", error);
 
-    async deleteRevenue() {
-      try {
-        await axios.delete(`${this.apiStore.apiURL}/revenue/${this.item.id}/`);
-        this.showMessage("Receita excluída com sucesso!");
-      } catch (error) {
-        console.error("Erro ao excluir receita.", error);
-
-        this.showMessage("Erro ao excluir receita.");
-      }
-
-      this.showModal = false;
-      await this.apiStore.fetchRevenue();
-    },
-
-    showDeleteModal(item) {
-      this.item = item;
-      this.showModal = true;
-      this.action = "delete";
-      let date = `${item.month}/${item.year}`;
-
-      this.messageData = {
-        name: item.name,
-        date: date
-      };
-    },
-
-    closeModal() {
-      this.showModal = false;
-      this.isForm = false;
-      this.showConfirmation = false;
-      this.action = "";
-    },
-
-    showMessage(msg) {
-      this.requestMessage = msg;
-    },
-
-    getConfirmation(data) {
-      this.confirmationData = data;
-      this.showModal = true;
-      this.showConfirmation = true;
-    },
-
-    async getModalAction() {
-      if (this.showConfirmation) {
-        this.updateCustomerValue();
-        this.updateFutureRevenue();
-
-        this.closeModal();
-        await this.apiStore.fetchData();
-      } else {
-        this.deleteRevenue();
-      }
-    },
-
-    updateFutureRevenue() {
-      let nextMonth = this.$methods.getNextMonth(
-        this.confirmationData.month,
-        this.confirmationData.year
-      );
-      let nextRevenues = this.apiStore.revenue.filter(
-        (e) => e.month === nextMonth.month && e.year === nextMonth.year
-      );
-
-      for (let i = 0; i < nextRevenues.length; i++) {
-        this.updateRevenueValue(nextRevenues[i].id);
-      }
-    },
-
-    async updateCustomerValue() {
-      try {
-        let updatedCustomer = {
-          value: this.confirmationData.updatedValue
-        };
-
-        await axios.patch(
-          `${this.apiStore.apiURL}/customer/${this.confirmationData.id}/`,
-          updatedCustomer
-        );
-        this.$emit("showMessage", "Cliente atualizado com sucesso!");
-      } catch (error) {
-        console.error("Erro ao atualizar cliente.", error);
-        this.$emit("showMessage", "Erro ao atualizar cliente.");
-      }
-    },
-
-    async updateRevenueValue(id) {
-      try {
-        let updatedRevenue = {
-          value: this.confirmationData.updatedValue
-        };
-        await axios.patch(`${this.apiStore.apiURL}/revenue/${id}/`, updatedRevenue);
-      } catch (error) {
-        console.error("Erro ao atualizar receita.", error);
-      }
-    },
-
-    incrementData() {
-      this.apiStore.customers.forEach((customer) => {
-        const matchingRevenues = this.apiStore.revenue.filter(
-          (revenue) => revenue.customer === customer.id
-        );
-
-        matchingRevenues.forEach((matchingRevenue) => {
-          matchingRevenue.name = customer.name
-          matchingRevenue.start = customer.start
-          matchingRevenue.plan = customer.plan
-          matchingRevenue.status = customer.status
-        });
-      });
-    },
-
-    formatValue(value) {
-      return value.toFixed(2).toString().replace(/\./g, ",");
-    }
-  },
-
-  watch: {
-    revenue() {
-      this.incrementData();
-    }
-  },
-
-  mounted() {
-    if (this.apiStore.customers && this.apiStore.customers.length > 0) {
-      this.incrementData();
-    }
+    showMessage("Erro ao excluir receita.");
   }
-}
+
+  showModal.value = false;
+  await apiStore.fetchRevenue();
+};
+
+const showDeleteModal = (item: Revenue) => {
+  selectedItem.value = item;
+  showModal.value = true;
+  action.value = "delete";
+  let date = `${item.month}/${item.year}`;
+
+  messageData.value = {
+    name: item.name,
+    date: date
+  };
+};
+
+const closeModal = () => {
+  showModal.value = false;
+  isForm.value = false;
+  showConfirmation.value = false;
+  action.value = "";
+};
+
+const showMessage = (msg: string) => {
+  requestMessage.value = msg;
+};
+
+const getConfirmation = (data: UpdatedRevenue) => {
+  confirmationData.value = data;
+  showModal.value = true;
+  showConfirmation.value = true;
+};
+
+const getModalAction = async () => {
+  if (showConfirmation.value) {
+    updateCustomerValue();
+    updateFutureRevenue();
+
+    closeModal();
+    await apiStore.fetchData();
+  } else {
+    deleteRevenue();
+  }
+};
+
+const updateFutureRevenue = () => {
+  let nextMonth = getNextMonth(
+    confirmationData.value.month,
+    confirmationData.value.year
+  );
+  let nextRevenues = apiStore.revenue.filter(
+    (e) => e.month === nextMonth.month && e.year === nextMonth.year
+  );
+
+  for (let i = 0; i < nextRevenues.length; i++) {
+    updateRevenueValue(nextRevenues[i].id);
+  }
+};
+
+const updateCustomerValue = async () => {
+  try {
+    let updatedCustomer = {
+      value: confirmationData.value.updatedValue
+    };
+
+    await axios.patch(
+      `${apiStore.apiURL}/customer/${confirmationData.value.id}/`,
+      updatedCustomer
+    );
+    emit("showMessage", "Cliente atualizado com sucesso!");
+  } catch (error) {
+    console.error("Erro ao atualizar cliente.", error);
+    emit("showMessage", "Erro ao atualizar cliente.");
+  }
+};
+
+const updateRevenueValue = async (id: number) => {
+  try {
+    let updatedRevenue = {
+      value: confirmationData.value.updatedValue
+    };
+    await axios.patch(`${apiStore.apiURL}/revenue/${id}/`, updatedRevenue);
+  } catch (error) {
+    console.error("Erro ao atualizar receita.", error);
+  }
+};
+
+const incrementData = () => {
+  apiStore.customers.forEach((customer) => {
+    const matchingRevenues = apiStore.revenue.filter(
+      (revenue) => revenue.customer === customer.id
+    );
+
+    matchingRevenues.forEach((matchingRevenue) => {
+      matchingRevenue.name = customer.name
+      matchingRevenue.start = customer.start
+      matchingRevenue.plan = customer.plan
+      matchingRevenue.status = customer.status
+    });
+  });
+};
+
+const formatValue = (value: number) => {
+  return value.toFixed(2).toString().replace(/\./g, ",");
+};
+
+watch(apiStore.revenue, () => {
+  incrementData();
+});
+
+onMounted(() => {
+  if (apiStore.customers && apiStore.customers.length > 0) {
+    incrementData();
+  }
+});
 </script>

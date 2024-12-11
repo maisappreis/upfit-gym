@@ -1,3 +1,9 @@
+export interface SumPerMonth {
+  year: number;
+  month: string;
+  sum: number;
+};
+
 export interface Data {
   labels: string[];
   datasets: Dataset[];

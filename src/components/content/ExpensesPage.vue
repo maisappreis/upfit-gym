@@ -37,7 +37,7 @@
       </h3>
       <ExpensesForm
         v-else
-        :item="item"
+        :item="selectedItem"
         :action="action"
         :modalTitle="modalTitle"
         @closeModal="closeModal"
@@ -48,144 +48,124 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { ref, computed } from "vue";
 import DefaultTable from "@/components/common/DefaultTable.vue";
 import DefaultButton from "@/components/common/DefaultButton.vue";
 import SearchFilter from "@/components/common/SearchFilter.vue";
 import ModalCard from "@/components/common/ModalCard.vue";
 import MonthFilter from "@/components/common/MonthFilter.vue";
-import ExpensesForm from "../forms/ExpensesForm.vue";
-import { globalVariablesMixin } from "@/utils/variables.js";
-import { mapStores } from "pinia";
+import ExpensesForm from "@/components/forms/ExpensesForm.vue";
+import { type Expense, type Message } from "@/types/expense";
+import { type Column } from "@/types/table";
 import { useApiStore } from "@/stores/api";
+import { useUtils } from "@/utils/utils";
 import axios from "axios";
 
-export default {
-  name: "ExpensesPage",
-  mixins: [globalVariablesMixin],
+const apiStore = useApiStore();
+const { filteredData } = useUtils();
 
-  components: {
-    DefaultTable,
-    DefaultButton,
-    SearchFilter,
-    ModalCard,
-    ExpensesForm,
-    MonthFilter
-  },
+const columns = ref<Column[]>([
+  { key: "year", name: "Ano" },
+  { key: "month", name: "Mês" },
+  { key: "name", name: "Nome" },
+  { key: "date", name: "Vencimento" },
+  { key: "installments", name: "Parcelas" },
+  { key: "value", name: "Valor" },
+  { key: "paid", name: "Status" },
+  { key: "actions", name: "" }
+]);
+const statusList = ref<string[]>(["Pago", "À pagar", "Todos"]);
+const searchedField = ref<string[]>([]);
+const showModal = ref<boolean>(false);
+const selectedItem = ref<Expense>({} as Expense);
+const action = ref<string>("");
+const messageData = ref<Message>({} as Message);
+const modalTitle = ref<string>("");
+const requestMessage = ref<string>("");
+const currentMonth = ref<string>("");
+const currentYear = ref<number>(0);
+const currentStatus = ref<string>("");
+const isForm = ref<boolean>(false);
 
-  props: {
-    expenses: Array
-  },
+defineProps({
+  expenses: Array
+});
 
-  data() {
-    return {
-      columns: [
-        { key: "year", name: "Ano" },
-        { key: "month", name: "Mês" },
-        { key: "name", name: "Nome" },
-        { key: "date", name: "Vencimento" },
-        { key: "installments", name: "Parcelas" },
-        { key: "value", name: "Valor" },
-        { key: "paid", name: "Status" },
-        { key: "actions", name: "" }
-      ],
-      statusList: ["Pago", "À pagar", "Todos"],
-      searchedField: [],
-      showModal: false,
-      item: {},
-      action: "",
-      messageData: {},
-      modalTitle: "",
-      requestMessage: "",
-      currentMonth: "",
-      currentYear: 0,
-      currentStatus: "",
-      isForm: false
-    }
-  },
 
-  computed: {
-    ...mapStores(useApiStore),
-    filteredExpenses() {
-      return this.$computed.filteredData(
-        this.apiStore.expenses,
-        this.currentMonth,
-        this.currentYear,
-        this.currentStatus
-      )
-    }
-  },
+const filteredExpenses = computed(() => {
+  return filteredData(
+    apiStore.expenses as Expense[],
+    currentMonth.value,
+    currentYear.value,
+    currentStatus.value
+  );
+});
 
-  methods: {
-    getMonth(month) {
-      this.currentMonth = month
-    },
+const getMonth = (month: string) => {
+  currentMonth.value = month;
+};
 
-    getYear(year) {
-      this.currentYear = year
-    },
+const getYear = (year: number) => {
+  currentYear.value = year;
+};
 
-    getStatus(status) {
-      this.currentStatus = status
-    },
+const getStatus = (status: string) => {
+  currentStatus.value = status;
+};
 
-    applySearch(field) {
-      this.searchedField = field
-    },
+const applySearch = (field: string[]) => {
+  searchedField.value = field;
+};
 
-    addExpense() {
-      this.showModal = true
-      this.isForm = true
-      this.action = "create"
-      this.modalTitle = "Adicionar Despesa"
-    },
+const addExpense = () => {
+  showModal.value = true;
+  isForm.value = true;
+  action.value = "create";
+  modalTitle.value = "Adicionar Despesa";
+};
 
-    updateExpense(item) {
-      this.showModal = true
-      this.isForm = true
-      this.item = item
-      this.action = "update"
-      this.modalTitle = "Atualizar Despesa"
-    },
+const updateExpense = (item: Expense) => {
+  selectedItem.value = item;
+  showModal.value = true;
+  isForm.value = true;
+  action.value = "update";
+  modalTitle.value = "Atualizar Despesa";
+};
 
-    async deleteExpense() {
-      try {
-        await axios.delete(`${this.apiStore.apiURL}/expense/${this.item.id}/`)
-        this.showMessage("Despesa excluída com sucesso!")
-      } catch (error) {
-        console.error("Erro ao excluir despesa.", error)
+const deleteExpense = async () => {
+  try {
+    await axios.delete(`${apiStore.apiURL}/expense/${selectedItem.value.id}/`);
+    showMessage("Despesa excluída com sucesso!");
+  } catch (error) {
+    console.error("Erro ao excluir despesa.", error);
 
-        this.showMessage("Erro ao excluir despesa.")
-      }
-
-      this.showModal = false
-      await this.apiStore.fetchExpenses()
-    },
-
-    showDeleteModal(item) {
-      this.item = item
-      this.showModal = true
-      this.action = "delete"
-      let date = `${item.month}/${item.year}`
-
-      this.messageData = {
-        name: item.name,
-        date: date,
-        view: "expense"
-      }
-    },
-
-    closeModal() {
-      this.showModal = false
-      this.isForm = false
-    },
-
-    showMessage(msg) {
-      this.requestMessage = msg
-    }
+    showMessage("Erro ao excluir despesa.");
   }
-}
-</script>
 
-<style scoped>
-</style>
+  showModal.value = false;
+  await apiStore.fetchExpenses();
+};
+
+const showDeleteModal = (item: Expense) => {
+  selectedItem.value = item;
+  showModal.value = true;
+  action.value = "delete";
+  let date = `${item.month}/${item.year}`;
+
+  messageData.value = {
+    name: item.name,
+    date: date,
+    view: "expense"
+  };
+};
+
+const closeModal = () => {
+  showModal.value = false;
+  isForm.value = false;
+};
+
+const showMessage = (msg: string) => {
+  requestMessage.value = msg;
+};
+</script>

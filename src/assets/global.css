@@ -20,9 +20,10 @@
     font-size: 20px;
     background-color: var(--red-light-color);
     font-weight: bold;
-    margin: 70px 20px;
+    margin: 0 20px;
     padding: 30px;
     border-radius: 10px;
+    height: fit-content;
 }
 
 .highlight {
