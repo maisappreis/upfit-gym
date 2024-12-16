@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, watch, onMounted } from "vue";
 import RevenueExpensesChart from "../charts/RevenueExpensesChart.vue";
 import ActiveCustomersChart from "../charts/ActiveCustomersChart.vue";
 import ProfitChart from "../charts/ProfitChart.vue";
@@ -67,8 +67,8 @@ const calculateProfit = () => {
   monthlyProfit.value = resultArray;
 };
 
-onMounted(() => {
-  if (apiStore.revenue && apiStore.revenue.length > 0) {
+const prepareDataForCalculation = () => {
+  if (apiStore.revenue.length > 0  || apiStore.expenses.length > 0) {
     let paidRevenue = apiStore.revenue.filter((e) => e.paid === 'Pago');
     let paidExpenses = apiStore.expenses.filter((e) => e.paid === 'Pago');
 
@@ -80,6 +80,14 @@ onMounted(() => {
 
     calculateProfit();
   }
+};
+
+watch(() => apiStore.expenses, () => {
+  prepareDataForCalculation();
+});
+
+onMounted(() => {
+  prepareDataForCalculation();
 });
 </script>
 

@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, watch, onMounted } from "vue";
 import { Line as LineChart } from "vue-chartjs";
 import { Chart as ChartJS, CategoryScale, LinearScale,
   PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
@@ -124,6 +124,10 @@ const drawChart = () => {
     };
   }
 };
+
+watch(() => apiStore.revenue, () => {
+  drawChart();
+});
 
 onMounted(() => {
   drawChart();
