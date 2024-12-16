@@ -27,6 +27,7 @@ import { ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useApiStore } from "@/stores/api";
 import { useAuthStore } from "@/stores/auth";
+import { usePageStore } from "@/stores/page";
 import DefaultButton from "@/components/common/DefaultButton.vue";
 import AlertMessage from "@/components/common//AlertMessage.vue";
 import logoUpfit from "@/assets/logo-upfit.png";
@@ -39,6 +40,7 @@ const responseMessage = ref("");
 const router = useRouter();
 const apiStore = useApiStore();
 const authStore = useAuthStore();
+const pageStore = usePageStore();
 
 const disable = computed(() => {
   return username.value == "" || password.value == "";
@@ -59,6 +61,10 @@ const loginUser = async () => {
       authStore.setTokens(accessToken, refreshToken);
       responseMessage.value = "Login realizado com sucesso!";
 
+      authStore.checkAuthentication();
+      await apiStore.fetchData();
+      pageStore.openPage('metrics');
+      
       setTimeout(() => {
         router.push("/")
       }, 800);
