@@ -77,13 +77,13 @@ import { ref, computed, onMounted } from "vue";
 import DefaultButton from "@/components/common/DefaultButton.vue";
 import { type Revenue } from "@/types/revenue";
 import { type Customer } from "@/types/customer";
-import { months, years } from "@/utils/variablesTs";
+import { months, years } from "@/utils/variables";
 import { useApiStore } from "@/stores/api";
-import { useUtils } from "@/utils/utils";
+import { useDataUtils } from "@/utils/dataUtils";
 import axios from "axios";
 
 const apiStore = useApiStore();
-const { getValidFloat } = useUtils();
+const { getValidFloat } = useDataUtils();
 const emit = defineEmits(["showMessage", "closeModal", "getConfirmation"]);
 
 const customersList = ref<Customer[]>();

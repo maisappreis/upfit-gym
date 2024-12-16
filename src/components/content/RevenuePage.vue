@@ -67,11 +67,13 @@ import MonthFilter from "@/components/common/MonthFilter.vue";
 import RevenueForm from "../forms/RevenueForm.vue";
 import { type Revenue, type UpdatedRevenue, type Message } from "@/types/revenue";
 import { useApiStore } from "@/stores/api";
-import { useUtils } from "@/utils/utils";
+import { useDateUtils } from "@/utils/dateUtils";
+import { useDataUtils } from "@/utils/dataUtils";
 import axios from "axios";
 
 const apiStore = useApiStore();
-const { filteredData, getNextMonth } = useUtils();
+const { filteredData } = useDataUtils();
+const { getNextMonth } = useDateUtils();
 const emit = defineEmits(["showMessage"]);
 
 const statusList = ref<string[]>(["Pago", "À pagar", "Link enviado", "Todos"]);

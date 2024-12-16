@@ -57,11 +57,11 @@ import MonthFilter from "@/components/common/MonthFilter.vue";
 import ExpensesForm from "@/components/forms/ExpensesForm.vue";
 import { type Expense, type Message } from "@/types/expense";
 import { useApiStore } from "@/stores/api";
-import { useUtils } from "@/utils/utils";
+import { useDataUtils } from "@/utils/dataUtils";
 import axios from "axios";
 
 const apiStore = useApiStore();
-const { filteredData } = useUtils();
+const { filteredData } = useDataUtils();
 
 const statusList = ref<string[]>(["Pago", "À pagar", "Todos"]);
 const searchedField = ref<string[]>([]);

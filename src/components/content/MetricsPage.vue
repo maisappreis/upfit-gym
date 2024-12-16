@@ -20,10 +20,10 @@ import { type SumPerMonth } from "@/types/chart";
 import type { Revenue } from "@/types/revenue";
 import type { Expense } from "@/types/expense";
 import { useApiStore } from "@/stores/api";
-import { useUtils } from "@/utils/utils";
+import { useDateUtils } from "@/utils/dateUtils";
 
 const apiStore = useApiStore();
-const { sortData } = useUtils();
+const { sortDataByDate } = useDateUtils();
 
 const monthlyRevenueOrdered = ref<SumPerMonth[]>([]);
 const monthlyExpensesOrdered = ref<SumPerMonth[]>([]);
@@ -75,8 +75,8 @@ const prepareDataForCalculation = () => {
     let monthlyRevenue = sumMonthlyAmounts(paidRevenue);
     let monthlyExpenses = sumMonthlyAmounts(paidExpenses);
 
-    monthlyRevenueOrdered.value = sortData(monthlyRevenue);
-    monthlyExpensesOrdered.value = sortData(monthlyExpenses);
+    monthlyRevenueOrdered.value = sortDataByDate(monthlyRevenue);
+    monthlyExpensesOrdered.value = sortDataByDate(monthlyExpenses);
 
     calculateProfit();
   }

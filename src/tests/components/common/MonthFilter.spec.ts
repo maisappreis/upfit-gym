@@ -1,7 +1,7 @@
 import { mount } from "@vue/test-utils";
 import { describe, it, expect } from "vitest";
 import MonthFilter from "@/components/common/MonthFilter.vue";
-import { months } from "@/utils/variablesTs";
+import { months } from "@/utils/variables";
 
 describe("MonthFilter.vue", () => {
   it("renders the component correctly with props", () => {
@@ -11,10 +11,10 @@ describe("MonthFilter.vue", () => {
     });
 
     const monthOptions = wrapper.findAll("select#month option");
-    expect(monthOptions.length).toBe(13); // months at variables.ts
+    expect(monthOptions.length).toBe(13);
 
     const yearOptions = wrapper.findAll("select#year option");
-    expect(yearOptions.length).toBe(17); // years at variables.ts
+    expect(yearOptions.length).toBe(17);
 
     const statusOptions = wrapper.findAll("select#status option");
     expect(statusOptions.length).toBe(statusList.length + 1);

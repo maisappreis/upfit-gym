@@ -1,27 +1,20 @@
-import { createApp } from 'vue';
-import { createPinia } from 'pinia';
-import App from './App.vue';
-import router from './router/index';
-import './assets/variables.css';
-import './assets/global.css';
-import './assets/table.css';
+import { createApp } from "vue";
+import { createPinia } from "pinia";
+import App from "./App.vue";
+import router from "./router/index";
+import "./assets/variables.css";
+import "./assets/global.css";
+import "./assets/table.css";
 
-import { library } from './icons';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { globalVariablesMixin } from './utils/variables.js';
-
-import { globalMethods } from './utils/methods.js';
-import { globalComputed } from './utils/computed.js';
+import { library } from "@/icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 const app = createApp(App);
 const pinia = createPinia();
 
-app.mixin(globalVariablesMixin);
-app.component('font-awesome-icon', FontAwesomeIcon)
-app.config.globalProperties.$methods = globalMethods.methods;
-app.config.globalProperties.$computed = globalComputed.computed;
+app.component("font-awesome-icon", FontAwesomeIcon)
 app.use(library);
 app.use(router);
 app.use(pinia);
 
-app.mount('#app');
+app.mount("#app");

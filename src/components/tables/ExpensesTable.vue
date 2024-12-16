@@ -98,13 +98,13 @@ import TooltipModal from "@/components/common/TooltipModal.vue";
 import AlertMessage from "@/components/common/AlertMessage.vue";
 import ModalCard from "@/components/common/ModalCard.vue";
 import { useApiStore } from "@/stores/api";
-import { useUtils } from "@/utils/utils";
+import { useDateUtils } from "@/utils/dateUtils";
 import { useDataUtils } from "@/utils/dataUtils";
 import { type Expense } from "@/types/expense";
 import axios from "axios";
 
 const apiStore = useApiStore();
-const { formatDate, getNextMonth } = useUtils();
+const { formatDate, getNextMonth } = useDateUtils();
 const { searchData } = useDataUtils();
 
 const itemsPerPage = ref<number>(8);

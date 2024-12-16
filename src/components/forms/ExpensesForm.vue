@@ -68,14 +68,14 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted } from "vue";
 import DefaultButton from "@/components/common/DefaultButton.vue";
-import { months } from "@/utils/variablesTs";
+import { months } from "@/utils/variables";
 import { type Expense } from "@/types/expense";
 import { useApiStore } from "@/stores/api";
-import { useUtils } from "@/utils/utils";
+import { useDataUtils } from "@/utils/dataUtils";
 import axios from "axios";
 
 const apiStore = useApiStore();
-const { capitalize, getValidFloat } = useUtils();
+const { capitalize, getValidFloat } = useDataUtils();
 const emit = defineEmits(["showMessage", "closeModal"]);
 
 const bill = ref<string>("");

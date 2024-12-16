@@ -84,11 +84,13 @@ import { ref, computed, onMounted } from "vue";
 import DefaultButton from "@/components/common/DefaultButton.vue";
 import { type Customer } from "@/types/customer";
 import { useApiStore } from "@/stores/api";
-import { useUtils } from "@/utils/utils";
+import { useDateUtils } from "@/utils/dateUtils";
+import { useDataUtils } from "@/utils/dataUtils";
 import axios from "axios";
 
 const apiStore = useApiStore();
-const { capitalize, getValidFloat, getCurrentYearMonthDay } = useUtils();
+const { capitalize, getValidFloat } = useDataUtils();
+const { getCurrentYearMonthDay } = useDateUtils();
 const emit = defineEmits(["showMessage", "closeModal"]);
 
 const customerName = ref<string>("");

@@ -85,11 +85,11 @@ import { ref, computed } from "vue";
 import PaginationTable from "@/components/common/PaginationTable.vue";
 import TooltipModal from "@/components/common/TooltipModal.vue";
 import AlertMessage from "@/components/common/AlertMessage.vue";
-import { useUtils } from "@/utils/utils";
+import { useDateUtils } from "@/utils/dateUtils";
 import { useDataUtils } from "@/utils/dataUtils";
 import { type Customer } from "@/types/customer";
 
-const { formatDate } = useUtils();
+const { formatDate } = useDateUtils();
 const { searchData } = useDataUtils();
 
 const itemsPerPage = ref<number>(8);
