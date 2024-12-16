@@ -10,8 +10,7 @@
         <SearchFilter @apply-search="applySearch" />
       </div>
     </div>
-    <DefaultTable
-      :columns="columns"
+    <CustomersTable
       :data="filteredCustomers"
       :searchedField="searchedField"
       :requestMessage="requestMessage"
@@ -49,7 +48,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import DefaultTable from "@/components/common/DefaultTable.vue";
+import CustomersTable from "@/components/tables/CustomersTable.vue";
 import DefaultButton from "@/components/common/DefaultButton.vue";
 import SearchFilter from "@/components/common/SearchFilter.vue";
 import ModalCard from "@/components/common/ModalCard.vue";
@@ -57,24 +56,14 @@ import CustomersForm from "@/components/forms/CustomersForm.vue";
 import StatusFilter from "@/components/common/StatusFilter.vue";
 import { useApiStore } from "@/stores/api";
 import { type Customer } from "@/types/customer";
-import { type Column } from "@/types/table";
 import axios from "axios";
 
 const apiStore = useApiStore();
 
-const columns = ref<Column[]>([
-  { key: "name", name: "Nome" },
-  { key: "frequency", name: "Freq." },
-  { key: "start", name: "Início" },
-  { key: "plan", name: "Plano" },
-  { key: "value", name: "Valor" },
-  { key: "status", name: "Status" },
-  { key: "actions", name: "" }
-]);
 const searchedField = ref<string[]>([]);
 const showModal = ref<boolean>(false);
 const selectedItem = ref<Customer>({} as Customer);
-const action = ref<string>("");
+const action = ref<"create" | "update" | "delete" | "">("");
 const customerName = ref<string>("");
 const modalTitle = ref<string>("");
 const requestMessage = ref<string>("");

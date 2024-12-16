@@ -196,6 +196,13 @@ export function useUtils() {
     }
   };
 
+  const formatDate = (date: string) => {
+    const [year, month, day] = date.split("-");
+  
+    const formattedDateString = `${day}/${month}/${year}`;
+    return formattedDateString;
+  };
+
   return {
     getMonthIndex,
     sortData,
@@ -203,6 +210,7 @@ export function useUtils() {
     getNextMonth,
     capitalize,
     filteredData,
-    getValidFloat
+    getValidFloat,
+    formatDate
   };
 };
