@@ -5,7 +5,7 @@
       <div class="form-item">
         <label class="form-label" for="plan">Cliente:</label>
         <select class="form-select" id="plan" name="plan" v-model="customer" required>
-          <option v-for="(cust, index) in customers" :key="index" :value="customer">
+          <option v-for="(cust, index) in customersList" :key="index" :value="cust">
             {{ cust.name }}
           </option>
         </select>
@@ -59,7 +59,7 @@
         <textarea class="form-textarea" id="notes" name="notes" rows="4" v-model="notes"></textarea>
       </div>
       <div class="form-buttons-area">
-        <DefaultButton type="submit" :disable="disable"> Salvar </DefaultButton>
+        <DefaultButton type="submit" :disable="disable">Salvar</DefaultButton>
         <DefaultButton
           style="background-color: red"
           type="button"
@@ -86,7 +86,8 @@ const apiStore = useApiStore();
 const { getValidFloat } = useUtils();
 const emit = defineEmits(["showMessage", "closeModal", "getConfirmation"]);
 
-const customer = ref<Customer | null>(null);
+const customersList = ref<Customer[]>();
+const customer = ref<Customer>();
 const value = ref<number | null>(null);
 const notes = ref<string>("");
 const year = ref<number>(0);
@@ -175,18 +176,21 @@ const fillModal = () => {
     let updatedYear = currentDate.getFullYear();
     let updatedMmonth = months[currentMonth];
 
+    customersList.value = props.customers;
+    customer.value = customersList.value[0];
     year.value = updatedYear;
     month.value = updatedMmonth;
   }
 
   if (props.action === "update") {
-    let value = props.item;
-    let formatedValue = value ? value.value.toString().replace(/\./g, ",") : "";
-    let customerID = Number(props.item!.customer);
+    let revenueValue = props.item.value;
+    let formatedValue = revenueValue ? revenueValue.toString().replace(/\./g, ",") : 0;
+    let customerID = props.item!.customer;
     let currentCustomer = props.customers!.find((e: Customer) => e.id === customerID);
 
-    customer.value = currentCustomer ? currentCustomer : null;
-    value!.value = Number(formatedValue);
+    customersList.value = currentCustomer ? [currentCustomer]: [];
+    customer.value = currentCustomer;
+    value.value = Number(formatedValue);
     notes.value = props.item!.notes;
     dueDate.value = props.item!.payment_day;
     year.value = props.item!.year;

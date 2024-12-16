@@ -15,8 +15,7 @@
         <SearchFilter @apply-search="applySearch" />
       </div>
     </div>
-    <DefaultTable
-      :columns="columns"
+    <RevenuesTable
       :data="filteredRevenue"
       :searchedField="searchedField"
       :requestMessage="requestMessage"
@@ -45,7 +44,7 @@
       </h3>
       <RevenueForm
         v-else
-        :item="selectedItem"
+        :item="selectedRevenue"
         :customers="apiStore.customers"
         :action="action"
         :modalTitle="modalTitle"
@@ -60,14 +59,13 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, onMounted } from "vue";
-import DefaultTable from "@/components/common/DefaultTable.vue";
+import RevenuesTable from "@/components/tables/RevenuesTable.vue";
 import DefaultButton from "@/components/common/DefaultButton.vue";
 import SearchFilter from "@/components/common/SearchFilter.vue";
 import ModalCard from "@/components/common/ModalCard.vue";
 import MonthFilter from "@/components/common/MonthFilter.vue";
 import RevenueForm from "../forms/RevenueForm.vue";
 import { type Revenue, type UpdatedRevenue, type Message } from "@/types/revenue";
-import { type Column } from "@/types/table";
 import { useApiStore } from "@/stores/api";
 import { useUtils } from "@/utils/utils";
 import axios from "axios";
@@ -76,21 +74,10 @@ const apiStore = useApiStore();
 const { filteredData, getNextMonth } = useUtils();
 const emit = defineEmits(["showMessage"]);
 
-const columns = ref<Column[]>([
-  { key: "year", name: "Ano" },
-  { key: "month", name: "Mês" },
-  { key: "name", name: "Nome" },
-  { key: "start", name: "Início" },
-  { key: "plan", name: "Plano" },
-  { key: "payment_day", name: "Venc." },
-  { key: "value", name: "Valor" },
-  { key: "paid", name: "Status" },
-  { key: "actions", name: "" }
-]);
 const statusList = ref<string[]>(["Pago", "À pagar", "Link enviado", "Todos"]);
 const searchedField = ref<string[]>([]);
 const showModal = ref<boolean>(false);
-const selectedItem = ref<Revenue>({} as Revenue);
+const selectedRevenue = ref<Revenue>({} as Revenue);
 const action = ref<"create" | "update" | "delete" | "">("");
 const messageData = ref<Message>({} as Message);
 const modalTitle = ref<string>("");
@@ -108,7 +95,7 @@ const filteredRevenue = computed(() => {
     currentMonth.value,
     currentYear.value,
     currentStatus.value
-  );
+  ) as Revenue[];
 });
 
 const getMonth = (month: string) => {
@@ -135,7 +122,7 @@ const addRevenue = () => {
 };
 
 const updateRevenue = (item: Revenue) => {
-  selectedItem.value = item;
+  selectedRevenue.value = item;
   showModal.value = true;
   isForm.value = true;
   action.value = "update";
@@ -144,7 +131,7 @@ const updateRevenue = (item: Revenue) => {
 
 const deleteRevenue = async () => {
   try {
-    await axios.delete(`${apiStore.apiURL}/revenue/${selectedItem.value.id}/`);
+    await axios.delete(`${apiStore.apiURL}/revenue/${selectedRevenue.value.id}/`);
     showMessage("Receita excluída com sucesso!");
   } catch (error) {
     console.error("Erro ao excluir receita.", error);
@@ -157,7 +144,7 @@ const deleteRevenue = async () => {
 };
 
 const showDeleteModal = (item: Revenue) => {
-  selectedItem.value = item;
+  selectedRevenue.value = item;
   showModal.value = true;
   action.value = "delete";
   let date = `${item.month}/${item.year}`;
@@ -187,7 +174,7 @@ const getConfirmation = (data: UpdatedRevenue) => {
 
 const getModalAction = async () => {
   if (showConfirmation.value) {
-    updateCustomerValue();
+    await updateCustomerValue();
     updateFutureRevenue();
 
     closeModal();
@@ -258,7 +245,7 @@ const formatValue = (value: number) => {
   return value.toFixed(2).toString().replace(/\./g, ",");
 };
 
-watch(apiStore.revenue, () => {
+watch(() => apiStore.revenue, () => {
   incrementData();
 });
 

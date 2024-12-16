@@ -25,7 +25,7 @@
       </option>
     </select>
     <select
-      class="form-select font status"
+      class="form-select font min-width"
       id="status"
       name="status"
       v-model="paymentStatus"
@@ -95,7 +95,7 @@ onMounted(() => {
   max-width: 80px;
 }
 
-.status {
+.min-width {
   min-width: 140px;
 }
 
@@ -113,7 +113,7 @@ onMounted(() => {
     max-width: 80px;
   }
 
-  .status {
+  .min-width {
     min-width: 80px;
   }
 }

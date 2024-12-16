@@ -3,7 +3,7 @@ export interface Expense {
   name: string;
   month: string;
   date: string;
-  paid: string;
+  paid: "Pago" | "À pagar";
   value: number;
   year: number;
   installments: string;

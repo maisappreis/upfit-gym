@@ -15,8 +15,7 @@
         <SearchFilter @apply-search="applySearch" />
       </div>
     </div>
-    <DefaultTable
-      :columns="columns"
+    <ExpensesTable
       :data="filteredExpenses"
       :searchedField="searchedField"
       :requestMessage="requestMessage"
@@ -37,7 +36,7 @@
       </h3>
       <ExpensesForm
         v-else
-        :item="selectedItem"
+        :item="selectedExpense"
         :action="action"
         :modalTitle="modalTitle"
         @closeModal="closeModal"
@@ -50,14 +49,13 @@
 
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import DefaultTable from "@/components/common/DefaultTable.vue";
+import ExpensesTable from "@/components/tables/ExpensesTable.vue";
 import DefaultButton from "@/components/common/DefaultButton.vue";
 import SearchFilter from "@/components/common/SearchFilter.vue";
 import ModalCard from "@/components/common/ModalCard.vue";
 import MonthFilter from "@/components/common/MonthFilter.vue";
 import ExpensesForm from "@/components/forms/ExpensesForm.vue";
 import { type Expense, type Message } from "@/types/expense";
-import { type Column } from "@/types/table";
 import { useApiStore } from "@/stores/api";
 import { useUtils } from "@/utils/utils";
 import axios from "axios";
@@ -65,20 +63,10 @@ import axios from "axios";
 const apiStore = useApiStore();
 const { filteredData } = useUtils();
 
-const columns = ref<Column[]>([
-  { key: "year", name: "Ano" },
-  { key: "month", name: "Mês" },
-  { key: "name", name: "Nome" },
-  { key: "date", name: "Vencimento" },
-  { key: "installments", name: "Parcelas" },
-  { key: "value", name: "Valor" },
-  { key: "paid", name: "Status" },
-  { key: "actions", name: "" }
-]);
 const statusList = ref<string[]>(["Pago", "À pagar", "Todos"]);
 const searchedField = ref<string[]>([]);
 const showModal = ref<boolean>(false);
-const selectedItem = ref<Expense>({} as Expense);
+const selectedExpense = ref<Expense>({} as Expense);
 const action = ref<"create" | "update" | "delete" | "">("");
 const messageData = ref<Message>({} as Message);
 const modalTitle = ref<string>("");
@@ -92,14 +80,13 @@ defineProps({
   expenses: Array
 });
 
-
 const filteredExpenses = computed(() => {
   return filteredData(
     apiStore.expenses as Expense[],
     currentMonth.value,
     currentYear.value,
     currentStatus.value
-  );
+  ) as Expense[];
 });
 
 const getMonth = (month: string) => {
@@ -126,7 +113,7 @@ const addExpense = () => {
 };
 
 const updateExpense = (item: Expense) => {
-  selectedItem.value = item;
+  selectedExpense.value = item;
   showModal.value = true;
   isForm.value = true;
   action.value = "update";
@@ -135,7 +122,7 @@ const updateExpense = (item: Expense) => {
 
 const deleteExpense = async () => {
   try {
-    await axios.delete(`${apiStore.apiURL}/expense/${selectedItem.value.id}/`);
+    await axios.delete(`${apiStore.apiURL}/expense/${selectedExpense.value.id}/`);
     showMessage("Despesa excluída com sucesso!");
   } catch (error) {
     console.error("Erro ao excluir despesa.", error);
@@ -148,7 +135,7 @@ const deleteExpense = async () => {
 };
 
 const showDeleteModal = (item: Expense) => {
-  selectedItem.value = item;
+  selectedExpense.value = item;
   showModal.value = true;
   action.value = "delete";
   let date = `${item.month}/${item.year}`;

@@ -35,7 +35,7 @@
       </h3>
       <CustomersForm
         v-else
-        :item="selectedItem"
+        :item="selectedCustomer"
         :action="action"
         :modalTitle="modalTitle"
         @closeModal="closeModal"
@@ -62,7 +62,7 @@ const apiStore = useApiStore();
 
 const searchedField = ref<string[]>([]);
 const showModal = ref<boolean>(false);
-const selectedItem = ref<Customer>({} as Customer);
+const selectedCustomer = ref<Customer>({} as Customer);
 const action = ref<"create" | "update" | "delete" | "">("");
 const customerName = ref<string>("");
 const modalTitle = ref<string>("");
@@ -96,7 +96,7 @@ const addCustomer = () => {
 };
 
 const updateCustomer = (item: Customer) => {
-  selectedItem.value = item;
+  selectedCustomer.value = item;
   showModal.value = true;
   isForm.value = true;
   action.value = "update";
@@ -113,7 +113,7 @@ const getModalAction = () => {
 
 const deleteCustomer = async () => {
   try {
-    await axios.delete(`${apiStore.apiURL}/customer/${selectedItem.value.id}/`);
+    await axios.delete(`${apiStore.apiURL}/customer/${selectedCustomer.value.id}/`);
     showMessage("Cliente excluído com sucesso!");
   } catch (error) {
     console.error("Erro ao excluir cliente.", error);
@@ -129,7 +129,7 @@ const inactiveCustomer = async () => {
   try {
     let data = { status: "Inativo" };
 
-    await axios.patch(`${apiStore.apiURL}/customer/${selectedItem.value.id}/`, data);
+    await axios.patch(`${apiStore.apiURL}/customer/${selectedCustomer.value.id}/`, data);
     showMessage("Cliente inativado com sucesso!");
   } catch (error) {
     console.error("Erro ao inativar cliente.", error);
@@ -142,7 +142,7 @@ const inactiveCustomer = async () => {
 };
 
 const showDeleteModal = (item: Customer) => {
-  selectedItem.value = item;
+  selectedCustomer.value = item;
   showModal.value = true;
   action.value = "delete";
   let revenueHistory = apiStore.revenue.filter((e) => e.customer === item.id);
