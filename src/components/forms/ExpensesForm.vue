@@ -39,7 +39,6 @@
           id="installments"
           name="installments"
           v-model="installments"
-          @change="checkIsValid"
           :disabled="disableInstallments"
         />
       </div>
@@ -66,183 +65,162 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { ref, computed, watch, onMounted } from "vue";
 import DefaultButton from "@/components/common/DefaultButton.vue";
-import { globalVariablesMixin } from '../../utils/variables.js'
-import { mapStores } from 'pinia'
-import { useApiStore } from '@/stores/api'
-import axios from 'axios'
+import { months } from "@/utils/variablesTs";
+import { type Expense } from "@/types/expense";
+import { useApiStore } from "@/stores/api";
+import { useUtils } from "@/utils/utils";
+import axios from "axios";
 
-export default {
-  name: 'ExpensesForm',
-  mixins: [globalVariablesMixin],
+const apiStore = useApiStore();
+const { capitalize, getValidFloat } = useUtils();
+const emit = defineEmits(["showMessage", "closeModal"]);
 
-  components: {
-    DefaultButton
-  },
+const bill = ref<string>("");
+const dueDate = ref<string>("");
+const value = ref<number | null>(null);
+const notes = ref<string>("");
+const hasInstallments = ref<boolean>(false);
+const installments = ref<string>("");
+const disableInstallments = ref<boolean>(false);
+const validInstallment = ref<boolean>(true);
 
-  props: {
-    item: Object,
-    action: String,
-    modalTitle: String
-  },
+const props = defineProps<{
+  item: Expense,
+  action: "create" | "update" | "delete" | "";
+  modalTitle: String;
+}>();
 
-  data() {
-    return {
-      bill: '',
-      dueDate: '',
-      value: null,
-      notes: '',
-      hasInstallments: false,
-      installments: '',
-      disableInstallments: false,
-      validInstallment: true
-    }
-  },
+const disable = computed(() => {
+  return (
+    bill.value === "" ||
+    dueDate.value === "" ||
+    value.value === null
+  );
+});
 
-  computed: {
-    ...mapStores(useApiStore),
-    disable() {
-      return this.bill === '' || this.dueDate === '' || this.value === 0
-    }
-  },
-
-  methods: {
-    saveExpense() {
-      if (this.action === 'create') {
-        this.createExpense()
-      } else {
-        this.updateExpense()
-      }
-    },
-
-    async createExpense() {
-      try {
-        this.validateFloat()
-        let date = this.getYearAndMonth(this.dueDate)
-        let nameCapitalized = this.$methods.capitalize(this.bill)
-
-        let newExpense = {
-          year: date.year,
-          month: date.month,
-          name: nameCapitalized,
-          date: this.dueDate,
-          installments: this.installments,
-          value: this.value,
-          paid: 'À pagar',
-          notes: this.notes
-        }
-
-        await axios.post(`${this.apiStore.apiURL}/expense/create/`, newExpense)
-        this.$emit('showMessage', 'Despesa criada com sucesso!')
-
-        this.$emit('closeModal')
-        await this.apiStore.fetchExpenses()
-      } catch (error) {
-        console.error('Erro ao criar despesa.', error)
-        this.$emit('showMessage', 'Erro ao criar despesa.')
-      }
-    },
-
-    async updateExpense() {
-      try {
-        this.validateFloat()
-        let date = this.getYearAndMonth(this.dueDate)
-        let nameCapitalized = this.$methods.capitalize(this.bill)
-
-        let updatedExpense = {
-          year: date.year,
-          month: date.month,
-          name: nameCapitalized,
-          date: this.dueDate,
-          value: this.value,
-          notes: this.notes
-        }
-
-        await axios.patch(`${this.apiStore.apiURL}/expense/${this.item.id}/`, updatedExpense)
-        this.$emit('showMessage', 'Despesa atualizada com sucesso!')
-
-        this.$emit('closeModal')
-        await this.apiStore.fetchExpenses()
-      } catch (error) {
-        console.error('Erro ao atualizar despesa.', error)
-        this.$emit('showMessage', 'Erro ao atualizar despesa.')
-      }
-    },
-
-    getYearAndMonth(dueDate) {
-      let parsedDate = new Date(dueDate)
-      let year = parsedDate.getFullYear()
-      let monthNumber = parsedDate.getMonth()
-      let month = this.months[monthNumber]
-
-      return { year, month }
-    },
-
-    fillModal() {
-      let value = this.item.value
-      let formatedValue = value.toString().replace(/\./g, ',')
-
-      this.bill = this.item.name
-      this.dueDate = this.item.date
-      this.value = formatedValue
-      this.installments = this.item.installments
-      this.notes = this.item.notes
-
-      if (this.item.installments !== '') {
-        this.hasInstallments = true
-        this.disableInstallments = true
-      }
-    },
-
-    validateFloat() {
-      const cleanedValue = this.value.replace(',', '.')
-      const floatValue = parseFloat(cleanedValue)
-
-      if (!isNaN(floatValue)) {
-        this.value = floatValue
-      } else {
-        this.value = null
-      }
-    },
-
-    setInstallments() {
-      if (!this.hasInstallments) {
-        this.installments = ''
-        this.validInstallment = true
-      }
-
-      if (this.hasInstallments && this.installments === '') {
-        this.validInstallment = false
-      }
-      this.hasInstallments == !this.hasInstallments
-    }
-  },
-
-  watch: {
-    installments() {
-      const integerNumber = parseInt(this.installments)
-
-      if (Number.isInteger(integerNumber) && this.hasInstallments) {
-        this.validInstallment = Number.isInteger(integerNumber)
-      }
-
-      if (!Number.isInteger(integerNumber)) {
-        this.validInstallment = false
-      }
-
-      if (this.installments === '' && !this.hasInstallments) {
-        this.validInstallment = true
-      }
-    }
-  },
-
-  mounted() {
-    if (this.action === 'update') {
-      this.fillModal()
-    }
+const saveExpense = () => {
+  if (props.action === "create") {
+    createExpense();
+  } else {
+    updateExpense();
   }
-}
+};
+
+const createExpense = async () => {
+  try {
+    let validFloat = getValidFloat(value.value);
+    let date = getYearAndMonth(dueDate.value);
+    let nameCapitalized = capitalize(bill.value);
+
+    let newExpense = {
+      year: date.year,
+      month: date.month,
+      name: nameCapitalized,
+      date: dueDate.value,
+      installments: installments.value,
+      value: validFloat,
+      paid: "À pagar",
+      notes: notes.value
+    };
+
+    await axios.post(`${apiStore.apiURL}/expense/create/`, newExpense);
+    emit("showMessage", "Despesa criada com sucesso!");
+
+    emit("closeModal");
+    await apiStore.fetchExpenses();
+  } catch (error) {
+    console.error("Erro ao criar despesa.", error);
+    emit("showMessage", "Erro ao criar despesa.");
+  }
+};
+
+const updateExpense = async () => {
+  try {
+    let validFloat = getValidFloat(value.value);
+    let date = getYearAndMonth(dueDate.value);
+    let nameCapitalized = capitalize(bill.value);
+
+    let updatedExpense = {
+      year: date.year,
+      month: date.month,
+      name: nameCapitalized,
+      date: dueDate.value,
+      value: validFloat,
+      notes: notes.value
+    };
+
+    await axios.patch(`${apiStore.apiURL}/expense/${props.item.id}/`, updatedExpense);
+    emit("showMessage", "Despesa atualizada com sucesso!");
+
+    emit("closeModal");
+    await apiStore.fetchExpenses();
+  } catch (error) {
+    console.error("Erro ao atualizar despesa.", error);
+    emit("showMessage", "Erro ao atualizar despesa.");
+  }
+};
+
+const getYearAndMonth = (dueDate: string) => {
+  let parsedDate = new Date(dueDate);
+  let year = parsedDate.getFullYear();
+  let monthNumber = parsedDate.getMonth();
+  let month = months[monthNumber];
+
+  return { year, month };
+};
+
+const fillModal = () => {
+  let itemValue = props.item.value;
+  let formatedValue = itemValue.toString().replace(/\./g, ",");
+
+  bill.value = props.item.name;
+  dueDate.value = props.item.date;
+  value.value = Number(formatedValue);
+  installments.value = props.item.installments;
+  notes.value = props.item.notes;
+
+  if (props.item.installments !== "") {
+    hasInstallments.value = true;
+    disableInstallments.value = true;
+  }
+};
+
+const setInstallments = () => {
+  if (!hasInstallments.value) {
+    installments.value = "";
+    validInstallment.value = true;
+  }
+
+  if (hasInstallments.value && installments.value === "") {
+    validInstallment.value = false;
+  }
+  hasInstallments.value == !hasInstallments.value;
+};
+
+watch(() => installments.value, () => {
+  const integerNumber = parseInt(installments.value);
+
+  if (Number.isInteger(integerNumber) && hasInstallments.value) {
+    validInstallment.value = Number.isInteger(integerNumber);
+  }
+
+  if (!Number.isInteger(integerNumber)) {
+    validInstallment.value = false;
+  }
+
+  if (installments.value === "" && !hasInstallments.value) {
+    validInstallment.value = true;
+  }
+});
+
+onMounted(() => {
+  if (props.action === "update") {
+    fillModal();
+  }
+});
 </script>
 
 <style scoped>

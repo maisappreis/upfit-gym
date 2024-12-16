@@ -79,9 +79,11 @@ import { type Revenue } from "@/types/revenue";
 import { type Customer } from "@/types/customer";
 import { months, years } from "@/utils/variablesTs";
 import { useApiStore } from "@/stores/api";
+import { useUtils } from "@/utils/utils";
 import axios from "axios";
 
 const apiStore = useApiStore();
+const { getValidFloat } = useUtils();
 const emit = defineEmits(["showMessage", "closeModal", "getConfirmation"]);
 
 const customer = ref<Customer | null>(null);
@@ -118,15 +120,15 @@ const saveRevenue = () => {
 
 const createRevenue = async () => {
   try {
-    validateFloat();
+    let validFloat = getValidFloat(value.value);
 
     let newRevenue = {
       customer: customer.value!.id,
-      year: year,
-      month: month,
-      value: value,
-      payment_day: dueDate,
-      notes: notes,
+      year: year.value,
+      month: month.value,
+      value: validFloat,
+      payment_day: dueDate.value,
+      notes: notes.value,
       paid: "À pagar"
     };
 
@@ -143,13 +145,13 @@ const createRevenue = async () => {
 
 const updateRevenue = async () => {
   try {
-    validateFloat();
+    let validFloat = getValidFloat(value.value);
 
     let updatedRevenue = {
       customer: props.item!.customer,
       year: year.value,
       month: month.value,
-      value: value.value,
+      value: validFloat,
       payment_day: dueDate.value,
       notes: notes.value
     };
@@ -192,17 +194,6 @@ const fillModal = () => {
   }
 };
 
-const validateFloat = () => {
-  const cleanedValue = value.value ? value.value.toString().replace(",", ".") : "";
-  const floatValue = parseFloat(cleanedValue);
-
-  if (!isNaN(floatValue)) {
-    value.value = floatValue;
-  } else {
-    value.value = null;
-  }
-};
-
 const checkChangesInValue = () => {
   let customer = props.customers!.filter((e: Customer) => e.id === props.item.customer);
   let customerValue = customer.map((e: Customer) => e.value);
@@ -214,7 +205,7 @@ const checkChangesInValue = () => {
     year: props.item!.year,
     name: customerName[0],
     currentValue: customerValue[0],
-    updatedValue: value
+    updatedValue: value.value
   };
 
   if (customerValue[0] !== value.value) {

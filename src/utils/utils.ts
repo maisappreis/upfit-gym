@@ -4,7 +4,7 @@ import { type SumPerMonth } from "@/types/chart";
 
 export function useUtils() {
   const getMonthIndex = (month) => {
-    console.log('month', month)
+    console.log("month ***", month)
     const months = [
       "Janeiro",
       "Fevereiro",
@@ -48,12 +48,12 @@ export function useUtils() {
   };
 
   const getCurrentYearMonthDay = (startDate) => {
-    console.log('startDate', startDate)
+    console.log("startDate", startDate)
 
     const currentDate = new Date(startDate);
     const currentYear = currentDate.getFullYear();
     const currentMonthIndex = currentDate.getMonth();
-    const currentDay = startDate.split('-')[2]
+    const currentDay = startDate.split("-")[2]
   
     const months = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
       "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
@@ -64,13 +64,13 @@ export function useUtils() {
       day: currentDay
     }
   
-    console.log('return data', data)
+    console.log("return data", data)
     return data;
   };
 
   const getNextMonth = (currentMonth, currentYear) => {
-    console.log('currentMonth', currentMonth)
-    console.log('currentYear', currentYear)
+    console.log("currentMonth", currentMonth)
+    console.log("currentYear", currentYear)
 
     const months = [
       "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
@@ -92,16 +92,16 @@ export function useUtils() {
       monthNumber: nextMonthIndex + 1
     };
   
-    console.log('response', response)
+    console.log("response", response)
     return response;
   };
 
   const capitalize = (string: string): string => {
     return string
       .toLowerCase()
-      .split(' ')
+      .split(" ")
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
+      .join(" ");
   };
 
   const filteredData = (
@@ -185,12 +185,24 @@ export function useUtils() {
     return result;
   };
 
+  const getValidFloat = (value: number | null): number | null => {
+    const cleanedValue = value ? value.toString().replace(",", ".") : null;
+    const floatValue = cleanedValue ? parseFloat(cleanedValue) : null;
+  
+    if (floatValue && !isNaN(floatValue)) {
+      return floatValue;
+    } else {
+      return null;
+    }
+  };
+
   return {
     getMonthIndex,
     sortData,
     getCurrentYearMonthDay,
     getNextMonth,
     capitalize,
-    filteredData
+    filteredData,
+    getValidFloat
   };
 };

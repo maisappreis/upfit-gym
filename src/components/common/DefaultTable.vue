@@ -46,7 +46,7 @@
                   {{ item[column.key].toFixed(2).toString().replace(/\./g, ',') }}
                 </span>
                 <span v-else-if="column.key === 'start' || column.key === 'date'">
-                  {{ this.formatDate(item[column.key]) }}
+                  {{ formatDate(item[column.key]) }}
                 </span>
                 <span
                   v-else-if="column.key === 'paid'"
@@ -105,7 +105,7 @@
         <span class="pagination-items">Total de {{ totalItems }} itens</span>
       </div>
       <TooltipModal v-if="showingTooltip" :mouseX="mouseX" :mouseY="mouseY">
-        <p class="tooltip-text">{{ this.tooltip }}</p>
+        <p class="tooltip-text">{{ tooltip }}</p>
       </TooltipModal>
     </div>
     <div v-else class="not-found">Nenhum resultado foi encontrado.</div>
@@ -126,309 +126,303 @@
   </div>
 </template>
 
-<script>
-import TooltipModal from './TooltipModal.vue'
-import AlertMessage from './AlertMessage.vue'
-import ModalCard from './ModalCard.vue'
-import { mapStores } from 'pinia'
-import { useApiStore } from '@/stores/api'
-import { usePageStore } from '@/stores/page'
-import axios from 'axios'
+<script setup lang="ts">
+import { ref, computed, watch } from "vue";
+import TooltipModal from "./TooltipModal.vue";
+import AlertMessage from "./AlertMessage.vue";
+import ModalCard from "./ModalCard.vue";
+import { type Revenue } from "@/types/revenue";
+import { type Expense } from "@/types/expense";
+import { type Customer } from "@/types/customer";
+import { useApiStore } from "@/stores/api";
+import { usePageStore } from "@/stores/page";
+import { useUtils } from "@/utils/utils";
+import axios from "axios";
 
-export default {
-  name: 'DefaultTable',
-  components: { TooltipModal, AlertMessage, ModalCard },
-  props: {
-    columns: Array,
-    data: Array,
-    searchedField: Array,
-    requestMessage: String
-  },
+const apiStore = useApiStore();
+const pageStore = usePageStore();
+const { getNextMonth } = useUtils();
 
-  data: function () {
-    return {
-      itemsPerPage: 8,
-      currentPage: 1,
-      checkboxState: false,
-      showingTooltip: false,
-      tooltip: '',
-      mouseX: 0,
-      mouseY: 0,
-      responseMessage: '',
-      entity: '',
-      showModal: false,
-      selectedItem: {},
-      statusMessage: ''
-    }
-  },
+const itemsPerPage = ref<number>(8);
+const currentPage = ref<number>(1);
+const showingTooltip = ref<boolean>(false);
+const tooltip = ref<string>("");
+const mouseX = ref<number>(0);
+const mouseY = ref<number>(0);
+const responseMessage = ref<string>("");
+const entity = ref<string>("");
+const showModal = ref<boolean>(false);
+const statusMessage = ref<string>("");
+const selectedItem = ref<Revenue | Expense | Customer>();
 
-  computed: {
-    ...mapStores(useApiStore, usePageStore),
-    paginatedData() {
-      if (this.searchedField && this.searchedField.length == 0) {
-        const startIndex = (this.currentPage - 1) * this.itemsPerPage
-        const endIndex = startIndex + Number(this.itemsPerPage)
+const props = defineProps<{
+  columns: array;
+  data: array;
+  searchedField: string[];
+  requestMessage: string;
+}>();
 
-        return this.filteredList.slice(startIndex, endIndex)
-      } else {
-        return this.filteredList
-      }
-    },
 
-    totalPages() {
-      if (this.searchedField && this.searchedField.length > 0) {
-        return Math.ceil(this.filteredList.length / this.itemsPerPage)
-      } else {
-        return Math.ceil(this.orderedData.length / this.itemsPerPage)
-      }
-    },
+const paginatedData = computed(() => {
+  if (props.searchedField && props.searchedField.length == 0) {
+    const startIndex = (currentPage.value - 1) * itemsPerPage.value;
+    const endIndex = startIndex + Number(itemsPerPage.value);
 
-    totalItems() {
-      if (this.searchedField && this.searchedField.length > 0) {
-        return this.filteredList.length
-      } else {
-        return this.orderedData.length
-      }
-    },
+    return filteredList.value.slice(startIndex, endIndex);
+  } else {
+    return filteredList.value;
+  }
+});
 
-    filteredList() {
-      if (this.searchedField && this.searchedField.length > 0) {
-        return this.orderedData.reduce((filteredData, item) => {
-          const matched = this.searchedField.some((element) => {
-            const searchedFieldName = element.toLowerCase()
-            const listedFieldName = item.name.toLowerCase()
+const totalPages = computed(() => {
+  if (props.searchedField && props.searchedField.length > 0) {
+    return Math.ceil(filteredList.value.length / itemsPerPage.value);
+  } else {
+    return Math.ceil(orderedData.value.length / itemsPerPage.value);
+  }
+});
 
-            return listedFieldName.includes(searchedFieldName)
-          })
-          if (matched) {
-            filteredData.push(item)
-          }
-          return filteredData
-        }, [])
-      } else {
-        return this.orderedData
-      }
-    },
+const totalItems = computed(() => {
+  if (props.searchedField && props.searchedField.length > 0) {
+    return filteredList.value.length;
+  } else {
+    return orderedData.value.length;
+  }
+});
 
-    orderedData() {
-      if (this.data && this.data.length > 0) {
-        let orderedList = this.orderData(this.data)
-        return orderedList
-      } else {
-        return []
-      }
-    }
-  },
+const filteredList = computed(() => {
+  if (props.searchedField && props.searchedField.length > 0) {
+    return orderedData.value.reduce((filteredData, item) => {
+      const matched = props.searchedField.some((element) => {
+        const searchedFieldName = element.toLowerCase();
+        const listedFieldName = item.name.toLowerCase();
 
-  methods: {
-    showNotes(event, item) {
-      this.showingTooltip = !this.showingTooltip
-      this.tooltip = item.notes
-      this.mouseX = event.clientX - 40
-      this.mouseY = event.clientY + 15
-    },
-
-    confirmPaidStatus(item) {
-      this.selectedItem = item
-
-      if (this.pageStore.currentPage === 'revenue') {
-        if (this.selectedItem.paid == 'À pagar') {
-          this.statusMessage = 'link enviado'
-        } else if (this.selectedItem.paid == 'Link enviado') {
-          this.statusMessage = 'pago'
-        } else if (this.selectedItem.paid == 'Pago') {
-          this.statusMessage = 'à pagar'
-        }
-      }
-
-      if (this.pageStore.currentPage === 'expenses') {
-        if (this.selectedItem.paid == 'À pagar') {
-          this.statusMessage = 'pago'
-        } else if (this.selectedItem.paid == 'Pago') {
-          this.statusMessage = 'à pagar'
-        }
-      }
-
-      this.showModal = true
-    },
-
-    closeModal() {
-      this.showModal = false
-      this.statusMessage = ''
-    },
-
-    async changePaidStatus() {
-      try {
-        let updatedPaidStatus = {}
-
-        if (this.pageStore.currentPage === 'expenses') {
-          this.entity = 'expense'
-          if (this.selectedItem.paid === 'À pagar') {
-            updatedPaidStatus = {
-              paid: 'Pago'
-            }
-          } else if (this.selectedItem.paid === 'Pago') {
-            updatedPaidStatus = {
-              paid: 'À pagar'
-            }
-          }
-        } else if (this.pageStore.currentPage === 'revenue') {
-          this.entity = 'revenue'
-          if (this.selectedItem.paid === 'À pagar') {
-            updatedPaidStatus = {
-              paid: 'Link enviado'
-            }
-          } else if (this.selectedItem.paid === 'Link enviado') {
-            updatedPaidStatus = {
-              paid: 'Pago'
-            }
-          } else if (this.selectedItem.paid === 'Pago') {
-            updatedPaidStatus = {
-              paid: 'À pagar'
-            }
-          }
-        }
-
-        await axios.patch(
-          `${this.apiStore.apiURL}/${this.entity}/${this.selectedItem.id}/`,
-          updatedPaidStatus
-        )
-        if (this.entity === 'revenue') await this.apiStore.fetchRevenue()
-        if (this.entity === 'expense') await this.apiStore.fetchExpenses()
-        this.responseMessage = 'Status do pagamento salvo com sucesso!'
-
-        if (updatedPaidStatus.paid === 'Pago') {
-          if (this.pageStore.currentPage === 'revenue' && this.selectedItem.status === 'Ativo') {
-            this.createRevenueForNextMonth(this.selectedItem)
-          } else if (
-            this.pageStore.currentPage === 'expenses' &&
-            this.selectedItem.installments === ''
-          ) {
-            this.createExpenseForNextMonth(this.selectedItem)
-          }
-        }
-        this.closeModal()
-      } catch (error) {
-        console.error('Erro ao atualizar o status de pagamento...', error)
-        this.responseMessage = 'Erro ao salvar o status do pagamento.'
-      }
-    },
-
-    previousPage() {
-      if (this.currentPage > 1) {
-        this.currentPage -= 1
-      }
-    },
-
-    nextPage() {
-      if (this.currentPage < this.totalPages) {
-        this.currentPage += 1
-      }
-    },
-
-    getPageNumbers() {
-      const range = 2
-      const start = Math.max(1, this.currentPage - range)
-      const end = Math.min(this.totalPages, this.currentPage + range)
-
-      const pageNumbers = []
-      for (let i = start; i <= end; i++) {
-        pageNumbers.push(i)
-      }
-      return pageNumbers
-    },
-
-    goToPage(pageNumber) {
-      this.currentPage = pageNumber
-    },
-
-    goToFirstPage() {
-      if (this.currentPage !== 1) {
-        this.currentPage = 1
-      }
-    },
-
-    goToLastPage() {
-      if (this.currentPage !== this.totalPages) {
-        this.currentPage = this.totalPages
-      }
-    },
-
-    orderData(list) {
-      return list.sort((a, b) => {
-        const nameA = a.name.toLowerCase()
-        const nameB = b.name.toLowerCase()
-
-        if (nameA < nameB) {
-          return -1
-        } else if (nameA > nameB) {
-          return 1
-        } else {
-          return 0
-        }
+        return listedFieldName.includes(searchedFieldName);
       })
-    },
-
-    formatDate(date) {
-      const [year, month, day] = date.split('-')
-
-      const formattedDateString = `${day}/${month}/${year}`
-      return formattedDateString
-    },
-
-    async createRevenueForNextMonth(item) {
-      try {
-        let nextMonth = this.$methods.getNextMonth(item.month, item.year)
-
-        let newRevenue = {
-          customer: item.customer,
-          year: nextMonth.year,
-          month: nextMonth.month,
-          value: item.value,
-          payment_day: item.payment_day,
-          notes: item.notes,
-          paid: 'À pagar'
-        }
-
-        await axios.post(`${this.apiStore.apiURL}/revenue/create/`, newRevenue)
-        await this.apiStore.fetchRevenue()
-      } catch (error) {
-        console.error('Erro ao criar receita.', error)
+      if (matched) {
+        filteredData.push(item);
       }
-    },
+      return filteredData;
+    }, []);
+  } else {
+    return orderedData.value;
+  }
+});
 
-    async createExpenseForNextMonth(item) {
-      try {
-        let nextMonth = this.$methods.getNextMonth(item.month, item.year)
-        let paymentDay = parseInt(item.date.slice(-2))
-        let dueDate = `${nextMonth.year}-${nextMonth.monthNumber}-${paymentDay}`
+const orderedData = computed(() => {
+  if (props.data && props.data.length > 0) {
+    let orderedList = orderData(props.data);
+    return orderedList;
+  } else {
+    return [];
+  }
+});
 
-        let newExpense = {
-          year: nextMonth.year,
-          month: nextMonth.month,
-          name: item.name,
-          date: dueDate,
-          value: item.value,
-          paid: 'À pagar',
-          notes: item.notes
-        }
+const showNotes = (event, item) => {
+  showingTooltip.value = !showingTooltip.value;
+  tooltip.value = item.notes;
+  mouseX.value = event.clientX - 40;
+  mouseY.value = event.clientY + 15;
+};
 
-        await axios.post(`${this.apiStore.apiURL}/expense/create/`, newExpense)
-        await this.apiStore.fetchExpenses()
-      } catch (error) {
-        console.error('Erro ao criar despesa.', error)
-      }
-    }
-  },
+const confirmPaidStatus = (item) => {
+  selectedItem.value = item;
 
-  watch: {
-    requestMessage() {
-      if (this.requestMessage) {
-        this.responseMessage = this.requestMessage
-      }
+  if (pageStore.currentPage === "revenue") {
+    if (selectedItem.value.paid == "À pagar") {
+      statusMessage.value = "link enviado";
+    } else if (selectedItem.value.paid == "Link enviado") {
+      statusMessage.value = "pago";
+    } else if (selectedItem.value.paid == "Pago") {
+      statusMessage.value = "à pagar";
     }
   }
-}
+
+  if (pageStore.currentPage === "expenses") {
+    if (selectedItem.value.paid == "À pagar") {
+      statusMessage.value = "pago";
+    } else if (selectedItem.value.paid == "Pago") {
+      statusMessage.value = "à pagar";
+    }
+  }
+
+  showModal.value = true;
+};
+
+const closeModal = () => {
+  showModal.value = false;
+  statusMessage.value = "";
+};
+
+const changePaidStatus = async () => {
+  try {
+    let updatedPaidStatus = {};
+
+    if (pageStore.currentPage === "expenses") {
+      entity.value = "expense";
+      if (selectedItem.value.paid === "À pagar") {
+        updatedPaidStatus = {
+          paid: "Pago"
+        };
+      } else if (selectedItem.value.paid === "Pago") {
+        updatedPaidStatus = {
+          paid: "À pagar"
+        };
+      }
+    } else if (pageStore.currentPage === "revenue") {
+      entity.value = "revenue";
+      if (selectedItem.value.paid === "À pagar") {
+        updatedPaidStatus = {
+          paid: "Link enviado"
+        };
+      } else if (selectedItem.value.paid === "Link enviado") {
+        updatedPaidStatus = {
+          paid: "Pago"
+        };
+      } else if (selectedItem.value.paid === "Pago") {
+        updatedPaidStatus = {
+          paid: "À pagar"
+        };
+      }
+    }
+
+    await axios.patch(
+      `${apiStore.apiURL}/${entity.value}/${selectedItem.value.id}/`,
+      updatedPaidStatus
+    );
+    if (entity.value === "revenue") await apiStore.fetchRevenue();
+    if (entity.value === "expense") await apiStore.fetchExpenses();
+    responseMessage.value = "Status do pagamento salvo com sucesso!";
+
+    if (updatedPaidStatus.paid === "Pago") {
+      if (pageStore.currentPage === "revenue" && selectedItem.value.status === "Ativo") {
+        createRevenueForNextMonth(selectedItem.value);
+      } else if (
+        pageStore.currentPage === "expenses" &&
+        selectedItem.value.installments === ""
+      ) {
+        createExpenseForNextMonth(selectedItem.value);
+      }
+    }
+    closeModal()
+  } catch (error) {
+    console.error("Erro ao atualizar o status de pagamento...", error);
+    responseMessage.value = "Erro ao salvar o status do pagamento.";
+  }
+};
+
+const previousPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value -= 1;
+  }
+};
+
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value += 1;
+  }
+};
+
+const getPageNumbers = () => {
+  const range = 2;
+  const start = Math.max(1, currentPage.value - range);
+  const end = Math.min(totalPages.value, currentPage.value + range);
+
+  const pageNumbers = []
+  for (let i = start; i <= end; i++) {
+    pageNumbers.push(i);
+  }
+  return pageNumbers;
+};
+
+const goToPage = (pageNumber: number) => {
+  currentPage.value = pageNumber;
+}; 
+
+const goToFirstPage = () => {
+  if (currentPage.value !== 1) {
+    currentPage.value = 1;
+  }
+};
+
+const goToLastPage = () => {
+  if (currentPage.value !== totalPages.value) {
+    currentPage.value = totalPages.value;
+  }
+};
+
+const orderData = (list) => {
+  console.log("list", list)
+  return list.sort((a, b) => {
+    const nameA = a.name.toLowerCase()
+    const nameB = b.name.toLowerCase()
+
+    if (nameA < nameB) {
+      return -1;
+    } else if (nameA > nameB) {
+      return 1;
+    } else {
+      return 0;
+    }
+  });
+};
+
+const formatDate = (date: string) => {
+  const [year, month, day] = date.split("-");
+
+  const formattedDateString = `${day}/${month}/${year}`;
+  return formattedDateString;
+};
+
+const createRevenueForNextMonth = async (item) => {
+  try {
+    let nextMonth = getNextMonth(item.month, item.year);
+
+    let newRevenue = {
+      customer: item.customer,
+      year: nextMonth.year,
+      month: nextMonth.month,
+      value: item.value,
+      payment_day: item.payment_day,
+      notes: item.notes,
+      paid: "À pagar"
+    };
+
+    await axios.post(`${apiStore.apiURL}/revenue/create/`, newRevenue);
+    await apiStore.fetchRevenue();
+  } catch (error) {
+    console.error("Erro ao criar receita.", error);
+  }
+};
+
+const createExpenseForNextMonth = async (item) => {
+  try {
+    let nextMonth = getNextMonth(item.month, item.year);
+    let paymentDay = parseInt(item.date.slice(-2));
+    let dueDate = `${nextMonth.year}-${nextMonth.monthNumber}-${paymentDay}`;
+
+    let newExpense = {
+      year: nextMonth.year,
+      month: nextMonth.month,
+      name: item.name,
+      date: dueDate,
+      value: item.value,
+      paid: "À pagar",
+      notes: item.notes
+    };
+
+    await axios.post(`${apiStore.apiURL}/expense/create/`, newExpense);
+    await apiStore.fetchExpenses();
+  } catch (error) {
+    console.error("Erro ao criar despesa.", error);
+  }
+};
+
+watch(() => props.requestMessage, () => {
+  if (props.requestMessage) {
+    responseMessage.value = props.requestMessage;
+  }
+});
 </script>
 
 <style scoped>
