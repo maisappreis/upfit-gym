@@ -1,0 +1,118 @@
+.table-overflow {
+  max-height: 360px;
+  overflow: auto;
+}
+
+.table-area {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  position: sticky;
+  top: 0;
+}
+
+th,
+td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  text-align: center
+}
+
+th {
+  background-color: var(--gray-dark-color);
+  color: white;
+  text-align: center;
+}
+
+tr:nth-child(even) {
+  background-color: #eeeded;
+}
+
+tr:hover {
+  background-color: var(--red-light-color);
+}
+
+.table-icon {
+  font-size: 20px;
+  margin: 0 10px;
+  cursor: pointer;
+}
+
+.status {
+  color: white;
+  padding: 3px 10px;
+  border-radius: 8px;
+}
+
+.paid {
+  cursor: pointer;
+}
+
+.active {
+  background-color: green;
+}
+
+.inactive {
+  background-color: red;
+}
+
+.sent {
+  background-color: orange;
+}
+
+.no-results {
+  color: red;
+  font-weight: bold;
+  font-size: 30px;
+}
+
+.total-items {
+  font-weight: bold;
+  font-size: 16px;
+  margin: 10px;
+}
+
+.checkbox {
+  transform: scale(1.5);
+  margin-right: 5px;
+}
+
+.align-right {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 15px;
+}
+
+
+@media only screen and (max-width: 1000px) {
+  .table-overflow {
+    max-height: 280px;
+  }
+
+  th,
+  td {
+    padding: 5px;
+    font-size: 13px;
+  }
+
+  .table-icon {
+    font-size: 15px;
+    margin: 0 5px;
+  }
+
+  .align-right {
+    margin-right: 0;
+  }
+
+  .status {
+    padding: 3px 5px;
+  }
+
+  .tooltip-text {
+    margin: 0;
+    font-size: 12px;
+  }
+}

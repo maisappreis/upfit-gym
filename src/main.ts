@@ -4,6 +4,7 @@ import App from './App.vue';
 import router from './router/index';
 import './assets/variables.css';
 import './assets/global.css';
+import './assets/table.css';
 
 import { library } from './icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
