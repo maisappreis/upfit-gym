@@ -7,9 +7,9 @@
         <input class="form-input" type="text" id="name" name="name" v-model="bill" required />
       </div>
       <div class="form-item">
-        <label class="form-label" for="due-date" style="min-width: 170px"
-          >Data de Vencimento:</label
-        >
+        <label class="form-label" for="due-date" style="min-width: 170px">
+          Data de Vencimento:
+        </label>
         <input
           class="form-input"
           type="date"
@@ -173,8 +173,8 @@ const getYearAndMonth = (dueDate: string) => {
 };
 
 const fillModal = () => {
-  let itemValue = props.item.value;
-  let formatedValue = itemValue.toString().replace(/\./g, ",");
+  let expenseValue = props.item.value;
+  let formatedValue = expenseValue.toString().replace(/\./g, ",");
 
   bill.value = props.item.name;
   dueDate.value = props.item.date;

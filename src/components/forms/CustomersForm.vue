@@ -38,7 +38,7 @@
       </div>
       <div class="form-item">
         <label class="form-label" for="value">Valor:</label>
-        <input class="form-input" type="text" id="value" name="value" v-model="value" required />
+        <input class="form-input" type="number" id="value" name="value" v-model="value" required />
       </div>
       <div class="form-item">
         <label class="form-label">Status:</label>
@@ -66,7 +66,7 @@
         <textarea class="form-textarea" id="notes" name="notes" rows="4" v-model="notes"></textarea>
       </div>
       <div class="form-buttons-area">
-        <DefaultButton type="submit" :disable="disable"> Salvar </DefaultButton>
+        <DefaultButton type="submit" :disable="disable">Salvar</DefaultButton>
         <DefaultButton
           style="background-color: red"
           type="button"
@@ -218,8 +218,8 @@ const fillModal = () => {
   }
 
   if (props.action === "update") {
-    let value = props.item.value;
-    let formatedValue = value.toString().replace(/\./g, ",");
+    let customerValue = props.item.value;
+    let formatedValue = customerValue.toString().replace(/\./g, ",");
 
     customerName.value = props.item.name;
     frequency.value = props.item.frequency;

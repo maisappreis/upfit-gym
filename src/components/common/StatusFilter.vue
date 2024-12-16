@@ -1,7 +1,7 @@
 <template>
   <div class="filter-area">
     <select
-      class="form-select font status"
+      class="form-select font min-width"
       id="status"
       name="status"
       v-model="customerStatus"
@@ -44,7 +44,7 @@ onMounted(() => {
   margin-left: 15px;
 }
 
-.status {
+.min-width {
   min-width: 140px;
 }
 
