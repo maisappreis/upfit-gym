@@ -8,7 +8,7 @@ export function useDataUtils() {
     const orderedData = orderData(data);
 
     if (searchedField && searchedField.length > 0) {
-      return orderedData.reduce((searchedData, item) => {
+      return orderedData.reduce<(Revenue | Expense | Customer)[]>((searchedData, item) => {
         const matched = searchedField.some((element) => {
           const searchedFieldName = element.toLowerCase();
           const listedFieldName = item.name.toLowerCase();

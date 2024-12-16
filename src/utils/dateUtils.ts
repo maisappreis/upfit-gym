@@ -1,10 +1,7 @@
-import { type Revenue } from "@/types/revenue";
-import { type Expense } from "@/types/expense";
 import { type SumPerMonth } from "@/types/chart";
 
 export function useDateUtils() {
-  const getMonthIndex = (month) => {
-    console.log("month ***", month)
+  const getMonthIndex = (month: string) => {
     const months = [
       "Janeiro",
       "Fevereiro",
@@ -47,9 +44,7 @@ export function useDateUtils() {
     });
   };
 
-  const getCurrentYearMonthDay = (startDate) => {
-    console.log("startDate", startDate)
-
+  const getCurrentYearMonthDay = (startDate: string) => {
     const currentDate = new Date(startDate);
     const currentYear = currentDate.getFullYear();
     const currentMonthIndex = currentDate.getMonth();
@@ -58,28 +53,27 @@ export function useDateUtils() {
     const months = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
       "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
   
-    let data = {
+    const data = {
       year: currentYear,
       month: months[currentMonthIndex],
       day: currentDay
-    }
+    } as {
+      year: number;
+      month: string;
+      day: string;
+    };
   
-    console.log("return data", data)
     return data;
   };
 
-  const getNextMonth = (currentMonth, currentYear) => {
-    console.log("currentMonth", currentMonth)
-    console.log("currentYear", currentYear)
-
+  const getNextMonth = (currentMonth: string, currentYear: number) => {
     const months = [
       "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
       "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
     ];
   
     const currentMonthIndex = months.indexOf(currentMonth);
-  
-    let nextMonthIndex = (currentMonthIndex + 1) % 12;
+    const nextMonthIndex = (currentMonthIndex + 1) % 12;
     let nextYear = currentYear;
   
     if (nextMonthIndex === 0) {
@@ -92,13 +86,11 @@ export function useDateUtils() {
       monthNumber: nextMonthIndex + 1
     };
   
-    console.log("response", response)
     return response;
   };
 
   const formatDate = (date: string) => {
     const [year, month, day] = date.split("-");
-  
     const formattedDateString = `${day}/${month}/${year}`;
     return formattedDateString;
   };
