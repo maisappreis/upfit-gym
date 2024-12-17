@@ -6,10 +6,8 @@ import { type Revenue } from "@/types/revenue";
 import { type Expense } from "@/types/expense";
 
 export const useApiStore = defineStore("api", () => {
-  const apiBase = ref("https://django-apis-two.vercel.app/api");
-  // const apiBase = ref<string>("http://localhost:8000/api");
-
-  const apiURL = ref<string>("");
+  const apiBase = ref(import.meta.env.VITE_API_BASE);
+  const apiURL = ref<string>(`${apiBase.value}/upfit/test`);
 
   const customers = ref<Customer[]>([]);
   const revenue = ref<Revenue[]>([]);
