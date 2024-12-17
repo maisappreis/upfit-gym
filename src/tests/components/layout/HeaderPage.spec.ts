@@ -87,15 +87,22 @@ describe("HeaderPage", () => {
   // });
 
   it("calls logout function when dropdown is clicked", async () => {
+    const mockReload = vi.fn();
+    Object.defineProperty(window, "location", {
+      configurable: true,
+      value: { ...window.location, reload: mockReload },
+    });
+  
     const authStore = useAuthStore();
     authStore.isAuthenticated = true;
     const logoutSpy = vi.spyOn(authStore, "logout");
-
+  
     await wrapper.vm.$nextTick();
     await wrapper.find("#login").trigger("click"); // Open dropdown
     await wrapper.find(".dropdown").trigger("click"); // Click logout
-
+  
     expect(logoutSpy).toHaveBeenCalled();
+    expect(mockReload).toHaveBeenCalled();
   });
 
   it("updates the title and subtitle when the current page changes", async () => {

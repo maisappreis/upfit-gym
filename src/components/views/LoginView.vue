@@ -66,7 +66,7 @@ const loginUser = async () => {
       pageStore.openPage('metrics');
       
       setTimeout(() => {
-        router.push("/")
+        router.push("/");
       }, 800);
     }
   } catch (error) {

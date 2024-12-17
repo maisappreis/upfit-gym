@@ -45,22 +45,17 @@ export function useDateUtils() {
   };
 
   const getCurrentYearMonthDay = (startDate: string) => {
-    const currentDate = new Date(startDate);
-    const currentYear = currentDate.getFullYear();
-    const currentMonthIndex = currentDate.getMonth();
-    const currentDay = startDate.split("-")[2]
+    const [year, month, day] = startDate.split("-").map(Number);
   
-    const months = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
-      "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+    const months = [
+      "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+      "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+    ];
   
     const data = {
-      year: currentYear,
-      month: months[currentMonthIndex],
-      day: currentDay
-    } as {
-      year: number;
-      month: string;
-      day: string;
+      year,
+      month: months[month - 1],
+      day: day.toString().padStart(2, "0"),
     };
   
     return data;

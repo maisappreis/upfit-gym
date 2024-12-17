@@ -6,12 +6,14 @@
     <button
       class="pagination-button"
       @click="goToFirstPage"
+      :class="{ inactive: currentPage === 1}"
       :disabled="currentPage === 1">
       &laquo;&laquo;
     </button>
     <button
       class="pagination-button"
       @click="previousPage"
+      :class="{ inactive: currentPage === 1}"
       :disabled="currentPage === 1">
       &laquo;
     </button>
@@ -24,12 +26,16 @@
     >
       {{ pageNumber }}
     </button>
-    <button class="pagination-button" @click="nextPage" :disabled="currentPage === totalPages">
+    <button class="pagination-button"
+      @click="nextPage"
+      :class="{ inactive: currentPage === totalPages}"
+      :disabled="currentPage === totalPages">
       &raquo;
     </button>
     <button
       class="pagination-button"
       @click="goToLastPage"
+      :class="{ inactive: currentPage === totalPages}"
       :disabled="currentPage === totalPages"
     >
       &raquo;&raquo;
@@ -40,7 +46,9 @@
       <option value="15">15</option>
       <option value="30">30</option>
     </select>
-    <span class="pagination-items">Total de {{ totalItems }} itens</span>
+    <span class="pagination-items">
+      Total de {{ totalItems }} itens
+    </span>
   </div>
 </template>
 
@@ -132,7 +140,7 @@ watch(linesPerPage, (newVal) => {
   display: inline-block;
   font-size: 14px;
   transition-duration: 0.4s;
-  cursor: pointer;
+  
   border-radius: 4px;
   margin-right: 5px;
 }
@@ -140,6 +148,12 @@ watch(linesPerPage, (newVal) => {
 .pagination-button:hover,
 .pagination-button.active {
   background-color: red;
+  cursor: pointer;
+}
+
+.pagination-button.inactive {
+  background-color: rgb(173, 107, 107);
+  cursor: default;
 }
 
 .pagination-items {
