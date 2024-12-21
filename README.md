@@ -9,8 +9,10 @@ You can try it out in this production test version: https://maisappreis.github.i
 - Vue.js 3
 - Vite
 - Typescript
+- Pinia
+- Vitest
 
-![image](https://github.com/maisappreis/upfit-project/assets/113925909/93fb4995-d68e-4aee-a6ba-abe8e9b105ab)
+![image](https://github.com/maisappreis/upfit-gym/assets/113925909/93fb4995-d68e-4aee-a6ba-abe8e9b105ab)
 
 
 ## 🌱 On Development
