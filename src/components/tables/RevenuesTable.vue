@@ -2,7 +2,9 @@
   <div>
     <div v-if="paginatedData.length > 0">
       <div class="table-overflow">
-        <table class="table-area" style="max-height: 50vh; overflow: auto">
+        <table
+          class="table-area"
+          style="max-height: 50vh; overflow: auto">
           <thead>
             <tr>
               <th>Ano</th>
@@ -51,12 +53,12 @@
                   <font-awesome-icon
                     icon="fa-solid fa-pen-to-square"
                     class="table-icon"
-                    @click="$emit('updateItem', revenue)"
+                    @click="emit('update-item', revenue)"
                   />
                   <font-awesome-icon
                     icon="fa-solid fa-trash-can"
                     class="table-icon"
-                    @click="$emit('deleteItem', revenue)"
+                    @click="emit('delete-item', revenue)"
                   />
                 </span>
               </td>
@@ -77,13 +79,6 @@
       </TooltipModal>
     </div>
     <div v-else class="not-found">Nenhum resultado foi encontrado.</div>
-    <AlertMessage
-      v-if="responseMessage"
-      :responseMessage="responseMessage"
-      @close-message="responseMessage = ''"
-    >
-      {{ responseMessage }}
-    </AlertMessage>
     <ModalCard v-if="showModal" @executeAction="changePaidStatus" @closeModal="closeModal">
       <span class="message-area" style="font-size: 20px">
         Marcar como <strong>{{ statusMessage }}</strong>?
@@ -94,10 +89,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from "vue";
+import { ref, computed } from "vue";
 import PaginationTable from "@/components/common/PaginationTable.vue";
 import TooltipModal from "@/components/common/TooltipModal.vue";
-import AlertMessage from "@/components/common/AlertMessage.vue";
 import ModalCard from "@/components/common/ModalCard.vue";
 import { useApiStore } from "@/stores/api";
 import { useDateUtils } from "@/utils/dateUtils";
@@ -108,6 +102,7 @@ import axios from "axios";
 const apiStore = useApiStore();
 const { formatDate, getNextMonth } = useDateUtils();
 const { searchData } = useDataUtils();
+const emit = defineEmits(["update-item", "delete-item"]);
 
 const itemsPerPage = ref<number>(8);
 const currentPage = ref<number>(1);
@@ -123,7 +118,6 @@ const selectedRevenue = ref<Revenue>();
 const props = defineProps<{
   data: Revenue[];
   searchedField: string[];
-  requestMessage: string;
 }>();
 
 const paginatedData = computed(() => {
@@ -227,10 +221,4 @@ const createRevenueForNextMonth = async (revenue: Revenue) => {
     console.error("Erro ao criar receita.", error);
   }
 };
-
-watch(() => props.requestMessage, () => {
-  if (props.requestMessage) {
-    responseMessage.value = props.requestMessage;
-  }
-});
 </script>

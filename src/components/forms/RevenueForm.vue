@@ -63,7 +63,7 @@
         <DefaultButton
           style="background-color: red"
           type="button"
-          @executeAction="$emit('closeModal')"
+          @executeAction="$emit('close-modal')"
         >
           Cancelar
         </DefaultButton>
@@ -84,7 +84,7 @@ import axios from "axios";
 
 const apiStore = useApiStore();
 const { getValidFloat } = useDataUtils();
-const emit = defineEmits(["showMessage", "closeModal", "getConfirmation"]);
+const emit = defineEmits(["show-message", "close-modal", "get-confirmation"]);
 
 const customersList = ref<Customer[]>();
 const customer = ref<Customer>();
@@ -134,13 +134,13 @@ const createRevenue = async () => {
     };
 
     await axios.post(`${apiStore.apiURL}/revenue/create/`, newRevenue);
-    emit("showMessage", "Receita criada com sucesso!");
+    emit("show-message", "Receita criada com sucesso!");
 
-    emit("closeModal");
+    emit("close-modal");
     await apiStore.fetchRevenue();
   } catch (error) {
     console.error("Erro ao criar receita.", error);
-    emit("showMessage", "Erro ao criar receita.");
+    emit("show-message", "Erro ao criar receita.");
   }
 };
 
@@ -157,15 +157,15 @@ const updateRevenue = async () => {
       notes: notes.value
     };
     await axios.patch(`${apiStore.apiURL}/revenue/${props.item!.id}/`, updatedRevenue);
-    emit("showMessage", "Receita atualizada com sucesso!");
+    emit("show-message", "Receita atualizada com sucesso!");
 
-    emit("closeModal");
+    emit("close-modal");
     await apiStore.fetchRevenue();
 
     checkChangesInValue();
   } catch (error) {
     console.error("Erro ao atualizar receita.", error);
-    emit("showMessage", "Erro ao atualizar receita.");
+    emit("show-message", "Erro ao atualizar receita.");
   }
 };
 
@@ -213,7 +213,7 @@ const checkChangesInValue = () => {
   };
 
   if (customerValue[0] !== value.value) {
-    emit("getConfirmation", data);
+    emit("get-confirmation", data);
   }
 };
 

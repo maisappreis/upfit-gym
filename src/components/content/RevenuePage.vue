@@ -18,9 +18,9 @@
     <RevenuesTable
       :data="filteredRevenue"
       :searchedField="searchedField"
-      :requestMessage="requestMessage"
-      @updateItem="updateRevenue"
-      @deleteItem="showDeleteModal"
+      :alertMessage="alertMessage"
+      @update-item="updateRevenue"
+      @delete-item="showDeleteModal"
     />
     <ModalCard
       v-if="showModal"
@@ -48,12 +48,19 @@
         :customers="apiStore.customers"
         :action="action"
         :modalTitle="modalTitle"
-        @closeModal="closeModal"
-        @showMessage="showMessage"
-        @getConfirmation="getConfirmation"
+        @close-modal="closeModal"
+        @show-message="alertMessage = $event"
+        @get-confirmation="getConfirmation"
       />
     </ModalCard>
     <div v-if="showModal" class="defocus"></div>
+    <AlertMessage
+      v-if="alertMessage"
+      :responseMessage="alertMessage"
+      @close-message="alertMessage = ''"
+    >
+      {{ alertMessage }}
+    </AlertMessage>
   </div>
 </template>
 
@@ -61,6 +68,7 @@
 import { ref, computed, watch, onMounted } from "vue";
 import RevenuesTable from "@/components/tables/RevenuesTable.vue";
 import DefaultButton from "@/components/common/DefaultButton.vue";
+import AlertMessage from "@/components/common/AlertMessage.vue";
 import SearchFilter from "@/components/common/SearchFilter.vue";
 import ModalCard from "@/components/common/ModalCard.vue";
 import MonthFilter from "@/components/common/MonthFilter.vue";
@@ -74,7 +82,6 @@ import axios from "axios";
 const apiStore = useApiStore();
 const { filteredData } = useDataUtils();
 const { getNextMonth } = useDateUtils();
-const emit = defineEmits(["showMessage"]);
 
 const statusList = ref<string[]>(["Pago", "À pagar", "Link enviado", "Todos"]);
 const searchedField = ref<string[]>([]);
@@ -83,7 +90,7 @@ const selectedRevenue = ref<Revenue>({} as Revenue);
 const action = ref<"create" | "update" | "delete" | "">("");
 const messageData = ref<Message>({} as Message);
 const modalTitle = ref<string>("");
-const requestMessage = ref<string>("");
+const alertMessage = ref<string>("");
 const currentMonth = ref<string>("");
 const currentYear = ref<number>(0);
 const currentStatus = ref<string>("");
@@ -134,11 +141,11 @@ const updateRevenue = (item: Revenue) => {
 const deleteRevenue = async () => {
   try {
     await axios.delete(`${apiStore.apiURL}/revenue/${selectedRevenue.value.id}/`);
-    showMessage("Receita excluída com sucesso!");
+    alertMessage.value = "Receita excluída com sucesso!";
   } catch (error) {
     console.error("Erro ao excluir receita.", error);
 
-    showMessage("Erro ao excluir receita.");
+    alertMessage.value = "Erro ao excluir receita.";
   }
 
   showModal.value = false;
@@ -162,10 +169,6 @@ const closeModal = () => {
   isForm.value = false;
   showConfirmation.value = false;
   action.value = "";
-};
-
-const showMessage = (msg: string) => {
-  requestMessage.value = msg;
 };
 
 const getConfirmation = (data: UpdatedRevenue) => {
@@ -210,10 +213,10 @@ const updateCustomerValue = async () => {
       `${apiStore.apiURL}/customer/${confirmationData.value.id}/`,
       updatedCustomer
     );
-    emit("showMessage", "Cliente atualizado com sucesso!");
+    alertMessage.value = "Cliente atualizado com sucesso!";
   } catch (error) {
     console.error("Erro ao atualizar cliente.", error);
-    emit("showMessage", "Erro ao atualizar cliente.");
+    alertMessage.value = "Erro ao atualizar cliente.";
   }
 };
 

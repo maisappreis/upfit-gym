@@ -1,7 +1,8 @@
 <template>
   <div class="content-area">
     <div class="flex-between mb-normal">
-      <DefaultButton @executeAction="addCustomer" style="background-color: var(--red-dark-color)">
+      <DefaultButton @executeAction="addCustomer"
+        style="background-color: var(--red-dark-color)">
         <font-awesome-icon icon="fa-solid fa-plus" class="icon-add" />
         <span class="button-text">Novo Cliente</span>
       </DefaultButton>
@@ -13,9 +14,10 @@
     <CustomersTable
       :data="filteredCustomers"
       :searchedField="searchedField"
-      :requestMessage="requestMessage"
+      :alertMessage="alertMessage"
       @updateItem="updateCustomer"
       @deleteItem="showDeleteModal"
+      @show-message="alertMessage = $event"
     />
     <ModalCard
       v-if="showModal"
@@ -25,9 +27,10 @@
       @closeModal="closeModal"
     >
       <h3 v-if="action === 'delete' && blockDelete" class="message-area">
-        Não é possível excluir o cliente <strong class="highlight">{{ customerName }}</strong>, pois isso excluiria todo
-        o seu histórico de receitas. Ao invés de excluí-lo, mude seu
-        status para <strong class="highlight">Inativo</strong>.
+        Não é possível excluir o cliente 
+        <strong class="highlight">{{ customerName }}</strong>, 
+        pois isso excluiria todo o seu histórico de receitas. Ao invés de excluí-lo, 
+        mude seu status para <strong class="highlight">Inativo</strong>.
       </h3>
       <h3 v-else-if="action === 'delete' && !blockDelete" class="message-area">
         Tem certeza que deseja excluir o cliente
@@ -38,11 +41,18 @@
         :item="selectedCustomer"
         :action="action"
         :modalTitle="modalTitle"
-        @closeModal="closeModal"
-        @showMessage="showMessage"
+        @close-modal="closeModal"
+        @show-message="alertMessage = $event"
       />
     </ModalCard>
     <div v-if="showModal" class="defocus"></div>
+    <AlertMessage
+      v-if="alertMessage"
+      :responseMessage="alertMessage"
+      @close-message="alertMessage = ''"
+    >
+      {{ alertMessage }}
+    </AlertMessage>
   </div>
 </template>
 
@@ -50,6 +60,7 @@
 import { ref, computed } from "vue";
 import CustomersTable from "@/components/tables/CustomersTable.vue";
 import DefaultButton from "@/components/common/DefaultButton.vue";
+import AlertMessage from "@/components/common/AlertMessage.vue";
 import SearchFilter from "@/components/common/SearchFilter.vue";
 import ModalCard from "@/components/common/ModalCard.vue";
 import CustomersForm from "@/components/forms/CustomersForm.vue";
@@ -66,7 +77,7 @@ const selectedCustomer = ref<Customer>({} as Customer);
 const action = ref<"create" | "update" | "delete" | "">("");
 const customerName = ref<string>("");
 const modalTitle = ref<string>("");
-const requestMessage = ref<string>("");
+const alertMessage = ref<string>("");
 const currentStatus = ref<string>("");
 const buttonMessage = ref<string>("Confirmar");
 const isForm = ref<boolean>(false);
@@ -114,11 +125,11 @@ const getModalAction = () => {
 const deleteCustomer = async () => {
   try {
     await axios.delete(`${apiStore.apiURL}/customer/${selectedCustomer.value.id}/`);
-    showMessage("Cliente excluído com sucesso!");
+    alertMessage.value = "Cliente excluído com sucesso!";
   } catch (error) {
     console.error("Erro ao excluir cliente.", error);
 
-    showMessage("Erro ao excluir cliente.");
+    alertMessage.value = "Erro ao excluir cliente.";
   }
 
   showModal.value = false
@@ -130,11 +141,11 @@ const inactiveCustomer = async () => {
     let data = { status: "Inativo" };
 
     await axios.patch(`${apiStore.apiURL}/customer/${selectedCustomer.value.id}/`, data);
-    showMessage("Cliente inativado com sucesso!");
+    alertMessage.value = "Cliente inativado com sucesso!";
   } catch (error) {
     console.error("Erro ao inativar cliente.", error);
 
-    showMessage("Erro ao inativar cliente.");
+    alertMessage.value = "Erro ao inativar cliente.";
   }
 
   showModal.value = false;
@@ -161,10 +172,6 @@ const closeModal = () => {
   showModal.value = false;
   isForm.value = false;
   buttonMessage.value = "Confirmar";
-};
-
-const showMessage = (msg: string) => {
-  requestMessage.value = msg;
 };
 
 const getStatus = (status: string) => {

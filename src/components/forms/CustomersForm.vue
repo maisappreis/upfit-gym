@@ -70,7 +70,7 @@
         <DefaultButton
           style="background-color: red"
           type="button"
-          @executeAction="$emit('closeModal')"
+          @executeAction="$emit('close-modal')"
         >
           Cancelar
         </DefaultButton>
@@ -91,7 +91,7 @@ import axios from "axios";
 const apiStore = useApiStore();
 const { capitalize, getValidFloat } = useDataUtils();
 const { getCurrentYearMonthDay } = useDateUtils();
-const emit = defineEmits(["showMessage", "closeModal"]);
+const emit = defineEmits(["show-message", "close-modal"]);
 
 const customerName = ref<string>("");
 const frequency = ref<string>("");
@@ -143,8 +143,8 @@ const createCustomer = async () => {
 
     let response = await axios.post(`${apiStore.apiURL}/customer/create/`, newCustomer);
 
-    emit("showMessage", "Cliente criado com sucesso!");
-    emit("closeModal");
+    emit("show-message", "Cliente criado com sucesso!");
+    emit("close-modal");
     await apiStore.fetchCustomers();
 
     if (status.value === "Ativo") {
@@ -154,7 +154,7 @@ const createCustomer = async () => {
     }
   } catch (error) {
     console.error("Erro ao criar cliente.", error);
-    emit("showMessage", "Erro ao criar cliente.");
+    emit("show-message", "Erro ao criar cliente.");
   }
 };
 
@@ -174,14 +174,14 @@ const updateCustomer = async () => {
     };
 
     await axios.patch(`${apiStore.apiURL}/customer/${props.item.id}/`, updatedCustomer);
-    emit("showMessage", "Cliente atualizado com sucesso!");
+    emit("show-message", "Cliente atualizado com sucesso!");
 
-    emit("closeModal")
+    emit("close-modal")
     await apiStore.fetchCustomers();
     await apiStore.fetchRevenue();
   } catch (error) {
     console.error("Erro ao atualizar cliente.", error);
-    emit("showMessage", "Erro ao atualizar cliente.");
+    emit("show-message", "Erro ao atualizar cliente.");
   }
 };
 

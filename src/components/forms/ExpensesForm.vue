@@ -56,7 +56,7 @@
         <DefaultButton
           style="background-color: red"
           type="button"
-          @executeAction="$emit('closeModal')"
+          @executeAction="$emit('close-modal')"
         >
           Cancelar
         </DefaultButton>
@@ -76,7 +76,7 @@ import axios from "axios";
 
 const apiStore = useApiStore();
 const { capitalize, getValidFloat } = useDataUtils();
-const emit = defineEmits(["showMessage", "closeModal"]);
+const emit = defineEmits(["show-message", "close-modal"]);
 
 const bill = ref<string>("");
 const dueDate = ref<string>("");
@@ -127,13 +127,13 @@ const createExpense = async () => {
     };
 
     await axios.post(`${apiStore.apiURL}/expense/create/`, newExpense);
-    emit("showMessage", "Despesa criada com sucesso!");
+    emit("show-message", "Despesa criada com sucesso!");
 
-    emit("closeModal");
+    emit("close-modal");
     await apiStore.fetchExpenses();
   } catch (error) {
     console.error("Erro ao criar despesa.", error);
-    emit("showMessage", "Erro ao criar despesa.");
+    emit("show-message", "Erro ao criar despesa.");
   }
 };
 
@@ -153,13 +153,13 @@ const updateExpense = async () => {
     };
 
     await axios.patch(`${apiStore.apiURL}/expense/${props.item.id}/`, updatedExpense);
-    emit("showMessage", "Despesa atualizada com sucesso!");
+    emit("show-message", "Despesa atualizada com sucesso!");
 
-    emit("closeModal");
+    emit("close-modal");
     await apiStore.fetchExpenses();
   } catch (error) {
     console.error("Erro ao atualizar despesa.", error);
-    emit("showMessage", "Erro ao atualizar despesa.");
+    emit("show-message", "Erro ao atualizar despesa.");
   }
 };
 

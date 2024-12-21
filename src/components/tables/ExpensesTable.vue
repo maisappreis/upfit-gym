@@ -2,7 +2,9 @@
   <div>
     <div v-if="paginatedData.length > 0">
       <div class="table-overflow">
-        <table class="table-area" style="max-height: 50vh; overflow: auto">
+        <table
+          class="table-area"
+          style="max-height: 50vh; overflow: auto">
           <thead>
             <tr>
               <th>Ano</th>
@@ -48,12 +50,12 @@
                   <font-awesome-icon
                     icon="fa-solid fa-pen-to-square"
                     class="table-icon"
-                    @click="$emit('updateItem', expense)"
+                    @click="emit('update-item', expense)"
                   />
                   <font-awesome-icon
                     icon="fa-solid fa-trash-can"
                     class="table-icon"
-                    @click="$emit('deleteItem', expense)"
+                    @click="emit('delete-item', expense)"
                   />
                 </span>
               </td>
@@ -74,13 +76,6 @@
       </TooltipModal>
     </div>
     <div v-else class="not-found">Nenhum resultado foi encontrado.</div>
-    <AlertMessage
-      v-if="responseMessage"
-      :responseMessage="responseMessage"
-      @close-message="responseMessage = ''"
-    >
-      {{ responseMessage }}
-    </AlertMessage>
     <ModalCard v-if="showModal" @executeAction="changePaidStatus" @closeModal="closeModal">
       <span class="message-area" style="font-size: 20px"
         >Marcar como <strong>{{ statusMessage }}</strong
@@ -92,10 +87,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from "vue";
+import { ref, computed } from "vue";
 import PaginationTable from "@/components/common/PaginationTable.vue";
 import TooltipModal from "@/components/common/TooltipModal.vue";
-import AlertMessage from "@/components/common/AlertMessage.vue";
 import ModalCard from "@/components/common/ModalCard.vue";
 import { useApiStore } from "@/stores/api";
 import { useDateUtils } from "@/utils/dateUtils";
@@ -106,6 +100,7 @@ import axios from "axios";
 const apiStore = useApiStore();
 const { formatDate, getNextMonth } = useDateUtils();
 const { searchData } = useDataUtils();
+const emit = defineEmits(["show-message", "update-item", "delete-item"]);
 
 const itemsPerPage = ref<number>(8);
 const currentPage = ref<number>(1);
@@ -113,7 +108,6 @@ const showingTooltip = ref<boolean>(false);
 const tooltip = ref<string>("");
 const mouseX = ref<number>(0);
 const mouseY = ref<number>(0);
-const responseMessage = ref<string>("");
 const showModal = ref<boolean>(false);
 const statusMessage = ref<string>("");
 const selectedExpense = ref<Expense>();
@@ -121,7 +115,6 @@ const selectedExpense = ref<Expense>();
 const props = defineProps<{
   data: Expense[];
   searchedField: string[];
-  requestMessage: string;
 }>();
 
 const paginatedData = computed(() => {
@@ -186,7 +179,7 @@ const changePaidStatus = async () => {
     );
 
     await apiStore.fetchExpenses();
-    responseMessage.value = "Status do pagamento salvo com sucesso!";
+    emit("show-message", "Status do pagamento salvo com sucesso!");
 
     if (updatedPaidStatus.paid === "Pago") {
       if (selectedExpense.value!.installments === "") {
@@ -196,7 +189,7 @@ const changePaidStatus = async () => {
     closeModal();
   } catch (error) {
     console.error("Erro ao atualizar o status de pagamento...", error);
-    responseMessage.value = "Erro ao salvar o status do pagamento.";
+    emit("show-message", "Erro ao salvar o status do pagamento.");
   }
 };
 
@@ -222,10 +215,4 @@ const createExpenseForNextMonth = async (expense: Expense) => {
     console.error("Erro ao criar despesa.", error);
   }
 };
-
-watch(() => props.requestMessage, () => {
-  if (props.requestMessage) {
-    responseMessage.value = props.requestMessage;
-  }
-});
 </script>

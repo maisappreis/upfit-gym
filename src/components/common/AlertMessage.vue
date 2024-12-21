@@ -1,20 +1,22 @@
 <template>
-  <div>
-    <div v-if="showSuccessAlert" class="alert-area success">
-      <div class="marker green"></div>
-      <div class="message">
-        <font-awesome-icon icon="fa-solid fa-check" class="icon" />
-        <slot></slot>
-      </div>
+  <section
+    :class="['alert-area', showSuccessAlert ? 'success' : 'error']"
+    aria-live="assertive"
+    role="alert"
+  >
+    <div :class="['marker', showSuccessAlert ? 'green' : 'red']"></div>
+    <div class="message">
+      <slot name="icon">
+        <font-awesome-icon
+          :icon="showSuccessAlert ? 'fa-solid fa-check' : 'fa-solid fa-xmark'"
+          class="icon"
+        />
+      </slot>
+      <slot>
+        {{ props.responseMessage }}
+      </slot>
     </div>
-    <div v-else class="alert-area error">
-      <div class="marker red"></div>
-      <div class="message">
-        <font-awesome-icon icon="fa-solid fa-xmark" class="icon" />
-        <slot></slot>
-      </div>
-    </div>
-  </div>
+  </section>
 </template>
 
 <script setup lang="ts">

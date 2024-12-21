@@ -69,13 +69,6 @@
       </TooltipModal>
     </div>
     <div v-else class="not-found">Nenhum resultado foi encontrado.</div>
-    <AlertMessage
-      v-if="responseMessage"
-      :responseMessage="responseMessage"
-      @close-message="responseMessage = ''"
-    >
-      {{ responseMessage }}
-    </AlertMessage>
     <div v-if="showModal" class="defocus"></div>
   </div>
 </template>
@@ -84,7 +77,6 @@
 import { ref, computed } from "vue";
 import PaginationTable from "@/components/common/PaginationTable.vue";
 import TooltipModal from "@/components/common/TooltipModal.vue";
-import AlertMessage from "@/components/common/AlertMessage.vue";
 import { useDateUtils } from "@/utils/dateUtils";
 import { useDataUtils } from "@/utils/dataUtils";
 import { type Customer } from "@/types/customer";
@@ -100,13 +92,11 @@ const tooltip = ref<string>("");
 const mouseX = ref<number>(0);
 const mouseY = ref<number>(0);
 
-const responseMessage = ref<string>("");
 const showModal = ref<boolean>(false);
 
 const props = defineProps<{
   data: Customer[];
   searchedField: string[];
-  requestMessage: string;
 }>();
 
 const paginatedData = computed(() => {

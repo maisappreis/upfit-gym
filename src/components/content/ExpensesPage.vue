@@ -18,9 +18,9 @@
     <ExpensesTable
       :data="filteredExpenses"
       :searchedField="searchedField"
-      :requestMessage="requestMessage"
-      @updateItem="updateExpense"
-      @deleteItem="showDeleteModal"
+      :alertMessage="alertMessage"
+      @update-item="updateExpense"
+      @delete-item="showDeleteModal"
     />
     <ModalCard
       v-if="showModal"
@@ -39,11 +39,18 @@
         :item="selectedExpense"
         :action="action"
         :modalTitle="modalTitle"
-        @closeModal="closeModal"
-        @showMessage="showMessage"
+        @close-modal="closeModal"
+        @show-message="alertMessage = $event"
       />
     </ModalCard>
     <div v-if="showModal" class="defocus"></div>
+    <AlertMessage
+      v-if="alertMessage"
+      :responseMessage="alertMessage"
+      @close-message="alertMessage = ''"
+    >
+      {{ alertMessage }}
+    </AlertMessage>
   </div>
 </template>
 
@@ -51,6 +58,7 @@
 import { ref, computed } from "vue";
 import ExpensesTable from "@/components/tables/ExpensesTable.vue";
 import DefaultButton from "@/components/common/DefaultButton.vue";
+import AlertMessage from "@/components/common/AlertMessage.vue";
 import SearchFilter from "@/components/common/SearchFilter.vue";
 import ModalCard from "@/components/common/ModalCard.vue";
 import MonthFilter from "@/components/common/MonthFilter.vue";
@@ -70,7 +78,7 @@ const selectedExpense = ref<Expense>({} as Expense);
 const action = ref<"create" | "update" | "delete" | "">("");
 const messageData = ref<Message>({} as Message);
 const modalTitle = ref<string>("");
-const requestMessage = ref<string>("");
+const alertMessage = ref<string>("");
 const currentMonth = ref<string>("");
 const currentYear = ref<number>(0);
 const currentStatus = ref<string>("");
@@ -123,11 +131,11 @@ const updateExpense = (item: Expense) => {
 const deleteExpense = async () => {
   try {
     await axios.delete(`${apiStore.apiURL}/expense/${selectedExpense.value.id}/`);
-    showMessage("Despesa excluída com sucesso!");
+    alertMessage.value = "Despesa excluída com sucesso!";
   } catch (error) {
     console.error("Erro ao excluir despesa.", error);
 
-    showMessage("Erro ao excluir despesa.");
+    alertMessage.value = "Erro ao excluir despesa.";
   }
 
   showModal.value = false;
@@ -150,9 +158,5 @@ const showDeleteModal = (item: Expense) => {
 const closeModal = () => {
   showModal.value = false;
   isForm.value = false;
-};
-
-const showMessage = (msg: string) => {
-  requestMessage.value = msg;
 };
 </script>
