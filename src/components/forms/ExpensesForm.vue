@@ -52,7 +52,9 @@
         <textarea class="form-textarea" id="notes" name="notes" rows="4" v-model="notes"></textarea>
       </div>
       <div class="form-buttons-area">
-        <DefaultButton type="submit" :disable="disable"> Salvar </DefaultButton>
+        <DefaultButton type="submit" :disable="disable">
+          Salvar
+        </DefaultButton>
         <DefaultButton
           style="background-color: red"
           type="button"
@@ -100,7 +102,8 @@ const disable = computed(() => {
   return (
     bill.value === "" ||
     dueDate.value === "" ||
-    value.value === null
+    value.value === null ||
+    validInstallment.value === false
   );
 });
 
