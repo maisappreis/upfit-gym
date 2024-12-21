@@ -80,9 +80,12 @@ import { type Customer } from "@/types/customer";
 import { months, years } from "@/utils/variables";
 import { useApiStore } from "@/stores/api";
 import { useDataUtils } from "@/utils/dataUtils";
+import { useLoadingStore } from "@/stores/loading";
 import axios from "axios";
 
 const apiStore = useApiStore();
+const loadingStore = useLoadingStore();
+
 const { getValidFloat } = useDataUtils();
 const emit = defineEmits(["show-message", "close-modal", "get-confirmation"]);
 
@@ -120,6 +123,7 @@ const saveRevenue = () => {
 };
 
 const createRevenue = async () => {
+  loadingStore.isLoading = true;
   try {
     let validFloat = getValidFloat(value.value);
 
@@ -134,17 +138,20 @@ const createRevenue = async () => {
     };
 
     await axios.post(`${apiStore.apiURL}/revenue/create/`, newRevenue);
-    emit("show-message", "Receita criada com sucesso!");
+    await apiStore.fetchRevenue();
 
     emit("close-modal");
-    await apiStore.fetchRevenue();
+    loadingStore.isLoading = false;
+    emit("show-message", "Receita criada com sucesso!");
   } catch (error) {
     console.error("Erro ao criar receita.", error);
+    loadingStore.isLoading = false;
     emit("show-message", "Erro ao criar receita.");
   }
 };
 
 const updateRevenue = async () => {
+  loadingStore.isLoading = true;
   try {
     let validFloat = getValidFloat(value.value);
 
@@ -157,14 +164,16 @@ const updateRevenue = async () => {
       notes: notes.value
     };
     await axios.patch(`${apiStore.apiURL}/revenue/${props.item!.id}/`, updatedRevenue);
-    emit("show-message", "Receita atualizada com sucesso!");
+    await apiStore.fetchRevenue();
 
     emit("close-modal");
-    await apiStore.fetchRevenue();
+    loadingStore.isLoading = false;
+    emit("show-message", "Receita atualizada com sucesso!");
 
     checkChangesInValue();
   } catch (error) {
     console.error("Erro ao atualizar receita.", error);
+    loadingStore.isLoading = false;
     emit("show-message", "Erro ao atualizar receita.");
   }
 };

@@ -66,10 +66,12 @@ import ModalCard from "@/components/common/ModalCard.vue";
 import CustomersForm from "@/components/forms/CustomersForm.vue";
 import StatusFilter from "@/components/common/StatusFilter.vue";
 import { useApiStore } from "@/stores/api";
+import { useLoadingStore } from "@/stores/loading";
 import { type Customer } from "@/types/customer";
 import axios from "axios";
 
 const apiStore = useApiStore();
+const loadingStore = useLoadingStore();
 
 const searchedField = ref<string[]>([]);
 const showModal = ref<boolean>(false);
@@ -123,33 +125,36 @@ const getModalAction = () => {
 };
 
 const deleteCustomer = async () => {
+  loadingStore.isLoading = true;
   try {
     await axios.delete(`${apiStore.apiURL}/customer/${selectedCustomer.value.id}/`);
+    await apiStore.fetchCustomers();
+
+    showModal.value = false;
+    loadingStore.isLoading = false;
     alertMessage.value = "Cliente excluído com sucesso!";
   } catch (error) {
     console.error("Erro ao excluir cliente.", error);
-
+    loadingStore.isLoading = false;
     alertMessage.value = "Erro ao excluir cliente.";
   }
-
-  showModal.value = false
-  await apiStore.fetchCustomers();
 };
 
 const inactiveCustomer = async () => {
+  loadingStore.isLoading = true;
   try {
     let data = { status: "Inativo" };
-
     await axios.patch(`${apiStore.apiURL}/customer/${selectedCustomer.value.id}/`, data);
+    await apiStore.fetchCustomers();
+    
+    showModal.value = false;
+    loadingStore.isLoading = false;
     alertMessage.value = "Cliente inativado com sucesso!";
   } catch (error) {
     console.error("Erro ao inativar cliente.", error);
-
+    loadingStore.isLoading = false;
     alertMessage.value = "Erro ao inativar cliente.";
   }
-
-  showModal.value = false;
-  await apiStore.fetchCustomers();
 };
 
 const showDeleteModal = (item: Customer) => {

@@ -72,9 +72,12 @@ import { months } from "@/utils/variables";
 import { type Expense } from "@/types/expense";
 import { useApiStore } from "@/stores/api";
 import { useDataUtils } from "@/utils/dataUtils";
+import { useLoadingStore } from "@/stores/loading";
 import axios from "axios";
 
 const apiStore = useApiStore();
+const loadingStore = useLoadingStore();
+
 const { capitalize, getValidFloat } = useDataUtils();
 const emit = defineEmits(["show-message", "close-modal"]);
 
@@ -110,6 +113,7 @@ const saveExpense = () => {
 };
 
 const createExpense = async () => {
+  loadingStore.isLoading = true;
   try {
     let validFloat = getValidFloat(value.value);
     let date = getYearAndMonth(dueDate.value);
@@ -127,17 +131,20 @@ const createExpense = async () => {
     };
 
     await axios.post(`${apiStore.apiURL}/expense/create/`, newExpense);
-    emit("show-message", "Despesa criada com sucesso!");
+    await apiStore.fetchExpenses();
 
     emit("close-modal");
-    await apiStore.fetchExpenses();
+    loadingStore.isLoading = false;
+    emit("show-message", "Despesa criada com sucesso!");
   } catch (error) {
     console.error("Erro ao criar despesa.", error);
+    loadingStore.isLoading = false;
     emit("show-message", "Erro ao criar despesa.");
   }
 };
 
 const updateExpense = async () => {
+  loadingStore.isLoading = true;
   try {
     let validFloat = getValidFloat(value.value);
     let date = getYearAndMonth(dueDate.value);
@@ -153,12 +160,14 @@ const updateExpense = async () => {
     };
 
     await axios.patch(`${apiStore.apiURL}/expense/${props.item.id}/`, updatedExpense);
-    emit("show-message", "Despesa atualizada com sucesso!");
+    await apiStore.fetchExpenses();
 
     emit("close-modal");
-    await apiStore.fetchExpenses();
+    loadingStore.isLoading = false;
+    emit("show-message", "Despesa atualizada com sucesso!");
   } catch (error) {
     console.error("Erro ao atualizar despesa.", error);
+    loadingStore.isLoading = false;
     emit("show-message", "Erro ao atualizar despesa.");
   }
 };

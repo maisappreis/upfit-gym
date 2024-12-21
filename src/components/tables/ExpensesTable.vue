@@ -92,12 +92,15 @@ import PaginationTable from "@/components/common/PaginationTable.vue";
 import TooltipModal from "@/components/common/TooltipModal.vue";
 import ModalCard from "@/components/common/ModalCard.vue";
 import { useApiStore } from "@/stores/api";
+import { useLoadingStore } from "@/stores/loading";
 import { useDateUtils } from "@/utils/dateUtils";
 import { useDataUtils } from "@/utils/dataUtils";
 import { type Expense } from "@/types/expense";
 import axios from "axios";
 
 const apiStore = useApiStore();
+const loadingStore = useLoadingStore();
+
 const { formatDate, getNextMonth } = useDateUtils();
 const { searchData } = useDataUtils();
 const emit = defineEmits(["show-message", "update-item", "delete-item"]);
@@ -161,6 +164,7 @@ const setCurrentPage = (newCurrentPage: number) => {
 };
 
 const changePaidStatus = async () => {
+  loadingStore.isLoading = true;
   try {
     let updatedPaidStatus = {} as { paid: string};
 
@@ -179,7 +183,6 @@ const changePaidStatus = async () => {
     );
 
     await apiStore.fetchExpenses();
-    emit("show-message", "Status do pagamento salvo com sucesso!");
 
     if (updatedPaidStatus.paid === "Pago") {
       if (selectedExpense.value!.installments === "") {
@@ -187,8 +190,11 @@ const changePaidStatus = async () => {
       }
     }
     closeModal();
+    loadingStore.isLoading = false;
+    emit("show-message", "Status do pagamento salvo com sucesso!");
   } catch (error) {
     console.error("Erro ao atualizar o status de pagamento...", error);
+    loadingStore.isLoading = false;
     emit("show-message", "Erro ao salvar o status do pagamento.");
   }
 };

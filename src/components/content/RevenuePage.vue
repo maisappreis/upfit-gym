@@ -75,11 +75,14 @@ import MonthFilter from "@/components/common/MonthFilter.vue";
 import RevenueForm from "../forms/RevenueForm.vue";
 import { type Revenue, type UpdatedRevenue, type Message } from "@/types/revenue";
 import { useApiStore } from "@/stores/api";
+import { useLoadingStore } from "@/stores/loading";
 import { useDateUtils } from "@/utils/dateUtils";
 import { useDataUtils } from "@/utils/dataUtils";
 import axios from "axios";
 
 const apiStore = useApiStore();
+const loadingStore = useLoadingStore();
+
 const { filteredData } = useDataUtils();
 const { getNextMonth } = useDateUtils();
 
@@ -139,17 +142,19 @@ const updateRevenue = (item: Revenue) => {
 };
 
 const deleteRevenue = async () => {
+  loadingStore.isLoading = true;
   try {
     await axios.delete(`${apiStore.apiURL}/revenue/${selectedRevenue.value.id}/`);
+    await apiStore.fetchRevenue();
+
+    showModal.value = false;
+    loadingStore.isLoading = false;
     alertMessage.value = "Receita excluída com sucesso!";
   } catch (error) {
     console.error("Erro ao excluir receita.", error);
-
+    loadingStore.isLoading = false;
     alertMessage.value = "Erro ao excluir receita.";
   }
-
-  showModal.value = false;
-  await apiStore.fetchRevenue();
 };
 
 const showDeleteModal = (item: Revenue) => {
@@ -179,9 +184,8 @@ const getConfirmation = (data: UpdatedRevenue) => {
 
 const getModalAction = async () => {
   if (showConfirmation.value) {
-    await updateCustomerValue();
     updateFutureRevenue();
-
+    await updateCustomerValue();
     closeModal();
     await apiStore.fetchData();
   } else {
@@ -204,6 +208,7 @@ const updateFutureRevenue = () => {
 };
 
 const updateCustomerValue = async () => {
+  loadingStore.isLoading = true;
   try {
     let updatedCustomer = {
       value: confirmationData.value.updatedValue
@@ -213,9 +218,11 @@ const updateCustomerValue = async () => {
       `${apiStore.apiURL}/customer/${confirmationData.value.id}/`,
       updatedCustomer
     );
+    loadingStore.isLoading = false;
     alertMessage.value = "Cliente atualizado com sucesso!";
   } catch (error) {
     console.error("Erro ao atualizar cliente.", error);
+    loadingStore.isLoading = false;
     alertMessage.value = "Erro ao atualizar cliente.";
   }
 };

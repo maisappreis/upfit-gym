@@ -28,6 +28,7 @@ import { useRouter } from "vue-router";
 import { useApiStore } from "@/stores/api";
 import { useAuthStore } from "@/stores/auth";
 import { usePageStore } from "@/stores/page";
+import { useLoadingStore } from "@/stores/loading";
 import DefaultButton from "@/components/common/DefaultButton.vue";
 import AlertMessage from "@/components/common//AlertMessage.vue";
 import logoUpfit from "@/assets/logo-upfit.png";
@@ -41,12 +42,14 @@ const router = useRouter();
 const apiStore = useApiStore();
 const authStore = useAuthStore();
 const pageStore = usePageStore();
+const loadingStore = useLoadingStore();
 
 const disable = computed(() => {
   return username.value == "" || password.value == "";
 });
 
 const loginUser = async () => {
+  loadingStore.isLoading = true;
   try {
     const loginData = {
       username: username.value,
@@ -59,10 +62,11 @@ const loginUser = async () => {
 
     if (accessToken && refreshToken) {
       authStore.setTokens(accessToken, refreshToken);
-      responseMessage.value = "Login realizado com sucesso!";
-
       authStore.checkAuthentication();
       await apiStore.fetchData();
+
+      loadingStore.isLoading = false;
+      responseMessage.value = "Login realizado com sucesso!";
       pageStore.openPage('metrics');
       
       setTimeout(() => {
@@ -71,6 +75,7 @@ const loginUser = async () => {
     }
   } catch (error) {
     console.error(error);
+    loadingStore.isLoading = false;
     responseMessage.value = "Erro ao fazer login.";
   }
 }

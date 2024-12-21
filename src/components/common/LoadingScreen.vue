@@ -1,13 +1,18 @@
 <template>
-  <div class="overlay">
+  <div v-if="loadingStore.isLoading" class="overlay">
     <div class="conteiner">
       <div class="spinner" />
       <h3 class="message">
-        <slot></slot>
+        Carregando...
       </h3>
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { useLoadingStore } from "@/stores/loading";
+const loadingStore = useLoadingStore();
+</script>
 
 <style scoped>
 .overlay {

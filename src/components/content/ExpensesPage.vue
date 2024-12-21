@@ -65,10 +65,12 @@ import MonthFilter from "@/components/common/MonthFilter.vue";
 import ExpensesForm from "@/components/forms/ExpensesForm.vue";
 import { type Expense, type Message } from "@/types/expense";
 import { useApiStore } from "@/stores/api";
+import { useLoadingStore } from "@/stores/loading";
 import { useDataUtils } from "@/utils/dataUtils";
 import axios from "axios";
 
 const apiStore = useApiStore();
+const loadingStore = useLoadingStore();
 const { filteredData } = useDataUtils();
 
 const statusList = ref<string[]>(["Pago", "À pagar", "Todos"]);
@@ -129,17 +131,19 @@ const updateExpense = (item: Expense) => {
 };
 
 const deleteExpense = async () => {
+  loadingStore.isLoading = true;
   try {
     await axios.delete(`${apiStore.apiURL}/expense/${selectedExpense.value.id}/`);
+    await apiStore.fetchExpenses();
+    
+    showModal.value = false;
+    loadingStore.isLoading = false;
     alertMessage.value = "Despesa excluída com sucesso!";
   } catch (error) {
     console.error("Erro ao excluir despesa.", error);
-
+    loadingStore.isLoading = false;
     alertMessage.value = "Erro ao excluir despesa.";
   }
-
-  showModal.value = false;
-  await apiStore.fetchExpenses();
 };
 
 const showDeleteModal = (item: Expense) => {

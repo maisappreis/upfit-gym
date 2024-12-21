@@ -84,11 +84,14 @@ import { ref, computed, onMounted } from "vue";
 import DefaultButton from "@/components/common/DefaultButton.vue";
 import { type Customer } from "@/types/customer";
 import { useApiStore } from "@/stores/api";
+import { useLoadingStore } from "@/stores/loading";
 import { useDateUtils } from "@/utils/dateUtils";
 import { useDataUtils } from "@/utils/dataUtils";
 import axios from "axios";
 
 const apiStore = useApiStore();
+const loadingStore = useLoadingStore();
+
 const { capitalize, getValidFloat } = useDataUtils();
 const { getCurrentYearMonthDay } = useDateUtils();
 const emit = defineEmits(["show-message", "close-modal"]);
@@ -127,6 +130,7 @@ const saveCustomer = () => {
 };
 
 const createCustomer = async () => {
+  loadingStore.isLoading = true;
   try {
     let validFloat = getValidFloat(value.value);
     const customerCapitalized = capitalize(customerName.value);
@@ -142,9 +146,6 @@ const createCustomer = async () => {
     };
 
     let response = await axios.post(`${apiStore.apiURL}/customer/create/`, newCustomer);
-
-    emit("show-message", "Cliente criado com sucesso!");
-    emit("close-modal");
     await apiStore.fetchCustomers();
 
     if (status.value === "Ativo") {
@@ -152,13 +153,18 @@ const createCustomer = async () => {
         createRevenue(response.data.id, response.data.start);
       }, 500);
     }
+    loadingStore.isLoading = false;
+    emit("show-message", "Cliente criado com sucesso!");
+    emit("close-modal");
   } catch (error) {
     console.error("Erro ao criar cliente.", error);
+    loadingStore.isLoading = false;
     emit("show-message", "Erro ao criar cliente.");
   }
 };
 
 const updateCustomer = async () => {
+  loadingStore.isLoading = true;
   try {
     let validFloat = getValidFloat(value.value);
     let customerNameCapitalized = capitalize(customerName.value);
@@ -174,13 +180,15 @@ const updateCustomer = async () => {
     };
 
     await axios.patch(`${apiStore.apiURL}/customer/${props.item.id}/`, updatedCustomer);
-    emit("show-message", "Cliente atualizado com sucesso!");
-
-    emit("close-modal")
     await apiStore.fetchCustomers();
     await apiStore.fetchRevenue();
+
+    loadingStore.isLoading = false;
+    emit("show-message", "Cliente atualizado com sucesso!");
+    emit("close-modal")
   } catch (error) {
     console.error("Erro ao atualizar cliente.", error);
+    loadingStore.isLoading = false;
     emit("show-message", "Erro ao atualizar cliente.");
   }
 };
