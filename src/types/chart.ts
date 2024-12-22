@@ -11,7 +11,7 @@ export interface Data {
 
 interface Dataset {
   label: string;
-  backgroundColor: string;
+  backgroundColor: string | string[];
   data: number[];
   borderColor?: string;
   pointRadius?: number;
