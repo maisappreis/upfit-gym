@@ -79,7 +79,10 @@
       </TooltipModal>
     </div>
     <div v-else class="not-found">Nenhum resultado foi encontrado.</div>
-    <ModalCard v-if="showModal" @executeAction="changePaidStatus" @closeModal="closeModal">
+    <ModalCard
+      v-if="showModal"
+      @execute-action="changePaidStatus"
+      @close-modal="closeModal">
       <span class="message-area" style="font-size: 20px">
         Marcar como <strong>{{ statusMessage }}</strong>?
       </span>
@@ -89,7 +92,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import PaginationTable from "@/components/common/PaginationTable.vue";
 import TooltipModal from "@/components/common/TooltipModal.vue";
 import ModalCard from "@/components/common/ModalCard.vue";
@@ -228,4 +231,10 @@ const createRevenueForNextMonth = async (revenue: Revenue) => {
     console.error("Erro ao criar receita.", error);
   }
 };
+
+watch(() => props.searchedField, () => {
+  if (props.searchedField.length > 0) {
+    currentPage.value = 1;
+  }
+});
 </script>

@@ -43,12 +43,12 @@
                   <font-awesome-icon
                     icon="fa-solid fa-pen-to-square"
                     class="table-icon"
-                    @click="$emit('updateItem', customer)"
+                    @click="$emit('update-item', customer)"
                   />
                   <font-awesome-icon
                     icon="fa-solid fa-trash-can"
                     class="table-icon"
-                    @click="$emit('deleteItem', customer)"
+                    @click="$emit('delete-item', customer)"
                   />
                 </span>
               </td>
@@ -74,7 +74,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import PaginationTable from "@/components/common/PaginationTable.vue";
 import TooltipModal from "@/components/common/TooltipModal.vue";
 import { useDateUtils } from "@/utils/dateUtils";
@@ -121,4 +121,10 @@ const setItemsPerPage = (newItemsPerPage: number) => {
 const setCurrentPage = (newCurrentPage: number) => {
   currentPage.value = newCurrentPage;
 };
+
+watch(() => props.searchedField, () => {
+  if (props.searchedField.length > 0) {
+    currentPage.value = 1;
+  }
+});
 </script>
