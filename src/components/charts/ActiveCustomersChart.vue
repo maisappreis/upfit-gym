@@ -6,7 +6,9 @@
       :options="chartOptions"
       :style="myStyles"
     />
-    <div v-else class="not-found">Sem dados para exibição do gráfico de Clientes Ativos</div>
+    <div v-else class="not-found">
+      Sem dados para exibição do gráfico de Clientes Ativos
+    </div>
   </div>
 </template>
 
@@ -142,7 +144,6 @@ onMounted(() => {
 
 @media only screen and (max-width: 1000px) {
   .chart-area {
-    margin: 0 0 0 10px;
     height: fit-content;
   }
 }

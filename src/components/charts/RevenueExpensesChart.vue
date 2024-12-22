@@ -6,7 +6,9 @@
       :options="chartOptions"
       :style="myStyles"
     />
-    <div v-else class="not-found">Sem dados para exibição do gráfico de Receitas x Despesas</div>
+    <div v-else class="not-found">
+      Sem dados para exibição do gráfico de Receitas x Despesas
+    </div>
   </div>
 </template>
 
@@ -29,6 +31,7 @@ const chartData = ref<Data>({
   labels: [],
   datasets: []
 });
+
 const chartOptions = ref<Options>({
   responsive: true,
   plugins: {
@@ -61,7 +64,6 @@ const chartOptions = ref<Options>({
 const myStyles = computed(() => {
   return {
     height: "100%",
-    width: "85%",
     position: "relative"
   };
 });
@@ -101,7 +103,6 @@ watch(() => props.monthlyRevenue, () => {
 
 <style scoped>
 .chart-area {
-  width: 100%;
   height: 50%;
   min-height: 200px;
 }
@@ -109,7 +110,6 @@ watch(() => props.monthlyRevenue, () => {
 @media only screen and (max-width: 1000px) {
   .chart-area {
     height: fit-content;
-    min-height: 400px;
   }
 }
 </style>

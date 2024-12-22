@@ -1,12 +1,24 @@
 <template>
   <div class="content-area">
-    <RevenueExpensesChart
-      :monthlyRevenue="monthlyRevenueOrdered"
-      :monthlyExpenses="monthlyExpensesOrdered"
-    />
     <div class="chart-area">
-      <ActiveCustomersChart />
-      <ProfitChart :monthlyProfit="monthlyProfit" />
+      <RevenueExpensesChart
+        class="chart-item"
+        :monthlyRevenue="monthlyRevenueOrdered"
+        :monthlyExpenses="monthlyExpensesOrdered"
+      />
+      <ActiveInactiveChart
+        class="chart-item"
+        :activeCustomers="activeCustomers"
+        :inactiveCustomers="inactiveCustomers" />
+    </div>
+    <div
+      class="chart-area"
+      style="margin-top: 20px">
+      <ActiveCustomersChart
+        class="chart-item"/>
+      <ProfitChart
+        class="chart-item"
+        :monthlyProfit="monthlyProfit" />
     </div>
   </div>
 </template>
@@ -14,6 +26,7 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from "vue";
 import RevenueExpensesChart from "../charts/RevenueExpensesChart.vue";
+import ActiveInactiveChart from "../charts/ActiveInactiveChart.vue";
 import ActiveCustomersChart from "../charts/ActiveCustomersChart.vue";
 import ProfitChart from "../charts/ProfitChart.vue";
 import { type SumPerMonth } from "@/types/chart";
@@ -28,6 +41,8 @@ const { sortDataByDate } = useDateUtils();
 const monthlyRevenueOrdered = ref<SumPerMonth[]>([]);
 const monthlyExpensesOrdered = ref<SumPerMonth[]>([]);
 const monthlyProfit = ref<SumPerMonth[]>([]);
+const activeCustomers = ref<number>(0);
+const inactiveCustomers = ref<number>(0);
 
 const sumMonthlyAmounts = (data: (Revenue | Expense)[]) => {
   const summedValuesMap = new Map();
@@ -82,12 +97,24 @@ const prepareDataForCalculation = () => {
   }
 };
 
+const countActiveAndInactiveCustomers = () => {
+  if (apiStore.customers.length > 0) {
+    const actives = apiStore.customers.filter(customer => customer.status === "Ativo");
+    const inactives = apiStore.customers.filter(customer => customer.status === "Inativo");
+
+    activeCustomers.value = actives.length;
+    inactiveCustomers.value = inactives.length;
+  }
+};
+
 watch(() => apiStore.expenses, () => {
   prepareDataForCalculation();
+  countActiveAndInactiveCustomers();
 });
 
 onMounted(() => {
   prepareDataForCalculation();
+  countActiveAndInactiveCustomers();
 });
 </script>
 
@@ -97,10 +124,15 @@ onMounted(() => {
   justify-content: space-around;
 }
 
+.chart-item {
+  width: 50%;
+}
+
 @media only screen and (max-width: 1000px) {
   .chart-area {
     flex-direction: column;
     justify-content: center;
+    width: 100%;
   }
 }
 </style>

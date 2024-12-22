@@ -7,7 +7,9 @@
       :data="chartData"
       :style="myStyles"
     />
-    <div v-else class="not-found">Sem dados para exibição do gráfico de Lucros</div>
+    <div v-else class="not-found">
+      Sem dados para exibição do gráfico de Lucros
+    </div>
   </div>
 </template>
 
@@ -96,7 +98,6 @@ watch(() => props.monthlyProfit, () => {
 
 @media only screen and (max-width: 1000px) {
   .chart-area {
-    margin: 0 10px 0 0;
     height: fit-content;
   }
 }
