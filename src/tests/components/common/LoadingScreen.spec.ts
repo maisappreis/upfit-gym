@@ -1,8 +1,19 @@
 import { mount } from "@vue/test-utils";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeEach } from "vitest";
+import { createPinia, setActivePinia } from "pinia";
 import LoadingScreen from "@/components/common/LoadingScreen.vue";
+import { useLoadingStore } from "@/stores/loading";
 
 describe("LoadingScreen.vue", () => {
+  let loadingStore: ReturnType<typeof useLoadingStore>;
+
+  beforeEach(() => {
+    setActivePinia(createPinia());
+    loadingStore = useLoadingStore();
+
+    loadingStore.isLoading = true;
+  });
+
   it("should render the spinner and overlay", () => {
     const wrapper = mount(LoadingScreen);
 
@@ -18,12 +29,9 @@ describe("LoadingScreen.vue", () => {
 
   it("should display the slot content as the message", () => {
     const wrapper = mount(LoadingScreen, {
-      slots: {
-        default: "Loading, please wait...",
-      },
     });
 
     const message = wrapper.find(".message");
-    expect(message.text()).toBe("Loading, please wait...");
+    expect(message.text()).toBe("Carregando...");
   });
 });
