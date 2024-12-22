@@ -1,7 +1,7 @@
 <template>
   <div class="content-area">
     <div class="flex-between mb-normal">
-      <DefaultButton @executeAction="addExpense" style="background-color: var(--red-dark-color)">
+      <DefaultButton @execute-action="addExpense" style="background-color: var(--red-dark-color)">
         <font-awesome-icon icon="fa-solid fa-plus" class="icon-add" />
         <span class="button-text">Nova Despesa</span>
       </DefaultButton>
@@ -25,8 +25,8 @@
     <ModalCard
       v-if="showModal"
       :isForm="isForm"
-      @executeAction="deleteExpense"
-      @closeModal="closeModal"
+      @execute-action="deleteExpense"
+      @close-modal="closeModal"
     >
       <h3 v-if="action === 'delete'" class="message-area">
         Tem certeza que deseja excluir o pagamento da despesa de

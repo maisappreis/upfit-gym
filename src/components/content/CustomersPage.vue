@@ -1,7 +1,7 @@
 <template>
   <div class="content-area">
     <div class="flex-between mb-normal">
-      <DefaultButton @executeAction="addCustomer"
+      <DefaultButton @execute-action="addCustomer"
         style="background-color: var(--red-dark-color)">
         <font-awesome-icon icon="fa-solid fa-plus" class="icon-add" />
         <span class="button-text">Novo Cliente</span>
@@ -15,16 +15,16 @@
       :data="filteredCustomers"
       :searchedField="searchedField"
       :alertMessage="alertMessage"
-      @updateItem="updateCustomer"
-      @deleteItem="showDeleteModal"
+      @update-item="updateCustomer"
+      @delete-item="showDeleteModal"
       @show-message="alertMessage = $event"
     />
     <ModalCard
       v-if="showModal"
       :isForm="isForm"
       :buttonMessage="buttonMessage"
-      @executeAction="getModalAction"
-      @closeModal="closeModal"
+      @execute-action="getModalAction"
+      @close-modal="closeModal"
     >
       <h3 v-if="action === 'delete' && blockDelete" class="message-area">
         Não é possível excluir o cliente 

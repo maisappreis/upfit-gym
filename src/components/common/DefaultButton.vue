@@ -1,7 +1,7 @@
 <template>
   <button
     class="button-area"
-    @click="$emit('executeAction')"
+    @click="$emit('execute-action')"
     :class="{ green: !disable, disabled: disable }">
     <slot></slot>
   </button>

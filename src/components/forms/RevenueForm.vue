@@ -63,7 +63,7 @@
         <DefaultButton
           style="background-color: red"
           type="button"
-          @executeAction="$emit('close-modal')"
+          @execute-action="$emit('close-modal')"
         >
           Cancelar
         </DefaultButton>

@@ -47,7 +47,7 @@ describe('ModalCard.vue', () => {
     expect(wrapper.text()).toContain('Submit');
   });
 
-  // it('emits "executeAction" when the confirm button is clicked', async () => {
+  // it('emits "execute-action" when the confirm button is clicked', async () => {
   //   const wrapper = mount(ModalCard, {
   //     props: { isForm: false },
   //     global: {
@@ -57,10 +57,10 @@ describe('ModalCard.vue', () => {
 
   //   const confirmButton = wrapper.find('button[style="background-color: green"]');
   //   await confirmButton.trigger('click');
-  //   expect(wrapper.emitted('executeAction')).toBeTruthy();
+  //   expect(wrapper.emitted('execute-action')).toBeTruthy();
   // });
 
-  // it('emits "closeModal" when the cancel button is clicked', async () => {
+  // it('emits "close-modal" when the cancel button is clicked', async () => {
   //   const wrapper = mount(ModalCard, {
   //     props: { isForm: false },
   //     global: {
@@ -70,7 +70,7 @@ describe('ModalCard.vue', () => {
 
   //   const cancelButton = wrapper.find('button[style="background-color: red"]');
   //   await cancelButton.trigger('click');
-  //   expect(wrapper.emitted('closeModal')).toBeTruthy();
+  //   expect(wrapper.emitted('close-modal')).toBeTruthy();
   // });
 
   it('does not render buttons when isForm is true', () => {

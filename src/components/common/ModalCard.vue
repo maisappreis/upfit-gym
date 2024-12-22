@@ -2,10 +2,10 @@
   <div class="modal-area" :class="{ 'top-up': isForm, 'top-down': !isForm }">
     <slot></slot>
     <div v-if="!isForm" class="form-buttons-area">
-      <DefaultButton style="background-color: green" @executeAction="$emit('executeAction')">
+      <DefaultButton style="background-color: green" @execute-action="$emit('execute-action')">
         {{ buttonMessage }}
       </DefaultButton>
-      <DefaultButton style="background-color: red" @executeAction="$emit('closeModal')">
+      <DefaultButton style="background-color: red" @execute-action="$emit('close-modal')">
         Cancelar
       </DefaultButton>
     </div>

@@ -3,12 +3,12 @@ import { describe, it, expect } from "vitest";
 import DefaultButton from "@/components/common/DefaultButton.vue";
 
 describe("DefaultButton", () => {
-  it("emits the 'executeAction' event when the button is clicked", async () => {
+  it("emits the 'execute-action' event when the button is clicked", async () => {
     const wrapper = mount(DefaultButton);
     
     await wrapper.trigger("click");
     
-    expect(wrapper.emitted("executeAction")).toBeTruthy();
+    expect(wrapper.emitted("execute-action")).toBeTruthy();
   });
 
   it("apply class 'green' when 'disable' is false", () => {
@@ -31,7 +31,7 @@ describe("DefaultButton", () => {
     expect(wrapper.classes()).toContain("disabled");
   });
 
-  // it("does not emit 'executeAction' event when 'disable' is true", async () => {
+  // it("does not emit 'execute-action' event when 'disable' is true", async () => {
   //   const wrapper = mount(DefaultButton, {
   //     props: {
   //       disable: true,
@@ -40,7 +40,7 @@ describe("DefaultButton", () => {
 
   //   await wrapper.trigger("click");
 
-  //   expect(wrapper.emitted("executeAction")).toBeFalsy(); // está retornando [[]]
+  //   expect(wrapper.emitted("execute-action")).toBeFalsy(); // está retornando [[]]
   // });
 
   it("renders the slot content correctly", () => {

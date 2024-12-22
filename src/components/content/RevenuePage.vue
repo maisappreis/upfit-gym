@@ -1,7 +1,9 @@
 <template>
   <div class="content-area">
     <div class="flex-between mb-normal">
-      <DefaultButton @executeAction="addRevenue" style="background-color: var(--red-dark-color)">
+      <DefaultButton
+        @execute-action="addRevenue"
+        style="background-color: var(--red-dark-color)">
         <font-awesome-icon icon="fa-solid fa-plus" class="icon-add" />
         <span class="button-text">Nova Receita</span>
       </DefaultButton>
@@ -25,8 +27,8 @@
     <ModalCard
       v-if="showModal"
       :isForm="isForm"
-      @executeAction="getModalAction"
-      @closeModal="closeModal"
+      @execute-action="getModalAction"
+      @close-modal="closeModal"
     >
       <h3 v-if="action === 'delete'" class="message-area">
         Tem certeza que deseja excluir o recebimento da mensalidade do cliente
