@@ -93,7 +93,7 @@ watch(() => props.monthlyProfit, () => {
 <style scoped>
 .chart-area {
   height: 50%;
-  min-height: 250px;
+  min-height: 230px;
 }
 
 @media only screen and (max-width: 1000px) {
