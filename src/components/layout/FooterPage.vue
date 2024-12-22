@@ -41,9 +41,7 @@
 
 @media only screen and (max-width: 1000px) {
   .footer-area {
-    bottom: 0;
     left: 0;
-    width: 100vw;
     height: 25px;
     padding: 0 5px 5px 5px;
   }

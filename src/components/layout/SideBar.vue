@@ -72,7 +72,7 @@ const pageStore = usePageStore();
   z-index: 10;
 
   background-color: var(--black-color);
-  height: 100vh;
+  height: 100%;
   min-height: 100vh;
   overflow: auto;
 }

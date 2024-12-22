@@ -1,5 +1,5 @@
 <template>
-  <div class="content-area">
+  <div class="content-area center">
     <div class="chart-area">
       <RevenueExpensesChart
         class="chart-item"
@@ -119,6 +119,10 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.center {
+  justify-content: center;
+}
+
 .chart-area {
   display: flex;
   justify-content: space-around;
