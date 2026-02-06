@@ -2,55 +2,44 @@
   <div>
     <h2 class="modal-title">{{ modalTitle }}</h2>
     <form class="form-area" @submit.prevent="saveExpense">
-      <div class="form-item">
-        <label class="form-label" for="name">Nome:</label>
-        <input class="form-input" type="text" id="name" name="name" v-model="bill" required />
-      </div>
-      <div class="form-item">
-        <label class="form-label" for="due-date" style="min-width: 170px">
-          Data de Vencimento:
-        </label>
-        <input
-          class="form-input"
-          type="date"
-          id="due-date"
-          name="due-date"
-          v-model="dueDate"
-          required
-        />
-      </div>
-      <div class="form-item">
-        <label class="form-label" for="has-installments">Possui parcelas?</label>
-        <input
-          type="checkbox"
-          id="has-installments"
-          name="has-installments"
-          :checked="hasInstallments"
-          v-model="hasInstallments"
-          @change="setInstallments"
-          :disabled="disableInstallments"
-        />
-      </div>
-      <div v-if="hasInstallments" class="form-item">
-        <label class="form-label" for="installments">Número de parcelas:</label>
-        <input
-          class="form-input"
-          type="text"
-          id="installments"
-          name="installments"
+      <BaseInput
+        label="Nome"
+        v-model="bill"
+        type="text"
+      />
+
+      <BaseInput
+        label="Data de Vencimento"
+        v-model="dueDate"
+        type="date"
+      />
+
+      <BaseCheckbox
+        label="Possui parcelas?"
+        v-model="hasInstallments"
+      />
+
+      <div v-if="hasInstallments">
+        <BaseInput
+          label="Número de parcelas"
           v-model="installments"
+          type="text"
           :disabled="disableInstallments"
         />
       </div>
       <p v-if="!validInstallment" class="invalid">Parcelas inválidas.</p>
-      <div class="form-item">
-        <label class="form-label" for="value">Valor:</label>
-        <input class="form-input" type="text" id="value" name="value" v-model="value" required />
-      </div>
-      <div class="form-item">
-        <label class="form-label" for="notes">Notas:</label>
-        <textarea class="form-textarea" id="notes" name="notes" rows="4" v-model="notes"></textarea>
-      </div>
+
+      <BaseInput
+        label="Valor"
+        v-model="value"
+        type="number"
+      />
+
+      <BaseTextarea
+        label="Notas"
+        v-model="notes"
+      />
+      
       <div class="form-buttons-area">
         <DefaultButton type="submit" :disable="disable">
           Salvar
@@ -69,12 +58,15 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, onMounted } from "vue";
-import DefaultButton from "@/components/common/DefaultButton.vue";
 import { months } from "@/utils/variables";
 import { type Expense } from "@/types/expense";
 import { useApiStore } from "@/stores/api";
 import { useDataUtils } from "@/utils/dataUtils";
 import { useLoadingStore } from "@/stores/loading";
+import BaseInput from "@/components/common/form/BaseInput.vue";
+import BaseCheckbox from "@/components/common/form/BaseCheckbox.vue";
+import BaseTextarea from "@/components/common/form/BaseTextarea.vue";
+import DefaultButton from "@/components/common/DefaultButton.vue";
 import axios from "axios";
 
 const apiStore = useApiStore();

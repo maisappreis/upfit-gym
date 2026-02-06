@@ -2,69 +2,57 @@
   <div>
     <h2 class="modal-title">{{ modalTitle }}</h2>
     <form class="form-area" @submit.prevent="saveCustomer">
-      <div class="form-item">
-        <label class="form-label" for="name">Nome:</label>
-        <input
-          class="form-input"
-          type="text"
-          id="name"
-          name="name"
-          v-model="customerName"
-          required
-        />
-      </div>
-      <div class="form-item">
-        <label class="form-label" for="frequency">Frequência:</label>
-        <select class="form-select" id="frequency" name="frequency" v-model="frequency" required>
+      <BaseInput
+        label="Nome"
+        v-model="customerName"
+        type="text"
+      />
+
+      <BaseSelect
+        label="Frequência"
+        v-model="frequency">
           <option value="1x">1x</option>
           <option value="2x">2x</option>
           <option value="3x">3x</option>
           <option value="4x">4x</option>
           <option value="5x">5x</option>
-        </select>
-      </div>
-      <div class="form-item">
-        <label class="form-label" for="start">Data de Início:</label>
-        <input class="form-input" type="date" id="start" name="start" v-model="start" required />
-      </div>
-      <div class="form-item">
-        <label class="form-label" for="plan">Plano:</label>
-        <select class="form-select" id="plan" name="plan" v-model="plan" required>
+      </BaseSelect>
+
+      <BaseInput
+        label="Data de Início"
+        v-model="start"
+        type="date"
+      />
+
+      <BaseSelect
+        label="Plano"
+        v-model="plan">
           <option value="Mensal">Mensal</option>
           <option value="Trimestral">Trimestral</option>
           <option value="Semestral">Semestral</option>
           <option value="Anual">Anual</option>
-        </select>
-      </div>
-      <div class="form-item">
-        <label class="form-label" for="value">Valor:</label>
-        <input class="form-input" type="number" id="value" name="value" v-model="value" required />
-      </div>
-      <div class="form-item">
-        <label class="form-label">Status:</label>
-        <input
-          class="form-radio"
-          type="radio"
-          id="active"
-          name="status"
-          value="Ativo"
-          v-model="status"
-        />
-        <label class="form-label" for="active">Ativo</label>
-        <input
-          class="form-radio"
-          type="radio"
-          id="inactive"
-          name="status"
-          value="Inativo"
-          v-model="status"
-        />
-        <label class="form-label" for="inactive">Inativo</label>
-      </div>
-      <div class="form-item">
-        <label class="form-label" for="notes">Notas:</label>
-        <textarea class="form-textarea" id="notes" name="notes" rows="4" v-model="notes"></textarea>
-      </div>
+      </BaseSelect>
+
+      <BaseInput
+        label="Valor"
+        v-model="value"
+        type="number"
+      />
+
+      <BaseRadioGroup
+        name="Status"
+        v-model="status"
+        :options="[
+          {label: 'Ativo', value: 'Ativo' },
+          {label: 'Inativo', value: 'Inativo' }
+        ]"
+      />
+      
+      <BaseTextarea
+        label="Notas"
+        v-model="notes"
+      />
+
       <div class="form-buttons-area">
         <DefaultButton type="submit" :disable="disable">Salvar</DefaultButton>
         <DefaultButton
@@ -81,12 +69,16 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from "vue";
-import DefaultButton from "@/components/common/DefaultButton.vue";
 import { type Customer } from "@/types/customer";
 import { useApiStore } from "@/stores/api";
 import { useLoadingStore } from "@/stores/loading";
 import { useDateUtils } from "@/utils/dateUtils";
 import { useDataUtils } from "@/utils/dataUtils";
+import BaseInput from "@/components/common/form/BaseInput.vue";
+import BaseSelect from "@/components/common/form/BaseSelect.vue";
+import BaseTextarea from "@/components/common/form/BaseTextarea.vue";
+import BaseRadioGroup from "@/components/common/form/BaseRadioGroup.vue";
+import DefaultButton from "@/components/common/DefaultButton.vue";
 import axios from "axios";
 
 const apiStore = useApiStore();
@@ -97,11 +89,11 @@ const { getCurrentYearMonthDay } = useDateUtils();
 const emit = defineEmits(["show-message", "close-modal"]);
 
 const customerName = ref<string>("");
-const frequency = ref<string>("");
+const frequency = ref<"1x" | "2x" | "3x" | "4x" | "5x" | "">("");
 const start = ref<string>("");
-const plan = ref<string>("");
+const plan = ref<"Mensal" | "Trimestral" | "Semestral" | "Anual">("Mensal");
 const value = ref<number | null>(null);
-const status = ref<string>("");
+const status = ref<"Ativo" | "Inativo">("Ativo");
 const notes = ref<string>("");
 
 const props = defineProps<{
@@ -115,9 +107,7 @@ const disable = computed(() => {
     customerName.value === "" ||
     frequency.value === "" ||
     start.value === "" ||
-    plan.value === "" ||
-    value.value === null ||
-    status.value === ""
+    value.value === null
   );
 });
 

@@ -2,62 +2,49 @@
   <div>
     <h2 class="modal-title">{{ modalTitle }}</h2>
     <form class="form-area" @submit.prevent="saveRevenue">
-      <div class="form-item">
-        <label class="form-label" for="plan">Cliente:</label>
-        <select class="form-select" id="plan" name="plan" v-model="customer" required>
-          <option v-for="(cust, index) in customersList" :key="index" :value="cust">
+      <BaseSelect
+        label="Cliente"
+        v-model="customerId">
+          <option v-for="(cust, index) in customersList" :key="index" :value="cust.id">
             {{ cust.name }}
           </option>
-        </select>
-      </div>
-      <div class="form-item">
-        <label class="form-label" for="value">Valor:</label>
-        <input class="form-input" type="number" id="value" name="value" v-model="value" required />
-      </div>
-      <div class="form-item">
-        <label class="form-label" for="dueDate" style="min-width: 160px">Dia do Vencimento:</label>
-        <input
-          class="form-input"
-          type="number"
-          id="dueDate"
-          name="dueDate"
-          v-model="dueDate"
-          min="1"
-          max="31"
-          required
-        />
-      </div>
-      <div class="form-item">
-        <label class="form-label" for="month" style="min-width: 110px">Receber em:</label>
-        <select
-          class="form-select font month"
-          style="margin-right: 10px"
-          id="month"
-          name="month"
-          v-model="month"
-          required
-        >
-          <option v-for="(month, index) in months" :key="index" :value="month">
-            {{ month }}
-          </option>
-        </select>
-        <select
-          class="form-select font"
-          style="max-width: 120px"
-          id="year"
-          name="year"
+      </BaseSelect>
+
+      <BaseInput
+        label="Valor"
+        v-model="value"
+        type="number"
+      />
+
+      <BaseInput
+        label="Dia do Vencimento"
+        v-model="dueDate"
+        type="number"
+        min="1"
+        max="31"
+      />
+      <div class="form-item" style="justify-content: space-between;">
+        <BaseSelect
+          label="Receber em"
+          v-model="month">
+            <option v-for="(month, index) in months" :key="index" :value="month">
+              {{ month }}
+            </option>
+        </BaseSelect>
+
+        <BaseSelect
           v-model="year"
-          required
-        >
-          <option v-for="(year, index) in years" :key="index" :value="year">
+          style="width: 120px">
+            <option v-for="(year, index) in years" :key="index" :value="year">
             {{ year }}
           </option>
-        </select>
+        </BaseSelect>
       </div>
-      <div class="form-item">
-        <label class="form-label" for="notes">Notas:</label>
-        <textarea class="form-textarea" id="notes" name="notes" rows="4" v-model="notes"></textarea>
-      </div>
+
+      <BaseTextarea
+        label="Notas"
+        v-model="notes"
+      />
       <div class="form-buttons-area">
         <DefaultButton type="submit" :disable="disable">Salvar</DefaultButton>
         <DefaultButton
@@ -74,13 +61,16 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from "vue";
-import DefaultButton from "@/components/common/DefaultButton.vue";
 import { type Revenue } from "@/types/revenue";
 import { type Customer } from "@/types/customer";
 import { months, years } from "@/utils/variables";
 import { useApiStore } from "@/stores/api";
 import { useDataUtils } from "@/utils/dataUtils";
 import { useLoadingStore } from "@/stores/loading";
+import BaseInput from "@/components/common/form/BaseInput.vue";
+import BaseSelect from "@/components/common/form/BaseSelect.vue";
+import BaseTextarea from "@/components/common/form/BaseTextarea.vue";
+import DefaultButton from "@/components/common/DefaultButton.vue";
 import axios from "axios";
 
 const apiStore = useApiStore();
@@ -90,7 +80,7 @@ const { getValidFloat } = useDataUtils();
 const emit = defineEmits(["show-message", "close-modal", "get-confirmation"]);
 
 const customersList = ref<Customer[]>();
-const customer = ref<Customer>();
+const customerId = ref<number>(0);
 const value = ref<number | null>(null);
 const notes = ref<string>("");
 const year = ref<number>(0);
@@ -103,6 +93,10 @@ const props = defineProps<{
   modalTitle: String;
   customers: Customer[];
 }>();
+
+const customer = computed(() =>
+  customersList.value && customersList.value.find(c => c.id === customerId.value)
+);
 
 const disable = computed(() => {
   return (
@@ -128,7 +122,7 @@ const createRevenue = async () => {
     let validFloat = getValidFloat(value.value);
 
     let newRevenue = {
-      customer: customer.value!.id,
+      customer: customerId.value,
       year: year.value,
       month: month.value,
       value: validFloat,
@@ -186,7 +180,7 @@ const fillModal = () => {
     let updatedMmonth = months[currentMonth];
 
     customersList.value = props.customers;
-    customer.value = customersList.value[0];
+    customerId.value = customersList.value[0].id;
     year.value = updatedYear;
     month.value = updatedMmonth;
   }
@@ -198,7 +192,7 @@ const fillModal = () => {
     let currentCustomer = props.customers!.find((e: Customer) => e.id === customerID);
 
     customersList.value = currentCustomer ? [currentCustomer]: [];
-    customer.value = currentCustomer;
+    customerId.value = currentCustomer ? currentCustomer.id : 0;
     value.value = Number(formatedValue);
     notes.value = props.item!.notes;
     dueDate.value = props.item!.payment_day;
