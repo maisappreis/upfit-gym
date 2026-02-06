@@ -110,7 +110,7 @@ const { formatDate, getNextMonth } = useDateUtils();
 const { searchData } = useDataUtils();
 const emit = defineEmits(["update-item", "delete-item"]);
 
-const itemsPerPage = ref<number>(8);
+const itemsPerPage = ref<number>(30);
 const currentPage = ref<number>(1);
 const showingTooltip = ref<boolean>(false);
 const tooltip = ref<string>("");

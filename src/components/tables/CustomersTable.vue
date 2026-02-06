@@ -84,7 +84,7 @@ import { type Customer } from "@/types/customer";
 const { formatDate } = useDateUtils();
 const { searchData } = useDataUtils();
 
-const itemsPerPage = ref<number>(8);
+const itemsPerPage = ref<number>(30);
 const currentPage = ref<number>(1);
 
 const showingTooltip = ref<boolean>(false);
