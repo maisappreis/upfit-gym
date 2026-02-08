@@ -121,7 +121,7 @@ const saveCustomer = () => {
 };
 
 const createCustomer = async () => {
-  loadingStore.isLoading = true;
+  loadingStore.start();
   try {
     let validFloat = getValidFloat(value.value);
     const customerCapitalized = capitalize(customerName.value);
@@ -144,18 +144,18 @@ const createCustomer = async () => {
         createRevenue(response.id, response.start);
       }, 500);
     }
-    loadingStore.isLoading = false;
     emit("show-message", "Cliente criado com sucesso!");
     emit("close-modal");
   } catch (error) {
     console.error("Erro ao criar cliente.", error);
-    loadingStore.isLoading = false;
     emit("show-message", "Erro ao criar cliente.");
+  } finally {
+    loadingStore.stop();
   }
 };
 
 const updateCustomer = async () => {
-  loadingStore.isLoading = true;
+  loadingStore.start();
   try {
     let validFloat = getValidFloat(value.value);
     let customerNameCapitalized = capitalize(customerName.value);
@@ -174,13 +174,13 @@ const updateCustomer = async () => {
     await apiStore.fetchCustomers();
     await apiStore.fetchRevenue();
 
-    loadingStore.isLoading = false;
     emit("show-message", "Cliente atualizado com sucesso!");
     emit("close-modal")
   } catch (error) {
     console.error("Erro ao atualizar cliente.", error);
-    loadingStore.isLoading = false;
     emit("show-message", "Erro ao atualizar cliente.");
+  } finally {
+    loadingStore.stop();
   }
 };
 

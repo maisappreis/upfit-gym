@@ -145,18 +145,18 @@ const updateRevenue = (item: Revenue) => {
 };
 
 const deleteRevenue = async () => {
-  loadingStore.isLoading = true;
+  loadingStore.start();
   try {
     await axios.delete(`${apiStore.apiURL}/revenue/${selectedRevenue.value.id}/`);
     await apiStore.fetchRevenue();
 
     showModal.value = false;
-    loadingStore.isLoading = false;
     alertMessage.value = "Receita excluída com sucesso!";
   } catch (error) {
     console.error("Erro ao excluir receita.", error);
-    loadingStore.isLoading = false;
     alertMessage.value = "Erro ao excluir receita.";
+  } finally {
+    loadingStore.stop();
   }
 };
 
@@ -211,19 +211,19 @@ const updateFutureRevenue = () => {
 };
 
 const updateCustomerValue = async () => {
-  loadingStore.isLoading = true;
+  loadingStore.start();
   try {
     let updatedCustomer = {
       value: confirmationData.value.updatedValue
     };
 
     await customerService.update(confirmationData.value.id, updatedCustomer);
-    loadingStore.isLoading = false;
     alertMessage.value = "Cliente atualizado com sucesso!";
   } catch (error) {
     console.error("Erro ao atualizar cliente.", error);
-    loadingStore.isLoading = false;
     alertMessage.value = "Erro ao atualizar cliente.";
+  } finally {
+    loadingStore.stop();
   }
 };
 

@@ -4,12 +4,17 @@ import { ref } from "vue";
 export const useLoadingStore = defineStore("loading", () => {
     const isLoading = ref<boolean>(false);
 
-    const loadPage = (status: boolean) => {
-        isLoading.value = status;
+    const start = () => {
+        isLoading.value = true;
+    };
+
+    const stop = () => {
+        isLoading.value = false;
     };
 
     return {
-        loadPage,
-        isLoading
+        isLoading,
+        start,
+        stop
     };
 });

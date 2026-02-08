@@ -15,17 +15,17 @@ describe("Loading Store", () => {
   });
 
   it("should change isLoading when loadPage is called", () => {
-    loadingStore.loadPage(true);
+    loadingStore.start();
     expect(loadingStore.isLoading).toBe(true);
 
-    loadingStore.loadPage(false);
+    loadingStore.stop();
     expect(loadingStore.isLoading).toBe(false);
   });
 
   it("should update isLoading correctly", () => {
-    loadingStore.loadPage(true);
+    loadingStore.start();
     expect(loadingStore.isLoading).toBe(true);
-    loadingStore.loadPage(false);
+    loadingStore.stop();
     expect(loadingStore.isLoading).toBe(false);
   });
 });

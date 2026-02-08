@@ -167,7 +167,7 @@ const setCurrentPage = (newCurrentPage: number) => {
 };
 
 const changePaidStatus = async () => {
-  loadingStore.isLoading = true;
+  loadingStore.start();
   try {
     let updatedPaidStatus = {} as { paid: string};
 
@@ -193,12 +193,12 @@ const changePaidStatus = async () => {
       }
     }
     closeModal();
-    loadingStore.isLoading = false;
     emit("show-message", "Status do pagamento salvo com sucesso!");
   } catch (error) {
     console.error("Erro ao atualizar o status de pagamento...", error);
-    loadingStore.isLoading = false;
     emit("show-message", "Erro ao salvar o status do pagamento.");
+  } finally {
+    loadingStore.stop();
   }
 };
 

@@ -108,7 +108,7 @@ const saveExpense = () => {
 };
 
 const createExpense = async () => {
-  loadingStore.isLoading = true;
+  loadingStore.start();
   try {
     let validFloat = getValidFloat(value.value);
     let date = getYearAndMonth(dueDate.value);
@@ -129,17 +129,17 @@ const createExpense = async () => {
     await apiStore.fetchExpenses();
 
     emit("close-modal");
-    loadingStore.isLoading = false;
     emit("show-message", "Despesa criada com sucesso!");
   } catch (error) {
     console.error("Erro ao criar despesa.", error);
-    loadingStore.isLoading = false;
     emit("show-message", "Erro ao criar despesa.");
+  } finally {
+    loadingStore.stop();
   }
 };
 
 const updateExpense = async () => {
-  loadingStore.isLoading = true;
+  loadingStore.start();
   try {
     let validFloat = getValidFloat(value.value);
     let date = getYearAndMonth(dueDate.value);
@@ -158,12 +158,12 @@ const updateExpense = async () => {
     await apiStore.fetchExpenses();
 
     emit("close-modal");
-    loadingStore.isLoading = false;
     emit("show-message", "Despesa atualizada com sucesso!");
   } catch (error) {
     console.error("Erro ao atualizar despesa.", error);
-    loadingStore.isLoading = false;
     emit("show-message", "Erro ao atualizar despesa.");
+  } finally {
+    loadingStore.stop();
   }
 };
 

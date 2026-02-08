@@ -133,18 +133,18 @@ const updateExpense = (item: Expense) => {
 };
 
 const deleteExpense = async () => {
-  loadingStore.isLoading = true;
+  loadingStore.start();
   try {
     await axios.delete(`${apiStore.apiURL}/expense/${selectedExpense.value.id}/`);
     await apiStore.fetchExpenses();
     
     showModal.value = false;
-    loadingStore.isLoading = false;
     alertMessage.value = "Despesa excluída com sucesso!";
   } catch (error) {
     console.error("Erro ao excluir despesa.", error);
-    loadingStore.isLoading = false;
     alertMessage.value = "Erro ao excluir despesa.";
+  } finally {
+    loadingStore.stop();
   }
 };
 

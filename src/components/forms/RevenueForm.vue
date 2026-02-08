@@ -117,7 +117,7 @@ const saveRevenue = () => {
 };
 
 const createRevenue = async () => {
-  loadingStore.isLoading = true;
+  loadingStore.start();
   try {
     let validFloat = getValidFloat(value.value);
 
@@ -135,17 +135,17 @@ const createRevenue = async () => {
     await apiStore.fetchRevenue();
 
     emit("close-modal");
-    loadingStore.isLoading = false;
     emit("show-message", "Receita criada com sucesso!");
   } catch (error) {
     console.error("Erro ao criar receita.", error);
-    loadingStore.isLoading = false;
     emit("show-message", "Erro ao criar receita.");
+  } finally {
+    loadingStore.stop();
   }
 };
 
 const updateRevenue = async () => {
-  loadingStore.isLoading = true;
+  loadingStore.start();
   try {
     let validFloat = getValidFloat(value.value);
 
@@ -161,14 +161,14 @@ const updateRevenue = async () => {
     await apiStore.fetchRevenue();
 
     emit("close-modal");
-    loadingStore.isLoading = false;
     emit("show-message", "Receita atualizada com sucesso!");
 
     checkChangesInValue();
   } catch (error) {
     console.error("Erro ao atualizar receita.", error);
-    loadingStore.isLoading = false;
     emit("show-message", "Erro ao atualizar receita.");
+  } finally {
+    loadingStore.stop();
   }
 };
 

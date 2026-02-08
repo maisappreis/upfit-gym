@@ -25,11 +25,11 @@ const layoutComponent = computed(() => {
 });
 
 onMounted(async () => {
-  loadingStore.isLoading = true;
+  loadingStore.start();
   authStore.checkAuthentication();
   apiStore.configureAxios();
   await apiStore.fetchData();
-  loadingStore.isLoading = false;
+  loadingStore.stop();
 });
 </script>
 

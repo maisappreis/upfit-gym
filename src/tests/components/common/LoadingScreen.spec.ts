@@ -11,7 +11,7 @@ describe("LoadingScreen.vue", () => {
     setActivePinia(createPinia());
     loadingStore = useLoadingStore();
 
-    loadingStore.isLoading = true;
+    loadingStore.start();
   });
 
   it("should render the spinner and overlay", () => {

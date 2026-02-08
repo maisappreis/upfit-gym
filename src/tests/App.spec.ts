@@ -119,7 +119,7 @@ describe("App.vue", () => {
   // });
 
   it("shows the loading screen while loadingStore.isLoading is true", async () => {
-    loadingStore.isLoading = true;
+    loadingStore.start();
 
     const wrapper = mount(App, {
       global: {
@@ -131,7 +131,7 @@ describe("App.vue", () => {
   });
 
   // it("hides the loading screen after loadingStore.isLoading is set to false", async () => {
-  //   loadingStore.isLoading = false;
+  //   loadingStore.stop();
 
   //   const wrapper = mount(App, {
   //     global: {

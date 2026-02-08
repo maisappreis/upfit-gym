@@ -139,17 +139,13 @@ const getModalAction = () => {
 };
 
 const deleteCustomer = async () => {
-  loadingStore.isLoading = true;
-  // TODO
-  // loadingStore.start();
-  // loadingStore.stop();
+  loadingStore.start();
 
   try {
     await customerService.delete(selectedCustomer.value.id);
     await apiStore.fetchCustomers();
 
     showModal.value = false;
-    loadingStore.isLoading = false;
     alertMessage.value = "Cliente excluído com sucesso!";
 
     // TODO
@@ -157,28 +153,25 @@ const deleteCustomer = async () => {
   } catch (error) {
     // feedback.error('Erro ao excluir cliente');
     console.error("Erro ao excluir cliente.", error);
-    loadingStore.isLoading = false;
     alertMessage.value = "Erro ao excluir cliente.";
+  } finally {
+    loadingStore.stop();
   }
-
-  // finally {
-  //   loadingStore.stop();
-  // }
 };
 
 const inactiveCustomer = async () => {
-  loadingStore.isLoading = true;
+  loadingStore.start();
   try {
     await customerService.inactivate(selectedCustomer.value.id);
     await apiStore.fetchCustomers();
     
     showModal.value = false;
-    loadingStore.isLoading = false;
     alertMessage.value = "Cliente inativado com sucesso!";
   } catch (error) {
     console.error("Erro ao inativar cliente.", error);
-    loadingStore.isLoading = false;
     alertMessage.value = "Erro ao inativar cliente.";
+  } finally {
+    loadingStore.stop();
   }
 };
 

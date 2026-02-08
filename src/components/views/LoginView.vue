@@ -49,7 +49,7 @@ const disable = computed(() => {
 });
 
 const loginUser = async () => {
-  loadingStore.isLoading = true;
+  loadingStore.start();
   try {
     const loginData = {
       username: username.value,
@@ -65,7 +65,6 @@ const loginUser = async () => {
       authStore.checkAuthentication();
       await apiStore.fetchData();
 
-      loadingStore.isLoading = false;
       responseMessage.value = "Login realizado com sucesso!";
       pageStore.openPage('metrics');
       
@@ -75,8 +74,9 @@ const loginUser = async () => {
     }
   } catch (error) {
     console.error(error);
-    loadingStore.isLoading = false;
     responseMessage.value = "Erro ao fazer login.";
+  } finally {
+    loadingStore.stop();
   }
 }
 
