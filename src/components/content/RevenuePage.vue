@@ -80,6 +80,7 @@ import { useApiStore } from "@/stores/api";
 import { useLoadingStore } from "@/stores/loading";
 import { useDateUtils } from "@/utils/dateUtils";
 import { useDataUtils } from "@/utils/dataUtils";
+import { customerService } from "@/services/customer.service";
 import axios from "axios";
 
 const apiStore = useApiStore();
@@ -216,10 +217,7 @@ const updateCustomerValue = async () => {
       value: confirmationData.value.updatedValue
     };
 
-    await axios.patch(
-      `${apiStore.apiURL}/customer/${confirmationData.value.id}/`,
-      updatedCustomer
-    );
+    await customerService.update(confirmationData.value.id, updatedCustomer);
     loadingStore.isLoading = false;
     alertMessage.value = "Cliente atualizado com sucesso!";
   } catch (error) {
@@ -256,7 +254,8 @@ const incrementData = () => {
 };
 
 const formatValue = (value: number) => {
-  return value.toFixed(2).toString().replace(/\./g, ",");
+  // TODO: Bug aqui, tem value entrando como string
+  return Number(value).toFixed(2).toString().replace(/\./g, ",");
 };
 
 watch(() => apiStore.revenue, () => {

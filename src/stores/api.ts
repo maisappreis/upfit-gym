@@ -1,30 +1,65 @@
 import { defineStore } from "pinia"
 import { ref } from "vue"
 import axios from "axios";
+
 import { type Customer } from "@/types/customer";
 import { type Revenue } from "@/types/revenue";
 import { type Expense } from "@/types/expense";
 
+import { customerService } from '@/services/customer.service';
+// import { revenueService } from '@/services/revenue.service';
+// import { expenseService } from '@/services/expense.service';
+
 export const useApiStore = defineStore("api", () => {
+
+  // 🌐 API CONFIG
   const apiBase = ref(import.meta.env.VITE_API_BASE);
   const apiURL = ref<string>(`${apiBase.value}/upfit/test`);
+  const isConfigured = ref(false);
 
+  // 📦 STATE
   const customers = ref<Customer[]>([]);
   const revenue = ref<Revenue[]>([]);
   const expenses = ref<Expense[]>([]);
 
+  // 🔁 API URL
   const setApiURL = (url: string) => {
     apiURL.value = url;
+    axios.defaults.baseURL = url;
   };
 
+  // 📡 FETCH ACTIONS
   const fetchCustomers = async () => {
     try {
-      const response = await axios.get(`${apiURL.value}/customer/`);
-      customers.value = response.data;
+      customers.value = await customerService.fetchAll();
     } catch (error) {
-      console.error("Erro ao requisitar a lista de clientes.", error);
+      console.error('Erro ao requisitar clientes.', error);
     }
   };
+
+  // const fetchRevenue = async () => {
+  //   try {
+  //     revenue.value = await revenueService.fetchAll();
+  //   } catch (error) {
+  //     console.error('Erro ao requisitar receitas.', error);
+  //   }
+  // };
+
+  // const fetchExpenses = async () => {
+  //   try {
+  //     expenses.value = await expenseService.fetchAll();
+  //   } catch (error) {
+  //     console.error('Erro ao requisitar despesas.', error);
+  //   }
+  // };
+
+  // const fetchData = async () => {
+  //   await Promise.all([
+  //     fetchCustomers(),
+  //     fetchRevenue(),
+  //     fetchExpenses(),
+  //   ]);
+  // };
 
   const fetchRevenue = async () => {
     try {
@@ -50,14 +85,23 @@ export const useApiStore = defineStore("api", () => {
     await fetchExpenses();
   };
 
+   // 🧠 DOMAIN LOGIC
+  const canDeleteCustomer = (customerId: number): boolean => {
+    return !revenue.value.some(
+      (item) => item.customer === customerId
+    );
+  };
+
+  // 🔧 AXIOS CONFIG
   const configureAxios = () => {
+    if (isConfigured.value) return;
+
+    axios.defaults.baseURL = apiURL.value;
     axios.defaults.headers.common["Content-Type"] = "application/json";
 
     axios.interceptors.request.use(
       (config) => {
-        axios.defaults.baseURL = apiURL.value;
-        
-        const token = localStorage.getItem("accessToken")
+        const token = localStorage.getItem("accessToken");
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
         }
@@ -65,43 +109,61 @@ export const useApiStore = defineStore("api", () => {
       },
       (error) => Promise.reject(error)
     );
-    
+
     axios.interceptors.response.use(
       (response) => response,
       async (error) => {
         const originalRequest = error.config;
-        if (error.response.status === 401 && !originalRequest._retry) {
+
+        if (
+          error.response?.status === 401 &&
+          !originalRequest._retry
+        ) {
           originalRequest._retry = true;
+
           const refreshToken = localStorage.getItem("refreshToken");
-    
-          if (refreshToken) {
-            try {
-              const response = await axios.post("/token/refresh/", { refresh: refreshToken });
-              const { access } = response.data;
-              localStorage.setItem("accessToken", access);
-              axios.defaults.headers.common["Authorization"] = `Bearer ${access}`;
-              return axios(originalRequest);
-            } catch (refreshError) {
-                console.error(refreshError);
-            }
+          if (!refreshToken) return Promise.reject(error);
+
+          try {
+            const { data } = await axios.post("/token/refresh/", {
+              refresh: refreshToken,
+            });
+
+            localStorage.setItem("accessToken", data.access);
+            axios.defaults.headers.common.Authorization = `Bearer ${data.access}`;
+
+            return axios(originalRequest);
+          } catch (refreshError) {
+            console.error("Erro ao renovar token", refreshError);
           }
         }
+
         return Promise.reject(error);
       }
     );
+
+    isConfigured.value = true;
   };
 
   return {
-    setApiURL,
+    // config
     apiBase,
     apiURL,
-    fetchData,
-    fetchCustomers,
-    fetchRevenue,
-    fetchExpenses,
+    setApiURL,
+    configureAxios,
+
+    // state
     customers,
     revenue,
     expenses,
-    configureAxios
+
+    // actions
+    fetchCustomers,
+    fetchRevenue,
+    fetchExpenses,
+    fetchData,
+
+    // domain helpers
+    canDeleteCustomer,
   };
 });

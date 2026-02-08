@@ -79,6 +79,7 @@ import BaseSelect from "@/components/common/form/BaseSelect.vue";
 import BaseTextarea from "@/components/common/form/BaseTextarea.vue";
 import BaseRadioGroup from "@/components/common/form/BaseRadioGroup.vue";
 import DefaultButton from "@/components/common/DefaultButton.vue";
+import { customerService } from "@/services/customer.service";
 import axios from "axios";
 
 const apiStore = useApiStore();
@@ -135,12 +136,12 @@ const createCustomer = async () => {
       notes: notes.value
     };
 
-    let response = await axios.post(`${apiStore.apiURL}/customer/create/`, newCustomer);
+    let response = await customerService.create(newCustomer);
     await apiStore.fetchCustomers();
 
     if (status.value === "Ativo") {
       setTimeout(() => {
-        createRevenue(response.data.id, response.data.start);
+        createRevenue(response.id, response.start);
       }, 500);
     }
     loadingStore.isLoading = false;
@@ -169,7 +170,7 @@ const updateCustomer = async () => {
       notes: notes.value
     };
 
-    await axios.patch(`${apiStore.apiURL}/customer/${props.item.id}/`, updatedCustomer);
+    await customerService.update(props.item.id, updatedCustomer);
     await apiStore.fetchCustomers();
     await apiStore.fetchRevenue();
 
@@ -219,7 +220,7 @@ const fillModal = () => {
 
   if (props.action === "update") {
     let customerValue = props.item.value;
-    let formatedValue = customerValue.toString().replace(/\./g, ",");
+    let formatedValue = customerValue ? customerValue.toString().replace(/\./g, ",") : 0;
 
     customerName.value = props.item.name;
     frequency.value = props.item.frequency;

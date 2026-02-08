@@ -69,7 +69,10 @@ import StatusFilter from "@/components/common/StatusFilter.vue";
 import { useApiStore } from "@/stores/api";
 import { useLoadingStore } from "@/stores/loading";
 import { type Customer } from "@/types/customer";
-import axios from "axios";
+import { customerService } from "@/services/customer.service";
+
+// TODO:
+// type ModalAction = 'create' | 'update' | 'delete';
 
 const apiStore = useApiStore();
 const loadingStore = useLoadingStore();
@@ -78,10 +81,11 @@ const searchedField = ref<string[]>([]);
 const showModal = ref<boolean>(false);
 const selectedCustomer = ref<Customer>({} as Customer);
 const action = ref<"create" | "update" | "delete" | "">("");
+// const action = ref<ModalAction | null>(null);
 const customerName = ref<string>("");
 const modalTitle = ref<string>("");
 const alertMessage = ref<string>("");
-const currentStatus = ref<string>("");
+const currentStatus = ref<"Inativo" | "Ativo" | "Todos">("Ativo");
 const buttonMessage = ref<string>("Confirmar");
 const isForm = ref<boolean>(false);
 const blockDelete = ref<boolean>(false);
@@ -97,6 +101,15 @@ const filteredCustomers = computed(() => {
     return [];
   }
 });
+
+// TODO
+// const filteredCustomers = computed(() =>
+//   apiStore.customers.filter(customer =>
+//     currentStatus.value === 'Todos'
+//       ? true
+//       : customer.status === currentStatus.value
+//   )
+// );
 
 const applySearch = (field: string[]) => {
   searchedField.value = field;
@@ -127,25 +140,36 @@ const getModalAction = () => {
 
 const deleteCustomer = async () => {
   loadingStore.isLoading = true;
+  // TODO
+  // loadingStore.start();
+  // loadingStore.stop();
+
   try {
-    await axios.delete(`${apiStore.apiURL}/customer/${selectedCustomer.value.id}/`);
+    await customerService.delete(selectedCustomer.value.id);
     await apiStore.fetchCustomers();
 
     showModal.value = false;
     loadingStore.isLoading = false;
     alertMessage.value = "Cliente excluído com sucesso!";
+
+    // TODO
+    // feedback.success('Cliente excluído com sucesso');
   } catch (error) {
+    // feedback.error('Erro ao excluir cliente');
     console.error("Erro ao excluir cliente.", error);
     loadingStore.isLoading = false;
     alertMessage.value = "Erro ao excluir cliente.";
   }
+
+  // finally {
+  //   loadingStore.stop();
+  // }
 };
 
 const inactiveCustomer = async () => {
   loadingStore.isLoading = true;
   try {
-    let data = { status: "Inativo" };
-    await axios.patch(`${apiStore.apiURL}/customer/${selectedCustomer.value.id}/`, data);
+    await customerService.inactivate(selectedCustomer.value.id);
     await apiStore.fetchCustomers();
     
     showModal.value = false;
@@ -163,6 +187,8 @@ const showDeleteModal = (item: Customer) => {
   showModal.value = true;
   action.value = "delete";
   let revenueHistory = apiStore.revenue.filter((e) => e.customer === item.id);
+  // TODO
+  // blockDelete.value = !canDeleteCustomer(item.id);
 
   customerName.value = item.name;
 
@@ -180,7 +206,7 @@ const closeModal = () => {
   buttonMessage.value = "Confirmar";
 };
 
-const getStatus = (status: string) => {
+const getStatus = (status: "Inativo" | "Ativo" | "Todos") => {
   currentStatus.value = status;
 };
 </script>
