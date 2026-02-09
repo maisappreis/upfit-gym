@@ -16,9 +16,7 @@
       </div>
     </form>
   </div>
-  <AlertMessage v-if="responseMessage" :responseMessage="responseMessage" @close-message="responseMessage = ''">
-    {{ responseMessage }}
-  </AlertMessage>
+  <AlertMessage v-if="alertStore.visible" />
 </div>
 </template>
 
@@ -28,6 +26,7 @@ import { useRouter } from "vue-router";
 import { useApiStore } from "@/stores/api";
 import { useAuthStore } from "@/stores/auth";
 import { usePageStore } from "@/stores/page";
+import { useAlertStore } from "@/stores/alert";
 import { useLoadingStore } from "@/stores/loading";
 import DefaultButton from "@/components/common/DefaultButton.vue";
 import AlertMessage from "@/components/common//AlertMessage.vue";
@@ -36,12 +35,12 @@ import axios from "axios";
 
 const username = ref("");
 const password = ref("");
-const responseMessage = ref("");
 
 const router = useRouter();
 const apiStore = useApiStore();
 const authStore = useAuthStore();
 const pageStore = usePageStore();
+const alertStore = useAlertStore();
 const loadingStore = useLoadingStore();
 
 const disable = computed(() => {
@@ -65,7 +64,7 @@ const loginUser = async () => {
       authStore.checkAuthentication();
       await apiStore.fetchData();
 
-      responseMessage.value = "Login realizado com sucesso!";
+      alertStore.success("Login realizado com sucesso!");
       pageStore.openPage('metrics');
       
       setTimeout(() => {
@@ -73,8 +72,7 @@ const loginUser = async () => {
       }, 800);
     }
   } catch (error) {
-    console.error(error);
-    responseMessage.value = "Erro ao fazer login.";
+    alertStore.error("Erro ao fazer login.", error);
   } finally {
     loadingStore.stop();
   }
@@ -83,7 +81,7 @@ const loginUser = async () => {
 onMounted(async () => {
   authStore.checkAuthentication();
   if (authStore.isAuthenticated) {
-    responseMessage.value = "Você já está logado! Redirecionando...";
+    alertStore.success("Você já está logado! Redirecionando...");
     setTimeout(() => {
       router.push("/")
     }, 2000);

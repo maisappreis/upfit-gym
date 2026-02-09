@@ -15,10 +15,8 @@
     <CustomersTable
       :data="filteredCustomers"
       :searchedField="searchedField"
-      :alertMessage="alertMessage"
       @update-item="updateCustomer"
       @delete-item="showDeleteModal"
-      @show-message="alertMessage = $event"
     />
     <ModalCard
       v-if="showModal"
@@ -43,17 +41,10 @@
         :action="action"
         :modalTitle="modalTitle"
         @close-modal="closeModal"
-        @show-message="alertMessage = $event"
       />
     </ModalCard>
     <div v-if="showModal" class="defocus"></div>
-    <AlertMessage
-      v-if="alertMessage"
-      :responseMessage="alertMessage"
-      @close-message="alertMessage = ''"
-    >
-      {{ alertMessage }}
-    </AlertMessage>
+    <AlertMessage v-if="alertStore.visible" />
   </div>
 </template>
 
@@ -67,6 +58,7 @@ import ModalCard from "@/components/common/ModalCard.vue";
 import CustomersForm from "@/components/forms/CustomersForm.vue";
 import StatusFilter from "@/components/common/StatusFilter.vue";
 import { useApiStore } from "@/stores/api";
+import { useAlertStore } from "@/stores/alert";
 import { useLoadingStore } from "@/stores/loading";
 import { type Customer } from "@/types/customer";
 import { customerService } from "@/services/customer.service";
@@ -75,6 +67,7 @@ import { customerService } from "@/services/customer.service";
 // type ModalAction = 'create' | 'update' | 'delete';
 
 const apiStore = useApiStore();
+const alertStore = useAlertStore();
 const loadingStore = useLoadingStore();
 
 const searchedField = ref<string[]>([]);
@@ -84,7 +77,6 @@ const action = ref<"create" | "update" | "delete" | "">("");
 // const action = ref<ModalAction | null>(null);
 const customerName = ref<string>("");
 const modalTitle = ref<string>("");
-const alertMessage = ref<string>("");
 const currentStatus = ref<"Inativo" | "Ativo" | "Todos">("Ativo");
 const buttonMessage = ref<string>("Confirmar");
 const isForm = ref<boolean>(false);
@@ -146,14 +138,9 @@ const deleteCustomer = async () => {
     await apiStore.fetchCustomers();
 
     showModal.value = false;
-    alertMessage.value = "Cliente excluído com sucesso!";
-
-    // TODO
-    // feedback.success('Cliente excluído com sucesso');
+    alertStore.success("Cliente excluído com sucesso");
   } catch (error) {
-    // feedback.error('Erro ao excluir cliente');
-    console.error("Erro ao excluir cliente.", error);
-    alertMessage.value = "Erro ao excluir cliente.";
+    alertStore.error("Erro ao excluir cliente.", error);
   } finally {
     loadingStore.stop();
   }
@@ -166,10 +153,9 @@ const inactiveCustomer = async () => {
     await apiStore.fetchCustomers();
     
     showModal.value = false;
-    alertMessage.value = "Cliente inativado com sucesso!";
+    alertStore.success("Cliente inativado com sucesso!");
   } catch (error) {
-    console.error("Erro ao inativar cliente.", error);
-    alertMessage.value = "Erro ao inativar cliente.";
+    alertStore.error("Erro ao inativar cliente", error);
   } finally {
     loadingStore.stop();
   }

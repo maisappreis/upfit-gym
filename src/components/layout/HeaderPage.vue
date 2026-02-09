@@ -19,13 +19,6 @@
       Logout
     </div>
   </div>
-  <AlertMessage
-    v-if="responseMessage"
-    :responseMessage="responseMessage"
-    @close-message="responseMessage = ''"
-  >
-    {{ responseMessage }}
-  </AlertMessage>
   <RouterView />
 </template>
 
@@ -34,7 +27,6 @@ import { ref, watch } from "vue";
 import { RouterLink, RouterView } from "vue-router";
 import { usePageStore } from "@/stores/page";
 import { useAuthStore } from "@/stores/auth";
-import AlertMessage from "@/components/common/AlertMessage.vue";
 
 const authStore = useAuthStore();
 const pageStore = usePageStore();
@@ -43,7 +35,6 @@ const icon = ref<string>("fa-solid fa-chart-line");
 const title = ref<string>("Métricas");
 const subtitle = ref<string>("Visualização gráfica de receita, despesas, lucro e clientes");
 const openDropdown = ref<boolean>(false);
-const responseMessage = ref<string>("");
 
 const showDropdown = () => {
   openDropdown.value = !openDropdown.value;

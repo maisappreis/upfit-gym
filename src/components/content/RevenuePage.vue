@@ -20,7 +20,6 @@
     <RevenuesTable
       :data="filteredRevenue"
       :searchedField="searchedField"
-      :alertMessage="alertMessage"
       @update-item="updateRevenue"
       @delete-item="showDeleteModal"
     />
@@ -51,18 +50,11 @@
         :action="action"
         :modalTitle="modalTitle"
         @close-modal="closeModal"
-        @show-message="alertMessage = $event"
         @get-confirmation="getConfirmation"
       />
     </ModalCard>
     <div v-if="showModal" class="defocus"></div>
-    <AlertMessage
-      v-if="alertMessage"
-      :responseMessage="alertMessage"
-      @close-message="alertMessage = ''"
-    >
-      {{ alertMessage }}
-    </AlertMessage>
+    <AlertMessage v-if="alertStore.visible" />
   </div>
 </template>
 
@@ -77,6 +69,7 @@ import MonthFilter from "@/components/common/MonthFilter.vue";
 import RevenueForm from "../forms/RevenueForm.vue";
 import { type Revenue, type UpdatedRevenue, type Message } from "@/types/revenue";
 import { useApiStore } from "@/stores/api";
+import { useAlertStore } from "@/stores/alert";
 import { useLoadingStore } from "@/stores/loading";
 import { useDateUtils } from "@/utils/dateUtils";
 import { useDataUtils } from "@/utils/dataUtils";
@@ -84,6 +77,7 @@ import { customerService } from "@/services/customer.service";
 import axios from "axios";
 
 const apiStore = useApiStore();
+const alertStore = useAlertStore();
 const loadingStore = useLoadingStore();
 
 const { filteredData } = useDataUtils();
@@ -96,7 +90,6 @@ const selectedRevenue = ref<Revenue>({} as Revenue);
 const action = ref<"create" | "update" | "delete" | "">("");
 const messageData = ref<Message>({} as Message);
 const modalTitle = ref<string>("");
-const alertMessage = ref<string>("");
 const currentMonth = ref<string>("");
 const currentYear = ref<number>(0);
 const currentStatus = ref<string>("");
@@ -151,10 +144,9 @@ const deleteRevenue = async () => {
     await apiStore.fetchRevenue();
 
     showModal.value = false;
-    alertMessage.value = "Receita excluída com sucesso!";
+    alertStore.success("Receita excluída com sucesso!");
   } catch (error) {
-    console.error("Erro ao excluir receita.", error);
-    alertMessage.value = "Erro ao excluir receita.";
+    alertStore.error("Erro ao excluir receita.", error);
   } finally {
     loadingStore.stop();
   }
@@ -218,10 +210,9 @@ const updateCustomerValue = async () => {
     };
 
     await customerService.update(confirmationData.value.id, updatedCustomer);
-    alertMessage.value = "Cliente atualizado com sucesso!";
+    alertStore.success("Cliente atualizado com sucesso!");
   } catch (error) {
-    console.error("Erro ao atualizar cliente.", error);
-    alertMessage.value = "Erro ao atualizar cliente.";
+    alertStore.error("Erro ao atualizar cliente.", error);
   } finally {
     loadingStore.stop();
   }

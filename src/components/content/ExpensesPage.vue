@@ -20,7 +20,6 @@
     <ExpensesTable
       :data="filteredExpenses"
       :searchedField="searchedField"
-      :alertMessage="alertMessage"
       @update-item="updateExpense"
       @delete-item="showDeleteModal"
     />
@@ -42,17 +41,10 @@
         :action="action"
         :modalTitle="modalTitle"
         @close-modal="closeModal"
-        @show-message="alertMessage = $event"
       />
     </ModalCard>
     <div v-if="showModal" class="defocus"></div>
-    <AlertMessage
-      v-if="alertMessage"
-      :responseMessage="alertMessage"
-      @close-message="alertMessage = ''"
-    >
-      {{ alertMessage }}
-    </AlertMessage>
+    <AlertMessage v-if="alertStore.visible" />
   </div>
 </template>
 
@@ -67,12 +59,15 @@ import MonthFilter from "@/components/common/MonthFilter.vue";
 import ExpensesForm from "@/components/forms/ExpensesForm.vue";
 import { type Expense, type Message } from "@/types/expense";
 import { useApiStore } from "@/stores/api";
+import { useAlertStore } from "@/stores/alert";
 import { useLoadingStore } from "@/stores/loading";
 import { useDataUtils } from "@/utils/dataUtils";
 import axios from "axios";
 
 const apiStore = useApiStore();
+const alertStore = useAlertStore();
 const loadingStore = useLoadingStore();
+
 const { filteredData } = useDataUtils();
 
 const statusList = ref<string[]>(["Pago", "À pagar", "Todos"]);
@@ -82,7 +77,6 @@ const selectedExpense = ref<Expense>({} as Expense);
 const action = ref<"create" | "update" | "delete" | "">("");
 const messageData = ref<Message>({} as Message);
 const modalTitle = ref<string>("");
-const alertMessage = ref<string>("");
 const currentMonth = ref<string>("");
 const currentYear = ref<number>(0);
 const currentStatus = ref<string>("");
@@ -139,10 +133,9 @@ const deleteExpense = async () => {
     await apiStore.fetchExpenses();
     
     showModal.value = false;
-    alertMessage.value = "Despesa excluída com sucesso!";
+    alertStore.success("Despesa excluída com sucesso!");
   } catch (error) {
-    console.error("Erro ao excluir despesa.", error);
-    alertMessage.value = "Erro ao excluir despesa.";
+    alertStore.error("Erro ao excluir despesa.", error);
   } finally {
     loadingStore.stop();
   }

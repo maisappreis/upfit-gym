@@ -1,45 +1,46 @@
 <template>
   <section
-    :class="['alert-area', showSuccessAlert ? 'success' : 'error']"
-    aria-live="assertive"
+    :class="['alert-area', alertStore.type]"
     role="alert"
+    aria-live="assertive"
   >
-    <div :class="['marker', showSuccessAlert ? 'green' : 'red']"></div>
+    <div :class="['marker', alertStore.type === 'success' ? 'green' : 'red']"></div>
+
     <div class="message">
-      <slot name="icon">
-        <font-awesome-icon
-          :icon="showSuccessAlert ? 'fa-solid fa-check' : 'fa-solid fa-xmark'"
-          class="icon"
-        />
-      </slot>
-      <slot>
-        {{ props.responseMessage }}
-      </slot>
+      <font-awesome-icon
+        :icon="icon"
+        class="icon"
+      />
+      {{ alertStore.message }}
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
 import { computed, onMounted } from "vue";
+import { useAlertStore } from "@/stores/alert";
 
-const props = defineProps({
-  responseMessage: String
+const alertStore = useAlertStore();
+
+const icon = computed(() => {
+  switch (alertStore.type) {
+    case "success":
+      return "fa-solid fa-check";
+    case "error":
+      return "fa-solid fa-xmark";
+    case "info":
+      return "fa-solid fa-circle-info";
+    case "warning":
+      return "fa-solid fa-triangle-exclamation";
+  }
 });
-
-const emit = defineEmits(["close-message"]);
-
-const showSuccessAlert = computed(() => {
-  if (!props.responseMessage) return false;
-  return !props.responseMessage.trim().toLowerCase().includes("erro");
-});
-
-const closeMessage = () => {
-  emit("close-message");
-};
 
 onMounted(() => {
-  setTimeout(closeMessage, 1000);
+  setTimeout(() => {
+    alertStore.clear();
+  }, 1500);
 });
+
 </script>
 
 <style scoped>
