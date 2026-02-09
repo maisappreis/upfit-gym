@@ -99,7 +99,7 @@ const notes = ref<string>("");
 
 const props = defineProps<{
   item: Customer,
-  action: "create" | "update" | "delete" | "";
+  action: "create" | "update" | "delete" | null;
   modalTitle: String;
 }>();
 

@@ -8,8 +8,8 @@
         <span class="button-text">Novo Cliente</span>
       </DefaultButton>
       <div style="display: flex; justify-content: flex-end">
-        <StatusFilter @get-status="getStatus" />
-        <SearchFilter @apply-search="applySearch" />
+        <StatusFilter @get-status="currentStatus = $event" />
+        <SearchFilter @apply-search="searchedField = $event" />
       </div>
     </div>
     <CustomersTable
@@ -19,31 +19,31 @@
       @delete-item="showDeleteModal"
     />
     <ModalCard
-      v-if="showModal"
+      v-if="isModalOpen"
       :isForm="isForm"
       :buttonMessage="buttonMessage"
       @execute-action="getModalAction"
       @close-modal="closeModal"
     >
-      <h3 v-if="action === 'delete' && blockDelete" class="message-area">
+      <h3 v-if="isDeleteAction && modal.blockDelete" class="message-area">
         Não é possível excluir o cliente 
         <strong class="highlight">{{ customerName }}</strong>, 
         pois isso excluiria todo o seu histórico de receitas. Ao invés de excluí-lo, 
         mude seu status para <strong class="highlight">Inativo</strong>.
       </h3>
-      <h3 v-else-if="action === 'delete' && !blockDelete" class="message-area">
+      <h3 v-else-if="isDeleteAction && !modal.blockDelete" class="message-area">
         Tem certeza que deseja excluir o cliente
         <strong class="highlight">{{ customerName }}</strong>?
       </h3>
       <CustomersForm
         v-else
         :item="selectedCustomer"
-        :action="action"
+        :action="modal.mode"
         :modalTitle="modalTitle"
         @close-modal="closeModal"
       />
     </ModalCard>
-    <div v-if="showModal" class="defocus"></div>
+    <div v-if="isModalOpen" class="defocus"></div>
     <AlertMessage v-if="alertStore.visible" />
   </div>
 </template>
@@ -63,50 +63,78 @@ import { useLoadingStore } from "@/stores/loading";
 import { type Customer } from "@/types/customer";
 import { customerService } from "@/services/customer.service";
 
+type ModalMode = 'create' | 'update' | 'delete' | null;
+
+interface ModalState {
+  mode: ModalMode;
+  customer: Customer | null;
+  blockDelete: boolean;
+}
+
 const apiStore = useApiStore();
 const alertStore = useAlertStore();
 const loadingStore = useLoadingStore();
 
 const searchedField = ref<string[]>([]);
-const showModal = ref<boolean>(false);
 const selectedCustomer = ref<Customer>({} as Customer);
-const action = ref<"create" | "update" | "delete" | "">("");
 const customerName = ref<string>("");
-const modalTitle = ref<string>("");
 const currentStatus = ref<"Inativo" | "Ativo" | "Todos">("Ativo");
-const buttonMessage = ref<string>("Confirmar");
-const isForm = ref<boolean>(false);
-const blockDelete = ref<boolean>(false);
+const modal = ref<ModalState>({
+  mode: null,
+  customer: null,
+  blockDelete: false
+});
+
+const isModalOpen = computed(() => modal.value.mode !== null);
+
+const isDeleteAction = computed(() => modal.value.mode === "delete");
+
+const isForm = computed(() =>
+  modal.value.mode === "create" || modal.value.mode === "update"
+);
+
+const modalTitle = computed(() => {
+  switch (modal.value.mode) {
+    case "create": return "Adicionar Cliente";
+    case "update": return "Atualizar Cliente";
+    default: return "";
+  }
+});
+
+const buttonMessage = computed(() =>
+  modal.value.mode === "delete" && modal.value.blockDelete
+    ? "Inativar"
+    : "Confirmar"
+);
 
 const filteredCustomers = computed(() =>
   apiStore.customers.filter(customer =>
-    currentStatus.value === 'Todos'
+    currentStatus.value === "Todos"
       ? true
       : customer.status === currentStatus.value
   )
 );
 
-const applySearch = (field: string[]) => {
-  searchedField.value = field;
-};
-
 const addCustomer = () => {
-  showModal.value = true;
-  isForm.value = true;
-  action.value = "create";
-  modalTitle.value = "Adicionar Cliente";
+  modal.value = {
+    mode: 'create',
+    customer: null,
+    blockDelete: false
+  };
 };
 
-const updateCustomer = (item: Customer) => {
-  selectedCustomer.value = item;
-  showModal.value = true;
-  isForm.value = true;
-  action.value = "update";
-  modalTitle.value = "Atualizar Cliente";
+const updateCustomer = (customer: Customer) => {
+  selectedCustomer.value = customer;
+
+  modal.value = {
+    mode: 'update',
+    customer: customer,
+    blockDelete: false
+  };
 };
 
 const getModalAction = () => {
-  if (blockDelete.value) {
+  if (modal.value.blockDelete) {
     inactiveCustomer();
   } else {
     deleteCustomer();
@@ -120,46 +148,47 @@ const deleteCustomer = async () => {
     await customerService.delete(selectedCustomer.value.id);
     await apiStore.fetchCustomers();
 
-    showModal.value = false;
     alertStore.success("Cliente excluído com sucesso");
   } catch (error) {
     alertStore.error("Erro ao excluir cliente.", error);
   } finally {
     loadingStore.stop();
+    modal.value.mode = null;
   }
 };
 
 const inactiveCustomer = async () => {
   loadingStore.start();
+
   try {
     await customerService.inactivate(selectedCustomer.value.id);
     await apiStore.fetchCustomers();
     
-    showModal.value = false;
     alertStore.success("Cliente inativado com sucesso!");
   } catch (error) {
     alertStore.error("Erro ao inativar cliente", error);
   } finally {
     loadingStore.stop();
+    modal.value.mode = null;
   }
 };
 
-const showDeleteModal = (item: Customer) => {
-  selectedCustomer.value = item;
-  showModal.value = true;
-  action.value = "delete";
+const showDeleteModal = (custumer: Customer) => {
+  selectedCustomer.value = custumer;
+  customerName.value = custumer.name;
 
-  customerName.value = item.name;
-  blockDelete.value = !apiStore.canDeleteCustomer(item.id);
+  modal.value = {
+    mode: "delete",
+    customer: custumer,
+    blockDelete: !apiStore.canDeleteCustomer(custumer.id)
+  };
 };
 
 const closeModal = () => {
-  showModal.value = false;
-  isForm.value = false;
-  buttonMessage.value = "Confirmar";
-};
-
-const getStatus = (status: "Inativo" | "Ativo" | "Todos") => {
-  currentStatus.value = status;
+  modal.value = {
+    mode: null,
+    customer: null,
+    blockDelete: false
+  };
 };
 </script>
