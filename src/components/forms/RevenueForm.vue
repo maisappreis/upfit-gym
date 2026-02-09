@@ -61,12 +61,14 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from "vue";
+import { useApiStore } from "@/stores/api";
+import { useAlertStore } from "@/stores/alert";
+import { useLoadingStore } from "@/stores/loading";
+import { months, years } from "@/utils/variables";
+import { useDataUtils } from "@/utils/dataUtils";
 import { type Revenue } from "@/types/revenue";
 import { type Customer } from "@/types/customer";
-import { months, years } from "@/utils/variables";
-import { useApiStore } from "@/stores/api";
-import { useDataUtils } from "@/utils/dataUtils";
-import { useLoadingStore } from "@/stores/loading";
+
 import BaseInput from "@/components/common/form/BaseInput.vue";
 import BaseSelect from "@/components/common/form/BaseSelect.vue";
 import BaseTextarea from "@/components/common/form/BaseTextarea.vue";
@@ -74,10 +76,11 @@ import DefaultButton from "@/components/common/DefaultButton.vue";
 import axios from "axios";
 
 const apiStore = useApiStore();
+const alertStore = useAlertStore();
 const loadingStore = useLoadingStore();
 
 const { getValidFloat } = useDataUtils();
-const emit = defineEmits(["show-message", "close-modal", "get-confirmation"]);
+const emit = defineEmits(["close-modal", "get-confirmation"]);
 
 const customersList = ref<Customer[]>();
 const customerId = ref<number>(0);
@@ -135,10 +138,9 @@ const createRevenue = async () => {
     await apiStore.fetchRevenue();
 
     emit("close-modal");
-    emit("show-message", "Receita criada com sucesso!");
+    alertStore.success("Receita criada com sucesso!");
   } catch (error) {
-    console.error("Erro ao criar receita.", error);
-    emit("show-message", "Erro ao criar receita.");
+    alertStore.error("Erro ao criar receita.", error);
   } finally {
     loadingStore.stop();
   }
@@ -161,12 +163,11 @@ const updateRevenue = async () => {
     await apiStore.fetchRevenue();
 
     emit("close-modal");
-    emit("show-message", "Receita atualizada com sucesso!");
+    alertStore.success("Receita atualizada com sucesso!");
 
     checkChangesInValue();
   } catch (error) {
-    console.error("Erro ao atualizar receita.", error);
-    emit("show-message", "Erro ao atualizar receita.");
+    alertStore.error("Erro ao atualizar receita.", error);
   } finally {
     loadingStore.stop();
   }

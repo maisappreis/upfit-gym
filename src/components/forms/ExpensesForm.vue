@@ -58,11 +58,13 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, onMounted } from "vue";
-import { months } from "@/utils/variables";
-import { type Expense } from "@/types/expense";
 import { useApiStore } from "@/stores/api";
-import { useDataUtils } from "@/utils/dataUtils";
+import { useAlertStore } from "@/stores/alert";
 import { useLoadingStore } from "@/stores/loading";
+import { months } from "@/utils/variables";
+import { useDataUtils } from "@/utils/dataUtils";
+import { type Expense } from "@/types/expense";
+
 import BaseInput from "@/components/common/form/BaseInput.vue";
 import BaseCheckbox from "@/components/common/form/BaseCheckbox.vue";
 import BaseTextarea from "@/components/common/form/BaseTextarea.vue";
@@ -70,10 +72,11 @@ import DefaultButton from "@/components/common/DefaultButton.vue";
 import axios from "axios";
 
 const apiStore = useApiStore();
+const alertStore = useAlertStore();
 const loadingStore = useLoadingStore();
 
 const { capitalize, getValidFloat } = useDataUtils();
-const emit = defineEmits(["show-message", "close-modal"]);
+const emit = defineEmits(["close-modal"]);
 
 const bill = ref<string>("");
 const dueDate = ref<string>("");
@@ -129,10 +132,9 @@ const createExpense = async () => {
     await apiStore.fetchExpenses();
 
     emit("close-modal");
-    emit("show-message", "Despesa criada com sucesso!");
+    alertStore.success("Despesa criada com sucesso!");
   } catch (error) {
-    console.error("Erro ao criar despesa.", error);
-    emit("show-message", "Erro ao criar despesa.");
+    alertStore.error("Erro ao criar despesa.", error);
   } finally {
     loadingStore.stop();
   }
@@ -158,10 +160,9 @@ const updateExpense = async () => {
     await apiStore.fetchExpenses();
 
     emit("close-modal");
-    emit("show-message", "Despesa atualizada com sucesso!");
+    alertStore.success("Despesa atualizada com sucesso!");
   } catch (error) {
-    console.error("Erro ao atualizar despesa.", error);
-    emit("show-message", "Erro ao atualizar despesa.");
+    alertStore.error("Erro ao atualizar despesa.", error);
   } finally {
     loadingStore.stop();
   }

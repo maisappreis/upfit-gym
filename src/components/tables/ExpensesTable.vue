@@ -91,22 +91,25 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from "vue";
-import PaginationTable from "@/components/common/PaginationTable.vue";
-import TooltipModal from "@/components/common/TooltipModal.vue";
-import ModalCard from "@/components/common/ModalCard.vue";
 import { useApiStore } from "@/stores/api";
+import { useAlertStore } from "@/stores/alert";
 import { useLoadingStore } from "@/stores/loading";
 import { useDateUtils } from "@/utils/dateUtils";
 import { useDataUtils } from "@/utils/dataUtils";
 import { type Expense } from "@/types/expense";
+
+import PaginationTable from "@/components/common/PaginationTable.vue";
+import TooltipModal from "@/components/common/TooltipModal.vue";
+import ModalCard from "@/components/common/ModalCard.vue";
 import axios from "axios";
 
 const apiStore = useApiStore();
+const alertStore = useAlertStore();
 const loadingStore = useLoadingStore();
 
 const { formatDate, getNextMonth } = useDateUtils();
 const { searchData } = useDataUtils();
-const emit = defineEmits(["show-message", "update-item", "delete-item"]);
+const emit = defineEmits(["update-item", "delete-item"]);
 
 const itemsPerPage = ref<number>(30);
 const currentPage = ref<number>(1);
@@ -193,10 +196,10 @@ const changePaidStatus = async () => {
       }
     }
     closeModal();
-    emit("show-message", "Status do pagamento salvo com sucesso!");
+    alertStore.success( "Status do pagamento salvo com sucesso!");
   } catch (error) {
     console.error("Erro ao atualizar o status de pagamento...", error);
-    emit("show-message", "Erro ao salvar o status do pagamento.");
+    alertStore.error("Erro ao salvar o status do pagamento.", error);
   } finally {
     loadingStore.stop();
   }

@@ -69,25 +69,28 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from "vue";
-import { type Customer } from "@/types/customer";
 import { useApiStore } from "@/stores/api";
+import { useAlertStore } from "@/stores/alert";
 import { useLoadingStore } from "@/stores/loading";
 import { useDateUtils } from "@/utils/dateUtils";
 import { useDataUtils } from "@/utils/dataUtils";
+import { customerService } from "@/services/customer.service";
+import { type Customer } from "@/types/customer";
+
 import BaseInput from "@/components/common/form/BaseInput.vue";
 import BaseSelect from "@/components/common/form/BaseSelect.vue";
 import BaseTextarea from "@/components/common/form/BaseTextarea.vue";
 import BaseRadioGroup from "@/components/common/form/BaseRadioGroup.vue";
 import DefaultButton from "@/components/common/DefaultButton.vue";
-import { customerService } from "@/services/customer.service";
 import axios from "axios";
 
 const apiStore = useApiStore();
+const alertStore = useAlertStore();
 const loadingStore = useLoadingStore();
 
 const { capitalize, getValidFloat } = useDataUtils();
 const { getCurrentYearMonthDay } = useDateUtils();
-const emit = defineEmits(["show-message", "close-modal"]);
+const emit = defineEmits(["close-modal"]);
 
 const customerName = ref<string>("");
 const frequency = ref<"1x" | "2x" | "3x" | "4x" | "5x" | "">("");
@@ -122,6 +125,7 @@ const saveCustomer = () => {
 
 const createCustomer = async () => {
   loadingStore.start();
+
   try {
     let validFloat = getValidFloat(value.value);
     const customerCapitalized = capitalize(customerName.value);
@@ -144,11 +148,10 @@ const createCustomer = async () => {
         createRevenue(response.id, response.start);
       }, 500);
     }
-    emit("show-message", "Cliente criado com sucesso!");
+    alertStore.success("Cliente criado com sucesso!");
     emit("close-modal");
   } catch (error) {
-    console.error("Erro ao criar cliente.", error);
-    emit("show-message", "Erro ao criar cliente.");
+    alertStore.error("Erro ao criar cliente.", error);
   } finally {
     loadingStore.stop();
   }
@@ -156,6 +159,7 @@ const createCustomer = async () => {
 
 const updateCustomer = async () => {
   loadingStore.start();
+
   try {
     let validFloat = getValidFloat(value.value);
     let customerNameCapitalized = capitalize(customerName.value);
@@ -174,11 +178,10 @@ const updateCustomer = async () => {
     await apiStore.fetchCustomers();
     await apiStore.fetchRevenue();
 
-    emit("show-message", "Cliente atualizado com sucesso!");
+    alertStore.success("Cliente atualizado com sucesso!");
     emit("close-modal")
   } catch (error) {
-    console.error("Erro ao atualizar cliente.", error);
-    emit("show-message", "Erro ao atualizar cliente.");
+    alertStore.error("Erro ao atualizar cliente.", error);
   } finally {
     loadingStore.stop();
   }

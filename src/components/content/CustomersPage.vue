@@ -50,6 +50,12 @@
 
 <script setup lang="ts">
 import { ref, computed } from "vue";
+import { useApiStore } from "@/stores/api";
+import { useAlertStore } from "@/stores/alert";
+import { useLoadingStore } from "@/stores/loading";
+import { customerService } from "@/services/customer.service";
+import { type Customer } from "@/types/customer";
+
 import CustomersTable from "@/components/tables/CustomersTable.vue";
 import DefaultButton from "@/components/common/DefaultButton.vue";
 import AlertMessage from "@/components/common/AlertMessage.vue";
@@ -57,11 +63,6 @@ import SearchFilter from "@/components/common/SearchFilter.vue";
 import ModalCard from "@/components/common/ModalCard.vue";
 import CustomersForm from "@/components/forms/CustomersForm.vue";
 import StatusFilter from "@/components/common/StatusFilter.vue";
-import { useApiStore } from "@/stores/api";
-import { useAlertStore } from "@/stores/alert";
-import { useLoadingStore } from "@/stores/loading";
-import { type Customer } from "@/types/customer";
-import { customerService } from "@/services/customer.service";
 
 type ModalMode = 'create' | 'update' | 'delete' | null;
 
