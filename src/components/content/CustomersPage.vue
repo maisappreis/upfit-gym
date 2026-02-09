@@ -22,7 +22,7 @@
       v-if="isModalOpen"
       :isForm="isForm"
       :buttonMessage="buttonMessage"
-      @execute-action="getModalAction"
+      @execute-action="confirmDelete"
       @close-modal="closeModal"
     >
       <h3 v-if="isDeleteAction && modal.blockDelete" class="message-area">
@@ -77,14 +77,16 @@ const alertStore = useAlertStore();
 const loadingStore = useLoadingStore();
 
 const searchedField = ref<string[]>([]);
-const selectedCustomer = ref<Customer>({} as Customer);
-const customerName = ref<string>("");
 const currentStatus = ref<"Inativo" | "Ativo" | "Todos">("Ativo");
 const modal = ref<ModalState>({
   mode: null,
   customer: null,
   blockDelete: false
 });
+
+const selectedCustomer = computed(() => modal.value.customer);
+
+const customerName = computed(() => modal.value.customer?.name ?? "");
 
 const isModalOpen = computed(() => modal.value.mode !== null);
 
@@ -125,8 +127,6 @@ const addCustomer = () => {
 };
 
 const updateCustomer = (customer: Customer) => {
-  selectedCustomer.value = customer;
-
   modal.value = {
     mode: 'update',
     customer: customer,
@@ -134,27 +134,23 @@ const updateCustomer = (customer: Customer) => {
   };
 };
 
-const getModalAction = () => {
-  if (modal.value.blockDelete) {
-    inactiveCustomer();
-  } else {
-    deleteCustomer();
-  }
+const confirmDelete = () => {
+  modal.value.blockDelete ? inactiveCustomer() : deleteCustomer();
 };
 
 const deleteCustomer = async () => {
   loadingStore.start();
 
   try {
-    await customerService.delete(selectedCustomer.value.id);
+    await customerService.delete(selectedCustomer.value!.id);
     await apiStore.fetchCustomers();
 
     alertStore.success("Cliente excluído com sucesso");
+    closeModal();
   } catch (error) {
     alertStore.error("Erro ao excluir cliente.", error);
   } finally {
     loadingStore.stop();
-    modal.value.mode = null;
   }
 };
 
@@ -162,22 +158,19 @@ const inactiveCustomer = async () => {
   loadingStore.start();
 
   try {
-    await customerService.inactivate(selectedCustomer.value.id);
+    await customerService.inactivate(selectedCustomer.value!.id);
     await apiStore.fetchCustomers();
     
     alertStore.success("Cliente inativado com sucesso!");
+    closeModal();
   } catch (error) {
     alertStore.error("Erro ao inativar cliente", error);
   } finally {
     loadingStore.stop();
-    modal.value.mode = null;
   }
 };
 
 const showDeleteModal = (custumer: Customer) => {
-  selectedCustomer.value = custumer;
-  customerName.value = custumer.name;
-
   modal.value = {
     mode: "delete",
     customer: custumer,

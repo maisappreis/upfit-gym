@@ -101,7 +101,7 @@ const status = ref<"Ativo" | "Inativo">("Ativo");
 const notes = ref<string>("");
 
 const props = defineProps<{
-  item: Customer,
+  item: Customer | null,
   action: "create" | "update" | "delete" | null;
   modalTitle: String;
 }>();
@@ -174,7 +174,7 @@ const updateCustomer = async () => {
       notes: notes.value
     };
 
-    await customerService.update(props.item.id, updatedCustomer);
+    await customerService.update(props.item!.id, updatedCustomer);
     await apiStore.fetchCustomers();
     await apiStore.fetchRevenue();
 
@@ -222,16 +222,16 @@ const fillModal = () => {
   }
 
   if (props.action === "update") {
-    let customerValue = props.item.value;
+    let customerValue = props.item!.value;
     let formatedValue = customerValue ? customerValue.toString().replace(/\./g, ",") : 0;
 
-    customerName.value = props.item.name;
-    frequency.value = props.item.frequency;
-    start.value = props.item.start;
-    plan.value = props.item.plan;
+    customerName.value = props.item!.name;
+    frequency.value = props.item!.frequency;
+    start.value = props.item!.start;
+    plan.value = props.item!.plan;
     value.value = Number(formatedValue);
-    status.value = props.item.status;
-    notes.value = props.item.notes;
+    status.value = props.item!.status;
+    notes.value = props.item!.notes;
   }
 };
 
