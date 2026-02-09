@@ -63,9 +63,6 @@ import { useLoadingStore } from "@/stores/loading";
 import { type Customer } from "@/types/customer";
 import { customerService } from "@/services/customer.service";
 
-// TODO:
-// type ModalAction = 'create' | 'update' | 'delete';
-
 const apiStore = useApiStore();
 const alertStore = useAlertStore();
 const loadingStore = useLoadingStore();
@@ -74,7 +71,6 @@ const searchedField = ref<string[]>([]);
 const showModal = ref<boolean>(false);
 const selectedCustomer = ref<Customer>({} as Customer);
 const action = ref<"create" | "update" | "delete" | "">("");
-// const action = ref<ModalAction | null>(null);
 const customerName = ref<string>("");
 const modalTitle = ref<string>("");
 const currentStatus = ref<"Inativo" | "Ativo" | "Todos">("Ativo");
@@ -165,18 +161,9 @@ const showDeleteModal = (item: Customer) => {
   selectedCustomer.value = item;
   showModal.value = true;
   action.value = "delete";
-  let revenueHistory = apiStore.revenue.filter((e) => e.customer === item.id);
-  // TODO
-  // blockDelete.value = !canDeleteCustomer(item.id);
 
   customerName.value = item.name;
-
-  if (revenueHistory.length > 0) {
-    blockDelete.value = true;
-    buttonMessage.value = "Inativar";
-  } else {
-    blockDelete.value = false;
-  }
+  blockDelete.value = !apiStore.canDeleteCustomer(item.id);
 };
 
 const closeModal = () => {
