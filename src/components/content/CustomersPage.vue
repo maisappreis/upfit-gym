@@ -78,26 +78,13 @@ const buttonMessage = ref<string>("Confirmar");
 const isForm = ref<boolean>(false);
 const blockDelete = ref<boolean>(false);
 
-const filteredCustomers = computed(() => {
-  if (apiStore.customers && apiStore.customers.length > 0) {
-    if (currentStatus.value === "Todos") {
-      return apiStore.customers;
-    } else {
-      return apiStore.customers.filter((e) => e.status === currentStatus.value);
-    }
-  } else {
-    return [];
-  }
-});
-
-// TODO
-// const filteredCustomers = computed(() =>
-//   apiStore.customers.filter(customer =>
-//     currentStatus.value === 'Todos'
-//       ? true
-//       : customer.status === currentStatus.value
-//   )
-// );
+const filteredCustomers = computed(() =>
+  apiStore.customers.filter(customer =>
+    currentStatus.value === 'Todos'
+      ? true
+      : customer.status === currentStatus.value
+  )
+);
 
 const applySearch = (field: string[]) => {
   searchedField.value = field;
