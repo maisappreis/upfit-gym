@@ -5,7 +5,7 @@ export type CrudMode = "create" | "update" | "delete" | null;
 export function useCrudModal<T>() {
   const mode = ref<CrudMode>(null);
   const entity = shallowRef<T | null>(null);
-  const deleteBlocked = ref<boolean>(false);
+  const deleteIsBlocked = ref<boolean>(false);
 
   const isOpen = computed(() => mode.value !== null);
   const isForm = computed(() => mode.value === 'create' || mode.value === 'update');
@@ -21,22 +21,22 @@ export function useCrudModal<T>() {
     entity.value = data;
   };
 
-  const openDelete = (data: T, blocked: boolean) => {
+  const openDelete = (data: T, blocked: boolean = false) => {
     mode.value = 'delete';
     entity.value = data;
-    deleteBlocked.value = blocked;
+    deleteIsBlocked.value = blocked;
   };
 
   const close = () => {
     mode.value = null;
     entity.value = null;
-    deleteBlocked.value = false;
+    deleteIsBlocked.value = false;
   };
 
   return {
     mode,
     entity,
-    deleteBlocked,
+    deleteIsBlocked,
     isOpen,
     isForm,
     isDelete,

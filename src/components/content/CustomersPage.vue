@@ -25,13 +25,13 @@
       @execute-action="confirmDelete"
       @close-modal="modalCrud.close"
     >
-      <h3 v-if="modalCrud.isDelete.value && modalCrud.deleteBlocked.value" class="message-area">
+      <h3 v-if="modalCrud.isDelete.value && modalCrud.deleteIsBlocked.value" class="message-area">
         Não é possível excluir o cliente 
         <strong class="highlight">{{ customerName }}</strong>, 
         pois isso excluiria todo o seu histórico de receitas. Ao invés de excluí-lo, 
         mude seu status para <strong class="highlight">Inativo</strong>.
       </h3>
-      <h3 v-else-if="modalCrud.isDelete.value && !modalCrud.deleteBlocked.value" class="message-area">
+      <h3 v-else-if="modalCrud.isDelete.value && !modalCrud.deleteIsBlocked.value" class="message-area">
         Tem certeza que deseja excluir o cliente
         <strong class="highlight">{{ customerName }}</strong>?
       </h3>
@@ -74,7 +74,7 @@ const modalCrud = useCrudModal<Customer>();
 const searchedField = ref<string[]>([]);
 const currentStatus = ref<"Inativo" | "Ativo" | "Todos">("Ativo");
 
-const selectedCustomer = computed(() => modalCrud.entity.value as Customer);
+const selectedCustomer = computed(() => modalCrud.entity.value);
 const customerName = computed(() => modalCrud.entity.value?.name ?? "");
 
 const modalTitle = computed(() => {
@@ -86,7 +86,7 @@ const modalTitle = computed(() => {
 });
 
 const buttonMessage = computed(() =>
-  modalCrud.mode.value === "delete" && modalCrud.deleteBlocked.value
+  modalCrud.mode.value === "delete" && modalCrud.deleteIsBlocked.value
     ? "Inativar"
     : "Confirmar"
 );
@@ -104,7 +104,7 @@ const showDeleteModal = (custumer: Customer) => {
 };
 
 const confirmDelete = () => {
-  modalCrud.deleteBlocked.value ? inactiveCustomer() : deleteCustomer();
+  modalCrud.deleteIsBlocked.value ? inactiveCustomer() : deleteCustomer();
 };
 
 const deleteCustomer = async () => {
@@ -138,5 +138,4 @@ const inactiveCustomer = async () => {
     loadingStore.stop();
   }
 };
-
 </script>

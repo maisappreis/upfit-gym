@@ -88,8 +88,8 @@ const disableInstallments = ref<boolean>(false);
 const validInstallment = ref<boolean>(true);
 
 const props = defineProps<{
-  item: Expense,
-  action: "create" | "update" | "delete" | "";
+  item: Expense | null,
+  action: "create" | "update" | "delete" | null;
   modalTitle: String;
 }>();
 
@@ -156,7 +156,7 @@ const updateExpense = async () => {
       notes: notes.value
     };
 
-    await axios.patch(`${apiStore.apiURL}/expense/${props.item.id}/`, updatedExpense);
+    await axios.patch(`${apiStore.apiURL}/expense/${props.item!.id}/`, updatedExpense);
     await apiStore.fetchExpenses();
 
     emit("close-modal");
@@ -178,16 +178,16 @@ const getYearAndMonth = (dueDate: string) => {
 };
 
 const fillModal = () => {
-  let expenseValue = props.item.value;
+  let expenseValue = props.item!.value;
   let formatedValue = expenseValue.toString().replace(/\./g, ",");
 
-  bill.value = props.item.name;
-  dueDate.value = props.item.date;
+  bill.value = props.item!.name;
+  dueDate.value = props.item!.date;
   value.value = Number(formatedValue);
-  installments.value = props.item.installments;
-  notes.value = props.item.notes;
+  installments.value = props.item!.installments;
+  notes.value = props.item!.notes;
 
-  if (props.item.installments !== "") {
+  if (props.item!.installments !== "") {
     hasInstallments.value = true;
     disableInstallments.value = true;
   }
