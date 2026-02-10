@@ -2,7 +2,7 @@
   <div class="content-area">
     <div class="flex-between mb-normal">
       <DefaultButton
-        @execute-action="addCustomer"
+        @execute-action="modalCrud.openCreate()"
         style="background-color: var(--red-dark-color)">
         <font-awesome-icon icon="fa-solid fa-plus" class="icon-add" />
         <span class="button-text">Novo Cliente</span>
@@ -15,35 +15,35 @@
     <CustomersTable
       :data="filteredCustomers"
       :searchedField="searchedField"
-      @update-item="updateCustomer"
+      @update-item="modalCrud.openUpdate($event);"
       @delete-item="showDeleteModal"
     />
     <ModalCard
-      v-if="isModalOpen"
-      :isForm="isForm"
+      v-if="modalCrud.isOpen.value"
+      :isForm="modalCrud.isForm.value"
       :buttonMessage="buttonMessage"
       @execute-action="confirmDelete"
-      @close-modal="closeModal"
+      @close-modal="modalCrud.close"
     >
-      <h3 v-if="isDeleteAction && modal.blockDelete" class="message-area">
+      <h3 v-if="modalCrud.isDelete.value && modalCrud.deleteBlocked.value" class="message-area">
         Não é possível excluir o cliente 
         <strong class="highlight">{{ customerName }}</strong>, 
         pois isso excluiria todo o seu histórico de receitas. Ao invés de excluí-lo, 
         mude seu status para <strong class="highlight">Inativo</strong>.
       </h3>
-      <h3 v-else-if="isDeleteAction && !modal.blockDelete" class="message-area">
+      <h3 v-else-if="modalCrud.isDelete.value && !modalCrud.deleteBlocked.value" class="message-area">
         Tem certeza que deseja excluir o cliente
         <strong class="highlight">{{ customerName }}</strong>?
       </h3>
       <CustomersForm
         v-else
         :item="selectedCustomer"
-        :action="modal.mode"
+        :action="modalCrud.mode.value"
         :modalTitle="modalTitle"
-        @close-modal="closeModal"
+        @close-modal="modalCrud.close"
       />
     </ModalCard>
-    <div v-if="isModalOpen" class="defocus"></div>
+    <div v-if="modalCrud.isOpen.value" class="defocus"></div>
     <AlertMessage v-if="alertStore.visible" />
   </div>
 </template>
@@ -53,6 +53,7 @@ import { ref, computed } from "vue";
 import { useApiStore } from "@/stores/api";
 import { useAlertStore } from "@/stores/alert";
 import { useLoadingStore } from "@/stores/loading";
+import { useCrudModal } from "@/composables/useCrudModal";
 import { customerService } from "@/services/customer.service";
 import { type Customer } from "@/types/customer";
 
@@ -64,40 +65,20 @@ import ModalCard from "@/components/common/ModalCard.vue";
 import CustomersForm from "@/components/forms/CustomersForm.vue";
 import StatusFilter from "@/components/common/StatusFilter.vue";
 
-type ModalMode = 'create' | 'update' | 'delete' | null;
-
-interface ModalState {
-  mode: ModalMode;
-  customer: Customer | null;
-  blockDelete: boolean;
-}
-
 const apiStore = useApiStore();
 const alertStore = useAlertStore();
 const loadingStore = useLoadingStore();
 
+const modalCrud = useCrudModal<Customer>();
+
 const searchedField = ref<string[]>([]);
 const currentStatus = ref<"Inativo" | "Ativo" | "Todos">("Ativo");
-const modal = ref<ModalState>({
-  mode: null,
-  customer: null,
-  blockDelete: false
-});
 
-const selectedCustomer = computed(() => modal.value.customer);
-
-const customerName = computed(() => modal.value.customer?.name ?? "");
-
-const isModalOpen = computed(() => modal.value.mode !== null);
-
-const isDeleteAction = computed(() => modal.value.mode === "delete");
-
-const isForm = computed(() =>
-  modal.value.mode === "create" || modal.value.mode === "update"
-);
+const selectedCustomer = computed(() => modalCrud.entity.value as Customer);
+const customerName = computed(() => modalCrud.entity.value?.name ?? "");
 
 const modalTitle = computed(() => {
-  switch (modal.value.mode) {
+  switch (modalCrud.mode.value) {
     case "create": return "Adicionar Cliente";
     case "update": return "Atualizar Cliente";
     default: return "";
@@ -105,7 +86,7 @@ const modalTitle = computed(() => {
 });
 
 const buttonMessage = computed(() =>
-  modal.value.mode === "delete" && modal.value.blockDelete
+  modalCrud.mode.value === "delete" && modalCrud.deleteBlocked.value
     ? "Inativar"
     : "Confirmar"
 );
@@ -118,24 +99,12 @@ const filteredCustomers = computed(() =>
   )
 );
 
-const addCustomer = () => {
-  modal.value = {
-    mode: 'create',
-    customer: null,
-    blockDelete: false
-  };
-};
-
-const updateCustomer = (customer: Customer) => {
-  modal.value = {
-    mode: 'update',
-    customer: customer,
-    blockDelete: false
-  };
+const showDeleteModal = (custumer: Customer) => {
+  modalCrud.openDelete(custumer, !apiStore.canDeleteCustomer(custumer.id));
 };
 
 const confirmDelete = () => {
-  modal.value.blockDelete ? inactiveCustomer() : deleteCustomer();
+  modalCrud.deleteBlocked.value ? inactiveCustomer() : deleteCustomer();
 };
 
 const deleteCustomer = async () => {
@@ -146,7 +115,7 @@ const deleteCustomer = async () => {
     await apiStore.fetchCustomers();
 
     alertStore.success("Cliente excluído com sucesso");
-    closeModal();
+    modalCrud.close();
   } catch (error) {
     alertStore.error("Erro ao excluir cliente.", error);
   } finally {
@@ -162,7 +131,7 @@ const inactiveCustomer = async () => {
     await apiStore.fetchCustomers();
     
     alertStore.success("Cliente inativado com sucesso!");
-    closeModal();
+    modalCrud.close();
   } catch (error) {
     alertStore.error("Erro ao inativar cliente", error);
   } finally {
@@ -170,19 +139,4 @@ const inactiveCustomer = async () => {
   }
 };
 
-const showDeleteModal = (custumer: Customer) => {
-  modal.value = {
-    mode: "delete",
-    customer: custumer,
-    blockDelete: !apiStore.canDeleteCustomer(custumer.id)
-  };
-};
-
-const closeModal = () => {
-  modal.value = {
-    mode: null,
-    customer: null,
-    blockDelete: false
-  };
-};
 </script>
