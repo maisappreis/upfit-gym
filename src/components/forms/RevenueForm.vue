@@ -91,8 +91,8 @@ const month = ref<string>("");
 const dueDate = ref<number>(0);
 
 const props = defineProps<{
-  item: Revenue,
-  action: "create" | "update" | "delete" | "";
+  item: Revenue | null,
+  action: "create" | "update" | "delete" | null;
   modalTitle: String;
   customers: Customer[];
 }>();
@@ -187,7 +187,7 @@ const fillModal = () => {
   }
 
   if (props.action === "update") {
-    let revenueValue = props.item.value;
+    let revenueValue = props.item!.value;
     let formatedValue = revenueValue ? revenueValue.toString().replace(/\./g, ",") : 0;
     let customerID = props.item!.customer;
     let currentCustomer = props.customers!.find((e: Customer) => e.id === customerID);
@@ -203,7 +203,7 @@ const fillModal = () => {
 };
 
 const checkChangesInValue = () => {
-  let customer = props.customers!.filter((e: Customer) => e.id === props.item.customer);
+  let customer = props.customers!.filter((e: Customer) => e.id === props.item!.customer);
   let customerValue = customer.map((e: Customer) => e.value);
   let customerName = customer.map((e: Customer) => e.name);
 
@@ -216,7 +216,7 @@ const checkChangesInValue = () => {
     updatedValue: value.value
   };
 
-  if (customerValue[0] !== value.value) {
+  if (customerValue[0] !== Number(value.value)) {
     emit("get-confirmation", data);
   }
 };

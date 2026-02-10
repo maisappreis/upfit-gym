@@ -2,34 +2,34 @@
   <div class="content-area">
     <div class="flex-between mb-normal">
       <DefaultButton
-        @execute-action="addRevenue"
+        @execute-action="modalCrud.openCreate"
         style="background-color: var(--red-dark-color)">
         <font-awesome-icon icon="fa-solid fa-plus" class="icon-add" />
         <span class="button-text">Nova Receita</span>
       </DefaultButton>
       <div style="display: flex; justify-content: flex-end">
         <MonthFilter
-          @get-month="getMonth"
-          @get-year="getYear"
-          @get-status="getStatus"
+          @get-month="currentMonth = $event"
+          @get-year="currentYear = $event"
+          @get-status="currentStatus = $event"
           :statusList="statusList"
         />
-        <SearchFilter @apply-search="applySearch" />
+        <SearchFilter @apply-search="searchedField = $event" />
       </div>
     </div>
     <RevenuesTable
       :data="filteredRevenue"
       :searchedField="searchedField"
-      @update-item="updateRevenue"
+      @update-item="modalCrud.openUpdate($event)"
       @delete-item="showDeleteModal"
     />
     <ModalCard
-      v-if="showModal"
-      :isForm="isForm"
+      v-if="modalCrud.isOpen.value"
+      :isForm="modalCrud.isForm.value"
       @execute-action="getModalAction"
       @close-modal="closeModal"
     >
-      <h3 v-if="action === 'delete'" class="message-area">
+      <h3 v-if="modalCrud.isDelete.value" class="message-area">
         Tem certeza que deseja excluir o recebimento da mensalidade do cliente
         <strong class="highlight">{{ messageData.name }}</strong>
         referente ao mês de
@@ -42,24 +42,41 @@
         segundo o seu cadastro. Você gostaria de atualizar todos os futuros pagamentos deste cliente
         para este novo valor de
         <strong class="highlight">R${{ formatValue(confirmationData.updatedValue) }}</strong>?
+        <div class="form-buttons-area">
+          <DefaultButton style="background-color: green" @execute-action="getModalAction">
+            Confirmar
+          </DefaultButton>
+          <DefaultButton style="background-color: red" @execute-action="closeModal">
+            Cancelar
+          </DefaultButton>
+        </div>
       </h3>
       <RevenueForm
         v-else
         :item="selectedRevenue"
         :customers="apiStore.customers"
-        :action="action"
+        :action="modalCrud.mode.value"
         :modalTitle="modalTitle"
         @close-modal="closeModal"
         @get-confirmation="getConfirmation"
       />
     </ModalCard>
-    <div v-if="showModal" class="defocus"></div>
+    <div v-if="modalCrud.isOpen.value" class="defocus"></div>
     <AlertMessage v-if="alertStore.visible" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, watch, onMounted } from "vue";
+import { useApiStore } from "@/stores/api";
+import { useAlertStore } from "@/stores/alert";
+import { useLoadingStore } from "@/stores/loading";
+import { useCrudModal } from "@/composables/useCrudModal";
+import { useDateUtils } from "@/utils/dateUtils";
+import { useDataUtils } from "@/utils/dataUtils";
+import { customerService } from "@/services/customer.service";
+import { type Revenue, type UpdatedRevenue, type Message } from "@/types/revenue";
+
 import RevenuesTable from "@/components/tables/RevenuesTable.vue";
 import DefaultButton from "@/components/common/DefaultButton.vue";
 import AlertMessage from "@/components/common/AlertMessage.vue";
@@ -67,35 +84,35 @@ import SearchFilter from "@/components/common/SearchFilter.vue";
 import ModalCard from "@/components/common/ModalCard.vue";
 import MonthFilter from "@/components/common/MonthFilter.vue";
 import RevenueForm from "../forms/RevenueForm.vue";
-import { type Revenue, type UpdatedRevenue, type Message } from "@/types/revenue";
-import { useApiStore } from "@/stores/api";
-import { useAlertStore } from "@/stores/alert";
-import { useLoadingStore } from "@/stores/loading";
-import { useDateUtils } from "@/utils/dateUtils";
-import { useDataUtils } from "@/utils/dataUtils";
-import { customerService } from "@/services/customer.service";
+
 import axios from "axios";
 
 const apiStore = useApiStore();
 const alertStore = useAlertStore();
 const loadingStore = useLoadingStore();
 
+const modalCrud = useCrudModal<Revenue>();
 const { filteredData } = useDataUtils();
 const { getNextMonth } = useDateUtils();
 
 const statusList = ref<string[]>(["Pago", "À pagar", "Link enviado", "Todos"]);
 const searchedField = ref<string[]>([]);
-const showModal = ref<boolean>(false);
-const selectedRevenue = ref<Revenue>({} as Revenue);
-const action = ref<"create" | "update" | "delete" | "">("");
 const messageData = ref<Message>({} as Message);
-const modalTitle = ref<string>("");
 const currentMonth = ref<string>("");
 const currentYear = ref<number>(0);
 const currentStatus = ref<string>("");
 const showConfirmation = ref<boolean>(false);
 const confirmationData = ref<UpdatedRevenue>({} as UpdatedRevenue);
-const isForm = ref<boolean>(false);
+
+const selectedRevenue = computed(() => modalCrud.entity.value);
+
+const modalTitle = computed(() => {
+  switch (modalCrud.mode.value) {
+    case "create": return "Adicionar Receita";
+    case "update": return "Atualizar Receita";
+    default: return "";
+  }
+});
 
 const filteredRevenue = computed(() => {
   return filteredData(
@@ -106,45 +123,24 @@ const filteredRevenue = computed(() => {
   ) as Revenue[];
 });
 
-const getMonth = (month: string) => {
-  currentMonth.value = month;
-};
+const showDeleteModal = (revenue: Revenue) => {
+  modalCrud.openDelete(revenue);
 
-const getYear = (year: number) => {
-  currentYear.value = year;
-};
-
-const getStatus = (status: string) => {
-  currentStatus.value = status;
-};
-
-const applySearch = (field: string[]) => {
-  searchedField.value = field;
-};
-
-const addRevenue = () => {
-  showModal.value = true;
-  isForm.value = true;
-  action.value = "create";
-  modalTitle.value = "Adicionar Receita";
-};
-
-const updateRevenue = (item: Revenue) => {
-  selectedRevenue.value = item;
-  showModal.value = true;
-  isForm.value = true;
-  action.value = "update";
-  modalTitle.value = "Atualizar Receita";
+  let date = `${revenue.month}/${revenue.year}`;
+  messageData.value = {
+    name: revenue.name,
+    date: date
+  };
 };
 
 const deleteRevenue = async () => {
   loadingStore.start();
   try {
-    await axios.delete(`${apiStore.apiURL}/revenue/${selectedRevenue.value.id}/`);
+    await axios.delete(`${apiStore.apiURL}/revenue/${selectedRevenue.value!.id}/`);
     await apiStore.fetchRevenue();
 
-    showModal.value = false;
     alertStore.success("Receita excluída com sucesso!");
+    closeModal();
   } catch (error) {
     alertStore.error("Erro ao excluir receita.", error);
   } finally {
@@ -152,28 +148,14 @@ const deleteRevenue = async () => {
   }
 };
 
-const showDeleteModal = (item: Revenue) => {
-  selectedRevenue.value = item;
-  showModal.value = true;
-  action.value = "delete";
-  let date = `${item.month}/${item.year}`;
-
-  messageData.value = {
-    name: item.name,
-    date: date
-  };
-};
-
 const closeModal = () => {
-  showModal.value = false;
-  isForm.value = false;
+  modalCrud.close();
   showConfirmation.value = false;
-  action.value = "";
 };
 
 const getConfirmation = (data: UpdatedRevenue) => {
   confirmationData.value = data;
-  showModal.value = true;
+  modalCrud.openUpdate(selectedRevenue.value!);
   showConfirmation.value = true;
 };
 

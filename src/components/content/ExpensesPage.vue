@@ -2,7 +2,7 @@
   <div class="content-area">
     <div class="flex-between mb-normal">
       <DefaultButton
-        @execute-action="modalCrud.openCreate()"
+        @execute-action="modalCrud.openCreate"
         style="background-color: var(--red-dark-color)">
         <font-awesome-icon icon="fa-solid fa-plus" class="icon-add" />
         <span class="button-text">Nova Despesa</span>
