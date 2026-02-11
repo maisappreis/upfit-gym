@@ -28,10 +28,11 @@ import { useAuthStore } from "@/stores/auth";
 import { usePageStore } from "@/stores/page";
 import { useAlertStore } from "@/stores/alert";
 import { useLoadingStore } from "@/stores/loading";
+import { loginService } from "@/services/login.service";
+
 import DefaultButton from "@/components/common/DefaultButton.vue";
 import AlertMessage from "@/components/common//AlertMessage.vue";
 import logoUpfit from "@/assets/logo-upfit.png";
-import axios from "axios";
 
 const username = ref("");
 const password = ref("");
@@ -55,9 +56,9 @@ const loginUser = async () => {
       password: password.value
     };
 
-    const response = await axios.post(`${apiStore.apiBase}/accounts/token/`, loginData);
-    const accessToken = response.data.access;
-    const refreshToken = response.data.refresh;
+    const response = await loginService.create(loginData);
+    const accessToken = response.access;
+    const refreshToken = response.refresh;
 
     if (accessToken && refreshToken) {
       authStore.setTokens(accessToken, refreshToken);

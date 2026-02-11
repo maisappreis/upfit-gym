@@ -8,7 +8,7 @@ export interface Revenue {
   payment_day: number;
   plan: string;
   start: string;
-  status: string;
+  status: "Ativo" | "Inativo",
   value: number | null;
   year: number;
 };

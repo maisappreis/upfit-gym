@@ -1,16 +1,16 @@
-import axios from "axios";
+import { apiClient } from "./apiClient";
 
 export function crudService<T, CreateDTO, UpdateDTO>(
   baseUrl: string
 ) {
   return {
     async fetchAll(): Promise<T[]> {
-      const { data } = await axios.get<T[]>(`/${baseUrl}/`);
+      const { data } = await apiClient.get<T[]>(`/${baseUrl}/`);
       return data;
     },
 
     async create(payload: CreateDTO): Promise<T> {
-      const { data } = await axios.post<T>(
+      const { data } = await apiClient.post<T>(
         `/${baseUrl}/create/`,
         payload
       );
@@ -18,7 +18,7 @@ export function crudService<T, CreateDTO, UpdateDTO>(
     },
 
     async update(id: number, payload: UpdateDTO): Promise<T> {
-      const { data } = await axios.patch<T>(
+      const { data } = await apiClient.patch<T>(
         `/${baseUrl}/${id}/`,
         payload
       );
@@ -26,7 +26,7 @@ export function crudService<T, CreateDTO, UpdateDTO>(
     },
 
     async delete(id: number): Promise<void> {
-      await axios.delete(`/${baseUrl}/${id}/`);
+      await apiClient.delete(`/${baseUrl}/${id}/`);
     }
   };
 };
