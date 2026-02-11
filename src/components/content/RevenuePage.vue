@@ -1,12 +1,11 @@
 <template>
   <div class="content-area">
     <div class="flex-between mb-normal">
-      <DefaultButton
-        @execute-action="modalCrud.openCreate"
-        style="background-color: var(--red-dark-color)">
+      <BaseButton size="lg" @click="modalCrud.openCreate">
         <font-awesome-icon icon="fa-solid fa-plus" class="icon-add" />
-        <span class="button-text">Nova Receita</span>
-      </DefaultButton>
+        Nova Receita
+      </BaseButton>
+
       <div style="display: flex; justify-content: flex-end">
         <MonthFilter
           @get-month="currentMonth = $event"
@@ -17,12 +16,14 @@
         <SearchFilter @apply-search="searchedField = $event" />
       </div>
     </div>
+
     <RevenuesTable
       :data="filteredRevenue"
       :searchedField="searchedField"
       @update-item="modalCrud.openUpdate($event)"
       @delete-item="showDeleteModal"
     />
+
     <ModalCard
       v-if="modalCrud.isOpen.value"
       :isForm="modalCrud.isForm.value"
@@ -43,12 +44,12 @@
         para este novo valor de
         <strong class="highlight">R${{ formatValue(confirmationData.updatedValue) }}</strong>?
         <div class="form-buttons-area">
-          <DefaultButton style="background-color: green" @execute-action="getModalAction">
+          <BaseButton size="lg" @click="getModalAction">
             Confirmar
-          </DefaultButton>
-          <DefaultButton style="background-color: red" @execute-action="closeModal">
+          </BaseButton>
+          <BaseButton size="lg" variant="danger" @click="closeModal">
             Cancelar
-          </DefaultButton>
+          </BaseButton>
         </div>
       </h3>
       <RevenueForm
@@ -61,7 +62,9 @@
         @get-confirmation="getConfirmation"
       />
     </ModalCard>
+
     <div v-if="modalCrud.isOpen.value" class="defocus"></div>
+
     <AlertMessage v-if="alertStore.visible" />
   </div>
 </template>
@@ -78,8 +81,8 @@ import { customerService } from "@/services/customer.service";
 import { revenueService } from "@/services/revenue.service";
 import { type Revenue, type UpdatedRevenue, type Message } from "@/types/revenue";
 
+import BaseButton from "@/components/common/BaseButton.vue";
 import RevenuesTable from "@/components/tables/RevenuesTable.vue";
-import DefaultButton from "@/components/common/DefaultButton.vue";
 import AlertMessage from "@/components/common/AlertMessage.vue";
 import SearchFilter from "@/components/common/SearchFilter.vue";
 import ModalCard from "@/components/common/ModalCard.vue";

@@ -12,7 +12,9 @@
         <input type="password" id="password" name="password" v-model="password" required />
       </div>
       <div class="button-area">
-        <DefaultButton type="submit" :disable="disable">Entrar</DefaultButton>
+        <BaseButton type="submit" size="lg" :disabled="disable">
+          Entrar
+        </BaseButton>
       </div>
     </form>
   </div>
@@ -30,7 +32,7 @@ import { useAlertStore } from "@/stores/alert";
 import { useLoadingStore } from "@/stores/loading";
 import { loginService } from "@/services/login.service";
 
-import DefaultButton from "@/components/common/DefaultButton.vue";
+import BaseButton from "@/components/common/BaseButton.vue";
 import AlertMessage from "@/components/common//AlertMessage.vue";
 import logoUpfit from "@/assets/logo-upfit.png";
 

@@ -46,14 +46,12 @@
         v-model="notes"
       />
       <div class="form-buttons-area">
-        <DefaultButton type="submit" :disable="disable">Salvar</DefaultButton>
-        <DefaultButton
-          style="background-color: red"
-          type="button"
-          @execute-action="$emit('close-modal')"
-        >
+        <BaseButton type="submit" size="lg" :disabled="disable">
+          Salvar
+        </BaseButton>
+        <BaseButton size="lg" variant="danger" @click="$emit('close-modal')">
           Cancelar
-        </DefaultButton>
+        </BaseButton>
       </div>
     </form>
   </div>
@@ -73,8 +71,7 @@ import { type Customer } from "@/types/customer";
 import BaseInput from "@/components/common/form/BaseInput.vue";
 import BaseSelect from "@/components/common/form/BaseSelect.vue";
 import BaseTextarea from "@/components/common/form/BaseTextarea.vue";
-import DefaultButton from "@/components/common/DefaultButton.vue";
-import axios from "axios";
+import BaseButton from "@/components/common/BaseButton.vue";
 
 const apiStore = useApiStore();
 const alertStore = useAlertStore();

@@ -2,18 +2,18 @@
   <div class="modal-area" :class="{ 'top-up': isForm, 'top-down': !isForm }">
     <slot></slot>
     <div v-if="!isForm" class="form-buttons-area">
-      <DefaultButton style="background-color: green" @execute-action="$emit('execute-action')">
+      <BaseButton size="lg" @click="$emit('execute-action')">
         {{ buttonMessage }}
-      </DefaultButton>
-      <DefaultButton style="background-color: red" @execute-action="$emit('close-modal')">
+      </BaseButton>
+      <BaseButton size="lg" variant="danger" @click="$emit('close-modal')">
         Cancelar
-      </DefaultButton>
+      </BaseButton>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import DefaultButton from "@/components/common/DefaultButton.vue";
+import BaseButton from "@/components/common/BaseButton.vue";
 
 defineProps({
   buttonMessage: {

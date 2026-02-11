@@ -1,12 +1,11 @@
 <template>
   <div class="content-area">
     <div class="flex-between mb-normal">
-      <DefaultButton
-        @execute-action="modalCrud.openCreate"
-        style="background-color: var(--red-dark-color)">
+      <BaseButton size="lg" @click="modalCrud.openCreate">
         <font-awesome-icon icon="fa-solid fa-plus" class="icon-add" />
-        <span class="button-text">Nova Despesa</span>
-      </DefaultButton>
+        Nova Despesa
+      </BaseButton>
+
       <div style="display: flex; justify-content: flex-end">
         <MonthFilter
           @get-month="currentMonth = $event"
@@ -17,12 +16,14 @@
         <SearchFilter @apply-search="searchedField = $event" />
       </div>
     </div>
+
     <ExpensesTable
       :data="filteredExpenses"
       :searchedField="searchedField"
       @update-item="modalCrud.openUpdate($event)"
       @delete-item="showDeleteModal"
     />
+
     <ModalCard
       v-if="modalCrud.isOpen.value"
       :isForm="modalCrud.isForm.value"
@@ -43,7 +44,9 @@
         @close-modal="modalCrud.close"
       />
     </ModalCard>
+
     <div v-if="modalCrud.isOpen.value" class="defocus"></div>
+
     <AlertMessage v-if="alertStore.visible" />
   </div>
 </template>
@@ -58,8 +61,8 @@ import { useDataUtils } from "@/utils/dataUtils";
 import { expenseService } from "@/services/expense.service";
 import { type Expense, type Message } from "@/types/expense";
 
+import BaseButton from "@/components/common/BaseButton.vue";
 import ExpensesTable from "@/components/tables/ExpensesTable.vue";
-import DefaultButton from "@/components/common/DefaultButton.vue";
 import AlertMessage from "@/components/common/AlertMessage.vue";
 import SearchFilter from "@/components/common/SearchFilter.vue";
 import ModalCard from "@/components/common/ModalCard.vue";

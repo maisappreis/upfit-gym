@@ -1,23 +1,24 @@
 <template>
   <div class="content-area">
     <div class="flex-between mb-normal">
-      <DefaultButton
-        @execute-action="modalCrud.openCreate"
-        style="background-color: var(--red-dark-color)">
+      <BaseButton size="lg" @click="modalCrud.openCreate">
         <font-awesome-icon icon="fa-solid fa-plus" class="icon-add" />
-        <span class="button-text">Novo Cliente</span>
-      </DefaultButton>
+        Novo Cliente
+      </BaseButton>
+
       <div style="display: flex; justify-content: flex-end">
         <StatusFilter @get-status="currentStatus = $event" />
         <SearchFilter @apply-search="searchedField = $event" />
       </div>
     </div>
+
     <CustomersTable
       :data="filteredCustomers"
       :searchedField="searchedField"
       @update-item="modalCrud.openUpdate($event);"
       @delete-item="showDeleteModal"
     />
+
     <ModalCard
       v-if="modalCrud.isOpen.value"
       :isForm="modalCrud.isForm.value"
@@ -43,7 +44,9 @@
         @close-modal="modalCrud.close"
       />
     </ModalCard>
+
     <div v-if="modalCrud.isOpen.value" class="defocus"></div>
+
     <AlertMessage v-if="alertStore.visible" />
   </div>
 </template>
@@ -57,8 +60,8 @@ import { useCrudModal } from "@/composables/useCrudModal";
 import { customerService } from "@/services/customer.service";
 import { type Customer } from "@/types/customer";
 
+import BaseButton from "@/components/common/BaseButton.vue";
 import CustomersTable from "@/components/tables/CustomersTable.vue";
-import DefaultButton from "@/components/common/DefaultButton.vue";
 import AlertMessage from "@/components/common/AlertMessage.vue";
 import SearchFilter from "@/components/common/SearchFilter.vue";
 import ModalCard from "@/components/common/ModalCard.vue";

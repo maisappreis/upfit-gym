@@ -49,20 +49,12 @@
 }
 
 /* ----------- Button Styles ------------*/
-
-.button-text {
-    margin-left: 10px;
-}
-
  .icon-add {
     font-size: 18px;
+    margin-right: 10px;
 }
 
 @media only screen and (max-width: 1000px) {
-    .button-text {
-      display: none;
-    }
-
     .icon-add {
         margin-right: 0 auto;
         font-size: 18px;
