@@ -63,13 +63,13 @@ import { useAlertStore } from "@/stores/alert";
 import { useLoadingStore } from "@/stores/loading";
 import { months } from "@/utils/variables";
 import { useDataUtils } from "@/utils/dataUtils";
+import { expenseService } from "@/services/expense.service";
 import { type Expense } from "@/types/expense";
 
 import BaseInput from "@/components/common/form/BaseInput.vue";
 import BaseCheckbox from "@/components/common/form/BaseCheckbox.vue";
 import BaseTextarea from "@/components/common/form/BaseTextarea.vue";
 import DefaultButton from "@/components/common/DefaultButton.vue";
-import axios from "axios";
 
 const apiStore = useApiStore();
 const alertStore = useAlertStore();
@@ -126,9 +126,9 @@ const createExpense = async () => {
       value: validFloat,
       paid: "À pagar",
       notes: notes.value
-    };
+    } as Expense;
 
-    await axios.post(`${apiStore.apiURL}/expense/create/`, newExpense);
+    await expenseService.create(newExpense);
     await apiStore.fetchExpenses();
 
     emit("close-modal");
@@ -156,7 +156,7 @@ const updateExpense = async () => {
       notes: notes.value
     };
 
-    await axios.patch(`${apiStore.apiURL}/expense/${props.item!.id}/`, updatedExpense);
+    await expenseService.update(props.item!.id, updatedExpense);
     await apiStore.fetchExpenses();
 
     emit("close-modal");
@@ -179,7 +179,7 @@ const getYearAndMonth = (dueDate: string) => {
 
 const fillModal = () => {
   let expenseValue = props.item!.value;
-  let formatedValue = expenseValue.toString().replace(/\./g, ",");
+  let formatedValue = expenseValue ? expenseValue.toString().replace(/\./g, ",") : 0;
 
   bill.value = props.item!.name;
   dueDate.value = props.item!.date;

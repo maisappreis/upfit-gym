@@ -55,6 +55,7 @@ import { useAlertStore } from "@/stores/alert";
 import { useLoadingStore } from "@/stores/loading";
 import { useCrudModal } from "@/composables/useCrudModal";
 import { useDataUtils } from "@/utils/dataUtils";
+import { expenseService } from "@/services/expense.service";
 import { type Expense, type Message } from "@/types/expense";
 
 import ExpensesTable from "@/components/tables/ExpensesTable.vue";
@@ -64,7 +65,6 @@ import SearchFilter from "@/components/common/SearchFilter.vue";
 import ModalCard from "@/components/common/ModalCard.vue";
 import MonthFilter from "@/components/common/MonthFilter.vue";
 import ExpensesForm from "@/components/forms/ExpensesForm.vue";
-import axios from "axios";
 
 const apiStore = useApiStore();
 const alertStore = useAlertStore();
@@ -113,7 +113,7 @@ const showDeleteModal = (expense: Expense) => {
 const deleteExpense = async () => {
   loadingStore.start();
   try {
-    await axios.delete(`${apiStore.apiURL}/expense/${selectedExpense.value!.id}/`);
+    await expenseService.delete(selectedExpense.value!.id);
     await apiStore.fetchExpenses();
     
     alertStore.success("Despesa excluída com sucesso!");

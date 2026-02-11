@@ -8,7 +8,7 @@ import { type Expense } from "@/types/expense";
 
 import { customerService } from '@/services/customer.service';
 // import { revenueService } from '@/services/revenue.service';
-// import { expenseService } from '@/services/expense.service';
+import { expenseService } from '@/services/expense.service';
 
 export const useApiStore = defineStore("api", () => {
 
@@ -45,13 +45,13 @@ export const useApiStore = defineStore("api", () => {
   //   }
   // };
 
-  // const fetchExpenses = async () => {
-  //   try {
-  //     expenses.value = await expenseService.fetchAll();
-  //   } catch (error) {
-  //     console.error('Erro ao requisitar despesas.', error);
-  //   }
-  // };
+  const fetchExpenses = async () => {
+    try {
+      expenses.value = await expenseService.fetchAll();
+    } catch (error) {
+      console.error('Erro ao requisitar despesas.', error);
+    }
+  };
 
   // const fetchData = async () => {
   //   await Promise.all([
@@ -67,15 +67,6 @@ export const useApiStore = defineStore("api", () => {
       revenue.value = response.data;
     } catch (error) {
       console.error("Erro ao requisitar a lista de receitas.", error);
-    }
-  };
-
-  const fetchExpenses = async () => {
-    try {
-      const response = await axios.get(`${apiURL.value}/expense/`);
-      expenses.value = response.data;
-    } catch (error) {
-      console.error("Erro ao requisitar a lista de despesas.", error);
     }
   };
 

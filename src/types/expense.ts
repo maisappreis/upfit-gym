@@ -4,7 +4,7 @@ export interface Expense {
   month: string;
   date: string;
   paid: "Pago" | "À pagar";
-  value: number;
+  value: number | null;
   year: number;
   installments: string;
   notes: string;

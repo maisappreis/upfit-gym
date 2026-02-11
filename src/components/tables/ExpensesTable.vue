@@ -25,7 +25,7 @@
               <td>{{ formatDate(expense.date) }}</td>
               <td>{{ expense.installments }}</td>
               <td>
-                R$ {{ expense.value.toFixed(2).toString().replace(/\./g, ',') }}
+                R$ {{ expense.value!.toFixed(2).toString().replace(/\./g, ',') }}
               </td>
               <td>
                 <span
@@ -96,6 +96,7 @@ import { useAlertStore } from "@/stores/alert";
 import { useLoadingStore } from "@/stores/loading";
 import { useDateUtils } from "@/utils/dateUtils";
 import { useDataUtils } from "@/utils/dataUtils";
+import { expenseService } from "@/services/expense.service";
 import { type Expense } from "@/types/expense";
 
 import PaginationTable from "@/components/common/PaginationTable.vue";
@@ -172,7 +173,7 @@ const setCurrentPage = (newCurrentPage: number) => {
 const changePaidStatus = async () => {
   loadingStore.start();
   try {
-    let updatedPaidStatus = {} as { paid: string};
+    let updatedPaidStatus = {} as { paid: "Pago" | "À pagar"};
 
     switch (selectedExpense.value!.paid) {
       case "À pagar":
@@ -183,11 +184,7 @@ const changePaidStatus = async () => {
         break;
     }
 
-    await axios.patch(
-      `${apiStore.apiURL}/expense/${selectedExpense.value!.id}/`,
-      updatedPaidStatus
-    );
-
+    await expenseService.update(selectedExpense.value!.id, updatedPaidStatus);
     await apiStore.fetchExpenses();
 
     if (updatedPaidStatus.paid === "Pago") {
@@ -219,9 +216,9 @@ const createExpenseForNextMonth = async (expense: Expense) => {
       value: expense.value,
       paid: "À pagar",
       notes: expense.notes
-    };
+    } as Expense;
 
-    await axios.post(`${apiStore.apiURL}/expense/create/`, newExpense);
+    await expenseService.create(newExpense);
     await apiStore.fetchExpenses();
   } catch (error) {
     console.error("Erro ao criar despesa.", error);
