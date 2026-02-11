@@ -27,7 +27,6 @@ const layoutComponent = computed(() => {
 onMounted(async () => {
   loadingStore.start();
   authStore.checkAuthentication();
-  apiStore.configureAxios();
   await apiStore.fetchData();
   loadingStore.stop();
 });

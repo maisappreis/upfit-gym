@@ -47,3 +47,7 @@ apiClient.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+export const setApiBaseURL = (url: string) => {
+  apiClient.defaults.baseURL = url;
+};
