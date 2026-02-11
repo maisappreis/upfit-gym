@@ -1,60 +1,92 @@
 <template>
-  <div v-if="loadingStore.isLoading" class="overlay">
-    <div class="conteiner">
-      <div class="spinner" />
-      <h3 class="message">
-        Carregando...
-      </h3>
+  <Teleport to="body">
+    <div
+      v-if="visible"
+      class="overlay"
+      role="status"
+      aria-live="polite"
+      aria-busy="true"
+    >
+      <div class="container">
+        <div class="spinner" />
+        <p v-if="message" class="message">
+          {{ message }}
+        </p>
+      </div>
     </div>
-  </div>
+  </Teleport>
 </template>
 
 <script setup lang="ts">
-import { useLoadingStore } from "@/stores/loading";
-const loadingStore = useLoadingStore();
+import { onUnmounted, watch } from "vue";
+
+const props = withDefaults(
+  defineProps<{
+    visible: boolean;
+    message?: string;
+    lockScroll?: boolean;
+  }>(),
+  {
+    message: "Carregando...",
+    lockScroll: true,
+  }
+);
+
+const lockBodyScroll = () => {
+  document.body.style.overflow = "hidden";
+};
+
+const unlockBodyScroll = () => {
+  document.body.style.overflow = "";
+};
+
+watch(
+  () => props.visible,
+  (value) => {
+    if (props.lockScroll) {
+      value ? lockBodyScroll() : unlockBodyScroll();
+    }
+  }
+);
+
+onUnmounted(() => {
+  unlockBodyScroll();
+});
 </script>
 
 <style scoped>
 .overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   background-color: rgba(0, 0, 0, 0.6);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: var(--z-overlay, 9999);
 }
 
-.conteiner {
+.container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
 }
 
 .spinner {
-  width: 50px;
-  height: 50px;
-  border: 5px solid transparent;
-  border-top: 5px solid #ffffff;
+  width: 48px;
+  height: 48px;
+  border: 4px solid transparent;
+  border-top: 4px solid white;
   border-radius: 50%;
-  animation: spin 1s linear infinite;
+  animation: spin 0.8s linear infinite;
 }
 
 .message {
-  margin-top: 20px;
-  font-weight: bold;
+  margin-top: 16px;
+  font-weight: 600;
   color: white;
 }
 
 @keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-
   to {
     transform: rotate(360deg);
   }
