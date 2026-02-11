@@ -75,6 +75,7 @@ import { useCrudModal } from "@/composables/useCrudModal";
 import { useDateUtils } from "@/utils/dateUtils";
 import { useDataUtils } from "@/utils/dataUtils";
 import { customerService } from "@/services/customer.service";
+import { revenueService } from "@/services/revenue.service";
 import { type Revenue, type UpdatedRevenue, type Message } from "@/types/revenue";
 
 import RevenuesTable from "@/components/tables/RevenuesTable.vue";
@@ -136,7 +137,7 @@ const showDeleteModal = (revenue: Revenue) => {
 const deleteRevenue = async () => {
   loadingStore.start();
   try {
-    await axios.delete(`${apiStore.apiURL}/revenue/${selectedRevenue.value!.id}/`);
+    await revenueService.delete(selectedRevenue.value!.id);
     await apiStore.fetchRevenue();
 
     alertStore.success("Receita excluída com sucesso!");
@@ -205,7 +206,7 @@ const updateRevenueValue = async (id: number) => {
     let updatedRevenue = {
       value: confirmationData.value.updatedValue
     };
-    await axios.patch(`${apiStore.apiURL}/revenue/${id}/`, updatedRevenue);
+    await revenueService.update(id, updatedRevenue);
   } catch (error) {
     console.error("Erro ao atualizar receita.", error);
   }

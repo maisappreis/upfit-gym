@@ -75,6 +75,7 @@ import { useLoadingStore } from "@/stores/loading";
 import { useDateUtils } from "@/utils/dateUtils";
 import { useDataUtils } from "@/utils/dataUtils";
 import { customerService } from "@/services/customer.service";
+import { revenueService } from "@/services/revenue.service";
 import { type Customer } from "@/types/customer";
 
 import BaseInput from "@/components/common/form/BaseInput.vue";
@@ -82,7 +83,6 @@ import BaseSelect from "@/components/common/form/BaseSelect.vue";
 import BaseTextarea from "@/components/common/form/BaseTextarea.vue";
 import BaseRadioGroup from "@/components/common/form/BaseRadioGroup.vue";
 import DefaultButton from "@/components/common/DefaultButton.vue";
-import axios from "axios";
 
 const apiStore = useApiStore();
 const alertStore = useAlertStore();
@@ -190,18 +190,19 @@ const updateCustomer = async () => {
 const createRevenue = async (id: number, startDate: string) => {
   try {
     let date = getCurrentYearMonthDay(startDate);
+    let paidStatus = "À pagar" as "Pago" | "À pagar";
 
     let newRevenue = {
       customer: id,
       year: date.year,
       month: date.month,
       value: value.value,
-      payment_day: date.day,
+      payment_day: Number(date.day),
       notes: notes.value,
-      paid: "À pagar"
+      paid: paidStatus
     };
 
-    await axios.post(`${apiStore.apiURL}/revenue/create/`, newRevenue);
+    await revenueService.create(newRevenue);
     await apiStore.fetchRevenue();
   } catch (error) {
     console.error("Erro ao criar receita.", error);

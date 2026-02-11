@@ -127,7 +127,7 @@ const inactiveCustomer = async () => {
   loadingStore.start();
 
   try {
-    await customerService.inactivate(selectedCustomer.value!.id);
+    await customerService.update(selectedCustomer.value!.id, { status: 'Inativo' });
     await apiStore.fetchCustomers();
     
     alertStore.success("Cliente inativado com sucesso!");

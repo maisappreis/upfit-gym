@@ -27,7 +27,7 @@
               <td>{{ revenue.plan }}</td>
               <td>{{ revenue.payment_day }}</td>
               <td>
-                R$ {{ revenue.value.toFixed(2).toString().replace(/\./g, ',') }}
+                R$ {{ revenue.value!.toFixed(2).toString().replace(/\./g, ',') }}
               </td>
               <td>
                 <span
@@ -93,15 +93,16 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from "vue";
-import PaginationTable from "@/components/common/PaginationTable.vue";
-import TooltipModal from "@/components/common/TooltipModal.vue";
-import ModalCard from "@/components/common/ModalCard.vue";
 import { useApiStore } from "@/stores/api";
 import { useLoadingStore } from "@/stores/loading";
 import { useDateUtils } from "@/utils/dateUtils";
 import { useDataUtils } from "@/utils/dataUtils";
+import { revenueService } from "@/services/revenue.service";
 import { type Revenue } from "@/types/revenue";
-import axios from "axios";
+
+import PaginationTable from "@/components/common/PaginationTable.vue";
+import TooltipModal from "@/components/common/TooltipModal.vue";
+import ModalCard from "@/components/common/ModalCard.vue";
 
 const apiStore = useApiStore();
 const loadingStore = useLoadingStore();
@@ -175,7 +176,7 @@ const setCurrentPage = (newCurrentPage: number) => {
 const changePaidStatus = async () => {
   loadingStore.start();
   try {
-    let updatedPaidStatus = {} as { paid: string};
+    let updatedPaidStatus = {} as { paid: "Pago" | "À pagar" | "Link enviado"};
 
     switch (selectedRevenue.value!.paid) {
       case "À pagar":
@@ -189,10 +190,7 @@ const changePaidStatus = async () => {
         break;
     };
 
-    await axios.patch(
-      `${apiStore.apiURL}/revenue/${selectedRevenue.value!.id}/`,
-      updatedPaidStatus
-    );
+    await revenueService.update(selectedRevenue.value!.id, updatedPaidStatus);
 
     if (updatedPaidStatus.paid === "Pago") {
       if (selectedRevenue.value!.status === "Ativo") {
@@ -215,6 +213,7 @@ const changePaidStatus = async () => {
 const createRevenueForNextMonth = async (revenue: Revenue) => {
   try {
     let nextMonth = getNextMonth(revenue.month, revenue.year);
+    let paidStatus = "À pagar" as "Pago" | "À pagar";
 
     let newRevenue = {
       customer: revenue.customer,
@@ -223,10 +222,10 @@ const createRevenueForNextMonth = async (revenue: Revenue) => {
       value: revenue.value,
       payment_day: revenue.payment_day,
       notes: revenue.notes,
-      paid: "À pagar"
+      paid: paidStatus
     };
 
-    await axios.post(`${apiStore.apiURL}/revenue/create/`, newRevenue);
+    await revenueService.create(newRevenue);
   } catch (error) {
     console.error("Erro ao criar receita.", error);
   }

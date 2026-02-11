@@ -66,6 +66,7 @@ import { useAlertStore } from "@/stores/alert";
 import { useLoadingStore } from "@/stores/loading";
 import { months, years } from "@/utils/variables";
 import { useDataUtils } from "@/utils/dataUtils";
+import { revenueService } from "@/services/revenue.service";
 import { type Revenue } from "@/types/revenue";
 import { type Customer } from "@/types/customer";
 
@@ -123,6 +124,7 @@ const createRevenue = async () => {
   loadingStore.start();
   try {
     let validFloat = getValidFloat(value.value);
+    let paidStatus = "À pagar" as "Pago" | "À pagar";
 
     let newRevenue = {
       customer: customerId.value,
@@ -131,10 +133,10 @@ const createRevenue = async () => {
       value: validFloat,
       payment_day: dueDate.value,
       notes: notes.value,
-      paid: "À pagar"
+      paid: paidStatus
     };
 
-    await axios.post(`${apiStore.apiURL}/revenue/create/`, newRevenue);
+    await revenueService.create(newRevenue);
     await apiStore.fetchRevenue();
 
     emit("close-modal");
@@ -159,7 +161,7 @@ const updateRevenue = async () => {
       payment_day: dueDate.value,
       notes: notes.value
     };
-    await axios.patch(`${apiStore.apiURL}/revenue/${props.item!.id}/`, updatedRevenue);
+    await revenueService.update(props.item!.id, updatedRevenue);
     await apiStore.fetchRevenue();
 
     emit("close-modal");

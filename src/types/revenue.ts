@@ -9,7 +9,7 @@ export interface Revenue {
   plan: string;
   start: string;
   status: string;
-  value: number;
+  value: number | null;
   year: number;
 };
 

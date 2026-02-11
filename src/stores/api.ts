@@ -7,7 +7,7 @@ import { type Revenue } from "@/types/revenue";
 import { type Expense } from "@/types/expense";
 
 import { customerService } from '@/services/customer.service';
-// import { revenueService } from '@/services/revenue.service';
+import { revenueService } from '@/services/revenue.service';
 import { expenseService } from '@/services/expense.service';
 
 export const useApiStore = defineStore("api", () => {
@@ -37,13 +37,13 @@ export const useApiStore = defineStore("api", () => {
     }
   };
 
-  // const fetchRevenue = async () => {
-  //   try {
-  //     revenue.value = await revenueService.fetchAll();
-  //   } catch (error) {
-  //     console.error('Erro ao requisitar receitas.', error);
-  //   }
-  // };
+  const fetchRevenue = async () => {
+    try {
+      revenue.value = await revenueService.fetchAll();
+    } catch (error) {
+      console.error('Erro ao requisitar receitas.', error);
+    }
+  };
 
   const fetchExpenses = async () => {
     try {
@@ -53,27 +53,12 @@ export const useApiStore = defineStore("api", () => {
     }
   };
 
-  // const fetchData = async () => {
-  //   await Promise.all([
-  //     fetchCustomers(),
-  //     fetchRevenue(),
-  //     fetchExpenses(),
-  //   ]);
-  // };
-
-  const fetchRevenue = async () => {
-    try {
-      const response = await axios.get(`${apiURL.value}/revenue/`);
-      revenue.value = response.data;
-    } catch (error) {
-      console.error("Erro ao requisitar a lista de receitas.", error);
-    }
-  };
-
   const fetchData = async () => {
-    await fetchCustomers();
-    await fetchRevenue();
-    await fetchExpenses();
+    await Promise.all([
+      fetchCustomers(),
+      fetchRevenue(),
+      fetchExpenses(),
+    ]);
   };
 
    // 🧠 DOMAIN LOGIC
