@@ -8,3 +8,7 @@ export interface Customer {
   status: "Ativo" | "Inativo";
   notes: string;
 };
+
+export type CreateCustomerDTO = Omit<Customer, "id">;
+
+export type UpdateCustomerDTO = Partial<CreateCustomerDTO>;
