@@ -102,7 +102,6 @@ import { type Expense } from "@/types/expense";
 import PaginationTable from "@/components/common/PaginationTable.vue";
 import TooltipModal from "@/components/common/TooltipModal.vue";
 import ModalCard from "@/components/common/ModalCard.vue";
-import axios from "axios";
 
 const apiStore = useApiStore();
 const alertStore = useAlertStore();
