@@ -1,8 +1,9 @@
-import type { Customer } from "@/types/customer";
 import { crudService } from "./baseCrud.service";
-
-export type CreateCustomerDTO = Omit<Customer, "id">;
-export type UpdateCustomerDTO = Partial<CreateCustomerDTO>;
+import type {
+  Customer,
+  CreateCustomerDTO,
+  UpdateCustomerDTO
+} from "@/types/customer";
 
 export const customerService = crudService<
   Customer,

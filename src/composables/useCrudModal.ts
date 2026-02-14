@@ -8,21 +8,21 @@ export function useCrudModal<T>() {
   const deleteIsBlocked = ref<boolean>(false);
 
   const isOpen = computed(() => mode.value !== null);
-  const isForm = computed(() => mode.value === 'create' || mode.value === 'update');
-  const isDelete = computed(() => mode.value === 'delete');
+  const isForm = computed(() => mode.value === "create" || mode.value === "update");
+  const isDelete = computed(() => mode.value === "delete");
   
   const openCreate = () => {
-    mode.value = 'create';
+    mode.value = "create";
     entity.value = null;
   };
 
   const openUpdate = (data: T) => {
-    mode.value = 'update';
+    mode.value = "update";
     entity.value = data;
   };
 
   const openDelete = (data: T, blocked: boolean = false) => {
-    mode.value = 'delete';
+    mode.value = "delete";
     entity.value = data;
     deleteIsBlocked.value = blocked;
   };

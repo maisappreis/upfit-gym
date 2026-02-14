@@ -1,226 +1,84 @@
 <template>
-  <div>
-    <h2 class="modal-title">{{ modalTitle }}</h2>
-    <form class="form-area" @submit.prevent="saveExpense">
+  <form class="form-area" @submit.prevent>
+    <BaseInput
+      label="Nome"
+      v-model="form.name"
+      type="text"
+    />
+
+    <BaseInput
+      label="Data de Vencimento"
+      v-model="form.date"
+      type="date"
+    />
+
+    <BaseCheckbox
+      label="Possui parcelas?"
+      v-model="hasInstallments"
+    />
+
+    <div v-if="hasInstallments">
       <BaseInput
-        label="Nome"
-        v-model="bill"
-        type="text"
-      />
-
-      <BaseInput
-        label="Data de Vencimento"
-        v-model="dueDate"
-        type="date"
-      />
-
-      <BaseCheckbox
-        label="Possui parcelas?"
-        v-model="hasInstallments"
-      />
-
-      <div v-if="hasInstallments">
-        <BaseInput
-          label="Número de parcelas"
-          v-model="installments"
-          type="text"
-          :disabled="disableInstallments"
-        />
-      </div>
-      <p v-if="!validInstallment" class="invalid">Parcelas inválidas.</p>
-
-      <BaseInput
-        label="Valor"
-        v-model="value"
+        label="Número de parcelas"
+        v-model="form.installments"
         type="number"
       />
+    </div>
+    <p v-if="invalidInstallments" class="invalid">Parcelas inválidas.</p>
 
-      <BaseTextarea
-        label="Notas"
-        v-model="notes"
-      />
-      
-      <div class="form-buttons-area">
-        <BaseButton type="submit" size="lg" :disabled="disable">
-          Salvar
-        </BaseButton>
-        <BaseButton size="lg" variant="danger" @click="$emit('close-modal')">
-          Cancelar
-        </BaseButton>
-      </div>
-    </form>
-  </div>
+    <BaseInput
+      label="Valor"
+      v-model="form.value"
+      type="number"
+    />
+
+    <BaseTextarea
+      label="Notas"
+      v-model="form.notes"
+    />
+  </form>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted } from "vue";
-import { useApiStore } from "@/stores/api";
-import { useAlertStore } from "@/stores/alert";
-import { useLoadingStore } from "@/stores/loading";
-import { months } from "@/utils/variables";
-import { useDataUtils } from "@/utils/dataUtils";
-import { expenseService } from "@/services/expense.service";
-import { type Expense } from "@/types/expense";
+import { ref, computed } from "vue";
+import { type CreateExpenseDTO } from "@/types/expense";
 
 import BaseInput from "@/components/common/form/BaseInput.vue";
 import BaseCheckbox from "@/components/common/form/BaseCheckbox.vue";
 import BaseTextarea from "@/components/common/form/BaseTextarea.vue";
-import BaseButton from "@/components/common/BaseButton.vue";
 
-const apiStore = useApiStore();
-const alertStore = useAlertStore();
-const loadingStore = useLoadingStore();
-
-const { capitalize, getValidFloat } = useDataUtils();
-const emit = defineEmits(["close-modal"]);
-
-const bill = ref<string>("");
-const dueDate = ref<string>("");
-const value = ref<number | null>(null);
-const notes = ref<string>("");
 const hasInstallments = ref<boolean>(false);
-const installments = ref<string>("");
-const disableInstallments = ref<boolean>(false);
-const validInstallment = ref<boolean>(true);
 
 const props = defineProps<{
-  item: Expense | null,
-  action: "create" | "update" | "delete" | null;
-  modalTitle: String;
+  modelValue: CreateExpenseDTO;
 }>();
 
-const disable = computed(() => {
+const emit = defineEmits<{
+  (e: "update:modalValue", value: CreateExpenseDTO): void;
+}>();
+
+const form = computed({
+  get: () => props.modelValue,
+  set: (value) => emit("update:modalValue", value),
+});
+
+const isValid = computed(() => {
   return (
-    bill.value === "" ||
-    dueDate.value === "" ||
-    value.value === null ||
-    validInstallment.value === false
+    form.value.name.trim() !== "" &&
+    form.value.date !== "" &&
+    form.value.value !== null
   );
 });
 
-const saveExpense = () => {
-  if (props.action === "create") {
-    createExpense();
-  } else {
-    updateExpense();
-  }
-};
-
-const createExpense = async () => {
-  loadingStore.start();
-  try {
-    let validFloat = getValidFloat(value.value);
-    let date = getYearAndMonth(dueDate.value);
-    let nameCapitalized = capitalize(bill.value);
-
-    let newExpense = {
-      year: date.year,
-      month: date.month,
-      name: nameCapitalized,
-      date: dueDate.value,
-      installments: installments.value,
-      value: validFloat,
-      paid: "À pagar",
-      notes: notes.value
-    } as Expense;
-
-    await expenseService.create(newExpense);
-    await apiStore.fetchExpenses();
-
-    emit("close-modal");
-    alertStore.success("Despesa criada com sucesso!");
-  } catch (error) {
-    alertStore.error("Erro ao criar despesa.", error);
-  } finally {
-    loadingStore.stop();
-  }
-};
-
-const updateExpense = async () => {
-  loadingStore.start();
-  try {
-    let validFloat = getValidFloat(value.value);
-    let date = getYearAndMonth(dueDate.value);
-    let nameCapitalized = capitalize(bill.value);
-
-    let updatedExpense = {
-      year: date.year,
-      month: date.month,
-      name: nameCapitalized,
-      date: dueDate.value,
-      value: validFloat,
-      notes: notes.value
-    };
-
-    await expenseService.update(props.item!.id, updatedExpense);
-    await apiStore.fetchExpenses();
-
-    emit("close-modal");
-    alertStore.success("Despesa atualizada com sucesso!");
-  } catch (error) {
-    alertStore.error("Erro ao atualizar despesa.", error);
-  } finally {
-    loadingStore.stop();
-  }
-};
-
-const getYearAndMonth = (dueDate: string) => {
-  let parsedDate = new Date(dueDate);
-  let year = parsedDate.getFullYear();
-  let monthNumber = parsedDate.getMonth();
-  let month = months[monthNumber];
-
-  return { year, month };
-};
-
-const fillModal = () => {
-  let expenseValue = props.item!.value;
-  let formatedValue = expenseValue ? expenseValue.toString().replace(/\./g, ",") : 0;
-
-  bill.value = props.item!.name;
-  dueDate.value = props.item!.date;
-  value.value = Number(formatedValue);
-  installments.value = props.item!.installments;
-  notes.value = props.item!.notes;
-
-  if (props.item!.installments !== "") {
-    hasInstallments.value = true;
-    disableInstallments.value = true;
-  }
-};
-
-const setInstallments = () => {
-  if (!hasInstallments.value) {
-    installments.value = "";
-    validInstallment.value = true;
-  }
-
-  if (hasInstallments.value && installments.value === "") {
-    validInstallment.value = false;
-  }
-  hasInstallments.value == !hasInstallments.value;
-};
-
-watch(() => installments.value, () => {
-  const integerNumber = parseInt(installments.value);
-
-  if (Number.isInteger(integerNumber) && hasInstallments.value) {
-    validInstallment.value = Number.isInteger(integerNumber);
-  }
-
-  if (!Number.isInteger(integerNumber)) {
-    validInstallment.value = false;
-  }
-
-  if (installments.value === "" && !hasInstallments.value) {
-    validInstallment.value = true;
-  }
+const invalidInstallments = computed(() => {
+  return (
+    hasInstallments.value === true &&
+    !Number.isInteger(Number(form.value.installments))
+  );
 });
 
-onMounted(() => {
-  if (props.action === "update") {
-    fillModal();
-  }
+defineExpose({
+  isValid,
 });
 </script>
 

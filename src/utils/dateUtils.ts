@@ -1,23 +1,10 @@
 import { type SumPerMonth } from "@/types/chart";
+import { months } from "@/utils/variables";
 
 export function useDateUtils() {
   const getMonthIndex = (month: string) => {
-    const months = [
-      "Janeiro",
-      "Fevereiro",
-      "Março",
-      "Abril",
-      "Maio",
-      "Junho",
-      "Julho",
-      "Agosto",
-      "Setembro",
-      "Outubro",
-      "Novembro",
-      "Dezembro",
-      "Todos os meses",
-    ]
-    return months.indexOf(month);
+    const monthsFilter = [...months, "Todos os meses",]
+    return monthsFilter.indexOf(month);
   };
 
   const sortDataByDate = (data: SumPerMonth[]): SumPerMonth[] => {
@@ -47,11 +34,6 @@ export function useDateUtils() {
   const getCurrentYearMonthDay = (startDate: string) => {
     const [year, month, day] = startDate.split("-").map(Number);
   
-    const months = [
-      "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
-      "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
-    ];
-  
     const data = {
       year,
       month: months[month - 1],
@@ -62,11 +44,6 @@ export function useDateUtils() {
   };
 
   const getNextMonth = (currentMonth: string, currentYear: number) => {
-    const months = [
-      "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
-      "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
-    ];
-  
     const currentMonthIndex = months.indexOf(currentMonth);
     const nextMonthIndex = (currentMonthIndex + 1) % 12;
     let nextYear = currentYear;
@@ -90,11 +67,21 @@ export function useDateUtils() {
     return formattedDateString;
   };
 
+  const getYearAndMonth = (dueDate: string) => {
+    const parsedDate = new Date(dueDate);
+    const year = parsedDate.getFullYear();
+    const monthNumber = parsedDate.getMonth();
+    const month = months[monthNumber];
+
+    return { year, month };
+  };
+
   return {
     getMonthIndex,
     sortDataByDate,
     getCurrentYearMonthDay,
     getNextMonth,
-    formatDate
+    formatDate,
+    getYearAndMonth
   };
 };

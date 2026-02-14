@@ -38,7 +38,7 @@ const icon = computed(() => {
 onMounted(() => {
   setTimeout(() => {
     alertStore.clear();
-  }, 1500);
+  }, 2000);
 });
 
 </script>

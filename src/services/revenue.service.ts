@@ -1,11 +1,9 @@
-import type { Revenue } from '@/types/revenue';
 import { crudService } from "./baseCrud.service";
-
-export type CreateRevenueDTO = Omit<
+import type {
   Revenue,
-  "id" | "name" | "plan" | "start" | "status"
->;
-export type UpdateRevenueDTO = Partial<CreateRevenueDTO>;
+  CreateRevenueDTO,
+  UpdateRevenueDTO
+} from '@/types/revenue';
 
 export const revenueService = crudService<
   Revenue,

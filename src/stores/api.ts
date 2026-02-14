@@ -18,6 +18,10 @@ export const useApiStore = defineStore("api", () => {
   const fetchCustomers = async () => {
     try {
       customers.value = await customerService.fetchAll();
+
+      customers.value = customers.value.sort((a, b) =>
+        a.name.localeCompare(b.name, "pt-BR", { sensitivity: "base" })
+      );
     } catch (error) {
       console.error('Erro ao requisitar clientes.', error);
     }

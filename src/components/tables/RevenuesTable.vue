@@ -79,15 +79,32 @@
       </TooltipModal>
     </div>
     <div v-else class="not-found">Nenhum resultado foi encontrado.</div>
-    <ModalCard
-      v-if="showModal"
-      @execute-action="changePaidStatus"
-      @close-modal="closeModal">
-      <span class="message-area" style="font-size: 20px">
-        Marcar como <strong>{{ statusMessage }}</strong>?
-      </span>
+
+    <ModalCard v-model="modalCrud.isOpen.value">
+      <template #header>
+        <span>
+          Marcar como <strong>{{ statusMessage }}</strong>
+        </span>
+      </template>
+
+      <p class="message-area" style="font-size: 20px">
+        Gostaria de marcar essa receita como <strong>{{ statusMessage }}</strong>?
+      </p>
+
+      <template #footer>
+        <BaseButton
+          size="lg"
+          :loading="loadingStore.isLoading"
+          @click="changePaidStatus"
+        >
+          Confirmar
+        </BaseButton>
+        <BaseButton
+          size="lg" variant="danger" @click="closeModal">
+          Cancelar
+        </BaseButton>
+      </template>
     </ModalCard>
-    <div v-if="showModal" class="defocus"></div>
   </div>
 </template>
 
@@ -97,16 +114,19 @@ import { useApiStore } from "@/stores/api";
 import { useLoadingStore } from "@/stores/loading";
 import { useDateUtils } from "@/utils/dateUtils";
 import { useDataUtils } from "@/utils/dataUtils";
+import { useCrudModal } from "@/composables/useCrudModal";
 import { revenueService } from "@/services/revenue.service";
 import { type Revenue } from "@/types/revenue";
 
 import PaginationTable from "@/components/common/PaginationTable.vue";
 import TooltipModal from "@/components/common/TooltipModal.vue";
+import BaseButton from "@/components/common/BaseButton.vue";
 import ModalCard from "@/components/common/ModalCard.vue";
 
 const apiStore = useApiStore();
 const loadingStore = useLoadingStore();
 
+const modalCrud = useCrudModal<Revenue>();
 const { formatDate, getNextMonth } = useDateUtils();
 const { searchData } = useDataUtils();
 const emit = defineEmits(["update-item", "delete-item"]);
@@ -118,7 +138,6 @@ const tooltip = ref<string>("");
 const mouseX = ref<number>(0);
 const mouseY = ref<number>(0);
 const responseMessage = ref<string>("");
-const showModal = ref<boolean>(false);
 const statusMessage = ref<string>("");
 const selectedRevenue = ref<Revenue>();
 
@@ -157,11 +176,11 @@ const confirmPaidStatus = (revenue: Revenue) => {
       break;
   }
 
-  showModal.value = true;
+  modalCrud.openUpdate(selectedRevenue.value)
 };
 
 const closeModal = () => {
-  showModal.value = false;
+  modalCrud.close();
   statusMessage.value = "";
 };
 
@@ -212,7 +231,7 @@ const changePaidStatus = async () => {
 
 const createRevenueForNextMonth = async (revenue: Revenue) => {
   try {
-    let nextMonth = getNextMonth(revenue.month, revenue.year);
+    let nextMonth = getNextMonth(revenue.month, revenue.year!);
     let paidStatus = "À pagar" as "Pago" | "À pagar";
 
     let newRevenue = {

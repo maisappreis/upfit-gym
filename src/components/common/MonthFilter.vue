@@ -8,7 +8,7 @@
       @change="$emit('get-month', month)"
       required
     >
-      <option v-for="(month, index) in months" :key="index" :value="month">
+      <option v-for="(month, index) in [...months, 'Todos']" :key="index" :value="month">
         {{ month }}
       </option>
     </select>
@@ -20,7 +20,7 @@
       @change="$emit('get-year', year)"
       required
     >
-      <option v-for="(year, index) in years" :key="index" :value="year">
+      <option v-for="(year, index) in [...years, 'Todos']" :key="index" :value="year">
         {{ year }}
       </option>
     </select>
