@@ -24,7 +24,7 @@
       @delete-item="openDeleteModal($event)"
     />
 
-    <ModalCard2 v-model="modalCrud.isOpen.value">
+    <ModalCard v-model="modalCrud.isOpen.value">
       <template #header>
         <span>
           {{ modalTitle }}
@@ -50,30 +50,32 @@
       />
 
       <template #footer>
-          <BaseButton
-            v-if="modalCrud.isDelete.value"
-            :loading="loadingStore.isLoading"
-            @click="deleteExpense"
-          >
-            Confirmar
-          </BaseButton>
-          <BaseButton
-            v-else
-            type="submit"
-            size="lg"
-            :disabled="!formRef?.isValid"
-            :loading="loadingStore.isLoading"
-            @click="submitForm"
-          >
-            Salvar
-          </BaseButton>
-          <BaseButton size="lg" variant="danger" @click="modalCrud.close">
-            Cancelar
-          </BaseButton>
+        <BaseButton
+          v-if="modalCrud.isDelete.value"
+          size="lg"
+          :loading="loadingStore.isLoading"
+          @click="deleteExpense"
+        >
+          Confirmar
+        </BaseButton>
+        <BaseButton
+          v-else
+          type="submit"
+          size="lg"
+          :disabled="!formRef?.isValid"
+          :loading="loadingStore.isLoading"
+          @click="submitForm"
+        >
+          Salvar
+        </BaseButton>
+        <BaseButton
+          size="lg"
+          variant="danger"
+          @click="modalCrud.close">
+          Cancelar
+        </BaseButton>
       </template>
-    </ModalCard2>
-
-    <div v-if="modalCrud.isOpen.value" class="defocus"></div>
+    </ModalCard>
 
     <AlertMessage v-if="alertStore.visible" />
   </div>
@@ -94,7 +96,7 @@ import BaseButton from "@/components/common/BaseButton.vue";
 import ExpensesTable from "@/components/tables/ExpensesTable.vue";
 import AlertMessage from "@/components/common/AlertMessage.vue";
 import SearchFilter from "@/components/common/SearchFilter.vue";
-import ModalCard2 from "@/components/common/ModalCard2.vue";
+import ModalCard from "@/components/common/ModalCard.vue";
 import MonthFilter from "@/components/common/MonthFilter.vue";
 import ExpensesForm from "@/components/forms/ExpensesForm.vue";
 

@@ -63,6 +63,7 @@
           </tbody>
         </table>
       </div>
+
       <PaginationTable
         :itemsPerPage="itemsPerPage"
         :currentPage="currentPage"
@@ -71,21 +72,39 @@
         @current-page="setCurrentPage"
         @items-per-page="setItemsPerPage"
       />
+
       <TooltipModal v-if="showingTooltip" :mouseX="mouseX" :mouseY="mouseY">
         <p class="tooltip-text">{{ tooltip }}</p>
       </TooltipModal>
     </div>
+
     <div v-else class="not-found">Nenhum resultado foi encontrado.</div>
-    <ModalCard
-      v-if="showModal"
-      @execute-action="changePaidStatus"
-      @close-modal="closeModal">
-      <span class="message-area" style="font-size: 20px"
-        >Marcar como <strong>{{ statusMessage }}</strong
-        >?</span
-      >
+
+    <ModalCard v-model="modalCrud.isOpen.value">
+      <template #header>
+        <span>
+          Marcar como <strong>{{ statusMessage }}</strong>
+        </span>
+      </template>
+
+      <p class="message-area" style="font-size: 20px">
+        Gostaria de marcar essa conta como <strong>{{ statusMessage }}</strong>?
+      </p>
+
+      <template #footer>
+        <BaseButton
+          size="lg"
+          :loading="loadingStore.isLoading"
+          @click="changePaidStatus"
+        >
+          Confirmar
+        </BaseButton>
+        <BaseButton
+          size="lg" variant="danger" @click="closeModal">
+          Cancelar
+        </BaseButton>
+      </template>
     </ModalCard>
-    <div v-if="showModal" class="defocus"></div>
   </div>
 </template>
 
@@ -94,6 +113,7 @@ import { ref, computed, watch } from "vue";
 import { useApiStore } from "@/stores/api";
 import { useAlertStore } from "@/stores/alert";
 import { useLoadingStore } from "@/stores/loading";
+import { useCrudModal } from "@/composables/useCrudModal";
 import { useDateUtils } from "@/utils/dateUtils";
 import { useDataUtils } from "@/utils/dataUtils";
 import { expenseService } from "@/services/expense.service";
@@ -101,12 +121,14 @@ import { type Expense } from "@/types/expense";
 
 import PaginationTable from "@/components/common/PaginationTable.vue";
 import TooltipModal from "@/components/common/TooltipModal.vue";
+import BaseButton from "@/components/common/BaseButton.vue";
 import ModalCard from "@/components/common/ModalCard.vue";
 
 const apiStore = useApiStore();
 const alertStore = useAlertStore();
 const loadingStore = useLoadingStore();
 
+const modalCrud = useCrudModal<Expense>();
 const { formatDate, getNextMonth } = useDateUtils();
 const { searchData } = useDataUtils();
 const emit = defineEmits(["update-item", "delete-item"]);
@@ -117,7 +139,6 @@ const showingTooltip = ref<boolean>(false);
 const tooltip = ref<string>("");
 const mouseX = ref<number>(0);
 const mouseY = ref<number>(0);
-const showModal = ref<boolean>(false);
 const statusMessage = ref<string>("");
 const selectedExpense = ref<Expense>();
 
@@ -153,11 +174,11 @@ const confirmPaidStatus = (expense: Expense) => {
       break;
   }
 
-  showModal.value = true;
+  modalCrud.openUpdate(selectedExpense.value);
 };
 
 const closeModal = () => {
-  showModal.value = false;
+  modalCrud.close();
   statusMessage.value = "";
 };
 

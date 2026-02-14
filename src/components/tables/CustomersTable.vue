@@ -56,6 +56,7 @@
           </tbody>
         </table>
       </div>
+
       <PaginationTable
         :itemsPerPage="itemsPerPage"
         :currentPage="currentPage"
@@ -64,11 +65,14 @@
         @current-page="setCurrentPage"
         @items-per-page="setItemsPerPage"
       />
+
       <TooltipModal v-if="showingTooltip" :mouseX="mouseX" :mouseY="mouseY">
         <p class="tooltip-text">{{ tooltip }}</p>
       </TooltipModal>
     </div>
+
     <div v-else class="not-found">Nenhum resultado foi encontrado.</div>
+    
     <div v-if="showModal" class="defocus"></div>
   </div>
 </template>

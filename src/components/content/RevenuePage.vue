@@ -24,7 +24,7 @@
       @delete-item="openDeleteModal"
     />
 
-    <ModalCard2 v-model="modalCrud.isOpen.value">
+    <ModalCard v-model="modalCrud.isOpen.value">
       <template #header>
         <span>
           {{ modalTitle }}
@@ -94,9 +94,7 @@
             Cancelar
           </BaseButton>
       </template>
-    </ModalCard2>
-
-    <div v-if="modalCrud.isOpen.value" class="defocus"></div>
+    </ModalCard>
 
     <AlertMessage v-if="alertStore.visible" />
   </div>
@@ -120,7 +118,7 @@ import BaseButton from "@/components/common/BaseButton.vue";
 import RevenuesTable from "@/components/tables/RevenuesTable.vue";
 import AlertMessage from "@/components/common/AlertMessage.vue";
 import SearchFilter from "@/components/common/SearchFilter.vue";
-import ModalCard2 from "@/components/common/ModalCard2.vue";
+import ModalCard from "@/components/common/ModalCard.vue";
 import MonthFilter from "@/components/common/MonthFilter.vue";
 import RevenueForm from "@/components/forms/RevenueForm.vue";
 
