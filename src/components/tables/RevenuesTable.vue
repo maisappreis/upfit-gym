@@ -44,12 +44,23 @@
               </td>
               <td>
                 <span class="align-right">
-                  <font-awesome-icon
+                  <span
                     v-if="revenue.notes"
-                    icon="fa-solid fa-circle-info"
-                    class="table-icon"
-                    @click="showNotes($event, revenue)"
-                  />
+                    :ref="el => setRef(revenue.id, el)"
+                    @mouseenter="hoveredId = revenue.id"
+                    @mouseleave="hoveredId = null"
+                  >
+                    <font-awesome-icon
+                      icon="fa-solid fa-circle-info"
+                      class="table-icon"
+                    />
+                  </span>
+                  <TooltipModal
+                    :anchor="refsMap[revenue.id]"
+                    :visible="hoveredId === revenue.id"
+                  >
+                    {{ revenue.notes }}
+                  </TooltipModal>
                   <font-awesome-icon
                     icon="fa-solid fa-pen-to-square"
                     class="table-icon"
@@ -71,12 +82,9 @@
         :currentPage="currentPage"
         :searchedField="searchedField"
         :data="data"
-        @current-page="setCurrentPage"
-        @items-per-page="setItemsPerPage"
+        @current-page="currentPage = $event"
+        @items-per-page="itemsPerPage = $event"
       />
-      <TooltipModal v-if="showingTooltip" :mouseX="mouseX" :mouseY="mouseY">
-        <p class="tooltip-text">{{ tooltip }}</p>
-      </TooltipModal>
     </div>
     <div v-else class="not-found">Nenhum resultado foi encontrado.</div>
 
@@ -109,7 +117,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from "vue";
+import { ref, computed, watch, type ComponentPublicInstance } from "vue";
 import { useApiStore } from "@/stores/api";
 import { useLoadingStore } from "@/stores/loading";
 import { useDateUtils } from "@/utils/dateUtils";
@@ -133,13 +141,11 @@ const emit = defineEmits(["update-item", "delete-item"]);
 
 const itemsPerPage = ref<number>(30);
 const currentPage = ref<number>(1);
-const showingTooltip = ref<boolean>(false);
-const tooltip = ref<string>("");
-const mouseX = ref<number>(0);
-const mouseY = ref<number>(0);
 const responseMessage = ref<string>("");
 const statusMessage = ref<string>("");
 const selectedRevenue = ref<Revenue>();
+const hoveredId = ref<number | null>(null);
+const refsMap = ref<Record<number, HTMLElement | null>>({});
 
 const props = defineProps<{
   data: Revenue[];
@@ -154,11 +160,15 @@ const paginatedData = computed(() => {
   return searchedData.slice(startIndex, endIndex) as Revenue[];
 });
 
-const showNotes = (event: MouseEvent, revenue: Revenue) => {
-  showingTooltip.value = !showingTooltip.value;
-  tooltip.value = revenue.notes;
-  mouseX.value = event.clientX - 40;
-  mouseY.value = event.clientY + 15;
+const setRef = ( // TODO: reutilizar essa função
+  id: number,
+  el: Element | ComponentPublicInstance | null
+) => {
+  if (el && "$el" in el) {
+    refsMap.value[id] = el.$el as HTMLElement;
+  } else {
+    refsMap.value[id] = el as HTMLElement | null;
+  }
 };
 
 const confirmPaidStatus = (revenue: Revenue) => {
@@ -182,14 +192,6 @@ const confirmPaidStatus = (revenue: Revenue) => {
 const closeModal = () => {
   modalCrud.close();
   statusMessage.value = "";
-};
-
-const setItemsPerPage = (newItemsPerPage: number) => {
-  itemsPerPage.value = newItemsPerPage;
-};
-
-const setCurrentPage = (newCurrentPage: number) => {
-  currentPage.value = newCurrentPage;
 };
 
 const changePaidStatus = async () => {

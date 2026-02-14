@@ -21,7 +21,7 @@
               <td>{{ formatDate(customer.start)}}</td>
               <td>{{ customer.plan }}</td>
               <td>
-                R$ {{ customer.value.toFixed(2).toString().replace(/\./g, ',') }}
+                R$ {{ customer.value!.toFixed(2).toString().replace(/\./g, ',') }}
               </td>
               <td>
                 <span class="status"
@@ -34,12 +34,23 @@
               </td>
               <td>
                 <span class="align-right">
-                  <font-awesome-icon
+                  <span
                     v-if="customer.notes"
-                    icon="fa-solid fa-circle-info"
-                    class="table-icon"
-                    @click="showNotes($event, customer)"
-                  />
+                    :ref="el => setRef(customer.id, el)"
+                    @mouseenter="hoveredId = customer.id"
+                    @mouseleave="hoveredId = null"
+                  >
+                    <font-awesome-icon
+                      icon="fa-solid fa-circle-info"
+                      class="table-icon"
+                    />
+                  </span>
+                  <TooltipModal
+                    :anchor="refsMap[customer.id]"
+                    :visible="hoveredId === customer.id"
+                  >
+                    {{ customer.notes }}
+                  </TooltipModal>
                   <font-awesome-icon
                     icon="fa-solid fa-pen-to-square"
                     class="table-icon"
@@ -62,41 +73,31 @@
         :currentPage="currentPage"
         :searchedField="searchedField"
         :data="data"
-        @current-page="setCurrentPage"
-        @items-per-page="setItemsPerPage"
+        @current-page="currentPage = $event"
+        @items-per-page="itemsPerPage = $event"
       />
-
-      <TooltipModal v-if="showingTooltip" :mouseX="mouseX" :mouseY="mouseY">
-        <p class="tooltip-text">{{ tooltip }}</p>
-      </TooltipModal>
     </div>
 
     <div v-else class="not-found">Nenhum resultado foi encontrado.</div>
-    
-    <div v-if="showModal" class="defocus"></div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from "vue";
-import PaginationTable from "@/components/common/PaginationTable.vue";
-import TooltipModal from "@/components/common/TooltipModal.vue";
+import { ref, computed, watch, type ComponentPublicInstance } from "vue";
 import { useDateUtils } from "@/utils/dateUtils";
 import { useDataUtils } from "@/utils/dataUtils";
 import { type Customer } from "@/types/customer";
+
+import PaginationTable from "@/components/common/PaginationTable.vue";
+import TooltipModal from "@/components/common/TooltipModal.vue";
 
 const { formatDate } = useDateUtils();
 const { searchData } = useDataUtils();
 
 const itemsPerPage = ref<number>(30);
 const currentPage = ref<number>(1);
-
-const showingTooltip = ref<boolean>(false);
-const tooltip = ref<string>("");
-const mouseX = ref<number>(0);
-const mouseY = ref<number>(0);
-
-const showModal = ref<boolean>(false);
+const hoveredId = ref<number | null>(null);
+const refsMap = ref<Record<number, HTMLElement | null>>({});
 
 const props = defineProps<{
   data: Customer[];
@@ -111,19 +112,15 @@ const paginatedData = computed(() => {
   return searchedData.slice(startIndex, endIndex) as Customer[];
 });
 
-const showNotes = (event: MouseEvent, customer: Customer) => {
-  showingTooltip.value = !showingTooltip.value;
-  tooltip.value = customer.notes;
-  mouseX.value = event.clientX - 40;
-  mouseY.value = event.clientY + 15;
-};
-
-const setItemsPerPage = (newItemsPerPage: number) => {
-  itemsPerPage.value = newItemsPerPage;
-};
-
-const setCurrentPage = (newCurrentPage: number) => {
-  currentPage.value = newCurrentPage;
+const setRef = (
+  id: number,
+  el: Element | ComponentPublicInstance | null
+) => {
+  if (el && "$el" in el) {
+    refsMap.value[id] = el.$el as HTMLElement;
+  } else {
+    refsMap.value[id] = el as HTMLElement | null;
+  }
 };
 
 watch(() => props.searchedField, () => {
