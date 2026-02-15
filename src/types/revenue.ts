@@ -19,17 +19,3 @@ export type CreateRevenueDTO = Omit<
 >;
 
 export type UpdateRevenueDTO = Partial<CreateRevenueDTO>;
-
-export interface UpdatedRevenue {
-  id: number;
-  month: string;
-  year: number;
-  name: string;
-  currentValue: number;
-  updatedValue: number;
-};
-
-export interface Message {
-  name: string;
-  date: string;
-};

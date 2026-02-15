@@ -83,9 +83,9 @@ import { useDateUtils } from "@/utils/dateUtils";
 import { useDataUtils } from "@/utils/dataUtils";
 import { type Customer } from "@/types/customer";
 
-import BaseTable, { type BaseTableColumn } from "@/components/common/BaseTable.vue";
-import PaginationTable from "@/components/common/PaginationTable.vue";
-import TooltipModal from "@/components/common/TooltipModal.vue";
+import BaseTable, { type BaseTableColumn } from "@/components/base/BaseTable.vue";
+import PaginationTable from "@/components/base/PaginationTable.vue";
+import TooltipModal from "@/components/base/TooltipModal.vue";
 
 const { formatDate } = useDateUtils();
 const { searchData } = useDataUtils();

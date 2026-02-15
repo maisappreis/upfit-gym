@@ -43,9 +43,9 @@
 import { ref, computed } from "vue";
 import { type CreateExpenseDTO } from "@/types/expense";
 
-import BaseInput from "@/components/common/form/BaseInput.vue";
-import BaseCheckbox from "@/components/common/form/BaseCheckbox.vue";
-import BaseTextarea from "@/components/common/form/BaseTextarea.vue";
+import BaseInput from "@/components/base/form/BaseInput.vue";
+import BaseCheckbox from "@/components/base/form/BaseCheckbox.vue";
+import BaseTextarea from "@/components/base/form/BaseTextarea.vue";
 
 const hasInstallments = ref<boolean>(false);
 

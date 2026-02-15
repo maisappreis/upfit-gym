@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils";
 import { describe, it, expect } from "vitest";
-import TooltipModal from "@/components/common/TooltipModal.vue";
+import TooltipModal from "@/components/base/TooltipModal.vue";
 
 describe("TooltipModal.vue", () => {
   it("should render the component correctly", () => {

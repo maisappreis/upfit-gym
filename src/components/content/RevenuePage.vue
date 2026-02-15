@@ -117,13 +117,13 @@ import { months, years } from "@/utils/variables";
 import { type Customer } from "@/types/customer";
 import { type Revenue, type CreateRevenueDTO } from "@/types/revenue";
 
-import BaseButton from "@/components/common/BaseButton.vue";
+import BaseButton from "@/components/base/BaseButton.vue";
 import RevenuesTable from "@/components/tables/RevenuesTable.vue";
-import AlertMessage from "@/components/common/AlertMessage.vue";
-import ModalCard from "@/components/common/ModalCard.vue";
-import DateFilter from "@/components/common/DateFilter.vue";
-import SearchFilter from "@/components/common/SearchFilter.vue";
-import StatusFilter from "@/components/common/StatusFilter.vue";
+import AlertMessage from "@/components/base/AlertMessage.vue";
+import ModalCard from "@/components/base/ModalCard.vue";
+import DateFilter from "@/components/base/DateFilter.vue";
+import SearchFilter from "@/components/base/SearchFilter.vue";
+import StatusFilter from "@/components/base/StatusFilter.vue";
 import RevenueForm from "@/components/forms/RevenueForm.vue";
 
 const apiStore = useApiStore();

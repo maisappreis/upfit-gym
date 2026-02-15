@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils";
 import { describe, it, expect } from "vitest";
-import PaginationTable from "@/components/common/PaginationTable.vue";
+import PaginationTable from "@/components/base/PaginationTable.vue";
 
 describe("PaginationTable Component", () => {
   const defaultProps = {

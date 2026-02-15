@@ -1,7 +1,7 @@
 import { mount } from "@vue/test-utils";
 import { describe, it, expect, beforeEach } from "vitest";
 import { createPinia, setActivePinia } from "pinia";
-import LoadingScreen from "@/components/common/LoadingScreen.vue";
+import LoadingScreen from "@/components/base/LoadingScreen.vue";
 import { useLoadingStore } from "@/stores/loading";
 
 describe("LoadingScreen.vue", () => {

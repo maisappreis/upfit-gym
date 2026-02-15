@@ -32,8 +32,8 @@ import { useAlertStore } from "@/stores/alert";
 import { useLoadingStore } from "@/stores/loading";
 import { loginService } from "@/services/login.service";
 
-import BaseButton from "@/components/common/BaseButton.vue";
-import AlertMessage from "@/components/common//AlertMessage.vue";
+import BaseButton from "@/components/base/BaseButton.vue";
+import AlertMessage from "@/components/base//AlertMessage.vue";
 import logoUpfit from "@/assets/logo-upfit.png";
 
 const username = ref("");

@@ -115,11 +115,11 @@ import { useCrudModal } from "@/composables/useCrudModal";
 import { revenueService } from "@/services/revenue.service";
 import { type Revenue } from "@/types/revenue";
 
-import BaseTable, { type BaseTableColumn } from "@/components/common/BaseTable.vue";
-import PaginationTable from "@/components/common/PaginationTable.vue";
-import TooltipModal from "@/components/common/TooltipModal.vue";
-import BaseButton from "@/components/common/BaseButton.vue";
-import ModalCard from "@/components/common/ModalCard.vue";
+import BaseTable, { type BaseTableColumn } from "@/components/base/BaseTable.vue";
+import PaginationTable from "@/components/base/PaginationTable.vue";
+import TooltipModal from "@/components/base/TooltipModal.vue";
+import BaseButton from "@/components/base/BaseButton.vue";
+import ModalCard from "@/components/base/ModalCard.vue";
 
 const apiStore = useApiStore();
 const loadingStore = useLoadingStore();

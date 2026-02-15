@@ -103,13 +103,13 @@ import { customerService } from "@/services/customer.service";
 import { revenueService } from "@/services/revenue.service";
 import { type Customer, type CreateCustomerDTO } from "@/types/customer";
 
-import BaseButton from "@/components/common/BaseButton.vue";
+import BaseButton from "@/components/base/BaseButton.vue";
 import CustomersTable from "@/components/tables/CustomersTable.vue";
-import AlertMessage from "@/components/common/AlertMessage.vue";
-import SearchFilter from "@/components/common/SearchFilter.vue";
-import ModalCard from "@/components/common/ModalCard.vue";
+import AlertMessage from "@/components/base/AlertMessage.vue";
+import SearchFilter from "@/components/base/SearchFilter.vue";
+import ModalCard from "@/components/base/ModalCard.vue";
 import CustomersForm from "@/components/forms/CustomersForm.vue";
-import StatusFilter from "@/components/common/StatusFilter.vue";
+import StatusFilter from "@/components/base/StatusFilter.vue";
 
 const apiStore = useApiStore();
 const alertStore = useAlertStore();

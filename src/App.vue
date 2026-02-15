@@ -14,7 +14,7 @@ import { useRoute } from "vue-router";
 
 import HomeView from "@/components/views/HomeView.vue";
 import LoginView from "@/components/views/LoginView.vue";
-import LoadingScreen from "@/components/common/LoadingScreen.vue";
+import LoadingScreen from "@/components/base/LoadingScreen.vue";
 
 const route = useRoute();
 const authStore = useAuthStore();

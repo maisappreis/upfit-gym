@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils";
 import { describe, it, expect } from "vitest";
-import DefaultButton from "@/components/common/DefaultButton.vue";
+import DefaultButton from "@/components/base/DefaultButton.vue";
 
 describe("DefaultButton", () => {
   it("emits the 'execute-action' event when the button is clicked", async () => {

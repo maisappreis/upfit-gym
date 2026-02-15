@@ -1,23 +1,22 @@
 <template>
-  <div class="form-item">
-    <label
-      v-if="label"
-      :for="String(uuid)"
-      class="form-label"
-    >
-      {{ label }}
-    </label>
-    <input
+  <input
+      type="radio"
+      class="form-radio"
+      :value="value" 
       v-bind="{ ...$attrs, onChange: updateValue }"
-      :checked="modelValue"
+      :checked="modelValue === value"
       :id="String(uuid)"
-      type="checkbox"
     />
-  </div>
-  
+  <label
+    v-if="label"
+    class="form-label"
+    :for="String(uuid)"
+  >
+    {{ label }}
+  </label>
   <BaseErrorMessage
     v-if="error"
-    :id="`${uuid}-error`"
+    :id="`${String(uuid)}-error`"
   >
     {{ error }}
   </BaseErrorMessage>
@@ -26,12 +25,13 @@
 <script setup lang="ts">
 import UniqueID from "@/features/UniqueID";
 import SetupFormComponent from "@/features/SetupFormComponent";
-import BaseErrorMessage from "@/components/common/BaseErrorMessage.vue";
+import BaseErrorMessage from "@/components/base/BaseErrorMessage.vue";
 
 const props = defineProps<{
   label?: string
+  modelValue?: string | number | null
+  value: string | number | null
   error?: string
-  modelValue?: boolean
 }>();
 
 const emit = defineEmits<{
