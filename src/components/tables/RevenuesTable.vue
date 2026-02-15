@@ -1,90 +1,81 @@
 <template>
   <div>
     <div v-if="paginatedData.length > 0">
-      <div class="table-overflow">
-        <table
-          class="table-area"
-          style="max-height: 50vh; overflow: auto">
-          <thead>
-            <tr>
-              <th>Ano</th>
-              <th>Mês</th>
-              <th>Nome</th>
-              <th>Início</th>
-              <th>Plano</th>
-              <th>Venc.</th>
-              <th>Valor</th>
-              <th>Status</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(revenue, index) in paginatedData" :key="index">
-              <td>{{ revenue.year }}</td>
-              <td>{{ revenue.month }}</td>
-              <td>{{ revenue.name }}</td>
-              <td>{{ formatDate(revenue.start) }}</td>
-              <td>{{ revenue.plan }}</td>
-              <td>{{ revenue.payment_day }}</td>
-              <td>
-                R$ {{ revenue.value!.toFixed(2).toString().replace(/\./g, ',') }}
-              </td>
-              <td>
-                <span
-                  class="status paid"
-                  :class="{
-                    active: revenue.paid === 'Pago',
-                    inactive: revenue.paid === 'À pagar',
-                    sent: revenue.paid === 'Link enviado'
-                  }"
-                  @click="confirmPaidStatus(revenue)"
-                >
-                  {{ revenue.paid }}
-                </span>
-              </td>
-              <td>
-                <span class="align-right">
-                  <span
-                    v-if="revenue.notes"
-                    :ref="el => setRef(revenue.id, el)"
-                    @mouseenter="hoveredId = revenue.id"
-                    @mouseleave="hoveredId = null"
-                  >
-                    <font-awesome-icon
-                      icon="fa-solid fa-circle-info"
-                      class="table-icon"
-                    />
-                  </span>
-                  <TooltipModal
-                    :anchor="refsMap[revenue.id]"
-                    :visible="hoveredId === revenue.id"
-                  >
-                    {{ revenue.notes }}
-                  </TooltipModal>
-                  <font-awesome-icon
-                    icon="fa-solid fa-pen-to-square"
-                    class="table-icon"
-                    @click="emit('update-item', revenue)"
-                  />
-                  <font-awesome-icon
-                    icon="fa-solid fa-trash-can"
-                    class="table-icon"
-                    @click="emit('delete-item', revenue)"
-                  />
-                </span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <BaseTable
+        :data="paginatedData"
+        :columns="columns"
+        rowKey="id"
+      >
+        <template #cell-start="{ row }">
+          {{ formatDate(row.start) }}
+        </template>
 
-      <PaginationTable
-        v-model:currentPage="currentPage"
-        v-model:itemsPerPage="itemsPerPage"
-        :totalItems="data.length"
-      />
+        <template #cell-value="{ row }">
+          R$ {{ row.value!.toFixed(2).toString().replace(/\./g, ',') }}
+        </template>
+
+        <template #cell-paid="{ row }">
+          <span
+            class="status paid"
+            :class="{
+              active: row.paid === 'Pago',
+              inactive: row.paid === 'À pagar',
+              sent: row.paid === 'Link enviado'
+            }"
+            @click="confirmPaidStatus(row)"
+          >
+            {{ row.paid }}
+          </span>
+        </template>
+
+        <template #cell-actions="{ row }">
+          <span class="align-right">
+            <span
+              v-if="row.notes"
+              :ref="el => setRef(row.id, el)"
+              @mouseenter="hoveredId = row.id"
+              @mouseleave="hoveredId = null"
+            >
+              <font-awesome-icon
+                icon="fa-solid fa-circle-info"
+                class="table-icon"
+              />
+            </span>
+
+            <TooltipModal
+              :anchor="refsMap[row.id]"
+              :visible="hoveredId === row.id"
+            >
+              {{ row.notes }}
+            </TooltipModal>
+
+            <font-awesome-icon
+              icon="fa-solid fa-pen-to-square"
+              class="table-icon"
+              @click="$emit('update-item', row)"
+            />
+
+            <font-awesome-icon
+              icon="fa-solid fa-trash-can"
+              class="table-icon"
+              @click="$emit('delete-item', row)"
+            />
+          </span>
+        </template>
+
+        <template #footer>
+          <PaginationTable
+            v-model:currentPage="currentPage"
+            v-model:itemsPerPage="itemsPerPage"
+            :totalItems="data.length"
+          />
+        </template>
+      </BaseTable>
     </div>
-    <div v-else class="not-found">Nenhum resultado foi encontrado.</div>
+
+    <div v-else class="not-found">
+      Nenhum resultado foi encontrado.
+    </div>
 
     <ModalCard v-model="modalCrud.isOpen.value">
       <template #header>
@@ -124,6 +115,7 @@ import { useCrudModal } from "@/composables/useCrudModal";
 import { revenueService } from "@/services/revenue.service";
 import { type Revenue } from "@/types/revenue";
 
+import BaseTable, { type BaseTableColumn } from "@/components/common/BaseTable.vue";
 import PaginationTable from "@/components/common/PaginationTable.vue";
 import TooltipModal from "@/components/common/TooltipModal.vue";
 import BaseButton from "@/components/common/BaseButton.vue";
@@ -144,6 +136,17 @@ const statusMessage = ref<string>("");
 const selectedRevenue = ref<Revenue>();
 const hoveredId = ref<number | null>(null);
 const refsMap = ref<Record<number, HTMLElement | null>>({});
+const columns: BaseTableColumn[] = [
+  { key: "year", label: "Ano" },
+  { key: "month", label: "Mês" },
+  { key: "name", label: "Nome" },
+  { key: "start", label: "Início" },
+  { key: "plan", label: "Plano" },
+  { key: "payment_day", label: "Venc." },
+  { key: "value", label: "Valor" },
+  { key: "paid", label: "Status" },
+  { key: "actions", label: "" },
+];
 
 const props = defineProps<{
   data: Revenue[];
@@ -152,13 +155,13 @@ const props = defineProps<{
 
 const paginatedData = computed(() => {
   const searchedData = searchData(props.data, props.searchedField);
-  const startIndex = (currentPage.value - 1) * itemsPerPage.value;
-  const endIndex = startIndex + Number(itemsPerPage.value);
+  const start = (currentPage.value - 1) * itemsPerPage.value;
+  const end = start + itemsPerPage.value;
 
-  return searchedData.slice(startIndex, endIndex) as Revenue[];
+  return searchedData.slice(start, end) as Revenue[];
 });
 
-const setRef = ( // TODO: reutilizar essa função
+const setRef = (
   id: number,
   el: Element | ComponentPublicInstance | null
 ) => {
@@ -250,9 +253,12 @@ const createRevenueForNextMonth = async (revenue: Revenue) => {
   }
 };
 
-watch(() => props.searchedField, () => {
-  if (props.searchedField.length > 0) {
-    currentPage.value = 1;
+watch(
+  () => props.searchedField,
+  () => {
+    if (props.searchedField.length > 0) {
+      currentPage.value = 1;
+    }
   }
-});
+);
 </script>

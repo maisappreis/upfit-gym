@@ -1,40 +1,3 @@
-.table-overflow {
-  max-height: 360px;
-  overflow: auto;
-}
-
-.table-area {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-thead {
-  position: sticky;
-  top: 0;
-}
-
-th,
-td {
-  padding: 10px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-  text-align: center
-}
-
-th {
-  background-color: var(--gray-dark-color);
-  color: white;
-  text-align: center;
-}
-
-tr:nth-child(even) {
-  background-color: #eeeded;
-}
-
-tr:hover {
-  background-color: var(--red-light-color);
-}
-
 .table-icon {
   font-size: 20px;
   margin: 0 10px;
@@ -88,16 +51,6 @@ tr:hover {
 
 
 @media only screen and (max-width: 1000px) {
-  .table-overflow {
-    max-height: 280px;
-  }
-
-  th,
-  td {
-    padding: 5px;
-    font-size: 13px;
-  }
-
   .table-icon {
     font-size: 15px;
     margin: 0 5px;

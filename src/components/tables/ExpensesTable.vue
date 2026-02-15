@@ -1,88 +1,80 @@
 <template>
   <div>
     <div v-if="paginatedData.length > 0">
-      <div class="table-overflow">
-        <table
-          class="table-area"
-          style="max-height: 50vh; overflow: auto">
-          <thead>
-            <tr>
-              <th>Ano</th>
-              <th>Mês</th>
-              <th>Nome</th>
-              <th>Vencimento</th>
-              <th>Parcelas</th>
-              <th>Valor</th>
-              <th>Status</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(expense, index) in paginatedData" :key="index">
-              <td>{{ expense.year }}</td>
-              <td>{{ expense.month }}</td>
-              <td>{{ expense.name }}</td>
-              <td>{{ formatDate(expense.date) }}</td>
-              <td>{{ expense.installments }}</td>
-              <td>
-                R$ {{ expense.value!.toFixed(2).toString().replace(/\./g, ',') }}
-              </td>
-              <td>
-                <span
-                  class="status paid"
-                  :class="{
-                    active: expense.paid === 'Pago',
-                    inactive: expense.paid === 'À pagar'
-                  }"
-                  @click="confirmPaidStatus(expense)"
-                >
-                  {{ expense.paid }}
-                </span>
-              </td>
-              <td>
-                <span class="align-right">
-                  <span
-                    v-if="expense.notes"
-                    :ref="el => setRef(expense.id, el)"
-                    @mouseenter="hoveredId = expense.id"
-                    @mouseleave="hoveredId = null"
-                  >
-                    <font-awesome-icon
-                      icon="fa-solid fa-circle-info"
-                      class="table-icon"
-                    />
-                  </span>
-                  <TooltipModal
-                    :anchor="refsMap[expense.id]"
-                    :visible="hoveredId === expense.id"
-                  >
-                    {{ expense.notes }}
-                  </TooltipModal>
-                  <font-awesome-icon
-                    icon="fa-solid fa-pen-to-square"
-                    class="table-icon"
-                    @click="emit('update-item', expense)"
-                  />
-                  <font-awesome-icon
-                    icon="fa-solid fa-trash-can"
-                    class="table-icon"
-                    @click="emit('delete-item', expense)"
-                  />
-                </span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <BaseTable
+        :data="paginatedData"
+        :columns="columns"
+        rowKey="id"
+      >
+        <template #cell-date="{ row }">
+          {{ formatDate(row.date) }}
+        </template>
 
-      <PaginationTable
-        v-model:currentPage="currentPage"
-        v-model:itemsPerPage="itemsPerPage"
-        :totalItems="data.length"
-      />
+        <template #cell-value="{ row }">
+          R$ {{ row.value!.toFixed(2).toString().replace(/\./g, ',') }}
+        </template>
+
+        <template #cell-paid="{ row }">
+          <span
+            class="status paid"
+            :class="{
+              active: row.paid === 'Pago',
+              inactive: row.paid === 'À pagar'
+            }"
+           @click="confirmPaidStatus(row)"
+          >
+            {{ row.paid }}
+          </span>
+        </template>
+
+        <template #cell-actions="{ row }">
+          <span class="align-right">
+            <span
+              v-if="row.notes"
+              :ref="el => setRef(row.id, el)"
+              @mouseenter="hoveredId = row.id"
+              @mouseleave="hoveredId = null"
+            >
+              <font-awesome-icon
+                icon="fa-solid fa-circle-info"
+                class="table-icon"
+              />
+            </span>
+
+            <TooltipModal
+              :anchor="refsMap[row.id]"
+              :visible="hoveredId === row.id"
+            >
+              {{ row.notes }}
+            </TooltipModal>
+
+            <font-awesome-icon
+              icon="fa-solid fa-pen-to-square"
+              class="table-icon"
+              @click="$emit('update-item', row)"
+            />
+
+            <font-awesome-icon
+              icon="fa-solid fa-trash-can"
+              class="table-icon"
+              @click="$emit('delete-item', row)"
+            />
+          </span>
+        </template>
+
+        <template #footer>
+          <PaginationTable
+            v-model:currentPage="currentPage"
+            v-model:itemsPerPage="itemsPerPage"
+            :totalItems="data.length"
+          />
+        </template>
+      </BaseTable>
     </div>
 
-    <div v-else class="not-found">Nenhum resultado foi encontrado.</div>
+    <div v-else class="not-found">
+      Nenhum resultado foi encontrado.
+    </div>
 
     <ModalCard v-model="modalCrud.isOpen.value">
       <template #header>
@@ -123,6 +115,7 @@ import { useDataUtils } from "@/utils/dataUtils";
 import { expenseService } from "@/services/expense.service";
 import { type Expense } from "@/types/expense";
 
+import BaseTable, { type BaseTableColumn } from "@/components/common/BaseTable.vue";
 import PaginationTable from "@/components/common/PaginationTable.vue";
 import TooltipModal from "@/components/common/TooltipModal.vue";
 import BaseButton from "@/components/common/BaseButton.vue";
@@ -143,6 +136,16 @@ const statusMessage = ref<string>("");
 const selectedExpense = ref<Expense>();
 const hoveredId = ref<number | null>(null);
 const refsMap = ref<Record<number, HTMLElement | null>>({});
+const columns: BaseTableColumn[] = [
+  { key: "year", label: "Ano" },
+  { key: "month", label: "Mês" },
+  { key: "name", label: "Nome" },
+  { key: "date", label: "Vencimento" },
+  { key: "installments", label: "Parcelas" },
+  { key: "value", label: "Valor" },
+  { key: "paid", label: "Status" },
+  { key: "actions", label: "" },
+];
 
 const props = defineProps<{
   data: Expense[];
@@ -151,10 +154,10 @@ const props = defineProps<{
 
 const paginatedData = computed(() => {
   const searchedData = searchData(props.data, props.searchedField);
-  const startIndex = (currentPage.value - 1) * itemsPerPage.value;
-  const endIndex = startIndex + Number(itemsPerPage.value);
+  const start = (currentPage.value - 1) * itemsPerPage.value;
+  const end = start + itemsPerPage.value;
 
-  return searchedData.slice(startIndex, endIndex) as Expense[];
+  return searchedData.slice(start, end) as Expense[];
 });
 
 const setRef = (
@@ -243,9 +246,12 @@ const createExpenseForNextMonth = async (expense: Expense) => {
   }
 };
 
-watch(() => props.searchedField, () => {
-  if (props.searchedField.length > 0) {
-    currentPage.value = 1;
+watch(
+  () => props.searchedField,
+  () => {
+    if (props.searchedField.length > 0) {
+      currentPage.value = 1;
+    }
   }
-});
+);
 </script>
