@@ -7,7 +7,11 @@
       </BaseButton>
 
       <div style="display: flex; justify-content: flex-end">
-        <StatusFilter @get-status="currentStatus = $event" />
+        <StatusFilter
+          v-model="currentStatus"
+          :options="['Ativo', 'Inativo', 'Todos']"
+          defaultValue="Ativo"
+        />
         <SearchFilter v-model="searchedField" />
       </div>
     </div>

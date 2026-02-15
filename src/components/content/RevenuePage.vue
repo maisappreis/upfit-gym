@@ -7,11 +7,14 @@
       </BaseButton>
 
       <div style="display: flex; justify-content: flex-end">
-        <MonthFilter
+        <DateFilter
           v-model:modelValueMonth="currentMonth"
           v-model:modelValueYear="currentYear"
-          v-model:modelValueStatus="currentStatus"
-          :statusList="['Pago', 'À pagar', 'Link enviado']"
+        />
+        <StatusFilter
+          v-model="currentStatus"
+          :options="['Pago', 'À pagar', 'Link enviado', 'Todos']"
+          defaultValue="Todos"
         />
         <SearchFilter v-model="searchedField" />
       </div>
@@ -112,14 +115,15 @@ import { customerService } from "@/services/customer.service";
 import { revenueService } from "@/services/revenue.service";
 import { months, years } from "@/utils/variables";
 import { type Customer } from "@/types/customer";
-import { type Revenue, type CreateRevenueDTO, type UpdatedRevenue, type Message } from "@/types/revenue";
+import { type Revenue, type CreateRevenueDTO } from "@/types/revenue";
 
 import BaseButton from "@/components/common/BaseButton.vue";
 import RevenuesTable from "@/components/tables/RevenuesTable.vue";
 import AlertMessage from "@/components/common/AlertMessage.vue";
-import SearchFilter from "@/components/common/SearchFilter.vue";
 import ModalCard from "@/components/common/ModalCard.vue";
-import MonthFilter from "@/components/common/MonthFilter.vue";
+import DateFilter from "@/components/common/DateFilter.vue";
+import SearchFilter from "@/components/common/SearchFilter.vue";
+import StatusFilter from "@/components/common/StatusFilter.vue";
 import RevenueForm from "@/components/forms/RevenueForm.vue";
 
 const apiStore = useApiStore();

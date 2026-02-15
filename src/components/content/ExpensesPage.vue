@@ -7,11 +7,14 @@
       </BaseButton>
 
       <div style="display: flex; justify-content: flex-end">
-        <MonthFilter
+        <DateFilter
           v-model:modelValueMonth="currentMonth"
           v-model:modelValueYear="currentYear"
-          v-model:modelValueStatus="currentStatus"
-          :statusList="['Pago', 'À pagar']"
+        />
+        <StatusFilter
+          v-model="currentStatus"
+          :options="['Pago', 'À pagar', 'Todos']"
+          defaultValue="Todos"
         />
         <SearchFilter v-model="searchedField" />
       </div>
@@ -95,9 +98,10 @@ import { type Expense, type CreateExpenseDTO } from "@/types/expense";
 import BaseButton from "@/components/common/BaseButton.vue";
 import ExpensesTable from "@/components/tables/ExpensesTable.vue";
 import AlertMessage from "@/components/common/AlertMessage.vue";
-import SearchFilter from "@/components/common/SearchFilter.vue";
 import ModalCard from "@/components/common/ModalCard.vue";
-import MonthFilter from "@/components/common/MonthFilter.vue";
+import DateFilter from "@/components/common/DateFilter.vue";
+import SearchFilter from "@/components/common/SearchFilter.vue";
+import StatusFilter from "@/components/common/StatusFilter.vue";
 import ExpensesForm from "@/components/forms/ExpensesForm.vue";
 
 const apiStore = useApiStore();

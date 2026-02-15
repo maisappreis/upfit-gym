@@ -27,20 +27,6 @@
         {{ year }}
       </option>
     </select>
-
-    <select
-      class="form-select font min-width"
-      v-model="statusModel"
-      name="status"
-    >
-      <option
-        v-for="status in statusOptions"
-        :key="status"
-        :value="status"
-      >
-        {{ status }}
-      </option>
-    </select>
   </div>
 </template>
 
@@ -50,19 +36,15 @@ import { months, years } from "@/utils/variables";
 
 type MonthValue = string;
 type YearValue = number | "Todos";
-type StatusValue = string;
 
 const props = defineProps<{
   modelValueMonth?: MonthValue;
   modelValueYear?: YearValue;
-  modelValueStatus?: StatusValue;
-  statusList: string[];
 }>();
 
 const emit = defineEmits<{
   (e: "update:modelValueMonth", value: MonthValue): void;
   (e: "update:modelValueYear", value: YearValue): void;
-  (e: "update:modelValueStatus", value: StatusValue): void;
 }>();
 
 const monthOptions = computed<MonthValue[]>(() => [
@@ -75,11 +57,6 @@ const yearOptions = computed<YearValue[]>(() => [
   "Todos",
 ]);
 
-const statusOptions = computed<StatusValue[]>(() => [
-  ...props.statusList,
-  "Todos"
-]);
-
 const monthModel = computed<MonthValue>({
   get: () => props.modelValueMonth ?? "Todos",
   set: (value) => emit("update:modelValueMonth", value),
@@ -90,11 +67,6 @@ const yearModel = computed<YearValue>({
   set: (value) => emit("update:modelValueYear", value),
 });
 
-const statusModel = computed<StatusValue>({
-  get: () => props.modelValueStatus ?? "Todos",
-  set: (value) => emit("update:modelValueStatus", value),
-});
-
 onMounted(() => {
   if (!props.modelValueMonth || !props.modelValueYear) {
     const currentDate = new Date();
@@ -103,10 +75,6 @@ onMounted(() => {
 
     emit("update:modelValueMonth", currentMonth);
     emit("update:modelValueYear", currentYear);
-  }
-
-  if (!props.modelValueStatus) {
-    emit("update:modelValueStatus", "Todos");
   }
 });
 </script>
@@ -130,10 +98,6 @@ onMounted(() => {
   max-width: 80px;
 }
 
-.min-width {
-  min-width: 140px;
-}
-
 @media only screen and (max-width: 1000px) {
   .font {
     font-size: 14px;
@@ -146,10 +110,6 @@ onMounted(() => {
 
   .year {
     max-width: 80px;
-  }
-
-  .min-width {
-    min-width: 80px;
   }
 }
 </style>

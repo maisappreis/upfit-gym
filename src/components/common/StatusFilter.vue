@@ -2,13 +2,14 @@
   <div class="filter-area">
     <select
       class="form-select font min-width"
-      id="status"
+      v-model="model"
       name="status"
-      v-model="customerStatus"
-      @change="$emit('get-status', customerStatus)"
-      required
     >
-      <option v-for="(status, index) in statusList" :key="index" :value="status">
+      <option
+        v-for="status in options"
+        :key="status"
+        :value="status"
+      >
         {{ status }}
       </option>
     </select>
@@ -16,20 +17,27 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { computed, onMounted } from "vue";
 
-const customerStatus = ref<string>("");
-const statusList = ref<string[]>(["Ativo", "Inativo", "Todos"]);
+const props = defineProps<{
+    modelValue?: string;
+    options: string[];
+    defaultValue: string;
+  }>();
 
-const emit = defineEmits(["get-status"]);
+const emit = defineEmits<{
+  (e: "update:modelValue", value: string): void;
+}>();
 
-const getStatus = () => {
-  customerStatus.value = "Ativo";
-  emit("get-status", customerStatus.value);
-};
+const model = computed({
+  get: () => props.modelValue ?? props.defaultValue,
+  set: (value: string) => emit("update:modelValue", value),
+});
 
 onMounted(() => {
-  getStatus();
+  if (!props.modelValue) {
+    emit("update:modelValue", props.defaultValue);
+  }
 });
 </script>
 
