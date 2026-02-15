@@ -2,38 +2,42 @@
   <div class="filter-area">
     <select
       class="form-select font month"
-      id="month"
+      v-model="monthModel"
       name="month"
-      v-model="month"
-      @change="$emit('get-month', month)"
-      required
     >
-      <option v-for="(month, index) in [...months, 'Todos']" :key="index" :value="month">
+      <option
+        v-for="month in monthOptions"
+        :key="month"
+        :value="month"
+      >
         {{ month }}
       </option>
     </select>
+
     <select
       class="form-select font year"
-      id="year"
+      v-model="yearModel"
       name="year"
-      v-model="year"
-      @change="$emit('get-year', year)"
-      required
     >
-      <option v-for="(year, index) in [...years, 'Todos']" :key="index" :value="year">
+      <option
+        v-for="year in yearOptions"
+        :key="year"
+        :value="year"
+      >
         {{ year }}
       </option>
     </select>
+
     <select
       class="form-select font min-width"
-      id="status"
+      v-model="statusModel"
       name="status"
-      v-model="paymentStatus"
-      @change="$emit('get-status', paymentStatus)"
-      required
     >
-      <option disabled selected value="Todos">Status:</option>
-      <option v-for="(status, index) in statusList" :key="index" :value="status">
+      <option
+        v-for="status in statusOptions"
+        :key="status"
+        :value="status"
+      >
         {{ status }}
       </option>
     </select>
@@ -41,38 +45,69 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { computed, onMounted } from "vue";
 import { months, years } from "@/utils/variables";
 
-const month = ref<string>("");
-const year = ref<number>(0);
-const paymentStatus = ref<string>("");
+type MonthValue = string;
+type YearValue = number | "Todos";
+type StatusValue = string;
 
-const emit = defineEmits(["get-month", "get-year", "get-status"]);
+const props = defineProps<{
+  modelValueMonth?: MonthValue;
+  modelValueYear?: YearValue;
+  modelValueStatus?: StatusValue;
+  statusList: string[];
+}>();
 
-defineProps({
-  statusList: Array
+const emit = defineEmits<{
+  (e: "update:modelValueMonth", value: MonthValue): void;
+  (e: "update:modelValueYear", value: YearValue): void;
+  (e: "update:modelValueStatus", value: StatusValue): void;
+}>();
+
+const monthOptions = computed<MonthValue[]>(() => [
+  ...months,
+  "Todos",
+]);
+
+const yearOptions = computed<YearValue[]>(() => [
+  ...years,
+  "Todos",
+]);
+
+const statusOptions = computed<StatusValue[]>(() => [
+  ...props.statusList,
+  "Todos"
+]);
+
+const monthModel = computed<MonthValue>({
+  get: () => props.modelValueMonth ?? "Todos",
+  set: (value) => emit("update:modelValueMonth", value),
 });
 
-const getDate = () => {
-  let currentDate = new Date();
-  let currentMonth = currentDate.getMonth();
-  year.value = currentDate.getFullYear();
-  month.value = months[currentMonth];
+const yearModel = computed<YearValue>({
+  get: () => props.modelValueYear ?? "Todos",
+  set: (value) => emit("update:modelValueYear", value),
+});
 
-  emit("get-month", month.value);
-  emit("get-year", year.value);
-};
-
-const getStatus = () => {
-  paymentStatus.value = "Todos";
-
-  emit("get-status", paymentStatus.value);
-};
+const statusModel = computed<StatusValue>({
+  get: () => props.modelValueStatus ?? "Todos",
+  set: (value) => emit("update:modelValueStatus", value),
+});
 
 onMounted(() => {
-  getDate();
-  getStatus();
+  if (!props.modelValueMonth || !props.modelValueYear) {
+    const currentDate = new Date();
+    const currentMonth = months[currentDate.getMonth()];
+    const currentYear = currentDate.getFullYear();
+
+    emit("update:modelValueMonth", currentMonth);
+    emit("update:modelValueYear", currentYear);
+  }
+
+  if (!props.modelValueStatus) {
+    emit("update:modelValueStatus", "Todos");
+  }
 });
 </script>
 

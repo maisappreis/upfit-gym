@@ -8,10 +8,10 @@
 
       <div style="display: flex; justify-content: flex-end">
         <MonthFilter
-          @get-month="currentMonth = $event"
-          @get-year="currentYear = $event"
-          @get-status="currentStatus = $event"
-          :statusList="statusList"
+          v-model:modelValueMonth="currentMonth"
+          v-model:modelValueYear="currentYear"
+          v-model:modelValueStatus="currentStatus"
+          :statusList="['Pago', 'À pagar']"
         />
         <SearchFilter @apply-search="searchedField = $event" />
       </div>
@@ -108,7 +108,6 @@ const modalCrud = useCrudModal<Expense>();
 const { filteredData, capitalize } = useDataUtils();
 const { getYearAndMonth }= useDateUtils();
 
-const statusList = ref<string[]>(["Pago", "À pagar", "Todos"]);
 const searchedField = ref<string[]>([]);
 const currentMonth = ref<string>("");
 const currentYear = ref<number>(0);

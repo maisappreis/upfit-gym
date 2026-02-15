@@ -8,10 +8,10 @@
 
       <div style="display: flex; justify-content: flex-end">
         <MonthFilter
-          @get-month="currentMonth = $event"
-          @get-year="currentYear = $event"
-          @get-status="currentStatus = $event"
-          :statusList="['Pago', 'À pagar', 'Link enviado', 'Todos']"
+          v-model:modelValueMonth="currentMonth"
+          v-model:modelValueYear="currentYear"
+          v-model:modelValueStatus="currentStatus"
+          :statusList="['Pago', 'À pagar', 'Link enviado']"
         />
         <SearchFilter @apply-search="searchedField = $event" />
       </div>
