@@ -69,12 +69,9 @@
       </div>
 
       <PaginationTable
-        :itemsPerPage="itemsPerPage"
-        :currentPage="currentPage"
-        :searchedField="searchedField"
-        :data="data"
-        @current-page="currentPage = $event"
-        @items-per-page="itemsPerPage = $event"
+        v-model:currentPage="currentPage"
+        v-model:itemsPerPage="itemsPerPage"
+        :totalItems="data.length"
       />
     </div>
 
