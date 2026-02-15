@@ -2,33 +2,37 @@
   <input
     class="search-area"
     type="text"
-    placeholder="Pesquisar nomes separados por vírgula..."
-    v-model="search"
-    @input="applyFilter"
+    :placeholder="placeholder"
+    v-model="searchModel"
   />
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { computed } from "vue";
 
-const search = ref<string>("");
-const searchedField = ref<string[]>([]);
+const props = withDefaults(
+  defineProps<{
+    modelValue?: string[];
+    placeholder?: string;
+  }>(),
+  {
+    placeholder: "Pesquisar...",
+  }
+);
 
-const emit = defineEmits(["apply-search"]);
+const emit = defineEmits<{
+  (e: "update:modelValue", value: string[]): void;
+}>();
 
-const applyFilter = () => {
-  searchedField.value = search.value
-    .split(",")
-    .filter((value) => value)
-    .map((value) => value.trim());
+const searchModel = computed({
+  get: () => (props.modelValue ?? []).join(", "),
+  set: (value: string) => {
+    const parsed = value
+      .split(",")
+      .map(v => v.trim())
+      .filter(Boolean);
 
-  emit("apply-search", searchedField.value);
-};
-
-watch(search, () => {
-  if (search.value === "") {
-    searchedField.value = [];
-    emit("apply-search", searchedField.value);
+    emit("update:modelValue", parsed);
   }
 });
 </script>

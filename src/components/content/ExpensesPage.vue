@@ -13,7 +13,7 @@
           v-model:modelValueStatus="currentStatus"
           :statusList="['Pago', 'À pagar']"
         />
-        <SearchFilter @apply-search="searchedField = $event" />
+        <SearchFilter v-model="searchedField" />
       </div>
     </div>
 

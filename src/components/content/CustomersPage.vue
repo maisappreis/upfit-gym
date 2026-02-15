@@ -8,7 +8,7 @@
 
       <div style="display: flex; justify-content: flex-end">
         <StatusFilter @get-status="currentStatus = $event" />
-        <SearchFilter @apply-search="searchedField = $event" />
+        <SearchFilter v-model="searchedField" />
       </div>
     </div>
 
