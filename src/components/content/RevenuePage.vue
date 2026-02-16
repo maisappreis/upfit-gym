@@ -98,8 +98,6 @@
           </BaseButton>
       </template>
     </ModalCard>
-
-    <AlertMessage v-if="alertStore.visible" />
   </div>
 </template>
 
@@ -119,7 +117,6 @@ import { type Revenue, type CreateRevenueDTO } from "@/types/revenue";
 
 import BaseButton from "@/components/base/BaseButton.vue";
 import RevenuesTable from "@/components/tables/RevenuesTable.vue";
-import AlertMessage from "@/components/base/AlertMessage.vue";
 import ModalCard from "@/components/base/ModalCard.vue";
 import DateFilter from "@/components/base/DateFilter.vue";
 import SearchFilter from "@/components/base/SearchFilter.vue";

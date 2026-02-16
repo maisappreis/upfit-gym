@@ -86,8 +86,6 @@
           </BaseButton>
       </template>
     </ModalCard>
-
-    <AlertMessage v-if="alertStore.visible" />
   </div>
 </template>
 
@@ -105,7 +103,6 @@ import { type Customer, type CreateCustomerDTO } from "@/types/customer";
 
 import BaseButton from "@/components/base/BaseButton.vue";
 import CustomersTable from "@/components/tables/CustomersTable.vue";
-import AlertMessage from "@/components/base/AlertMessage.vue";
 import SearchFilter from "@/components/base/SearchFilter.vue";
 import ModalCard from "@/components/base/ModalCard.vue";
 import CustomersForm from "@/components/forms/CustomersForm.vue";

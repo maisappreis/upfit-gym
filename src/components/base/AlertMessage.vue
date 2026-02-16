@@ -46,8 +46,8 @@ onMounted(() => {
 <style scoped>
 .alert-area {
   position: absolute;
-  top: 15px;
-  right: 65px;
+  top: 10px;
+  right: 50px;
   height: 90px;
   z-index: 99;
   width: 500px;

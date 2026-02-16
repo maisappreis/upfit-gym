@@ -1,5 +1,6 @@
 <template>
   <LoadingScreen :visible="loadingStore.isLoading" />
+  <AlertMessage v-if="alertStore.visible" />
   <div class="app-area">
     <component :is="layoutComponent" />
   </div>
@@ -7,18 +8,21 @@
 
 <script setup lang="ts">
 import { computed, onMounted } from "vue";
-import { useAuthStore } from "@/stores/auth";
 import { useApiStore } from "@/stores/api";
+import { useAuthStore } from "@/stores/auth";
+import { useAlertStore } from "@/stores/alert";
 import { useLoadingStore } from "@/stores/loading";
 import { useRoute } from "vue-router";
 
 import HomeView from "@/components/views/HomeView.vue";
 import LoginView from "@/components/views/LoginView.vue";
+import AlertMessage from "@/components/base//AlertMessage.vue";
 import LoadingScreen from "@/components/base/LoadingScreen.vue";
 
 const route = useRoute();
-const authStore = useAuthStore();
 const apiStore = useApiStore();
+const authStore = useAuthStore();
+const alertStore = useAlertStore();
 const loadingStore = useLoadingStore();
 
 const layoutComponent = computed(() => {
