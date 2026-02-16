@@ -41,3 +41,10 @@ const emit = defineEmits<{
 const { updateValue } = SetupFormComponent(props, { emit });
 const uuid = UniqueID().getID();
 </script>
+
+<style scoped>
+.form-radio {
+    margin: 10px;
+    width: 20px;
+}
+</style>

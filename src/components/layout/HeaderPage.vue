@@ -2,18 +2,21 @@
   <div class="header-area">
     <div class="text-box">
       <div class="header-title">
-        <font-awesome-icon :icon="icon" class="icon" />
-        <h2 class="title">{{ title }}</h2>
+        <font-awesome-icon :icon="pageConfig.icon" class="icon" />
+        <h2 class="title">{{ pageConfig.title }}</h2>
       </div>
-      <p class="subtitle">{{ subtitle }}</p>
+      <p class="subtitle">{{ pageConfig.subtitle }}</p>
     </div>
+
     <div v-if="authStore.isAuthenticated" id="login" @click="showDropdown">
       <span>Olá, <strong>Renan</strong></span>
       <font-awesome-icon icon="fa-solid fa-circle-user" style="margin-left: 10px; zoom: 1.3" />
     </div>
+
     <RouterLink v-else to="/login">
       <font-awesome-icon icon="fa-solid fa-right-to-bracket" id="login-icon" />
     </RouterLink>
+
     <div v-if="openDropdown" class="dropdown" @click="authStore.logout">
       <font-awesome-icon icon="fa-solid fa-right-to-bracket" style="margin-right: 10px" />
       Logout
@@ -23,53 +26,22 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { ref, computed } from "vue";
 import { RouterLink, RouterView } from "vue-router";
-import { usePageStore } from "@/stores/page";
+import { usePageStore, PAGE_CONFIG } from "@/stores/page";
 import { useAuthStore } from "@/stores/auth";
 
 const authStore = useAuthStore();
 const pageStore = usePageStore();
 
-const icon = ref<string>("fa-solid fa-chart-line");
-const title = ref<string>("Métricas");
-const subtitle = ref<string>("Visualização gráfica de receita, despesas, lucro e clientes");
 const openDropdown = ref<boolean>(false);
 
 const showDropdown = () => {
   openDropdown.value = !openDropdown.value;
 };
 
-watch(
-  () => pageStore.currentPage,
-  (newVal) => {
-    switch (newVal) {
-      case "metrics":
-        icon.value = "fa-solid fa-chart-line";
-        title.value = "Métricas";
-        subtitle.value = "Visualização gráfica de receita, despesas, lucro e clientes";
-        break;
-      case "customers":
-        icon.value = "fa-solid fa-users";
-        title.value = "Clientes";
-        subtitle.value = "Cadastramento dos clientes";
-        break;
-      case "revenue":
-        icon.value = "fa-solid fa-hand-holding-dollar";
-        title.value = "Receitas";
-        subtitle.value = "Controle do recebimento das mensalidades dos clientes";
-        break;
-      case "expenses":
-        icon.value = "fa-solid fa-money-bill-transfer";
-        title.value = "Despesas";
-        subtitle.value = "Controle do pagamento das contas";
-        break;
-      default:
-        icon.value = "";
-        title.value = "";
-        subtitle.value = "";
-    }
-  }
+const pageConfig = computed(
+  () => PAGE_CONFIG[pageStore.currentPage]
 );
 </script>
 

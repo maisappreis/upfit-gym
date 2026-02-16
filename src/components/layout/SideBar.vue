@@ -1,54 +1,23 @@
 <template>
   <aside class="sidebar-area">
     <LogoType class="logo-area" />
+
     <ul>
       <li
+        v-for="item in menuItems"
+        :key="item.page"
         class="option pad"
-        :class="{ selectedOption: pageStore.currentPage === 'metrics' }"
-        @click="pageStore.openPage('metrics')"
+        :class="{ selectedOption: isSelected(item.page) }"
+        @click="pageStore.openPage(item.page)"
       >
         <font-awesome-icon
-          icon="fa-solid fa-chart-line"
+          :icon="item.icon"
           class="icon"
-          :class="{ selectedIcon: pageStore.currentPage === 'metrics' }"
+          :class="{ selectedIcon: isSelected(item.page) }"
         />
-        <span class="option-text">Métricas</span>
-      </li>
-      <li
-        class="option pad"
-        :class="{ selectedOption: pageStore.currentPage === 'customers' }"
-        @click="pageStore.openPage('customers')"
-      >
-        <font-awesome-icon
-          icon="fa-solid fa-users"
-          class="icon"
-          :class="{ selectedIcon: pageStore.currentPage === 'customers' }"
-        />
-        <span class="option-text">Clientes</span>
-      </li>
-      <li
-        class="option pad"
-        :class="{ selectedOption: pageStore.currentPage === 'revenue' }"
-        @click="pageStore.openPage('revenue')"
-      >
-        <font-awesome-icon
-          icon="fa-solid fa-hand-holding-dollar"
-          class="icon"
-          :class="{ selectedIcon: pageStore.currentPage === 'revenue' }"
-        />
-        <span class="option-text">Receitas</span>
-      </li>
-      <li
-        class="option pad"
-        :class="{ selectedOption: pageStore.currentPage === 'expenses' }"
-        @click="pageStore.openPage('expenses')"
-      >
-        <font-awesome-icon
-          icon="fa-solid fa-money-bill-transfer"
-          class="icon"
-          :class="{ selectedIcon: pageStore.currentPage === 'expenses' }"
-        />
-        <span class="option-text">Despesas</span>
+        <span class="option-text">
+          {{ item.label }}
+        </span>
       </li>
     </ul>
   </aside>
@@ -59,6 +28,44 @@ import LogoType from "./LogoType.vue";
 import { usePageStore } from "@/stores/page";
 
 const pageStore = usePageStore();
+
+type PageName =
+  | "metrics"
+  | "customers"
+  | "revenue"
+  | "expenses";
+
+interface MenuItem {
+  page: PageName;
+  label: string;
+  icon: string;
+}
+
+const menuItems: MenuItem[] = [
+  {
+    page: "metrics",
+    label: "Métricas",
+    icon: "fa-solid fa-chart-line",
+  },
+  {
+    page: "customers",
+    label: "Clientes",
+    icon: "fa-solid fa-users",
+  },
+  {
+    page: "revenue",
+    label: "Receitas",
+    icon: "fa-solid fa-hand-holding-dollar",
+  },
+  {
+    page: "expenses",
+    label: "Despesas",
+    icon: "fa-solid fa-money-bill-transfer",
+  },
+];
+
+const isSelected = (page: PageName) =>
+  pageStore.currentPage === page;
 </script>
 
 <style scoped>
