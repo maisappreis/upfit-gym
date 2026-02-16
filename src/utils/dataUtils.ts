@@ -1,33 +1,36 @@
 import { type Revenue } from "@/types/revenue";
 import { type Expense } from "@/types/expense";
-import { type Customer } from "@/types/customer";
 
 export function useDataUtils() {
 
-  const searchData = (data: (Revenue | Expense | Customer)[], searchedField: string[]) => {
+  const searchData = <T extends { name: string }>(
+    data: T[],
+    searchedField: string[]
+  ): T[] => {
     const orderedData = orderData(data);
 
-    if (searchedField && searchedField.length > 0) {
-      return orderedData.reduce<(Revenue | Expense | Customer)[]>((searchedData, item) => {
-        const matched = searchedField.some((element) => {
-          const searchedFieldName = element.toLowerCase();
-          const listedFieldName = item.name.toLowerCase();
-  
-          return listedFieldName.includes(searchedFieldName);
-        })
-        if (matched) {
-          searchedData.push(item);
-        }
-        return searchedData;
-      }, []);
-    } else {
+    if (!searchedField || searchedField.length === 0) {
       return orderedData;
     }
+
+    return orderedData.reduce<T[]>((result, item) => {
+      const listedFieldName = item.name.toLowerCase();
+
+      const matched = searchedField.some((element) =>
+        listedFieldName.includes(element.toLowerCase())
+      );
+
+      if (matched) {
+        result.push(item);
+      }
+
+      return result;
+    }, []);
   };
 
-  const orderData = (
-    data: (Revenue | Expense | Customer)[]
-  ): (Revenue | Expense | Customer)[] => {
+  const orderData = <T extends { name: string }>(
+    data: T[],
+  ): T[] => {
     if (data && data.length > 0) {
       return data.sort((a, b) => {
         const nameA = a.name.toLowerCase()

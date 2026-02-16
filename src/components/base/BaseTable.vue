@@ -43,8 +43,8 @@
 </template>
 
 <script setup lang="ts" generic="T extends Record<string, any>">
-export interface BaseTableColumn {
-  key: string;
+export interface BaseTableColumn<T> {
+  key: Extract<keyof T, string> | string;
   label: string;
   thClass?: string;
   tdClass?: string;
@@ -52,7 +52,7 @@ export interface BaseTableColumn {
 
 const props = defineProps<{
   data: T[];
-  columns: BaseTableColumn[];
+  columns: BaseTableColumn<T>[];
   rowKey?: string;
 }>();
 

@@ -106,12 +106,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, type ComponentPublicInstance } from "vue";
+import { ref } from "vue";
 import { useApiStore } from "@/stores/api";
 import { useLoadingStore } from "@/stores/loading";
 import { useDateUtils } from "@/utils/dateUtils";
 import { useDataUtils } from "@/utils/dataUtils";
 import { useCrudModal } from "@/composables/useCrudModal";
+import { useTooltipAnchors } from "@/composables/useTooltipAnchors";
+import { useTablePagination } from "@/composables/useTablePagination";
 import { revenueService } from "@/services/revenue.service";
 import { type Revenue } from "@/types/revenue";
 
@@ -124,19 +126,31 @@ import ModalCard from "@/components/base/ModalCard.vue";
 const apiStore = useApiStore();
 const loadingStore = useLoadingStore();
 
+const props = defineProps<{
+  data: Revenue[];
+  searchedField: string[];
+}>();
+
+const emit = defineEmits(["update-item", "delete-item"]);
+
 const modalCrud = useCrudModal<Revenue>();
 const { formatDate, getNextMonth } = useDateUtils();
 const { searchData } = useDataUtils();
-const emit = defineEmits(["update-item", "delete-item"]);
+const { hoveredId, refsMap, setRef } = useTooltipAnchors();
+const {
+  itemsPerPage,
+  currentPage,
+  paginatedData
+} = useTablePagination(
+  () => props.data,
+  () => props.searchedField,
+  searchData
+);
 
-const itemsPerPage = ref<number>(30);
-const currentPage = ref<number>(1);
 const responseMessage = ref<string>("");
 const statusMessage = ref<string>("");
 const selectedRevenue = ref<Revenue>();
-const hoveredId = ref<number | null>(null);
-const refsMap = ref<Record<number, HTMLElement | null>>({});
-const columns: BaseTableColumn[] = [
+const columns: BaseTableColumn<Revenue>[] = [
   { key: "year", label: "Ano" },
   { key: "month", label: "Mês" },
   { key: "name", label: "Nome" },
@@ -147,30 +161,6 @@ const columns: BaseTableColumn[] = [
   { key: "paid", label: "Status" },
   { key: "actions", label: "" },
 ];
-
-const props = defineProps<{
-  data: Revenue[];
-  searchedField: string[];
-}>();
-
-const paginatedData = computed(() => {
-  const searchedData = searchData(props.data, props.searchedField);
-  const start = (currentPage.value - 1) * itemsPerPage.value;
-  const end = start + itemsPerPage.value;
-
-  return searchedData.slice(start, end) as Revenue[];
-});
-
-const setRef = (
-  id: number,
-  el: Element | ComponentPublicInstance | null
-) => {
-  if (el && "$el" in el) {
-    refsMap.value[id] = el.$el as HTMLElement;
-  } else {
-    refsMap.value[id] = el as HTMLElement | null;
-  }
-};
 
 const confirmPaidStatus = (revenue: Revenue) => {
   selectedRevenue.value = revenue;
@@ -252,13 +242,4 @@ const createRevenueForNextMonth = async (revenue: Revenue) => {
     console.error("Erro ao criar receita.", error);
   }
 };
-
-watch(
-  () => props.searchedField,
-  () => {
-    if (props.searchedField.length > 0) {
-      currentPage.value = 1;
-    }
-  }
-);
 </script>

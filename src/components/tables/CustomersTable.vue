@@ -78,23 +78,35 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, type ComponentPublicInstance } from "vue";
 import { useDateUtils } from "@/utils/dateUtils";
 import { useDataUtils } from "@/utils/dataUtils";
+import { useTooltipAnchors } from "@/composables/useTooltipAnchors";
+import { useTablePagination } from "@/composables/useTablePagination";
 import { type Customer } from "@/types/customer";
 
 import BaseTable, { type BaseTableColumn } from "@/components/base/BaseTable.vue";
 import PaginationTable from "@/components/base/PaginationTable.vue";
 import TooltipModal from "@/components/base/TooltipModal.vue";
 
+const props = defineProps<{
+  data: Customer[];
+  searchedField: string[];
+}>();
+
 const { formatDate } = useDateUtils();
 const { searchData } = useDataUtils();
+const { hoveredId, refsMap, setRef } = useTooltipAnchors();
+const {
+  itemsPerPage,
+  currentPage,
+  paginatedData
+} = useTablePagination(
+  () => props.data,
+  () => props.searchedField,
+  searchData
+);
 
-const itemsPerPage = ref<number>(30);
-const currentPage = ref<number>(1);
-const hoveredId = ref<number | null>(null);
-const refsMap = ref<Record<number, HTMLElement | null>>({});
-const columns: BaseTableColumn[] = [
+const columns: BaseTableColumn<Customer>[] = [
   { key: "name", label: "Nome" },
   { key: "frequency", label: "Freq." },
   { key: "start", label: "Início" },
@@ -103,37 +115,4 @@ const columns: BaseTableColumn[] = [
   { key: "status", label: "Status" },
   { key: "actions", label: "" },
 ];
-
-const props = defineProps<{
-  data: Customer[];
-  searchedField: string[];
-}>();
-
-const paginatedData = computed(() => { // TODO: lógica repetida em 3 componentes.
-  const searchedData = searchData(props.data, props.searchedField);
-  const start = (currentPage.value - 1) * itemsPerPage.value;
-  const end = start + itemsPerPage.value;
-
-  return searchedData.slice(start, end) as Customer[];
-});
-
-const setRef = ( // TODO: lógica repetida em 3 componentes.
-  id: number,
-  el: Element | ComponentPublicInstance | null
-) => {
-  if (el && "$el" in el) {
-    refsMap.value[id] = el.$el as HTMLElement;
-  } else {
-    refsMap.value[id] = el as HTMLElement | null;
-  }
-};
-
-watch(
-  () => props.searchedField,
-  () => {
-    if (props.searchedField.length > 0) {  // TODO: lógica repetida em 3 componentes.
-      currentPage.value = 1;
-    }
-  }
-);
 </script>

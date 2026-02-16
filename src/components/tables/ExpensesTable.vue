@@ -105,13 +105,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, type ComponentPublicInstance } from "vue";
+import { ref } from "vue";
 import { useApiStore } from "@/stores/api";
 import { useAlertStore } from "@/stores/alert";
 import { useLoadingStore } from "@/stores/loading";
 import { useCrudModal } from "@/composables/useCrudModal";
 import { useDateUtils } from "@/utils/dateUtils";
 import { useDataUtils } from "@/utils/dataUtils";
+import { useTooltipAnchors } from "@/composables/useTooltipAnchors";
+import { useTablePagination } from "@/composables/useTablePagination";
 import { expenseService } from "@/services/expense.service";
 import { type Expense } from "@/types/expense";
 
@@ -125,18 +127,30 @@ const apiStore = useApiStore();
 const alertStore = useAlertStore();
 const loadingStore = useLoadingStore();
 
+const props = defineProps<{
+  data: Expense[];
+  searchedField: string[];
+}>();
+
+const emit = defineEmits(["update-item", "delete-item"]);
+
 const modalCrud = useCrudModal<Expense>();
 const { formatDate, getNextMonth } = useDateUtils();
 const { searchData } = useDataUtils();
-const emit = defineEmits(["update-item", "delete-item"]);
+const { hoveredId, refsMap, setRef } = useTooltipAnchors();
+const {
+  itemsPerPage,
+  currentPage,
+  paginatedData
+} = useTablePagination(
+  () => props.data,
+  () => props.searchedField,
+  searchData
+);
 
-const itemsPerPage = ref<number>(30);
-const currentPage = ref<number>(1);
 const statusMessage = ref<string>("");
 const selectedExpense = ref<Expense>();
-const hoveredId = ref<number | null>(null);
-const refsMap = ref<Record<number, HTMLElement | null>>({});
-const columns: BaseTableColumn[] = [
+const columns: BaseTableColumn<Expense>[] = [
   { key: "year", label: "Ano" },
   { key: "month", label: "Mês" },
   { key: "name", label: "Nome" },
@@ -146,30 +160,6 @@ const columns: BaseTableColumn[] = [
   { key: "paid", label: "Status" },
   { key: "actions", label: "" },
 ];
-
-const props = defineProps<{
-  data: Expense[];
-  searchedField: string[];
-}>();
-
-const paginatedData = computed(() => {
-  const searchedData = searchData(props.data, props.searchedField);
-  const start = (currentPage.value - 1) * itemsPerPage.value;
-  const end = start + itemsPerPage.value;
-
-  return searchedData.slice(start, end) as Expense[];
-});
-
-const setRef = (
-  id: number,
-  el: Element | ComponentPublicInstance | null
-) => {
-  if (el && "$el" in el) {
-    refsMap.value[id] = el.$el as HTMLElement;
-  } else {
-    refsMap.value[id] = el as HTMLElement | null;
-  }
-};
 
 const confirmPaidStatus = (expense: Expense) => {
   selectedExpense.value = expense;
@@ -245,13 +235,4 @@ const createExpenseForNextMonth = async (expense: Expense) => {
     console.error("Erro ao criar despesa.", error);
   }
 };
-
-watch(
-  () => props.searchedField,
-  () => {
-    if (props.searchedField.length > 0) {
-      currentPage.value = 1;
-    }
-  }
-);
 </script>
