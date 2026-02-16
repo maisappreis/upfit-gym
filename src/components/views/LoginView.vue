@@ -1,93 +1,75 @@
 <template>
-<div class="login-area">
-  <div class="login-form">
-    <img class="logo-area" :src="logoUpfit" alt="Logotype company" />
-    <form class="form-area" @submit.prevent="loginUser">
-      <div class="form-field">
-        <label for="name">Username:</label>
-        <input type="text" id="username" name="username" v-model="username" required />
-      </div>
-      <div class="form-field">
-        <label for="password">Senha:</label>
-        <input type="password" id="password" name="password" v-model="password" required />
-      </div>
-      <div class="button-area">
-        <BaseButton type="submit" size="lg" :disabled="disable">
-          Entrar
-        </BaseButton>
-      </div>
-    </form>
+  <div class="login-area">
+    <div class="login-form">
+      <img class="logo-area" :src="logoUpfit" alt="Logotype company" />
+      <form class="form-area" @submit.prevent="loginUser">
+        <div class="form-field">
+          <label for="name">Username:</label>
+          <input type="text" id="username" name="username" v-model="form.username" required />
+        </div>
+        <div class="form-field">
+          <label for="password">Senha:</label>
+          <input type="password" id="password" name="password" v-model="form.password" required />
+        </div>
+        <div class="button-area">
+          <BaseButton type="submit" size="lg" :disabled="disable">
+            Entrar
+          </BaseButton>
+        </div>
+      </form>
+    </div>
   </div>
-  <AlertMessage v-if="alertStore.visible" />
-</div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from "vue";
+import { computed, reactive, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import { useApiStore } from "@/stores/api";
 import { useAuthStore } from "@/stores/auth";
 import { usePageStore } from "@/stores/page";
 import { useAlertStore } from "@/stores/alert";
 import { useLoadingStore } from "@/stores/loading";
-import { loginService } from "@/services/login.service";
 
 import BaseButton from "@/components/base/BaseButton.vue";
-import AlertMessage from "@/components/base//AlertMessage.vue";
 import logoUpfit from "@/assets/logo-upfit.png";
 
-const username = ref("");
-const password = ref("");
-
 const router = useRouter();
-const apiStore = useApiStore();
 const authStore = useAuthStore();
 const pageStore = usePageStore();
 const alertStore = useAlertStore();
 const loadingStore = useLoadingStore();
 
-const disable = computed(() => {
-  return username.value == "" || password.value == "";
+const form = reactive({
+  username: "",
+  password: ""
 });
 
+const disable = computed(
+  () => !form.username || !form.password
+);
+
 const loginUser = async () => {
-  loadingStore.start();
   try {
-    const loginData = {
-      username: username.value,
-      password: password.value
-    };
+    loadingStore.start();
 
-    const response = await loginService.create(loginData);
-    const accessToken = response.access;
-    const refreshToken = response.refresh;
+    await authStore.login(form);
 
-    if (accessToken && refreshToken) {
-      authStore.setTokens(accessToken, refreshToken);
-      authStore.checkAuthentication();
-      await apiStore.fetchData();
+    alertStore.success("Login realizado com sucesso!");
+    pageStore.openPage("metrics");
 
-      alertStore.success("Login realizado com sucesso!");
-      pageStore.openPage('metrics');
-      
-      setTimeout(() => {
-        router.push("/");
-      }, 800);
-    }
-  } catch (error) {
-    alertStore.error("Erro ao fazer login.", error);
+    router.push("/");
+  } catch (err) {
+    alertStore.error("Erro ao fazer login.", err);
   } finally {
     loadingStore.stop();
   }
-}
+};
 
-onMounted(async () => {
+onMounted(() => {
   authStore.checkAuthentication();
+
   if (authStore.isAuthenticated) {
     alertStore.success("Você já está logado! Redirecionando...");
-    setTimeout(() => {
-      router.push("/")
-    }, 2000);
+    router.push("/");
   }
 });
 </script>
