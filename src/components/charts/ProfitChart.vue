@@ -2,10 +2,9 @@
   <div class="chart-area">
     <Bar
       v-if="chartData.datasets.length > 0"
-      id="my-chart-id"
       :options="chartOptions"
       :data="chartData"
-      :style="myStyles"
+      :style="chartStyle"
     />
     <div v-else class="not-found">
       Sem dados para exibição do gráfico de Lucros
@@ -14,24 +13,38 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from "vue";
+import { computed } from "vue";
+import { useChart } from "@/composables/useChart";
 import { Bar } from "vue-chartjs";
-import { Chart as ChartJS, Title, Tooltip, Legend,
-  BarElement, CategoryScale, LinearScale } from "chart.js";
-import { type Data, type Options } from "@/types/chart";
-import { type SumPerMonth } from "@/types/chart";
+import {
+  Chart as ChartJS,
+  Title,
+  Tooltip,
+  Legend,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  type ChartData,
+  type ChartOptions,
+} from "chart.js";
 
-ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
+ChartJS.register(
+  Title,
+  Tooltip,
+  Legend,
+  BarElement,
+  CategoryScale,
+  LinearScale
+);
 
-const props = defineProps<{
-  monthlyProfit: SumPerMonth[];
-}>();
+const { monthlyProfit } = useChart();
 
-const chartData = ref<Data>({
-  labels: [],
-  datasets: []
-});
-const chartOptions = ref<Options>({
+const chartStyle = {
+  height: "100%",
+  position: "relative",
+} as const;
+
+const chartOptions: ChartOptions<"bar"> = {
   responsive: true,
     plugins: {
       legend: {
@@ -58,35 +71,29 @@ const chartOptions = ref<Options>({
         }
       }
     }
-});
-
-const myStyles = computed(() => {
-  return {
-    height: "100%",
-    position: "relative"
-  };
-});
-
-const drawChart = () => {
-  if (props.monthlyProfit && props.monthlyProfit.length > 0) {
-    let labels = props.monthlyProfit.map((e) => e.month);
-    let data = props.monthlyProfit.map((e) => e.sum);
-
-    chartData.value = {
-      labels: labels,
-      datasets: [
-        {
-          label: "Lucro",
-          backgroundColor: "green",
-          data: data
-        }
-      ]
-    };
-  }
 };
 
-watch(() => props.monthlyProfit, () => {
-  drawChart();
+const chartData = computed<ChartData<"bar">>(() => {
+  if (!monthlyProfit.value) {
+    return {
+      labels: [],
+      datasets: [],
+    };
+  }
+
+  let labels = monthlyProfit.value.map((e) => e.month);
+  let data = monthlyProfit.value.map((e) => e.sum);
+
+  return {
+    labels: labels,
+    datasets: [
+      {
+        label: "Lucro",
+        backgroundColor: "green",
+        data: data
+      }
+    ]
+  };
 });
 </script>
 
