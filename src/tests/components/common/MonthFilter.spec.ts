@@ -1,7 +1,7 @@
 import { mount } from "@vue/test-utils";
 import { describe, it, expect } from "vitest";
 import DateFilter from "@/components/base/DateFilter.vue";
-import { months } from "@/utils/variables";
+import { months } from "@/utils/constants";
 
 describe("DateFilter.vue", () => {
   it("renders the component correctly with props", () => {

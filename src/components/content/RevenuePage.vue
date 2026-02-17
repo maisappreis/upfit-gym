@@ -107,11 +107,11 @@ import { useApiStore } from "@/stores/api";
 import { useAlertStore } from "@/stores/alert";
 import { useLoadingStore } from "@/stores/loading";
 import { useCrudModal } from "@/composables/useCrudModal";
-import { useDateUtils } from "@/utils/dateUtils";
-import { useDataUtils } from "@/utils/dataUtils";
+import { getNextMonth } from "@/utils/dateUtils";
+import { filteredData } from "@/utils/dataUtils";
 import { customerService } from "@/services/customer.service";
 import { revenueService } from "@/services/revenue.service";
-import { months, years } from "@/utils/variables";
+import { months, years } from "@/utils/constants";
 import { type Customer } from "@/types/customer";
 import { type Revenue, type CreateRevenueDTO } from "@/types/revenue";
 
@@ -126,10 +126,7 @@ import RevenueForm from "@/components/forms/RevenueForm.vue";
 const apiStore = useApiStore();
 const alertStore = useAlertStore();
 const loadingStore = useLoadingStore();
-
 const modalCrud = useCrudModal<Revenue>();
-const { filteredData } = useDataUtils();
-const { getNextMonth } = useDateUtils();
 
 const searchedField = ref<string[]>([]);
 const currentMonth = ref<string>("");
@@ -163,12 +160,11 @@ const modalTitle = computed(() => {
 });
 
 const filteredRevenue = computed(() => {
-  return filteredData(
-    apiStore.revenue as Revenue[],
-    currentMonth.value,
-    currentYear.value,
-    currentStatus.value
-  ) as Revenue[];
+  return filteredData(apiStore.revenue, {
+    currentMonth: currentMonth.value,
+    currentYear: currentYear.value,
+    currentStatus: currentStatus.value,
+  });
 });
 
 const changeValue = async () => {

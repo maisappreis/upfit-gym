@@ -109,8 +109,8 @@
 import { ref } from "vue";
 import { useApiStore } from "@/stores/api";
 import { useLoadingStore } from "@/stores/loading";
-import { useDateUtils } from "@/utils/dateUtils";
-import { useDataUtils } from "@/utils/dataUtils";
+import { formatDate, getNextMonth } from "@/utils/dateUtils";
+import { searchData } from "@/utils/dataUtils";
 import { useCrudModal } from "@/composables/useCrudModal";
 import { useTooltipAnchors } from "@/composables/useTooltipAnchors";
 import { useTablePagination } from "@/composables/useTablePagination";
@@ -134,8 +134,6 @@ const props = defineProps<{
 const emit = defineEmits(["update-item", "delete-item"]);
 
 const modalCrud = useCrudModal<Revenue>();
-const { formatDate, getNextMonth } = useDateUtils();
-const { searchData } = useDataUtils();
 const { hoveredId, refsMap, setRef } = useTooltipAnchors();
 const {
   itemsPerPage,

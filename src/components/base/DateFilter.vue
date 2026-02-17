@@ -32,7 +32,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted } from "vue";
-import { months, years } from "@/utils/variables";
+import { months, years } from "@/utils/constants";
 
 type MonthValue = string;
 type YearValue = number | "Todos";

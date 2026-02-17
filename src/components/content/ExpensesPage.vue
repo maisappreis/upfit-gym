@@ -88,8 +88,8 @@ import { useApiStore } from "@/stores/api";
 import { useAlertStore } from "@/stores/alert";
 import { useLoadingStore } from "@/stores/loading";
 import { useCrudModal } from "@/composables/useCrudModal";
-import { useDataUtils } from "@/utils/dataUtils";
-import { useDateUtils } from "@/utils/dateUtils";
+import { filteredData, capitalize } from "@/utils/dataUtils";
+import { getYearAndMonth } from "@/utils/dateUtils";
 import { expenseService } from "@/services/expense.service";
 import { type Expense, type CreateExpenseDTO } from "@/types/expense";
 
@@ -104,10 +104,7 @@ import ExpensesForm from "@/components/forms/ExpensesForm.vue";
 const apiStore = useApiStore();
 const alertStore = useAlertStore();
 const loadingStore = useLoadingStore();
-
 const modalCrud = useCrudModal<Expense>();
-const { filteredData, capitalize } = useDataUtils();
-const { getYearAndMonth }= useDateUtils();
 
 const searchedField = ref<string[]>([]);
 const currentMonth = ref<string>("");
@@ -137,12 +134,11 @@ const modalTitle = computed(() => {
 });
 
 const filteredExpenses = computed(() => {
-  return filteredData(
-    apiStore.expenses as Expense[],
-    currentMonth.value,
-    currentYear.value,
-    currentStatus.value
-  ) as Expense[];
+  return filteredData(apiStore.expenses, {
+    currentMonth: currentMonth.value,
+    currentYear: currentYear.value,
+    currentStatus: currentStatus.value,
+  });
 });
 
 const closeModal = () => {

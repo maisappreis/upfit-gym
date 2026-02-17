@@ -1,14 +1,14 @@
 import { describe, it, expect } from "vitest";
-import { useDateUtils } from "@/utils/dateUtils";
+import { dateUtils } from "@/utils/dateUtils";
 
-describe("useDateUtils", () => {
+describe("dateUtils", () => {
   const {
     getMonthIndex,
     sortDataByDate,
     getCurrentYearMonthDay,
     getNextMonth,
     formatDate,
-  } = useDateUtils();
+  } = dateUtils();
 
   describe("getMonthIndex", () => {
     it("deve retornar o índice correto do mês", () => {

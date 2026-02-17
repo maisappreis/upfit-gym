@@ -95,10 +95,10 @@ import { useApiStore } from "@/stores/api";
 import { useAlertStore } from "@/stores/alert";
 import { useLoadingStore } from "@/stores/loading";
 import { useCrudModal } from "@/composables/useCrudModal";
-import { useDateUtils } from "@/utils/dateUtils";
-import { useDataUtils } from "@/utils/dataUtils";
+import { capitalize } from "@/utils/dataUtils";
 import { customerService } from "@/services/customer.service";
 import { revenueService } from "@/services/revenue.service";
+import { getCurrentYearMonthDay } from "@/utils/dateUtils";
 import { type Customer, type CreateCustomerDTO } from "@/types/customer";
 
 import BaseButton from "@/components/base/BaseButton.vue";
@@ -111,10 +111,7 @@ import StatusFilter from "@/components/base/StatusFilter.vue";
 const apiStore = useApiStore();
 const alertStore = useAlertStore();
 const loadingStore = useLoadingStore();
-
 const modalCrud = useCrudModal<Customer>();
-const { capitalize } = useDataUtils();
-const { getCurrentYearMonthDay } = useDateUtils();
 
 const searchedField = ref<string[]>([]);
 const currentStatus = ref<"Inativo" | "Ativo" | "Todos">("Ativo");

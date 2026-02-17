@@ -1,10 +1,10 @@
 import { describe, it, expect } from "vitest";
-import { useDataUtils } from "@/utils/dataUtils";
+import { dataUtils } from "@/utils/dataUtils";
 import { type Expense } from "@/types/expense";
 import { type Customer } from "@/types/customer";
 
-describe("useDataUtils", () => {
-  const { searchData, capitalize, filteredData, getValidFloat } = useDataUtils();
+describe("dataUtils", () => {
+  const { searchData, capitalize, filteredData, getValidFloat } = dataUtils();
 
   describe("searchData", () => {
     const customersData = [

@@ -1,6 +1,6 @@
 import { computed } from "vue";
 import { useApiStore } from "@/stores/api";
-import { useDateUtils } from "@/utils/dateUtils";
+import { sortDataByDate } from "@/utils/dateUtils";
 
 import type { Revenue } from "@/types/revenue";
 import type { Expense } from "@/types/expense";
@@ -8,7 +8,6 @@ import type { SumPerMonth } from "@/types/chart";
 
 export function useChart() {
   const apiStore = useApiStore();
-  const { sortDataByDate } = useDateUtils();
 
   const sumMonthlyAmounts = (
     data: (Revenue | Expense)[]

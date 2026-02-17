@@ -1,13 +1,13 @@
 import { defineStore } from "pinia"
 import { ref } from "vue"
 
-import { type Customer } from "@/types/customer";
-import { type Revenue } from "@/types/revenue";
-import { type Expense } from "@/types/expense";
-
 import { customerService } from '@/services/customer.service';
 import { revenueService } from '@/services/revenue.service';
 import { expenseService } from '@/services/expense.service';
+
+import { type Customer } from "@/types/customer";
+import { type Revenue } from "@/types/revenue";
+import { type Expense } from "@/types/expense";
 
 export const useApiStore = defineStore("api", () => {
 

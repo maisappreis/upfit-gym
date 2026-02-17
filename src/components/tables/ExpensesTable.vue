@@ -110,8 +110,8 @@ import { useApiStore } from "@/stores/api";
 import { useAlertStore } from "@/stores/alert";
 import { useLoadingStore } from "@/stores/loading";
 import { useCrudModal } from "@/composables/useCrudModal";
-import { useDateUtils } from "@/utils/dateUtils";
-import { useDataUtils } from "@/utils/dataUtils";
+import { formatDate, getNextMonth } from "@/utils/dateUtils";
+import { searchData } from "@/utils/dataUtils";
 import { useTooltipAnchors } from "@/composables/useTooltipAnchors";
 import { useTablePagination } from "@/composables/useTablePagination";
 import { expenseService } from "@/services/expense.service";
@@ -135,8 +135,6 @@ const props = defineProps<{
 const emit = defineEmits(["update-item", "delete-item"]);
 
 const modalCrud = useCrudModal<Expense>();
-const { formatDate, getNextMonth } = useDateUtils();
-const { searchData } = useDataUtils();
 const { hoveredId, refsMap, setRef } = useTooltipAnchors();
 const {
   itemsPerPage,

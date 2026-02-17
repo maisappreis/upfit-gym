@@ -1,158 +1,93 @@
-import { type Revenue } from "@/types/revenue";
-import { type Expense } from "@/types/expense";
+import type { Revenue } from "@/types/revenue";
+import type { Expense } from "@/types/expense";
 
-export function useDataUtils() {
+/* ---------- TYPES ---------- */
 
-  const searchData = <T extends { name: string }>(
-    data: T[],
-    searchedField: string[]
-  ): T[] => {
-    const orderedData = orderData(data);
+type NamedItem = { name: string };
+type PayableItem = Revenue | Expense;
 
-    if (!searchedField || searchedField.length === 0) {
-      return orderedData;
-    }
+/* ---------- HELPERS ---------- */
 
-    return orderedData.reduce<T[]>((result, item) => {
-      const listedFieldName = item.name.toLowerCase();
+const normalize = (value: string): string =>
+  value.trim().toLowerCase();
 
-      const matched = searchedField.some((element) =>
-        listedFieldName.includes(element.toLowerCase())
-      );
+/* ---------- SORT ---------- */
 
-      if (matched) {
-        result.push(item);
-      }
+export const orderData = <T extends NamedItem>(data: T[]): T[] => {
+  if (!data?.length) return [];
 
-      return result;
-    }, []);
-  };
+  return [...data].sort((a, b) =>
+    a.name.localeCompare(b.name, "pt-BR", {
+      sensitivity: "base",
+    })
+  );
+};
 
-  const orderData = <T extends { name: string }>(
-    data: T[],
-  ): T[] => {
-    if (data && data.length > 0) {
-      return data.sort((a, b) => {
-        const nameA = a.name.toLowerCase()
-        const nameB = b.name.toLowerCase()
-    
-        if (nameA < nameB) {
-          return -1;
-        } else if (nameA > nameB) {
-          return 1;
-        } else {
-          return 0;
-        }
-      });
-    } else {
-      return [];
-    }
-  };
+/* ---------- SEARCH ---------- */
 
-  const capitalize = (string: string): string => {
-    return string
-      .toLowerCase()
-      .split(" ")
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
-  };
+export const searchData = <T extends NamedItem>(
+  data: T[],
+  searchedField: string[]
+): T[] => {
+  const orderedData = orderData(data);
 
-  const filteredData = (
-    data: (Revenue | Expense)[],
-    currentMonth: string,
-    currentYear: number | string,
-    currentStatus: string
-  ) => {
-    let result: (Revenue | Expense)[];
+  if (!searchedField?.length) return orderedData;
 
-    if (data && data.length > 0) {
-      if (
-          currentMonth === "Todos os meses" &&
-          currentYear === "Todos" &&
-          currentStatus === "Todos"
-      ) {
-        result = data;
-      } else if (
-          currentMonth !== "Todos os meses" &&
-          currentYear === "Todos" &&
-          currentStatus === "Todos"
-      ) {
-        result = data.filter((e) => e.month === currentMonth);
-      } else if (
-          currentMonth === "Todos os meses" &&
-          currentYear !== "Todos" &&
-          currentStatus === "Todos"
-      ) {
-        result = data.filter((e) => e.year === currentYear);
-      } else if (
-          currentMonth === "Todos os meses" &&
-          currentYear === "Todos" &&
-          currentStatus !== "Todos"
-      ) {
-        result = data.filter(
-          (e) =>
-            e.paid === currentStatus
-          );
-      } else if (
-          currentMonth !== "Todos os meses" &&
-          currentYear !== "Todos" &&
-          currentStatus === "Todos"
-      ) {
-        result = data.filter(
-          (e) =>
-            e.month === currentMonth &&
-            e.year === currentYear
-          );
-      } else if (
-          currentMonth === "Todos os meses" &&
-          currentYear !== "Todos" &&
-          currentStatus !== "Todos"
-      ) {
-        result = data.filter(
-          (e) =>
-            e.year === currentYear &&
-            e.paid === currentStatus
-          );
-      } else if (
-          currentMonth !== "Todos os meses" &&
-          currentYear === "Todos" &&
-          currentStatus !== "Todos"
-      ) {
-        result = data.filter(
-          (e) =>
-              e.month === currentMonth &&
-              e.paid === currentStatus
-        );
-      } else {
-        result = data.filter(
-          (e) =>
-              e.month === currentMonth &&
-              e.year === currentYear &&
-              e.paid === currentStatus
-          );
-      }
-    } else {
-      result = [];
-    }
+  const normalizedSearch = searchedField.map(normalize);
 
-    return result;
-  };
+  return orderedData.filter((item) => {
+    const name = normalize(item.name);
 
-  const getValidFloat = (value: number | null): number | null => {
-    const cleanedValue = value ? value.toString().replace(",", ".") : null;
-    const floatValue = cleanedValue ? parseFloat(cleanedValue) : null;
-  
-    if (floatValue && !isNaN(floatValue)) {
-      return floatValue;
-    } else {
-      return null;
-    }
-  };
+    return normalizedSearch.some((term) =>
+      name.includes(term)
+    );
+  });
+};
 
-  return {
-    searchData,
-    capitalize,
-    filteredData,
-    getValidFloat
-  };
+/* ---------- STRING ---------- */
+
+export const capitalize = (value: string): string => {
+  return value
+    .toLowerCase()
+    .split(" ")
+    .map(
+      (word) =>
+        word.charAt(0).toUpperCase() + word.slice(1)
+    )
+    .join(" ");
+};
+
+/* ---------- FILTERS ---------- */
+
+export interface DataFilterParams {
+  currentMonth: string;
+  currentYear: number | string;
+  currentStatus: string;
+}
+
+export const filteredData = <T extends PayableItem>(
+  data: T[],
+  {
+    currentMonth,
+    currentYear,
+    currentStatus,
+  }: DataFilterParams
+): T[] => {
+  if (!data?.length) return [];
+
+  return data.filter((item) => {
+    const matchMonth =
+      currentMonth === "Todos os meses" ||
+      item.month === currentMonth;
+
+    const matchYear =
+      currentYear === "Todos" ||
+      item.year === currentYear;
+
+    const matchStatus =
+      currentStatus === "Todos" ||
+      item.paid === currentStatus;
+
+    return matchMonth && matchYear && matchStatus;
+  });
 };

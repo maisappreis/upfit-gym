@@ -78,8 +78,8 @@
 </template>
 
 <script setup lang="ts">
-import { useDateUtils } from "@/utils/dateUtils";
-import { useDataUtils } from "@/utils/dataUtils";
+import { formatDate } from "@/utils/dateUtils";
+import { searchData } from "@/utils/dataUtils";
 import { useTooltipAnchors } from "@/composables/useTooltipAnchors";
 import { useTablePagination } from "@/composables/useTablePagination";
 import { type Customer } from "@/types/customer";
@@ -93,8 +93,6 @@ const props = defineProps<{
   searchedField: string[];
 }>();
 
-const { formatDate } = useDateUtils();
-const { searchData } = useDataUtils();
 const { hoveredId, refsMap, setRef } = useTooltipAnchors();
 const {
   itemsPerPage,

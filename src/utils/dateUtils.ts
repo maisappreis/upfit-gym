@@ -1,87 +1,66 @@
 import { type SumPerMonth } from "@/types/chart";
-import { months } from "@/utils/variables";
+import { months } from "@/utils/constants";
 
-export function useDateUtils() {
-  const getMonthIndex = (month: string) => {
-    const monthsFilter = [...months, "Todos os meses",]
-    return monthsFilter.indexOf(month);
-  };
+const MONTHS_FILTER = [...months, "Todos os meses"];
 
-  const sortDataByDate = (data: SumPerMonth[]): SumPerMonth[] => {
-    const monthOrder = {
-      Janeiro: 1,
-      Fevereiro: 2,
-      Março: 3,
-      Abril: 4,
-      Maio: 5,
-      Junho: 6,
-      Julho: 7,
-      Agosto: 8,
-      Setembro: 9,
-      Outubro: 10,
-      Novembro: 11,
-      Dezembro: 12,
-    } as { [key:string]: number };
-  
-    return data.sort((a, b) => {
-      if (a.year !== b.year) {
-        return a.year - b.year;
-      }
-      return monthOrder[a.month] - monthOrder[b.month];
-    });
-  };
+const MONTH_ORDER: Record<string, number> = Object.fromEntries(
+  months.map((m, i) => [m, i + 1])
+);
 
-  const getCurrentYearMonthDay = (startDate: string) => {
-    const [year, month, day] = startDate.split("-").map(Number);
-  
-    const data = {
-      year,
-      month: months[month - 1],
-      day: day.toString().padStart(2, "0"),
-    };
-  
-    return data;
-  };
+/* ---------- BASICS ---------- */
 
-  const getNextMonth = (currentMonth: string, currentYear: number) => {
-    const currentMonthIndex = months.indexOf(currentMonth);
-    const nextMonthIndex = (currentMonthIndex + 1) % 12;
-    let nextYear = currentYear;
-  
-    if (nextMonthIndex === 0) {
-      nextYear++;
-    }
-  
-    const response = {
-      month: months[nextMonthIndex],
-      year: nextYear,
-      monthNumber: nextMonthIndex + 1
-    };
-  
-    return response;
-  };
+export const getMonthIndex = (month: string) =>
+  MONTHS_FILTER.indexOf(month);
 
-  const formatDate = (date: string) => {
-    const [year, month, day] = date.split("-");
-    const formattedDateString = `${day}/${month}/${year}`;
-    return formattedDateString;
-  };
+/* ---------- SORT ---------- */
 
-  const getYearAndMonth = (dueDate: string) => {
-    const parsedDate = new Date(dueDate);
-    const year = parsedDate.getFullYear();
-    const monthNumber = parsedDate.getMonth();
-    const month = months[monthNumber];
+export const sortDataByDate = (
+  data: SumPerMonth[]
+): SumPerMonth[] => {
+  return [...data].sort((a, b) => {
+    if (a.year !== b.year) return a.year - b.year;
+    return MONTH_ORDER[a.month] - MONTH_ORDER[b.month];
+  });
+};
 
-    return { year, month };
-  };
+/* ---------- DATE PARSING ---------- */
+
+export const getCurrentYearMonthDay = (startDate: string) => {
+  const [year, month, day] = startDate
+    .split("-")
+    .map(Number);
 
   return {
-    getMonthIndex,
-    sortDataByDate,
-    getCurrentYearMonthDay,
-    getNextMonth,
-    formatDate,
-    getYearAndMonth
+    year,
+    month: months[month - 1],
+    day: String(day).padStart(2, "0"),
+  };
+};
+
+export const getNextMonth = (
+  currentMonth: string,
+  currentYear: number
+) => {
+  const idx = months.indexOf(currentMonth);
+  const nextIdx = (idx + 1) % 12;
+
+  return {
+    month: months[nextIdx],
+    year: currentYear + (nextIdx === 0 ? 1 : 0),
+    monthNumber: nextIdx + 1,
+  };
+};
+
+export const formatDate = (date: string) => {
+  const [year, month, day] = date.split("-");
+  return `${day}/${month}/${year}`;
+};
+
+export const getYearAndMonth = (dueDate: string) => {
+  const parsedDate = new Date(dueDate);
+
+  return {
+    year: parsedDate.getFullYear(),
+    month: months[parsedDate.getMonth()],
   };
 };
