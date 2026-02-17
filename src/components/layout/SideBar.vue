@@ -7,17 +7,18 @@
         v-for="item in menuItems"
         :key="item.page"
         class="option pad"
-        :class="{ selectedOption: isSelected(item.page) }"
-        @click="pageStore.openPage(item.page)"
       >
-        <font-awesome-icon
-          :icon="item.icon"
-          class="icon"
-          :class="{ selectedIcon: isSelected(item.page) }"
-        />
-        <span class="option-text">
-          {{ item.label }}
-        </span>
+        <RouterLink
+          :to="`/${item.page}`"
+          class="router-link">
+          <font-awesome-icon
+            :icon="item.icon"
+            class="icon"
+          />
+          <span class="option-text">
+            {{ item.label }}
+          </span>
+        </RouterLink>
       </li>
     </ul>
   </aside>
@@ -25,15 +26,12 @@
 
 <script setup lang="ts">
 import LogoType from "./LogoType.vue";
-import { usePageStore } from "@/stores/page";
-
-const pageStore = usePageStore();
 
 type PageName =
-  | "metrics"
-  | "customers"
-  | "revenue"
-  | "expenses";
+  | "metricas"
+  | "clientes"
+  | "receitas"
+  | "despesas";
 
 interface MenuItem {
   page: PageName;
@@ -43,29 +41,26 @@ interface MenuItem {
 
 const menuItems: MenuItem[] = [
   {
-    page: "metrics",
+    page: "metricas",
     label: "Métricas",
     icon: "fa-solid fa-chart-line",
   },
   {
-    page: "customers",
+    page: "clientes",
     label: "Clientes",
     icon: "fa-solid fa-users",
   },
   {
-    page: "revenue",
+    page: "receitas",
     label: "Receitas",
     icon: "fa-solid fa-hand-holding-dollar",
   },
   {
-    page: "expenses",
+    page: "despesas",
     label: "Despesas",
     icon: "fa-solid fa-money-bill-transfer",
   },
 ];
-
-const isSelected = (page: PageName) =>
-  pageStore.currentPage === page;
 </script>
 
 <style scoped>
@@ -105,11 +100,23 @@ ul {
   cursor: pointer;
   font-size: 1.1rem;
   color: white;
-  padding: 20px 30px;
   text-shadow: 2px 2px 4px #000000;
 
   text-align: left;
   margin: 25px 0;
+
+  height: 80px;
+  width: 100%;
+}
+
+.router-link {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: inherit;
 }
 
 .option:hover {
@@ -123,14 +130,14 @@ ul {
   display: inline;
 }
 
-.selectedOption {
+.router-link-exact-active {
   background-color: var(--gray-light-color);
   color: black;
   font-weight: bold;
   text-shadow: 2px 2px 4px #cfcfcf;
 }
 
-.selectedIcon {
+.router-link-exact-active .icon {
   color: var(--black-color);
 }
 
@@ -173,10 +180,6 @@ ul {
 
   .icon {
     font-size: 20px;
-  }
-
-  .selectedOption {
-    width: 100%;
   }
 }
 </style>

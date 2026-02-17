@@ -2,7 +2,7 @@
   <div class="app-area">
     <HeaderPage />
     <SideBar />
-    <ContentPage class="content" />
+    <RouterView />
     <FooterPage />
   </div>
 </template>
@@ -10,7 +10,6 @@
 <script setup lang="ts">
 import HeaderPage from "@/components/layout/HeaderPage.vue";
 import SideBar from "@/components/layout/SideBar.vue";
-import ContentPage from "@/components/layout/ContentPage.vue";
 import FooterPage from "@/components/layout/FooterPage.vue";
 </script>
 

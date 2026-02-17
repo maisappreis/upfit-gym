@@ -27,12 +27,11 @@
 
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import { RouterLink, RouterView } from "vue-router";
-import { usePageStore, PAGE_CONFIG } from "@/stores/page";
+import { RouterLink, RouterView, useRoute } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 
+const route = useRoute();
 const authStore = useAuthStore();
-const pageStore = usePageStore();
 
 const openDropdown = ref<boolean>(false);
 
@@ -40,9 +39,13 @@ const showDropdown = () => {
   openDropdown.value = !openDropdown.value;
 };
 
-const pageConfig = computed(
-  () => PAGE_CONFIG[pageStore.currentPage]
-);
+const pageConfig = computed(() => {
+  return route.meta as {
+    icon?: string;
+    title?: string;
+    subtitle?: string;
+  };
+});
 </script>
 
 <style scoped>

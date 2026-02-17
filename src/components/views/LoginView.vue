@@ -25,7 +25,6 @@
 import { computed, reactive, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
-import { usePageStore } from "@/stores/page";
 import { useAlertStore } from "@/stores/alert";
 import { useLoadingStore } from "@/stores/loading";
 
@@ -34,7 +33,6 @@ import logoUpfit from "@/assets/logo-upfit.png";
 
 const router = useRouter();
 const authStore = useAuthStore();
-const pageStore = usePageStore();
 const alertStore = useAlertStore();
 const loadingStore = useLoadingStore();
 
@@ -54,9 +52,7 @@ const loginUser = async () => {
     await authStore.login(form);
 
     alertStore.success("Login realizado com sucesso!");
-    pageStore.openPage("metrics");
-
-    router.push("/");
+    router.push("/metricas");
   } catch (err) {
     alertStore.error("Erro ao fazer login.", err);
   } finally {
