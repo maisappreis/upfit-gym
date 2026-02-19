@@ -21,12 +21,7 @@ import ProfitChart from "../charts/ProfitChart.vue";
   gap: 20px;
 
   height: calc(100vh - var(--header-height) - 40px);
-  margin:
-    calc(var(--header-height) + 20px)
-    20px
-    20px
-    calc(var(--sidebar-width) + 20px);
-  
+  margin: var(--content-margin);
   box-sizing: border-box;
 }
 
@@ -50,7 +45,7 @@ import ProfitChart from "../charts/ProfitChart.vue";
 
   .chart-item {
     padding: 10px;
-    min-height: 300px;
+    height: 300px;
   }
 }
 </style>

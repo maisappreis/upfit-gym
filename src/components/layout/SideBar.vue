@@ -85,9 +85,10 @@ const menuItems: MenuItem[] = [
   inset: 0 auto 0 0;
 
   width: var(--sidebar-width);
-  height: 100%;
+  height: 95%;
+  margin: 10px;
 
-  border-radius: 0 40px 0 0;
+  border-radius: 0 40px 0 40px;
   background: var(--primary-color);
   z-index: 10;
 
@@ -183,7 +184,7 @@ ul {
 
 /* ===== RESPONSIVE ===== */
 
-@media (max-width: 1300px) {
+@media (max-width: 1200px) {
 
   .logo-area {
     width: 60%;

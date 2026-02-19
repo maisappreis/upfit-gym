@@ -61,11 +61,9 @@ const pageConfig = computed(() => {
   align-items: center;
   justify-content: space-between;
 
-  padding: 0 5vw 0 calc(var(--sidebar-width) + 20px);
-
+  padding: 0 5vw 0 calc(var(--sidebar-width) + 30px);
   background: var(--gray-lighter);
   box-shadow: 0 8px 6px -6px var(--secondary-color);
-  border-radius: 15px;
   z-index: 10;
 }
 
@@ -142,7 +140,7 @@ const pageConfig = computed(() => {
   background: rgb(245, 245, 245);
 }
 
-@media (max-width: 1300px) {
+@media (max-width: 1200px) {
   .header-area {
     width: 85%;
     padding: 0 5vw 0 calc(var(--sidebar-width) + 20px);

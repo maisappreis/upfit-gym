@@ -112,7 +112,7 @@ tr:hover {
   cursor: pointer;
 }
 
-@media only screen and (max-width: 1300px) {
+@media only screen and (max-width: 1200px) {
   th,
   td {
     padding: 6px;

@@ -21,6 +21,11 @@
 
   --header-height: 80px;
   --sidebar-width: 200px;
+  --content-margin:
+    calc(var(--header-height) + 20px)
+    20px
+    20px
+    calc(var(--sidebar-width) + 30px);
 
   --input-height: 25px;
   --input-margin-left: 15px;
@@ -32,7 +37,7 @@
   --box-shadow: 2px 2px 20px rgb(148, 148, 148);
 }
 
-@media (max-width: 1300px) {
+@media (max-width: 1200px) {
   :root {
     --header-height: 50px;
     --sidebar-width: 100px;
@@ -49,6 +54,11 @@
   :root {
     --header-height: 40px;
     --sidebar-width: 80px;
+    --content-margin:
+      calc(var(--header-height) + 15px)
+      15px
+      15px
+      calc(var(--sidebar-width) + 25px);
 
     --button-font-weight: 200;
     --button-padding-lg: 5px 20px;
