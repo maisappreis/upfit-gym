@@ -8,8 +8,13 @@ type PayableItem = Revenue | Expense;
 
 /* ---------- HELPERS ---------- */
 
-const normalize = (value: string): string =>
+export const normalize = (value: string): string =>
   value.trim().toLowerCase();
+
+export const getCssVar = (name: string) =>
+  getComputedStyle(document.documentElement)
+    .getPropertyValue(name)
+    .trim();
 
 /* ---------- SORT ---------- */
 

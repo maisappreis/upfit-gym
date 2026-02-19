@@ -1,9 +1,9 @@
 <template>
   <div class="content-area">
-    <div class="flex-between mb-normal">
+    <div class="flex space-between mb-normal">
       <BaseButton size="lg" @click="modalCrud.openCreate">
         <font-awesome-icon icon="fa-solid fa-plus" class="icon-add" />
-        Novo Cliente
+        <span class="text-add">Novo Cliente</span>
       </BaseButton>
 
       <div style="display: flex; justify-content: flex-end">

@@ -50,7 +50,7 @@ const computedClasses = computed(() => [
 .btn {
   border: none;
   border-radius: 8px;
-  font-weight: 600;
+  font-weight: var(--button-font-weight);
   font-family: "Montserrat", sans-serif;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -69,13 +69,13 @@ const computedClasses = computed(() => [
 }
 
 .btn--lg {
-  padding: 14px 24px;
-  font-size: 16px;
+  padding: var(--button-padding-lg);
+  font-size: var(--button-font-size-lg);
 }
 
 /* Variants */
 .btn--primary {
-  background-color: green;
+  background-color: var(--primary-color);
   color: white;
 }
 

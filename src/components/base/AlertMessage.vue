@@ -46,11 +46,12 @@ onMounted(() => {
 <style scoped>
 .alert-area {
   position: absolute;
-  top: 10px;
-  right: 50px;
+  top: 20px;
+  right: 20px;
+
   height: 90px;
-  z-index: 99;
   width: 500px;
+  z-index: 99;
   border-radius: 8px;
 
   display: flex;
@@ -64,26 +65,28 @@ onMounted(() => {
 }
 
 .error {
-  background-color: rgb(243, 186, 186);
+  background-color: var(--red-lighter);
 }
 
 .marker {
-  width: 3%;
+  width: 4%;
   height: 100%;
   border-radius: 8px 0 0 8px;
 }
 
 .red {
-  background-color: red;
+  background-color: var(--error-color);
 }
 
 .green {
-  background-color: rgb(19, 163, 0);
+  background-color: var(--success-color);
 }
 
 .message {
+  display: flex;
   width: 97%;
   font-size: 18px;
+  padding: 0 20px;
 }
 
 .icon {
@@ -100,7 +103,7 @@ onMounted(() => {
   }
 
   .message {
-    width: 95%;
+    width: 90%;
     font-size: 14px;
   }
 

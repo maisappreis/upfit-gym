@@ -71,7 +71,7 @@ const getRowKey = (row: Record<string, any>, index: number) => {
 
 .table-overflow {
   overflow: auto;
-  max-height: 50vh;
+  max-height: 58vh;
 }
 
 .table-area {
@@ -85,8 +85,8 @@ thead {
 }
 
 th {
-  background-color: var(--gray-dark-color);
-  color: white;
+  background-color: var(--gray-medium);
+  color: black;
   text-align: center;
 }
 
@@ -95,7 +95,7 @@ td {
   padding: 10px;
   text-align: left;
   border-bottom: 1px solid #ddd;
-  text-align: center
+  text-align: center;
 }
 
 tr:nth-child(even) {
@@ -103,7 +103,7 @@ tr:nth-child(even) {
 }
 
 tr:hover {
-  background-color: var(--red-light-color);
+  background-color: var(--tertiary-color);
 }
 
 .table-icon {
@@ -112,9 +112,17 @@ tr:hover {
   cursor: pointer;
 }
 
+@media only screen and (max-width: 1300px) {
+  th,
+  td {
+    padding: 6px;
+    font-size: 15px;
+  }
+}
+
 @media only screen and (max-width: 1000px) {
   .table-overflow {
-    max-height: 280px;
+    max-height: 54vh;
   }
 
   th,

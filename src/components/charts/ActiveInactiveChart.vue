@@ -1,5 +1,5 @@
 <template>
-  <div class="chart-area">
+  <div>
     <PieChart
       v-if="chartData.datasets.length > 0"
       :options="chartOptions"
@@ -15,6 +15,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useChart } from "@/composables/useChart";
+import { getCssVar } from "@/utils/dataUtils";
 import { Pie as PieChart } from "vue-chartjs";
 import {
   Chart as ChartJS,
@@ -80,22 +81,12 @@ const chartData = computed<ChartData<"pie">>(() => {
       {
         label: "Clientes",
         data: [activeCustomers.value, inactiveCustomers.value],
-        backgroundColor: ["green", "red"]
+        backgroundColor: [
+          getCssVar("--primary-color"),
+          getCssVar("--red-darker"),
+        ]
       }
     ]
   };
 });
 </script>
-
-<style scoped>
-.chart-area {
-  height: 50%;
-  min-height: 230px;
-}
-
-@media only screen and (max-width: 1000px) {
-  .chart-area {
-    height: 250px;
-  }
-}
-</style>

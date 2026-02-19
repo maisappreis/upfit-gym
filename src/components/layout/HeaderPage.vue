@@ -8,13 +8,13 @@
       <p class="subtitle">{{ pageConfig.subtitle }}</p>
     </div>
 
-    <div v-if="authStore.isAuthenticated" id="login" @click="showDropdown">
+    <div v-if="authStore.isAuthenticated" class="login" @click="showDropdown">
       <span>Olá, <strong>Renan</strong></span>
       <font-awesome-icon icon="fa-solid fa-circle-user" style="margin-left: 10px; zoom: 1.3" />
     </div>
 
     <RouterLink v-else to="/login">
-      <font-awesome-icon icon="fa-solid fa-right-to-bracket" id="login-icon" />
+      <font-awesome-icon icon="fa-solid fa-right-to-bracket" class="login-icon" />
     </RouterLink>
 
     <div v-if="openDropdown" class="dropdown" @click="authStore.logout">
@@ -52,109 +52,104 @@ const pageConfig = computed(() => {
 .header-area {
   position: fixed;
   top: 0;
-  background-color: rgb(235, 235, 235);
-  box-shadow: 0 8px 6px -6px rgb(99, 99, 99);
-  height: 80px;
-  width: 100%;
-  z-index: 9;
+  left: 0;
+
+  width: 80%;
+  height: var(--header-height);
 
   display: flex;
+  align-items: center;
   justify-content: space-between;
+
+  padding: 0 5vw 0 calc(var(--sidebar-width) + 20px);
+
+  background: var(--gray-lighter);
+  box-shadow: 0 8px 6px -6px var(--secondary-color);
+  border-radius: 15px;
+  z-index: 10;
 }
 
+/* ===== TEXT AREA ===== */
+
 .text-box {
-  text-align: left;
-  margin-left: 240px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .header-title {
   display: flex;
-}
-
-.title {
-  margin: 15px 0 0 0;
+  align-items: center;
+  gap: 12px;
 }
 
 .icon {
-  margin: 15px 15px 10px 15px;
-  font-size: 25px;
+  font-size: 24px;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 600;
 }
 
 .subtitle {
-  margin: 0 5px 5px 15px;
-  padding-bottom: 5px;
+  margin: 8px 0 0 0;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--gray-darker);
 }
 
-#login {
-  margin: 25px 20px 0 0;
-  font-size: 20px;
+/* ===== LOGIN AREA ===== */
+
+.login {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  font-size: 1.05rem;
   color: black;
   cursor: pointer;
 }
 
-#login-icon {
-  margin: 20px 20px 0 0;
-  zoom: 1.5;
+.login-icon {
+  font-size: 1.5rem;
   color: black;
-  cursor: pointer;
 }
+
+/* ===== DROPDOWN ===== */
 
 .dropdown {
   position: absolute;
-  top: 70px;
-  right: 10px;
-  z-index: 10;
-  background-color: rgb(235, 235, 235);
-  padding: 20px 40px;
-  box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.3);
+  top: calc(var(--header-height) - 5px);
+  right: 12px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 12px 18px;
+
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 18%);
+
   cursor: pointer;
+  transition: background 0.2s ease;
 }
 
-@media only screen and (max-width: 1300px) {
-  .text-box {
-    text-align: left;
-    margin-left: 110px;
-  }
+.dropdown:hover {
+  background: rgb(245, 245, 245);
 }
 
-@media only screen and (max-width: 1000px) {
+@media (max-width: 1300px) {
   .header-area {
-    height: 40px;
-  }
-
-  .text-box {
-    margin-left: 75px;
-  }
-
-  .title {
-    margin: 6px 6px 10px 6px;
-    font-size: 20px;
+    width: 85%;
+    padding: 0 5vw 0 calc(var(--sidebar-width) + 20px);
   }
 
   .subtitle {
     display: none;
-  }
-
-  .icon {
-    margin: 10px 5px 0 10px;
-    font-size: 20px;
-  }
-
-  #login {
-    margin: 6px 20px 0 0;
-    font-size: 18px;
-    color: black;
-  }
-
-  #login-icon {
-    margin: 5px 20px 0 0;
-  }
-
-  .dropdown {
-    position: absolute;
-    top: 40px;
-    right: 15px;
-    padding: 10px 20px;
   }
 }
 </style>

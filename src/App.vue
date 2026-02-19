@@ -1,10 +1,7 @@
 <template>
   <LoadingScreen :visible="loadingStore.isLoading" />
   <AlertMessage v-if="alertStore.visible" />
-
-  <div class="app-area">
-    <RouterView />
-  </div>
+  <RouterView />
 </template>
 
 <script setup lang="ts">
@@ -37,23 +34,11 @@ onMounted(async () => {
 
 body {
   margin: 0;
-  background-color: var(--gray-light-color);
+  background-color: var(--gray-medium);
 }
 
 #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  width: 100vw;
-  height: 90vh;
-}
-
-.app-area {
-  display: flex;
-  flex-direction: column;
-}
-
-.loading {
-  padding: 30px 15px;
 }
 </style>

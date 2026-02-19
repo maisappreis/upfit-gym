@@ -2,7 +2,7 @@ import { createApp } from "vue";
 import { createPinia } from "pinia";
 import App from "./App.vue";
 import router from "./router/index";
-import "./assets/global.css";
+import "./assets/css/global.css";
 
 import { library } from "@/icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";

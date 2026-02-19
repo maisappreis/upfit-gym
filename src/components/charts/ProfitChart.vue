@@ -1,5 +1,5 @@
 <template>
-  <div class="chart-area">
+  <div>
     <Bar
       v-if="chartData.datasets.length > 0"
       :options="chartOptions"
@@ -15,6 +15,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useChart } from "@/composables/useChart";
+import { getCssVar } from "@/utils/dataUtils";
 import { Bar } from "vue-chartjs";
 import {
   Chart as ChartJS,
@@ -89,23 +90,10 @@ const chartData = computed<ChartData<"bar">>(() => {
     datasets: [
       {
         label: "Lucro",
-        backgroundColor: "green",
+        backgroundColor: getCssVar("--primary-color"),
         data: data
       }
     ]
   };
 });
 </script>
-
-<style scoped>
-.chart-area {
-  height: 50%;
-  min-height: 230px;
-}
-
-@media only screen and (max-width: 1000px) {
-  .chart-area {
-    height: 250px;
-  }
-}
-</style>

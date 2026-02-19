@@ -1,7 +1,7 @@
 <template>
-  <div class="filter-area">
+  <div class="flex">
     <select
-      class="form-select font min-width"
+      class="form-select ml-input"
       v-model="model"
       name="status"
     >
@@ -40,25 +40,3 @@ onMounted(() => {
   }
 });
 </script>
-
-<style scoped>
-.filter-area {
-  display: flex;
-  font-size: 20px;
-}
-
-.font {
-  font-size: 16px;
-  margin-left: 15px;
-}
-
-.min-width {
-  min-width: 140px;
-}
-
-@media only screen and (max-width: 1000px) {
-  .font {
-    font-size: 14px;
-  }
-}
-</style>

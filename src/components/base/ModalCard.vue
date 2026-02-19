@@ -9,8 +9,9 @@
         <header v-if="$slots.header" class="modal-header">
           <slot name="header" />
         </header>
+        <div class="divider"></div>
 
-        <section class="modal__body">
+        <section class="modal-body">
           <slot />
         </section>
 
@@ -64,7 +65,7 @@ onUnmounted(() => {
 .modal {
   background: white;
   border-radius: 12px;
-  min-width: 320px;
+  min-width: 250px;
   max-width: 600px;
   width: 90%;
   padding: 24px;
@@ -72,9 +73,16 @@ onUnmounted(() => {
 }
 
 .modal-header {
-  margin-bottom: 16px;
   font-weight: 600;
-  font-size: 18px;
+  font-size: 20px;
+  text-align: center;
+}
+
+.divider {
+  height: 3px;
+  width: 70px;
+  margin: 8px auto 10px auto;
+  background: var(--primary-color);
 }
 
 .modal-footer {
@@ -87,5 +95,19 @@ onUnmounted(() => {
 @keyframes fadeIn {
   from { opacity: 0; transform: scale(0.95); }
   to { opacity: 1; transform: scale(1); }
+}
+
+@media only screen and (max-width: 1000px) {
+  .overlay {overflow-y: scroll;}
+
+  .modal {
+    padding: 18px;
+    max-width: 400px;
+    width: 50%;
+  }
+
+  .modal-header {
+    font-size: 15px;
+  }
 }
 </style>

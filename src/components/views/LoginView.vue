@@ -2,15 +2,18 @@
   <div class="login-area">
     <div class="login-form">
       <img class="logo-area" :src="logoUpfit" alt="Logotype company" />
+
       <form class="form-area" @submit.prevent="loginUser">
         <div class="form-field">
           <label for="name">Username:</label>
           <input type="text" id="username" name="username" v-model="form.username" required />
         </div>
+
         <div class="form-field">
           <label for="password">Senha:</label>
           <input type="password" id="password" name="password" v-model="form.password" required />
         </div>
+
         <div class="button-area">
           <BaseButton type="submit" size="lg" :disabled="disable">
             Entrar
@@ -29,7 +32,7 @@ import { useAlertStore } from "@/stores/alert";
 import { useLoadingStore } from "@/stores/loading";
 
 import BaseButton from "@/components/base/BaseButton.vue";
-import logoUpfit from "@/assets/logo-upfit.png";
+import logoUpfit from "@/assets/images/logo-black.png";
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -80,14 +83,17 @@ onMounted(() => {
 }
 
 .logo-area {
-  margin: 20px;
+  margin: 20px auto;
   height: 80px;
 }
 
 .login-form {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+
   background-color: white;
   width: 35vw;
-  height: fit-content;
   border-radius: 10px;
   padding: 30px;
   box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.3);
@@ -121,8 +127,8 @@ input {
 
 @media only screen and (max-width: 1000px) {
   .logo-area {
-    margin: 0;
-    height: 30px;
+    margin: 10px auto;
+    height: 50px;
   }
 
   .login-form {

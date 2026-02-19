@@ -1,5 +1,5 @@
 <template>
-  <div class="chart-area">
+  <div>
     <LineChart
       v-if="chartData.datasets.length > 0"
       :options="chartOptions"
@@ -14,9 +14,10 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { Line as LineChart } from "vue-chartjs";
 import { useApiStore } from "@/stores/api";
+import { getCssVar } from "@/utils/dataUtils";
 import type { Customer } from "@/types/customer";
+import { Line as LineChart } from "vue-chartjs";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -121,8 +122,8 @@ const chartData = computed<ChartData<"line">>(() => {
     datasets: [
       {
         label: "Clientes",
-        backgroundColor: "blue",
-        borderColor: "rgba(110, 93, 207, 0.8)",
+        backgroundColor: getCssVar("--primary-color"),
+        borderColor: getCssVar("--primary-color"),
         pointRadius: 4,
         data: activeCustomersPerMonth.value.map((e) => e.sum),
       },
@@ -130,16 +131,3 @@ const chartData = computed<ChartData<"line">>(() => {
   };
 });
 </script>
-
-<style scoped>
-.chart-area {
-  height: 50%;
-  min-height: 230px;
-}
-
-@media only screen and (max-width: 1000px) {
-  .chart-area {
-    height: 250px;
-  }
-}
-</style>

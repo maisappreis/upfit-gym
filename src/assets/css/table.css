@@ -15,19 +15,19 @@
 }
 
 .active {
-  background-color: green;
+  background-color: var(--success-color);
 }
 
 .inactive {
-  background-color: red;
+  background-color: var(--error-color);
 }
 
 .sent {
-  background-color: orange;
+  background-color: var( --info-color);
 }
 
 .no-results {
-  color: red;
+  color: var(--error-color);
   font-weight: bold;
   font-size: 30px;
 }
@@ -49,11 +49,21 @@
   margin-right: 15px;
 }
 
+@media only screen and (max-width: 1300px) {
+  .table-icon {
+    font-size: 18px;
+    margin: 0 5px;
+  }
+
+  .status {
+    padding: 3px 5px;
+    font-size: 13px;
+  }
+}
 
 @media only screen and (max-width: 1000px) {
   .table-icon {
     font-size: 15px;
-    margin: 0 5px;
   }
 
   .align-right {
@@ -61,7 +71,7 @@
   }
 
   .status {
-    padding: 3px 5px;
+    font-size: 10px;
   }
 
   .tooltip-text {

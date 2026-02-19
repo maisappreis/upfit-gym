@@ -52,7 +52,7 @@ const positionStyle = computed<CSSProperties>(() => {
 
 <style scoped>
 .tooltip {
-  background: var(--gray-dark-color);
+  background: var(--primary-color);
   color: white;
   padding: 6px 12px;
   border-radius: 8px;

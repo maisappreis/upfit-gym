@@ -1,6 +1,6 @@
 <template>
   <input
-    class="search-area"
+    class="form-input ml-input search-area"
     type="text"
     :placeholder="placeholder"
     v-model="searchModel"
@@ -39,22 +39,12 @@ const searchModel = computed({
 
 <style scoped>
 .search-area {
-  margin-left: 20px;
-  padding: 12px;
   width: 25vw;
-
-  font-weight: bold;
-  font-size: 15px;
-  border-radius: 5px;
-  border: 2px solid #b4b4b4;
 }
 
 @media only screen and (max-width: 1000px) {
   .search-area {
-    margin-left: 5px;
-    padding: 2px;
-    font-weight: lighter;
-    font-size: 14px;
+    width: 20vw;
   }
 }
 </style>

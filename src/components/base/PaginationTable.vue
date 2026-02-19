@@ -145,7 +145,7 @@ const nextPage = () => {
 }
 
 .pagination-button {
-  background-color: var(--red-dark-color);
+  background-color: var(--secondary-color);
   color: white;
   border: none;
   padding: 8px 16px;
@@ -156,12 +156,12 @@ const nextPage = () => {
 
 .pagination-button:hover,
 .pagination-button.active {
-  background-color: var(--color-danger, red);
+  background-color: var(--primary-color);
   cursor: pointer;
 }
 
 .pagination-button.inactive {
-  background-color: rgb(173, 107, 107);
+  background-color: var(--secondary-color);
   cursor: default;
 }
 

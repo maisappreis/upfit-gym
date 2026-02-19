@@ -1,0 +1,56 @@
+:root {
+  /* ============= COLORS ============= */
+
+  --primary-color: rgb(48, 80, 56);
+  --secondary-color: rgb(108, 143, 117);
+  --tertiary-color: rgb(166, 192, 172);
+
+  --gray-darker: rgb(117, 117, 117);
+  --gray-medium: rgb(214, 214, 214);
+  --gray-lighter: rgb(238, 238, 238);
+
+  --red-darker: rgb(156, 4, 4);
+  --red-medium: red;
+  --red-lighter: rgb(243, 186, 186);
+
+  --success-color: green;
+  --info-color: orange;
+  --error-color: red;
+
+  /* ============= LAYOUT ============= */
+
+  --header-height: 80px;
+  --sidebar-width: 200px;
+
+  --input-height: 25px;
+  --input-margin-left: 15px;
+
+  --button-padding-lg: 14px 24px;
+  --button-font-size-lg: 16px;
+  --button-font-weight: 600;
+
+  --box-shadow: 2px 2px 20px rgb(148, 148, 148);
+}
+
+@media (max-width: 1300px) {
+  :root {
+    --header-height: 50px;
+    --sidebar-width: 100px;
+
+    --input-height: 16px;
+    --input-margin-left: 5px;
+
+    --button-padding-lg: 10px 20px;
+    --button-font-size-lg: 14px;
+  }
+}
+
+@media (max-width: 1000px) {
+  :root {
+    --header-height: 40px;
+    --sidebar-width: 80px;
+
+    --button-font-weight: 200;
+    --button-padding-lg: 5px 20px;
+  }
+}

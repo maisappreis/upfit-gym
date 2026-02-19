@@ -1,5 +1,5 @@
 <template>
-  <div class="chart-area">
+  <div>
     <LineChart
       v-if="chartData.datasets.length > 0"
       :options="chartOptions"
@@ -15,6 +15,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useChart } from "@/composables/useChart";
+import { getCssVar } from "@/utils/dataUtils";
 import { Line as LineChart } from "vue-chartjs";
 import {
   Chart as ChartJS,
@@ -95,32 +96,19 @@ const chartData = computed<ChartData<"line">>(() => {
     datasets: [
       {
         label: 'Receita',
-        backgroundColor: 'green',
-        borderColor: 'rgba(64, 163, 79, 0.8)',
+        backgroundColor: getCssVar("--primary-color"),
+        borderColor: getCssVar("--primary-color"),
         pointRadius: 4,
         data: revenueData
       },
       {
         label: 'Despesas',
-        backgroundColor: 'red',
+        backgroundColor: getCssVar("--red-darker"),
+        borderColor: getCssVar("--red-darker"),
         pointRadius: 4,
-        borderColor: 'rgba(168, 59, 68, 0.8)',
         data: expensesData
       }
     ]
   };
 });
 </script>
-
-<style scoped>
-.chart-area {
-  height: 50%;
-  min-height: 230px;
-}
-
-@media only screen and (max-width: 1000px) {
-  .chart-area {
-    height: 250px;
-  }
-}
-</style>

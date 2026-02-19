@@ -84,7 +84,7 @@ defineExpose({
 
 <style scoped>
 .invalid {
-  color: red;
+  color: var(--error-color);
   margin: 0;
   font-size: 13px;
   text-align: right;

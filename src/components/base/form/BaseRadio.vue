@@ -44,7 +44,7 @@ const uuid = UniqueID().getID();
 
 <style scoped>
 .form-radio {
-    margin: 10px;
+    margin: 7px;
     width: 20px;
 }
 </style>

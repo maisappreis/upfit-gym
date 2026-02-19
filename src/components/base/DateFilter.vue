@@ -1,7 +1,7 @@
 <template>
-  <div class="filter-area">
+  <div class="flex">
     <select
-      class="form-select font month"
+      class="form-select ml-input min-width-input"
       v-model="monthModel"
       name="month"
     >
@@ -15,7 +15,7 @@
     </select>
 
     <select
-      class="form-select font year"
+      class="form-select ml-input"
       v-model="yearModel"
       name="year"
     >
@@ -78,38 +78,3 @@ onMounted(() => {
   }
 });
 </script>
-
-<style scoped>
-.filter-area {
-  display: flex;
-  font-size: 20px;
-}
-
-.font {
-  font-size: 16px;
-  margin-left: 15px;
-}
-
-.month {
-  min-width: 100px;
-}
-
-.year {
-  max-width: 80px;
-}
-
-@media only screen and (max-width: 1000px) {
-  .font {
-    font-size: 14px;
-    margin-left: 5px;
-  }
-
-  .month {
-    min-width: 80px;
-  }
-
-  .year {
-    max-width: 80px;
-  }
-}
-</style>
