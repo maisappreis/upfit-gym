@@ -4,6 +4,7 @@
       label="Nome"
       v-model="form.name"
       type="text"
+      ref="firstInput"
     />
 
     <BaseSelect
@@ -56,7 +57,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { type CreateCustomerDTO } from "@/types/customer";
 
 import BaseInput from "@/components/base/form/BaseInput.vue";
@@ -72,6 +73,8 @@ const emit = defineEmits<{
   (e: "update:modelValue", value: CreateCustomerDTO): void;
 }>();
 
+const firstInput = ref<InstanceType<typeof BaseInput> | null>(null);
+
 const form = computed({
   get: () => props.modelValue,
   set: (value) => emit("update:modelValue", value),
@@ -84,6 +87,10 @@ const isValid = computed(() => {
     form.value.start !== "" &&
     form.value.value !== null
   );
+});
+
+onMounted(() => {
+  firstInput.value?.focus();
 });
 
 defineExpose({

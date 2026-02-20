@@ -17,6 +17,7 @@
       :aria-describedby="error ? `${String(uuid)}-error` : undefined"
       :aria-invalid="!!error"
       :class="{ error }"
+      ref="inputRef"
     >
       <slot />
     </select>
@@ -31,6 +32,7 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from "vue";
 import SetupFormComponent from "@/features/SetupFormComponent";
 import UniqueID from "@/features/UniqueID";
 import BaseErrorMessage from "@/components/base/BaseErrorMessage.vue";
@@ -45,6 +47,13 @@ const emit = defineEmits<{
   (e: 'update:modelValue', value: string | number | boolean | null): void
 }>();
 
+const inputRef = ref<HTMLInputElement | null>(null);
+const focus = () => inputRef.value?.focus();
+
 const { updateValue } = SetupFormComponent(props, { emit });
 const uuid = UniqueID().getID();
+
+defineExpose({
+  focus
+});
 </script>

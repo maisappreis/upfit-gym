@@ -2,7 +2,9 @@
   <form class="form-area" @submit.prevent>
     <BaseSelect
       label="Cliente"
-      v-model="form.customer">
+      v-model="form.customer"
+      ref="firstInput"
+    >
         <option
           v-for="(cust, index) in customersList"
           :key="index"
@@ -52,7 +54,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { type CreateRevenueDTO } from "@/types/revenue";
 import { type Customer } from "@/types/customer";
 
@@ -71,6 +73,8 @@ const emit = defineEmits<{
   (e: "update:modelValue", value: CreateRevenueDTO): void;
 }>();
 
+const firstInput = ref<InstanceType<typeof BaseInput> | null>(null);
+
 const form = computed({
   get: () => props.modelValue,
   set: (value) => emit("update:modelValue", value),
@@ -84,6 +88,10 @@ const isValid = computed(() => {
     form.value.value !== 0 &&
     form.value.payment_day !== 0
   );
+});
+
+onMounted(() => {
+  firstInput.value?.focus();
 });
 
 defineExpose({

@@ -4,6 +4,7 @@
       label="Nome"
       v-model="form.name"
       type="text"
+      ref="firstInput"
     />
 
     <BaseInput
@@ -40,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { type CreateExpenseDTO } from "@/types/expense";
 
 import BaseInput from "@/components/base/form/BaseInput.vue";
@@ -56,6 +57,8 @@ const props = defineProps<{
 const emit = defineEmits<{
   (e: "update:modalValue", value: CreateExpenseDTO): void;
 }>();
+
+const firstInput = ref<InstanceType<typeof BaseInput> | null>(null);
 
 const form = computed({
   get: () => props.modelValue,
@@ -75,6 +78,10 @@ const invalidInstallments = computed(() => {
     hasInstallments.value === true &&
     !Number.isInteger(Number(form.value.installments))
   );
+});
+
+onMounted(() => {
+  firstInput.value?.focus();
 });
 
 defineExpose({
