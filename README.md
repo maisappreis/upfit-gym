@@ -1,6 +1,7 @@
 # Upfit Gym — Web Application
 
-> Web application developed to manage a gym company's **customers, revenues and expenses**, focusing on a clean UI and scalable frontend architecture.
+- Web application developed to manage a gym company's **customers, revenues and expenses**, focusing on a clean UI and scalable frontend architecture.
+- More information can be found in the [documentation](https://github.com/maisappreis/upfit-gym/blob/main/documentation.md).
 
 🌐 **Live demo:**  
 https://maisappreis.github.io/upfit-gym/
@@ -29,7 +30,8 @@ It focuses on **state management, authentication flows and modular frontend stru
 
 ## 📸 Preview
 
-![App Preview](https://github.com/maisappreis/upfit-gym/assets/113925909/93fb4995-d68e-4aee-a6ba-abe8e9b105ab)
+![App View](https://github.com/user-attachments/assets/9398647b-8c66-4aea-b0ff-d8367d675f5d)
+
 
 ---
 
