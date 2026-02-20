@@ -10,8 +10,6 @@ export interface Expense {
   notes: string;
 };
 
-export interface Message {
-  name: string;
-  date: string;
-  view: string;
-};
+export type CreateExpenseDTO = Omit<Expense, "id">;
+
+export type UpdateExpenseDTO = Partial<CreateExpenseDTO>;

@@ -1,146 +1,164 @@
 <template>
   <div>
     <div v-if="paginatedData.length > 0">
-      <div class="table-overflow">
-        <table
-          class="table-area"
-          style="max-height: 50vh; overflow: auto">
-          <thead>
-            <tr>
-              <th>Ano</th>
-              <th>Mês</th>
-              <th>Nome</th>
-              <th>Vencimento</th>
-              <th>Parcelas</th>
-              <th>Valor</th>
-              <th>Status</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(expense, index) in paginatedData" :key="index">
-              <td>{{ expense.year }}</td>
-              <td>{{ expense.month }}</td>
-              <td>{{ expense.name }}</td>
-              <td>{{ formatDate(expense.date) }}</td>
-              <td>{{ expense.installments }}</td>
-              <td>
-                R$ {{ expense.value!.toFixed(2).toString().replace(/\./g, ',') }}
-              </td>
-              <td>
-                <span
-                  class="status paid"
-                  :class="{
-                    active: expense.paid === 'Pago',
-                    inactive: expense.paid === 'À pagar'
-                  }"
-                  @click="confirmPaidStatus(expense)"
-                >
-                  {{ expense.paid }}
-                </span>
-              </td>
-              <td>
-                <span class="align-right">
-                  <font-awesome-icon
-                    v-if="expense.notes"
-                    icon="fa-solid fa-circle-info"
-                    class="table-icon"
-                    @click="showNotes($event, expense)"
-                  />
-                  <font-awesome-icon
-                    icon="fa-solid fa-pen-to-square"
-                    class="table-icon"
-                    @click="emit('update-item', expense)"
-                  />
-                  <font-awesome-icon
-                    icon="fa-solid fa-trash-can"
-                    class="table-icon"
-                    @click="emit('delete-item', expense)"
-                  />
-                </span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <PaginationTable
-        :itemsPerPage="itemsPerPage"
-        :currentPage="currentPage"
-        :searchedField="searchedField"
-        :data="data"
-        @current-page="setCurrentPage"
-        @items-per-page="setItemsPerPage"
-      />
-      <TooltipModal v-if="showingTooltip" :mouseX="mouseX" :mouseY="mouseY">
-        <p class="tooltip-text">{{ tooltip }}</p>
-      </TooltipModal>
-    </div>
-    <div v-else class="not-found">Nenhum resultado foi encontrado.</div>
-    <ModalCard
-      v-if="showModal"
-      @execute-action="changePaidStatus"
-      @close-modal="closeModal">
-      <span class="message-area" style="font-size: 20px"
-        >Marcar como <strong>{{ statusMessage }}</strong
-        >?</span
+      <BaseTable
+        :data="paginatedData"
+        :columns="columns"
+        rowKey="id"
       >
+        <template #cell-date="{ row }">
+          {{ formatDate(row.date) }}
+        </template>
+
+        <template #cell-value="{ row }">
+          R$ {{ row.value!.toFixed(2).toString().replace(/\./g, ',') }}
+        </template>
+
+        <template #cell-paid="{ row }">
+          <span
+            class="status paid"
+            :class="{
+              active: row.paid === 'Pago',
+              inactive: row.paid === 'À pagar'
+            }"
+           @click="confirmPaidStatus(row)"
+          >
+            {{ row.paid }}
+          </span>
+        </template>
+
+        <template #cell-actions="{ row }">
+          <span class="align-right">
+            <span
+              v-if="row.notes"
+              :ref="el => setRef(row.id, el)"
+              @mouseenter="hoveredId = row.id"
+              @mouseleave="hoveredId = null"
+            >
+              <font-awesome-icon
+                icon="fa-solid fa-circle-info"
+                class="table-icon"
+              />
+            </span>
+
+            <TooltipModal
+              :anchor="refsMap[row.id]"
+              :visible="hoveredId === row.id"
+            >
+              {{ row.notes }}
+            </TooltipModal>
+
+            <font-awesome-icon
+              icon="fa-solid fa-pen-to-square"
+              class="table-icon"
+              @click="$emit('update-item', row)"
+            />
+
+            <font-awesome-icon
+              icon="fa-solid fa-trash-can"
+              class="table-icon"
+              @click="$emit('delete-item', row)"
+            />
+          </span>
+        </template>
+
+        <template #footer>
+          <PaginationTable
+            v-model:currentPage="currentPage"
+            v-model:itemsPerPage="itemsPerPage"
+            :totalItems="data.length"
+          />
+        </template>
+      </BaseTable>
+    </div>
+
+    <div v-else class="not-found">
+      Nenhum resultado foi encontrado.
+    </div>
+
+    <ModalCard v-model="modalCrud.isOpen.value">
+      <template #header>
+        <span>
+          Marcar como <strong>{{ statusMessage }}</strong>
+        </span>
+      </template>
+
+      <p class="message-area">
+        Gostaria de marcar essa conta como <strong>{{ statusMessage }}</strong>?
+      </p>
+
+      <template #footer>
+        <BaseButton
+          size="lg"
+          :loading="loadingStore.isLoading"
+          @click="changePaidStatus"
+        >
+          Confirmar
+        </BaseButton>
+        <BaseButton
+          size="lg"
+          variant="danger"
+          @click="closeModal"
+        >
+          Cancelar
+        </BaseButton>
+      </template>
     </ModalCard>
-    <div v-if="showModal" class="defocus"></div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from "vue";
+import { ref } from "vue";
 import { useApiStore } from "@/stores/api";
 import { useAlertStore } from "@/stores/alert";
 import { useLoadingStore } from "@/stores/loading";
-import { useDateUtils } from "@/utils/dateUtils";
-import { useDataUtils } from "@/utils/dataUtils";
+import { useCrudModal } from "@/composables/useCrudModal";
+import { formatDate, getNextMonth } from "@/utils/dateUtils";
+import { useTooltipAnchors } from "@/composables/useTooltipAnchors";
+import { useTablePagination } from "@/composables/useTablePagination";
 import { expenseService } from "@/services/expense.service";
 import { type Expense } from "@/types/expense";
 
-import PaginationTable from "@/components/common/PaginationTable.vue";
-import TooltipModal from "@/components/common/TooltipModal.vue";
-import ModalCard from "@/components/common/ModalCard.vue";
-import axios from "axios";
+import BaseTable, { type BaseTableColumn } from "@/components/base/BaseTable.vue";
+import PaginationTable from "@/components/base/PaginationTable.vue";
+import TooltipModal from "@/components/base/TooltipModal.vue";
+import BaseButton from "@/components/base/BaseButton.vue";
+import ModalCard from "@/components/base/ModalCard.vue";
 
 const apiStore = useApiStore();
 const alertStore = useAlertStore();
 const loadingStore = useLoadingStore();
-
-const { formatDate, getNextMonth } = useDateUtils();
-const { searchData } = useDataUtils();
-const emit = defineEmits(["update-item", "delete-item"]);
-
-const itemsPerPage = ref<number>(30);
-const currentPage = ref<number>(1);
-const showingTooltip = ref<boolean>(false);
-const tooltip = ref<string>("");
-const mouseX = ref<number>(0);
-const mouseY = ref<number>(0);
-const showModal = ref<boolean>(false);
-const statusMessage = ref<string>("");
-const selectedExpense = ref<Expense>();
 
 const props = defineProps<{
   data: Expense[];
   searchedField: string[];
 }>();
 
-const paginatedData = computed(() => {
-  const searchedData = searchData(props.data, props.searchedField);
-  const startIndex = (currentPage.value - 1) * itemsPerPage.value;
-  const endIndex = startIndex + Number(itemsPerPage.value);
+const emit = defineEmits(["update-item", "delete-item"]);
 
-  return searchedData.slice(startIndex, endIndex) as Expense[];
-});
+const modalCrud = useCrudModal<Expense>();
+const { hoveredId, refsMap, setRef } = useTooltipAnchors();
+const {
+  itemsPerPage,
+  currentPage,
+  paginatedData
+} = useTablePagination(
+  () => props.data,
+  () => props.searchedField
+);
 
-const showNotes = (event: MouseEvent, expense: Expense) => {
-  showingTooltip.value = !showingTooltip.value;
-  tooltip.value = expense.notes;
-  mouseX.value = event.clientX - 40;
-  mouseY.value = event.clientY + 15;
-};
+const statusMessage = ref<string>("");
+const selectedExpense = ref<Expense>();
+const columns: BaseTableColumn<Expense>[] = [
+  { key: "year", label: "Ano" },
+  { key: "month", label: "Mês" },
+  { key: "name", label: "Nome" },
+  { key: "date", label: "Vencimento" },
+  { key: "installments", label: "Parcelas" },
+  { key: "value", label: "Valor" },
+  { key: "paid", label: "Status" },
+  { key: "actions", label: "" },
+];
 
 const confirmPaidStatus = (expense: Expense) => {
   selectedExpense.value = expense;
@@ -154,20 +172,12 @@ const confirmPaidStatus = (expense: Expense) => {
       break;
   }
 
-  showModal.value = true;
+  modalCrud.openUpdate(selectedExpense.value);
 };
 
 const closeModal = () => {
-  showModal.value = false;
+  modalCrud.close();
   statusMessage.value = "";
-};
-
-const setItemsPerPage = (newItemsPerPage: number) => {
-  itemsPerPage.value = newItemsPerPage;
-};
-
-const setCurrentPage = (newCurrentPage: number) => {
-  currentPage.value = newCurrentPage;
 };
 
 const changePaidStatus = async () => {
@@ -224,10 +234,4 @@ const createExpenseForNextMonth = async (expense: Expense) => {
     console.error("Erro ao criar despesa.", error);
   }
 };
-
-watch(() => props.searchedField, () => {
-  if (props.searchedField.length > 0) {
-    currentPage.value = 1;
-  }
-});
 </script>

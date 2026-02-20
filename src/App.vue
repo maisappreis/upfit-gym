@@ -1,28 +1,23 @@
 <template>
-  <LoadingScreen />
-  <div class="app-area">
-    <component :is="layoutComponent" />
-  </div>
+  <LoadingScreen :visible="loadingStore.isLoading" />
+  <AlertMessage v-if="alertStore.visible" />
+  <RouterView />
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted } from "vue";
-import { useRoute } from "vue-router";
-import HomeView from "@/components/views/HomeView.vue";
-import LoginView from "@/components/views/LoginView.vue";
-import LoadingScreen from "@/components/common/LoadingScreen.vue";
-import { useAuthStore } from "@/stores/auth";
+import { onMounted } from "vue";
 import { useApiStore } from "@/stores/api";
+import { useAuthStore } from "@/stores/auth";
+import { useAlertStore } from "@/stores/alert";
 import { useLoadingStore } from "@/stores/loading";
 
-const route = useRoute();
-const authStore = useAuthStore();
-const apiStore = useApiStore();
-const loadingStore = useLoadingStore();
+import AlertMessage from "@/components/base//AlertMessage.vue";
+import LoadingScreen from "@/components/base/LoadingScreen.vue";
 
-const layoutComponent = computed(() => {
-  return route.path === "/login" ? LoginView : HomeView
-});
+const apiStore = useApiStore();
+const authStore = useAuthStore();
+const alertStore = useAlertStore();
+const loadingStore = useLoadingStore();
 
 onMounted(async () => {
   loadingStore.start();
@@ -39,23 +34,11 @@ onMounted(async () => {
 
 body {
   margin: 0;
-  background-color: var(--gray-light-color);
+  background-color: var(--gray-medium);
 }
 
 #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  width: 100vw;
-  height: 90vh;
-}
-
-.app-area {
-  display: flex;
-  flex-direction: column;
-}
-
-.loading {
-  padding: 30px 15px;
 }
 </style>

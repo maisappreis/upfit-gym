@@ -1,10 +1,10 @@
 <template>
-  <div class="chart-area">
+  <div>
     <LineChart
       v-if="chartData.datasets.length > 0"
-      :data="chartData"
       :options="chartOptions"
-      :style="myStyles"
+      :data="chartData"
+      :style="chartStyle"
     />
     <div v-else class="not-found">
       Sem dados para exibição do gráfico de Clientes Ativos
@@ -13,24 +13,42 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted } from "vue";
-import { Line as LineChart } from "vue-chartjs";
-import { Chart as ChartJS, CategoryScale, LinearScale,
-  PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
+import { computed } from "vue";
 import { useApiStore } from "@/stores/api";
-import { type Data, type Options } from "@/types/chart";
-import { type Customer } from "@/types/customer";
-import { type SumPerMonth } from "@/types/chart";
+import { getCssVar } from "@/utils/dataUtils";
+import type { Customer } from "@/types/customer";
+import { Line as LineChart } from "vue-chartjs";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  type ChartData,
+  type ChartOptions,
+} from "chart.js";
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const apiStore = useApiStore();
 
-const chartData = ref<Data>({
-  labels: [],
-  datasets: []
-});
-const chartOptions = ref<Options>({
+const chartStyle = {
+  height: "100%",
+  position: "relative",
+} as const;
+
+const chartOptions: ChartOptions<"line"> = {
   responsive: true,
   plugins: {
     legend: {
@@ -40,9 +58,9 @@ const chartOptions = ref<Options>({
         boxHeight: 15,
         boxWidth: 15,
         font: {
-          size: 20
-        }
-      }
+          size: 20,
+        },
+      },
     },
     tooltip: {
       enabled: true,
@@ -50,101 +68,66 @@ const chartOptions = ref<Options>({
       padding: 15,
       displayColors: false,
       titleFont: {
-        size: 18
+        size: 18,
       },
       bodyFont: {
-        size: 15
-      }
-    }
-  }
-});
-
-const myStyles = computed(() => {
-  return {
-    height: "100%",
-    position: "relative"
-  };
-});
-
-const calculateActiveCustomersPerMonth = (): SumPerMonth[] => {
-  const activeCustomersPerMonth = [] as SumPerMonth[];
-
-  apiStore.revenue.forEach((revenueRecord) => {
-    if (revenueRecord.paid === "Pago") {
-      const year = revenueRecord.year;
-      const month = revenueRecord.month;
-      const customerId = revenueRecord.customer;
-      const customer = apiStore.customers.find((c) => c.id === customerId) as Customer;
-
-      if (customer && customer.status === "Ativo") {
-        const existingEntryIndex = activeCustomersPerMonth.findIndex(
-          (entry) => entry.year === year && entry.month === month
-        );
-
-        if (existingEntryIndex === -1) {
-          activeCustomersPerMonth.push({
-            year,
-            month,
-            sum: 1
-          });
-        } else {
-          activeCustomersPerMonth[existingEntryIndex].sum++;
-        }
-      }
-    }
-  })
-
-  return activeCustomersPerMonth;
+        size: 15,
+      },
+    },
+  },
 };
 
-const drawChart = () => {
-  let activeCustomers = [] as SumPerMonth[];
-  if (
-    apiStore.revenue &&
-    apiStore.revenue.length > 0 &&
-    apiStore.customers &&
-    apiStore.customers.length > 0
-  ) {
-    activeCustomers = calculateActiveCustomersPerMonth();
-  }
+const customersMap = computed(() => {
+  return new Map<number, Customer>(
+    apiStore.customers.map((c) => [c.id, c])
+  );
+});
 
-  if (activeCustomers && activeCustomers.length > 0) {
-    let labels = activeCustomers.map((e) => e.month);
-    let data = activeCustomers.map((e) => e.sum);
+const activeCustomersPerMonth = computed(() => {
+  const monthMap = new Map<string, { month: string; sum: number }>();
 
-    chartData.value = {
-      labels: labels,
-      datasets: [
-        {
-          label: "Clientes",
-          backgroundColor: "blue",
-          borderColor: "rgba(110, 93, 207, 0.8)",
-          pointRadius: 4,
-          data: data
-        }
-      ]
+  apiStore.revenue.forEach((record) => {
+    if (record.paid !== "Pago") return;
+
+    const customer = customersMap.value.get(record.customer!);
+
+    if (!customer || customer.status !== "Ativo") return;
+
+    const key = `${record.year}-${record.month}`;
+    const current = monthMap.get(key);
+
+    if (!current) {
+      monthMap.set(key, {
+        month: record.month,
+        sum: 1,
+      });
+    } else {
+      current.sum += 1;
+    }
+  });
+
+  return Array.from(monthMap.values());
+});
+
+const chartData = computed<ChartData<"line">>(() => {
+  if (!activeCustomersPerMonth.value.length) {
+    return {
+      labels: [],
+      datasets: [],
     };
   }
-};
 
-watch(() => apiStore.revenue, () => {
-  drawChart();
-});
-
-onMounted(() => {
-  drawChart();
+  return {
+    labels: activeCustomersPerMonth.value.map((e) => e.month),
+    datasets: [
+      {
+        label: "Clientes",
+        backgroundColor: getCssVar("--primary-color"),
+        borderColor: getCssVar("--primary-color"),
+        pointRadius: 4,
+        data: activeCustomersPerMonth.value.map((e) => e.sum),
+      },
+    ],
+  };
 });
 </script>
-
-<style scoped>
-.chart-area {
-  height: 50%;
-  min-height: 230px;
-}
-
-@media only screen and (max-width: 1000px) {
-  .chart-area {
-    height: 250px;
-  }
-}
-</style>

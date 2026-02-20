@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils";
 import { describe, it, expect } from "vitest";
-import SearchFilter from "@/components/common/SearchFilter.vue";
+import SearchFilter from "@/components/base/SearchFilter.vue";
 
 describe("SearchFilter.vue", () => {
   it("emits apply-search event with correct values on input", async () => {

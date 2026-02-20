@@ -11,8 +11,15 @@ export interface CreateLoginDTO {
 }
 
 export const loginService = {
+
   async create(payload: Login): Promise<CreateLoginDTO> {
     const { data } = await authClient.post<CreateLoginDTO>('/accounts/token/', payload);
+    
+    return data;
+  },
+
+  async refresh(payload: string): Promise<CreateLoginDTO> {
+    const { data } = await authClient.post<CreateLoginDTO>('/api/token/refresh/', payload);
 
     return data;
   },

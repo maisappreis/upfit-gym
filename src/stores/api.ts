@@ -1,13 +1,13 @@
 import { defineStore } from "pinia"
 import { ref } from "vue"
 
-import { type Customer } from "@/types/customer";
-import { type Revenue } from "@/types/revenue";
-import { type Expense } from "@/types/expense";
-
 import { customerService } from '@/services/customer.service';
 import { revenueService } from '@/services/revenue.service';
 import { expenseService } from '@/services/expense.service';
+
+import { type Customer } from "@/types/customer";
+import { type Revenue } from "@/types/revenue";
+import { type Expense } from "@/types/expense";
 
 export const useApiStore = defineStore("api", () => {
 
@@ -18,6 +18,10 @@ export const useApiStore = defineStore("api", () => {
   const fetchCustomers = async () => {
     try {
       customers.value = await customerService.fetchAll();
+
+      customers.value = customers.value.sort((a, b) =>
+        a.name.localeCompare(b.name, "pt-BR", { sensitivity: "base" })
+      );
     } catch (error) {
       console.error('Erro ao requisitar clientes.', error);
     }

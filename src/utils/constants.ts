@@ -12,9 +12,8 @@ export const months: string[] = [
   "Outubro",
   "Novembro",
   "Dezembro",
-  "Todos os meses",
 ];
 
-export const years: any[] = [
-  2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035, 2036, 2037, 2038, "Todos"
+export const years: number[] = [
+  2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035, 2036, 2037, 2038
 ];

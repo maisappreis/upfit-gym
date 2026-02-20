@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils";
 import { describe, it, expect } from "vitest";
-import StatusFilter from "@/components/common/StatusFilter.vue";
+import StatusFilter from "@/components/base/StatusFilter.vue";
 
 describe("StatusFilter.vue", () => {
   it("renders the select element and its options", () => {

@@ -1,93 +1,74 @@
 <template>
-<div class="login-area">
-  <div class="login-form">
-    <img class="logo-area" :src="logoUpfit" alt="Logotype company" />
-    <form class="form-area" @submit.prevent="loginUser">
-      <div class="form-field">
-        <label for="name">Username:</label>
-        <input type="text" id="username" name="username" v-model="username" required />
-      </div>
-      <div class="form-field">
-        <label for="password">Senha:</label>
-        <input type="password" id="password" name="password" v-model="password" required />
-      </div>
-      <div class="button-area">
-        <BaseButton type="submit" size="lg" :disabled="disable">
-          Entrar
-        </BaseButton>
-      </div>
-    </form>
+  <div class="login-area">
+    <div class="login-form">
+      <img class="logo-area" :src="logoUpfit" alt="Logotype company" />
+
+      <form class="form-area" @submit.prevent="loginUser">
+        <div class="form-field">
+          <label for="name">Username:</label>
+          <input type="text" id="username" name="username" v-model="form.username" required />
+        </div>
+
+        <div class="form-field">
+          <label for="password">Senha:</label>
+          <input type="password" id="password" name="password" v-model="form.password" required />
+        </div>
+
+        <div class="button-area">
+          <BaseButton type="submit" size="lg" :disabled="disable">
+            Entrar
+          </BaseButton>
+        </div>
+      </form>
+    </div>
   </div>
-  <AlertMessage v-if="alertStore.visible" />
-</div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from "vue";
+import { computed, reactive, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import { useApiStore } from "@/stores/api";
 import { useAuthStore } from "@/stores/auth";
-import { usePageStore } from "@/stores/page";
 import { useAlertStore } from "@/stores/alert";
 import { useLoadingStore } from "@/stores/loading";
-import { loginService } from "@/services/login.service";
 
-import BaseButton from "@/components/common/BaseButton.vue";
-import AlertMessage from "@/components/common//AlertMessage.vue";
-import logoUpfit from "@/assets/logo-upfit.png";
-
-const username = ref("");
-const password = ref("");
+import BaseButton from "@/components/base/BaseButton.vue";
+import logoUpfit from "@/assets/images/logo-black.png";
 
 const router = useRouter();
-const apiStore = useApiStore();
 const authStore = useAuthStore();
-const pageStore = usePageStore();
 const alertStore = useAlertStore();
 const loadingStore = useLoadingStore();
 
-const disable = computed(() => {
-  return username.value == "" || password.value == "";
+const form = reactive({
+  username: "",
+  password: ""
 });
 
+const disable = computed(
+  () => !form.username || !form.password
+);
+
 const loginUser = async () => {
-  loadingStore.start();
   try {
-    const loginData = {
-      username: username.value,
-      password: password.value
-    };
+    loadingStore.start();
 
-    const response = await loginService.create(loginData);
-    const accessToken = response.access;
-    const refreshToken = response.refresh;
+    await authStore.login(form);
 
-    if (accessToken && refreshToken) {
-      authStore.setTokens(accessToken, refreshToken);
-      authStore.checkAuthentication();
-      await apiStore.fetchData();
-
-      alertStore.success("Login realizado com sucesso!");
-      pageStore.openPage('metrics');
-      
-      setTimeout(() => {
-        router.push("/");
-      }, 800);
-    }
-  } catch (error) {
-    alertStore.error("Erro ao fazer login.", error);
+    alertStore.success("Login realizado com sucesso!");
+    router.push("/metricas");
+  } catch (err) {
+    alertStore.error("Erro ao fazer login.", err);
   } finally {
     loadingStore.stop();
   }
-}
+};
 
-onMounted(async () => {
+onMounted(() => {
   authStore.checkAuthentication();
+
   if (authStore.isAuthenticated) {
     alertStore.success("Você já está logado! Redirecionando...");
-    setTimeout(() => {
-      router.push("/")
-    }, 2000);
+    router.push("/");
   }
 });
 </script>
@@ -102,14 +83,17 @@ onMounted(async () => {
 }
 
 .logo-area {
-  margin: 20px;
+  margin: 20px auto;
   height: 80px;
 }
 
 .login-form {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+
   background-color: white;
   width: 35vw;
-  height: fit-content;
   border-radius: 10px;
   padding: 30px;
   box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.3);
@@ -143,8 +127,8 @@ input {
 
 @media only screen and (max-width: 1000px) {
   .logo-area {
-    margin: 0;
-    height: 30px;
+    margin: 10px auto;
+    height: 50px;
   }
 
   .login-form {

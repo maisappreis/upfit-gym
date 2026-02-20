@@ -1,8 +1,14 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
+import { loginService } from "@/services/login.service";
+import { useApiStore } from "@/stores/api";
 import { setApiBaseURL } from "@/services/apiClient";
-import axios from "axios";
 import * as jwt_decode from "jwt-decode";
+
+interface LoginPayload {
+  username: string;
+  password: string;
+}
 
 export const useAuthStore = defineStore("auth", () => {
   const accessToken = ref<string>("");
@@ -11,6 +17,23 @@ export const useAuthStore = defineStore("auth", () => {
   const refreshInterval = ref<ReturnType<typeof setInterval>>();
 
   const isAuthenticated = ref<boolean>(false);
+
+  const login = async (payload: LoginPayload) => {
+    const apiStore = useApiStore();
+
+    const response = await loginService.create(payload);
+
+    if (!response.access || !response.refresh) {
+      throw new Error("Invalid login response");
+    }
+
+    setTokens(response.access, response.refresh);
+    checkAuthentication();
+
+    await apiStore.fetchData();
+
+    return true;
+  };
 
   const setTokens = (access: string, refresh: string) => {
     accessToken.value = access;
@@ -34,19 +57,17 @@ export const useAuthStore = defineStore("auth", () => {
     if (delay > 0) {
         refreshTimeout.value = setTimeout(refreshTokenFunc, delay);
     }
-  }
+  };
 
   const refreshTokenFunc = async () => {
     try {
-      const response = await axios.post("/api/token/refresh/", {
-        refresh: refreshToken.value
-      });
-      setTokens(response.data.access, refreshToken.value);
+      const response = await loginService.refresh(refreshToken.value);
+      setTokens(response.access, refreshToken.value);
     } catch (error) {
       console.error("Token refresh error:", error);
       logout();
     }
-  }
+  };
 
   const checkAuthentication = async () => {
     const token = localStorage.getItem("accessToken");
@@ -58,7 +79,7 @@ export const useAuthStore = defineStore("auth", () => {
       isAuthenticated.value = false;
       setApiBaseURL(`${import.meta.env.VITE_API_BASE}/upfit/test`);
     }
-  }
+  };
 
   const logout = () => {
     accessToken.value = "";
@@ -70,9 +91,10 @@ export const useAuthStore = defineStore("auth", () => {
 
     if (refreshInterval.value) clearInterval(refreshInterval.value);
     location.reload();
-  }
+  };
 
   return {
+    login,
     setTokens,
     checkAuthentication,
     isAuthenticated,

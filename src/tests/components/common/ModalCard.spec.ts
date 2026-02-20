@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils';
 import { describe, it, expect } from "vitest";
-import ModalCard from '@/components/common/ModalCard.vue';
-import DefaultButton from "@/components/common/DefaultButton.vue";
+import ModalCard from '@/components/base/ModalCard.vue';
+import DefaultButton from "@/components/base/DefaultButton.vue";
 
 describe('ModalCard.vue', () => {
   it('renders slot content correctly', () => {
