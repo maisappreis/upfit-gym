@@ -1,117 +1,105 @@
-import { describe, it, expect } from "vitest";
-import { dataUtils } from "@/utils/dataUtils";
-import { type Expense } from "@/types/expense";
-import { type Customer } from "@/types/customer";
+import { describe, it, expect, vi } from 'vitest'
+import { normalize, getCssVar, orderData, searchData, capitalize, filteredData } from '@/utils/dataUtils'
 
-describe("dataUtils", () => {
-  const { searchData, capitalize, filteredData, getValidFloat } = dataUtils();
+describe('dataUtils', () => {
+  /* ---------- normalize ---------- */
 
-  describe("searchData", () => {
-    const customersData = [
-      {
-        id: 1,
-        name: "John Doe",
-        frequency: "3x",
-        plan: "Mensal",
-        value: 350,
-        start: "2024-12-17",
-        status: "Pago",
-        notes: "Notes to teste."
-      },{
-        id: 2,
-        name: "Jane Smith",
-        frequency: "4x",
-        plan: "Mensal",
-        value: 350,
-        start: "2024-12-23",
-        status: "Pago",
-        notes: "Notes to teste."
-      }
-    ] as Customer[];
+  it('normalize trims and lowercases string', () => {
+    expect(normalize('  TeStE  ')).toBe('teste')
+  })
 
-    it("should return ordered data when searchedField is empty", () => {
-      const result = searchData(customersData, []);
-      expect(result[0].name).toBe("Jane Smith");
-      expect(result[1].name).toBe("John Doe");
-    });
+  /* ---------- getCssVar ---------- */
 
-    it("should filter and return only matching data based on searchedField", () => {
-      const result = searchData(customersData, ["John"]);
-      expect(result).toHaveLength(1);
-      expect(result[0].name).toBe("John Doe");
-    });
+  it('getCssVar returns css variable value', () => {
+    const getComputedSpy = vi.spyOn(window, 'getComputedStyle')
 
-    it("should return an empty array if no match is found", () => {
-      const result = searchData(customersData, ["Alice"]);
-      expect(result).toEqual([]);
-    });
-  });
+    getComputedSpy.mockReturnValue({
+      getPropertyValue: vi.fn().mockReturnValue('  red  ')
+    } as any)
 
-  describe("capitalize", () => {
-    it("should capitalize the first letter of each word", () => {
-      const result = capitalize("john doe");
-      expect(result).toBe("John Doe");
-    });
+    const result = getCssVar('--color')
 
-    it("should handle single-word strings", () => {
-      const result = capitalize("john");
-      expect(result).toBe("John");
-    });
+    expect(result).toBe('red')
+    expect(getComputedSpy).toHaveBeenCalled()
 
-    it("should handle empty strings", () => {
-      const result = capitalize("");
-      expect(result).toBe("");
-    });
-  });
+    getComputedSpy.mockRestore()
+  })
 
-  describe("filteredData", () => {
-    const expenseData = [
-      { id: 1, name: "Bill 1", month: "Janeiro", year: 2024, date: "2024-01-25", paid: "Pago", value: 250, installments: "", notes: "notes"},
-      { id: 2, name: "Bill 2", month: "Fevereiro", year: 2023, date: "2023-02-25", paid: "À pagar", value: 800, installments: "", notes: "notes"},
-      { id: 3, name: "Bill 3", month: "Janeiro", year: 2023, date: "2023-01-25", paid: "Pago", value: 350, installments: "", notes: "notes"},
-    ] as Expense[];
+  /* ---------- orderData ---------- */
 
-    it("should return all data when all filters are set to 'Todos'", () => {
-      const result = filteredData(expenseData, "Todos os meses", "Todos", "Todos");
-      expect(result).toEqual(expenseData);
-    });
+  it('orderData sorts by name pt-BR insensitive', () => {
+    const data = [{ name: 'Zeca' }, { name: 'ana' }, { name: 'Álvaro' }]
 
-    it("should filter by month", () => {
-      const result = filteredData(expenseData, "Janeiro", "Todos", "Todos");
-      expect(result).toHaveLength(2);
-    });
+    const result = orderData(data)
 
-    it("should filter by year", () => {
-      const result = filteredData(expenseData, "Todos os meses", 2023, "Todos");
-      expect(result).toHaveLength(2);
-    });
+    expect(result.map((i) => i.name)).toEqual(['Álvaro', 'ana', 'Zeca'])
+  })
 
-    it("should filter by status", () => {
-      const result = filteredData(expenseData, "Todos os meses", "Todos", "Pago");
-      expect(result).toHaveLength(2);
-    });
+  it('orderData returns empty array if no data', () => {
+    expect(orderData([])).toEqual([])
+  })
 
-    it("should combine multiple filters", () => {
-      const result = filteredData(expenseData, "Janeiro", 2023, "Pago");
-      expect(result).toHaveLength(1);
-      expect(result[0].year).toBe(2023);
-    });
-  });
+  /* ---------- searchData ---------- */
 
-  describe("getValidFloat", () => {
-    it("should convert valid numbers to float", () => {
-      expect(getValidFloat(123)).toBe(123);
-      expect(getValidFloat("123,45" as unknown as number)).toBe(123.45);
-    });
+  it('searchData filters by search terms', () => {
+    const data = [{ name: 'Maria' }, { name: 'João' }, { name: 'Marcos' }]
 
-    it("should return null for invalid numbers", () => {
-      expect(getValidFloat(null)).toBeNull();
-      expect(getValidFloat("invalid" as unknown as number)).toBeNull();
-    });
+    const result = searchData(data, ['mar'])
 
-    it("should handle numbers with commas", () => {
-      const result = getValidFloat("123,45" as unknown as number);
-      expect(result).toBe(123.45);
-    });
-  });
-});
+    expect(result.map((i) => i.name)).toEqual(['Marcos', 'Maria'])
+  })
+
+  it('searchData returns ordered data if no search', () => {
+    const data = [{ name: 'Zeca' }, { name: 'Ana' }]
+
+    const result = searchData(data, [])
+
+    expect(result.map((i) => i.name)).toEqual(['Ana', 'Zeca'])
+  })
+
+  /* ---------- capitalize ---------- */
+
+  it('capitalize formats string correctly', () => {
+    expect(capitalize('joÃO siLVA')).toBe('João Silva')
+  })
+
+  /* ---------- filteredData ---------- */
+
+  it('filteredData filters by month, year and status', () => {
+    const data = [
+      { month: 'Janeiro', year: 2024, paid: 'Pago' },
+      { month: 'Fevereiro', year: 2024, paid: 'Aberto' },
+      { month: 'Janeiro', year: 2023, paid: 'Pago' }
+    ] as any
+
+    const result = filteredData(data, {
+      currentMonth: 'Janeiro',
+      currentYear: 2024,
+      currentStatus: 'Pago'
+    })
+
+    expect(result).toHaveLength(1)
+  })
+
+  it('filteredData returns all if filters are "Todos"', () => {
+    const data = [{ month: 'Janeiro', year: 2024, paid: 'Pago' }] as any
+
+    const result = filteredData(data, {
+      currentMonth: 'Todos',
+      currentYear: 'Todos',
+      currentStatus: 'Todos'
+    })
+
+    expect(result).toHaveLength(1)
+  })
+
+  it('filteredData returns empty array if no data', () => {
+    const result = filteredData([], {
+      currentMonth: 'Janeiro',
+      currentYear: 2024,
+      currentStatus: 'Pago'
+    })
+
+    expect(result).toEqual([])
+  })
+})

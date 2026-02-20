@@ -25,8 +25,8 @@
 </template>
 
 <script setup lang="ts">
-import SetupFormComponent from "@/features/SetupFormComponent";
-import UniqueID from "@/features/UniqueID";
+import setupFormComponent from "@/utils/setupFormComponent";
+import uniqueID from "@/utils/uniqueID";
 
 const props = defineProps<{
   label?: string
@@ -38,6 +38,6 @@ const emit = defineEmits<{
   (e: 'update:modelValue', value: string | number | boolean | null): void
 }>();
 
-const { updateValue } = SetupFormComponent(props, { emit })
-const uuid = UniqueID().getID();
+const { updateValue } = setupFormComponent(props, { emit })
+const uuid = uniqueID().getID();
 </script>

@@ -1,98 +1,59 @@
-import { mount } from "@vue/test-utils";
-import { describe, it, expect, beforeEach } from "vitest";
-import { createPinia, setActivePinia } from "pinia";
-import SideBar from "@/components/layout/SideBar.vue";
-import { usePageStore } from "@/stores/page";
+import { describe, it, expect } from 'vitest'
+import { mount } from '@vue/test-utils'
+import { createRouter, createMemoryHistory } from 'vue-router'
+import SideBar from '@/components/layout/SideBar.vue'
 
-const mockFontAwesomeIcon = {
-  template: `<span><slot /></span>`
-};
+const router = createRouter({
+  history: createMemoryHistory(),
+  routes: [
+    { path: '/metricas', component: { template: '<div />' } },
+    { path: '/clientes', component: { template: '<div />' } },
+    { path: '/receitas', component: { template: '<div />' } },
+    { path: '/despesas', component: { template: '<div />' } }
+  ]
+})
 
-describe("SideBar.vue", () => {
-  let pageStore: ReturnType<typeof usePageStore>;
-
-  beforeEach(() => {
-    setActivePinia(createPinia());
-    pageStore = usePageStore();
-  });
-
-  it("renderiza o componente corretamente", () => {
-    const wrapper = mount(SideBar, {
+describe('SideBar', () => {
+  const factory = () =>
+    mount(SideBar, {
       global: {
-        components: {
-          "font-awesome-icon": mockFontAwesomeIcon
+        plugins: [router],
+        stubs: {
+          LogoType: true,
+          'font-awesome-icon': true
         }
       }
-    });
+    })
 
-    expect(wrapper.find(".sidebar-area").exists()).toBe(true);
-    expect(wrapper.findAll("li.option")).toHaveLength(4);
-  });
+  it('renders sidebar container', () => {
+    const wrapper = factory()
+    expect(wrapper.find('.sidebar-area').exists()).toBe(true)
+  })
 
-  it("marca a opção 'Métricas' como selecionada ao alterar o estado do store", async () => {
-    const wrapper = mount(SideBar, {
-      global: {
-        components: {
-          "font-awesome-icon": mockFontAwesomeIcon
-        }
-      }
-    });
+  it('renders all menu items', () => {
+    const wrapper = factory()
 
-    pageStore.currentPage = "metrics";
-    await wrapper.vm.$nextTick();
+    const items = wrapper.findAll('li.option')
+    expect(items).toHaveLength(4)
 
-    const metricsOption = wrapper.find("li.option.selectedOption");
-    expect(metricsOption.exists()).toBe(true);
-    expect(metricsOption.find(".option-text").text()).toBe("Métricas");
-  });
+    expect(wrapper.text()).toContain('Métricas')
+    expect(wrapper.text()).toContain('Clientes')
+    expect(wrapper.text()).toContain('Receitas')
+    expect(wrapper.text()).toContain('Despesas')
+  })
 
-  // it("aciona a ação do Pinia ao clicar em uma opção", async () => {
-  //   const wrapper = mount(SideBar, {
-  //     global: {
-  //       components: {
-  //         "font-awesome-icon": mockFontAwesomeIcon
-  //       }
-  //     }
-  //   });
+  it('renders correct router links', () => {
+    const wrapper = factory()
 
-  //   const customersOption = wrapper.findAll("li.option");
-  //   await customersOption[1].trigger("click");
-  //   // const customersOption = wrapper.findAll("li.option").at(1);
-  //   // await customersOption?.trigger("click");
+    const links = wrapper.findAllComponents({ name: 'RouterLink' })
+    const paths = links.map((link) => link.props('to'))
 
-  //   expect(pageStore.openPage).toHaveBeenCalledWith("customers");
-  // });
+    expect(paths).toEqual(['/metricas', '/clientes', '/receitas', '/despesas'])
+  })
 
-  // it("alterna corretamente o ícone selecionado ao alterar o estado do store", async () => {
-  //   const wrapper = mount(SideBar, {
-  //     global: {
-  //       components: {
-  //         "font-awesome-icon": mockFontAwesomeIcon
-  //       }
-  //     }
-  //   });
-
-  //   pageStore.currentPage = "expenses";
-  //   await wrapper.vm.$nextTick();
-
-  //   const selectedIcon = wrapper.find(".icon.selectedIcon");
-  //   expect(selectedIcon.exists()).toBe(true);
-  //   expect(selectedIcon.classes()).toContain("fa-money-bill-transfer");
-  // });
-
-  // it("renderiza corretamente o modo responsivo para telas menores", async () => {
-  //   const wrapper = mount(SideBar, {
-  //     global: {
-  //       plugins: [createTestingPinia()],
-  //     },
-  //   });
-
-  //   global.innerWidth = 900; // Simula o tamanho da tela
-  //   window.dispatchEvent(new Event("resize"));
-  //   await wrapper.vm.$nextTick();
-
-  //   const sidebar = wrapper.find(".sidebar-area");
-  //   expect(sidebar.element.style.minWidth).toBe("20px");
-  //   expect(sidebar.element.style.maxWidth).toBe("70px");
-  // });
-});
+  it('renders footer text', () => {
+    const wrapper = factory()
+    expect(wrapper.text()).toContain('Desenvolvido com')
+    expect(wrapper.text()).toContain('Maisa')
+  })
+})

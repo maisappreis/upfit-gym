@@ -1,97 +1,139 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
-import { setActivePinia, createPinia } from "pinia";
-// import { useAuthStore } from "@/stores/auth";
-// import axios from "axios";
-// import * as jwt_decode from "jwt-decode";
+import { describe, it, expect, beforeEach, vi } from 'vitest'
+import { setActivePinia, createPinia } from 'pinia'
 
-vi.mock("axios");
+vi.mock('@/services/login.service', () => ({
+  loginService: {
+    create: vi.fn(),
+    refresh: vi.fn()
+  }
+}))
 
-describe("Auth Store", () => {
-  // let authStore: ReturnType<typeof useAuthStore>; 
+vi.mock('@/stores/api', () => ({
+  useApiStore: () => ({
+    fetchData: vi.fn().mockResolvedValue(undefined)
+  })
+}))
 
+vi.mock('@/services/apiClient', () => ({
+  setApiBaseURL: vi.fn()
+}))
+
+vi.mock('jwt-decode', () => ({
+  jwtDecode: vi.fn()
+}))
+
+import { loginService } from '@/services/login.service'
+import { setApiBaseURL } from '@/services/apiClient'
+import { jwtDecode } from 'jwt-decode'
+import { useAuthStore } from '@/stores/auth'
+
+describe('useAuthStore', () => {
   beforeEach(() => {
-    setActivePinia(createPinia());
-    // authStore = useAuthStore();
+    setActivePinia(createPinia())
+    vi.clearAllMocks()
+    localStorage.clear()
+  })
 
-    localStorage.clear();
-  });
+  it('login sets tokens and authenticates', async () => {
+    vi.mocked(loginService.create).mockResolvedValue({
+      access: 'access123',
+      refresh: 'refresh123'
+    })
 
-  it("aaa", async () => {
-    expect(true).toBe(true);
-  });
+    vi.mocked(jwtDecode).mockReturnValue({
+      exp: Math.floor(Date.now() / 1000) + 3600
+    })
 
-  // it("should set tokens and update localStorage", () => {
-  //   const accessToken = "mockAccessToken";
-  //   const refreshToken = "mockRefreshToken";
+    const store = useAuthStore()
 
-  //   authStore.setTokens(accessToken, refreshToken);
+    const result = await store.login({
+      username: 'user',
+      password: 'pass'
+    })
 
-  //   expect(authStore.accessToken).toBe(accessToken);
-  //   expect(authStore.refreshToken).toBe(refreshToken);
-  //   expect(localStorage.getItem("accessToken")).toBe(accessToken);
-  //   expect(localStorage.getItem("refreshToken")).toBe(refreshToken);
-  // });
+    expect(result).toBe(true)
+    expect(localStorage.getItem('accessToken')).toBe('access123')
+    expect(localStorage.getItem('refreshToken')).toBe('refresh123')
+    expect(store.isAuthenticated).toBe(true)
+  })
 
-  // it("should decode access token and set expiration time", () => {
-  //   const accessToken = "mockAccessTokenWithExpiration";
-  //   const refreshToken = "mockRefreshToken";
+  it('throws if login response invalid', async () => {
+    vi.mocked(loginService.create).mockResolvedValue({
+      access: '',
+      refresh: ''
+    })
 
-  //   vi.spyOn(jwt_decode, "jwtDecode").mockReturnValue({ exp: Math.floor(Date.now() / 1000) + 3600 });
+    const store = useAuthStore()
 
-  //   authStore.setTokens(accessToken, refreshToken);
+    await expect(store.login({ username: 'a', password: 'b' })).rejects.toThrow(
+      'Invalid login response'
+    )
+  })
 
-  //   expect(authStore.tokenExpirationTime).toBeGreaterThan(Date.now());
-  // });
+  it('checkAuthentication sets authenticated true if token exists', async () => {
+    localStorage.setItem('accessToken', 'abc')
 
-  // it("should logout and clear tokens", () => {
-  //   authStore.setTokens("mockAccessToken", "mockRefreshToken");
-  //   authStore.logout();
+    const store = useAuthStore()
+    await store.checkAuthentication()
 
-  //   expect(authStore.accessToken).toBe("");
-  //   expect(authStore.refreshToken).toBe("");
-  //   expect(localStorage.getItem("accessToken")).toBeNull();
-  //   expect(localStorage.getItem("refreshToken")).toBeNull();
-  // });
+    expect(store.isAuthenticated).toBe(true)
+    expect(setApiBaseURL).toHaveBeenCalled()
+  })
 
-  // it("should check authentication based on localStorage", async () => {
-  //   localStorage.setItem("accessToken", "mockAccessToken");
-  //   await authStore.checkAuthentication();
+  it('checkAuthentication sets authenticated false if no token', async () => {
+    const store = useAuthStore()
+    await store.checkAuthentication()
 
-  //   expect(authStore.isAuthenticated).toBe(true);
+    expect(store.isAuthenticated).toBe(false)
+    expect(setApiBaseURL).toHaveBeenCalled()
+  })
 
-  //   localStorage.removeItem("accessToken");
-  //   await authStore.checkAuthentication();
+  it('logout clears tokens and reloads page', () => {
+    const originalLocation = window.location
 
-  //   expect(authStore.isAuthenticated).toBe(false);
-  // });
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: {
+        ...originalLocation,
+        reload: vi.fn()
+      }
+    })
 
-  // it("should refresh token successfully", async () => {
-  //   const mockAccessToken = "mockAccessToken";
-  //   const mockRefreshToken = "mockRefreshToken";
-  //   const newAccessToken = "newMockAccessToken";
+    const store = useAuthStore()
 
-  //   authStore.setTokens(mockAccessToken, mockRefreshToken);
+    localStorage.setItem('accessToken', 'abc')
+    localStorage.setItem('refreshToken', 'def')
 
-  //   axios.post.mockResolvedValueOnce({ data: { access: newAccessToken } });
+    store.logout()
 
-  //   await authStore.refreshTokenFunc();
+    expect(localStorage.getItem('accessToken')).toBeNull()
+    expect(localStorage.getItem('refreshToken')).toBeNull()
+    expect(window.location.reload).toHaveBeenCalled()
 
-  //   expect(authStore.accessToken).toBe(newAccessToken);
-  //   expect(authStore.refreshToken).toBe(mockRefreshToken);
-  // });
+    // restaura original
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: originalLocation
+    })
+  })
 
-  // it("should logout if refresh token fails", async () => {
-  //   const mockAccessToken = "mockAccessToken";
-  //   const mockRefreshToken = "mockRefreshToken";
+  it('refreshTokenFunc refreshes token successfully', async () => {
+    vi.mocked(loginService.refresh).mockResolvedValue({
+      access: 'newAccess',
+      refresh: 'newRefresh'
+    })
 
-  //   authStore.setTokens(mockAccessToken, mockRefreshToken);
+    vi.mocked(jwtDecode).mockReturnValue({
+      exp: Math.floor(Date.now() / 1000) + 3600
+    })
 
-  //   axios.post.mockRejectedValueOnce(new Error("Token refresh error"));
+    const store = useAuthStore()
 
-  //   const logoutSpy = vi.spyOn(authStore, "logout");
-    
-  //   await authStore.refreshTokenFunc();
+    localStorage.setItem('refreshToken', 'refresh123')
+    await store.setTokens('oldAccess', 'refresh123')
 
-  //   expect(logoutSpy).toHaveBeenCalled();
-  // });
-});
+    await loginService.refresh('refresh123')
+
+    expect(loginService.refresh).toHaveBeenCalled()
+  })
+})

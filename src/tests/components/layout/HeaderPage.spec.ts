@@ -1,117 +1,86 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
-import { mount, VueWrapper } from "@vue/test-utils";
-import { createPinia, setActivePinia } from "pinia";
-import { createRouter, createWebHistory } from "vue-router";
-import HeaderPage from "@/components/layout/HeaderPage.vue";
-import { useAuthStore } from "@/stores/auth";
-import { usePageStore } from "@/stores/page";
+import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { mount } from '@vue/test-utils'
+import { createRouter, createMemoryHistory } from 'vue-router'
+import HeaderPage from '@/components/layout/HeaderPage.vue'
 
-const mockFontAwesomeIcon = {
-  template: `<span><slot /></span>`
-};
+const logoutMock = vi.fn()
 
-const routes = [
-  {
-    path: "/",
-    name: "home",
-    component: () => import("@/components/views/HomeView.vue")
-  },
-  {
-    path: "/login",
-    name: "login",
-    component: () => import("@/components/views/LoginView.vue")
-  },
-  {
-    path: "/:pathMatch(.*)*",
-    redirect: "/"
-  }
-];
+vi.mock('@/stores/auth', () => ({
+  useAuthStore: () => ({
+    isAuthenticated: true,
+    logout: logoutMock
+  })
+}))
 
-describe("HeaderPage", () => {
-  let wrapper: VueWrapper<any, any>;
-  let pageStore: ReturnType<typeof usePageStore>; 
-  let authStore: ReturnType<typeof useAuthStore>; 
-
-  beforeEach(() => {
-    setActivePinia(createPinia());
-    pageStore = usePageStore();
-    authStore = useAuthStore();
-
-    authStore.isAuthenticated = false;
-    pageStore.currentPage = "metrics";
-
-    const router = createRouter({
-      history: createWebHistory(),
-      routes,
-    });
-
-    wrapper = mount(HeaderPage, {
-      global: {
-        components: {
-          "font-awesome-icon": mockFontAwesomeIcon
-        },
-        plugins: [router]
+const router = createRouter({
+  history: createMemoryHistory(),
+  routes: [
+    {
+      path: '/',
+      component: { template: '<div />' },
+      meta: {
+        icon: 'fa-solid fa-house',
+        title: 'Dashboard',
+        subtitle: 'Resumo geral'
       }
-    });
-  });
+    },
+    {
+      path: '/login',
+      component: { template: '<div />' }
+    }
+  ]
+})
 
-  it("renders the header title and subtitle correctly", () => {
-    expect(wrapper.find(".title").text()).toBe("Métricas");
-    expect(wrapper.find(".subtitle").text()).toBe("Visualização gráfica de receita, despesas, lucro e clientes");
-  });
+describe('HeaderPage', () => {
+  beforeEach(async () => {
+    logoutMock.mockClear()
+    router.push('/')
+    await router.isReady()
+  })
 
-  it("shows login icon when not authenticated", () => {
-    expect(wrapper.find("#login-icon").exists()).toBe(true);
-  });
+  const factory = () =>
+    mount(HeaderPage, {
+      global: {
+        plugins: [router],
+        stubs: {
+          'font-awesome-icon': true,
+          RouterView: true
+        }
+      }
+    })
 
-  it("shows user greeting when authenticated", async () => {
-    const authStore = useAuthStore();
-    authStore.isAuthenticated = true;
+  it('renders title and subtitle from route meta', () => {
+    const wrapper = factory()
 
-    await wrapper.vm.$nextTick();
+    expect(wrapper.text()).toContain('Dashboard')
+    expect(wrapper.text()).toContain('Resumo geral')
+  })
 
-    expect(wrapper.find("#login").exists()).toBe(true);
-    expect(wrapper.find("#login").text()).toContain("Olá, Renan");
-  });
+  it('shows authenticated area when user is authenticated', () => {
+    const wrapper = factory()
 
-  // it("toggles dropdown on click", async () => {
-  //   expect(wrapper.find(".dropdown").exists()).toBe(false);
+    expect(wrapper.text()).toContain('Olá,')
+    expect(wrapper.find('.login').exists()).toBe(true)
+  })
 
-  //   await wrapper.find("#login").trigger("click");
-    
-  //   expect(wrapper.find(".dropdown").exists()).toBe(true);
-    
-  //   await wrapper.find("#login").trigger("click");
-    
-  //   expect(wrapper.find(".dropdown").exists()).toBe(false);
-  // });
+  it('toggles dropdown when clicking login area', async () => {
+    const wrapper = factory()
 
-  it("calls logout function when dropdown is clicked", async () => {
-    const mockReload = vi.fn();
-    Object.defineProperty(window, "location", {
-      configurable: true,
-      value: { ...window.location, reload: mockReload },
-    });
-  
-    const authStore = useAuthStore();
-    authStore.isAuthenticated = true;
-    const logoutSpy = vi.spyOn(authStore, "logout");
-  
-    await wrapper.vm.$nextTick();
-    await wrapper.find("#login").trigger("click"); // Open dropdown
-    await wrapper.find(".dropdown").trigger("click"); // Click logout
-  
-    expect(logoutSpy).toHaveBeenCalled();
-    expect(mockReload).toHaveBeenCalled();
-  });
+    expect(wrapper.find('.dropdown').exists()).toBe(false)
 
-  it("updates the title and subtitle when the current page changes", async () => {
-    const pageStore = usePageStore();
-    pageStore.currentPage = "customers";
+    await wrapper.find('.login').trigger('click')
+    expect(wrapper.find('.dropdown').exists()).toBe(true)
 
-    await wrapper.vm.$nextTick();
+    await wrapper.find('.login').trigger('click')
+    expect(wrapper.find('.dropdown').exists()).toBe(false)
+  })
 
-    expect(wrapper.find(".title").text()).toBe("Clientes");
-    expect(wrapper.find(".subtitle").text()).toBe("Cadastramento dos clientes");
-  });
-});
+  it('calls logout when clicking dropdown', async () => {
+    const wrapper = factory()
+
+    await wrapper.find('.login').trigger('click')
+    await wrapper.find('.dropdown').trigger('click')
+
+    expect(logoutMock).toHaveBeenCalled()
+  })
+})

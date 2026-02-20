@@ -32,8 +32,8 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import SetupFormComponent from "@/features/SetupFormComponent";
-import UniqueID from "@/features/UniqueID";
+import setupFormComponent from "@/utils/setupFormComponent";
+import uniqueID from "@/utils/uniqueID";
 import BaseErrorMessage from "@/components/base/BaseErrorMessage.vue";
 
 const props = defineProps<{
@@ -49,8 +49,8 @@ const emit = defineEmits<{
 const inputRef = ref<HTMLInputElement | null>(null);
 const focus = () => inputRef.value?.focus();
 
-const { updateValue } = SetupFormComponent(props, { emit });
-const uuid = UniqueID().getID();
+const { updateValue } = setupFormComponent(props, { emit });
+const uuid = uniqueID().getID();
 
 defineExpose({
   focus

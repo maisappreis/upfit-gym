@@ -1,53 +1,70 @@
-// import { mount } from "@vue/test-utils";
-import { describe, it, expect, beforeEach, vi } from "vitest";
-import { createPinia, setActivePinia } from "pinia";
-// import App from "@/App.vue";
-// import HomeView from "@/components/views/HomeView.vue";
-// import LoginView from "@/components/views/LoginView.vue";
-// import LoadingScreen from "@/components/base/LoadingScreen.vue";
-// // import { useAuthStore } from "@/stores/auth";
-// import { useApiStore } from "@/stores/api";
-// import { useLoadingStore } from "@/stores/loading";
-// import { useRoute } from "vue-router";
+import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { render, screen } from "@testing-library/vue";
 
-vi.mock("vue-router", () => ({
-  useRoute: vi.fn(),
-  useRouter: vi.fn(() => ({
-    push: vi.fn(),
-  })),
-  RouterLink: {
-    template: '<a><slot /></a>',
-  },
-}));
+import App from "@/App.vue";
+import { useAuthStore } from "@/stores/auth";
+import { useApiStore } from "@/stores/api";
+import { useLoadingStore } from "@/stores/loading";
+import { useAlertStore } from "@/stores/alert";
 
-vi.mock("axios");
-
-vi.mock('@/stores/api', () => ({
-  useApiStore: () => ({
-    apiBase: "http://localhost:8000/api",
-    fetchCustomers: vi.fn().mockResolvedValue([{ id: 1, name: "Cliente 1" }]),
-    fetchRevenue: vi.fn().mockResolvedValue([{ id: 1, customer: 1, name: "Cliente 1", value: 560 }]),
-    fetchExpenses: vi.fn().mockResolvedValue([{ id: 1, name: "Despesa 1", value: 150 }]),
-    fetchData: vi.fn(),
-    setApiURL: vi.fn(),
-    configureAxios: vi.fn(),
-  }),
-}));
+vi.mock("@/stores/auth");
+vi.mock("@/stores/api");
+vi.mock("@/stores/loading");
+vi.mock("@/stores/alert");
 
 describe("App.vue", () => {
-  // let authStore: ReturnType<typeof useAuthStore>;
-  // let apiStore: ReturnType<typeof useApiStore>;
-  // let loadingStore: ReturnType<typeof useLoadingStore>;
-  // const route = useRoute();
+  let checkAuthMock: any;
+  let fetchDataMock: any;
+  let startMock: any;
+  let stopMock: any;
 
   beforeEach(() => {
-    setActivePinia(createPinia());
-    // authStore = useAuthStore();
-    // apiStore = useApiStore();
-    // loadingStore = useLoadingStore();
+    checkAuthMock = vi.fn();
+    fetchDataMock = vi.fn();
+    startMock = vi.fn();
+    stopMock = vi.fn();
+
+    (useAuthStore as any).mockReturnValue({
+      checkAuthentication: checkAuthMock,
+    });
+    (useApiStore as any).mockReturnValue({
+      fetchData: fetchDataMock,
+    });
+    (useLoadingStore as any).mockReturnValue({
+      start: startMock,
+      stop: stopMock,
+      isLoading: false,
+    });
+    (useAlertStore as any).mockReturnValue({
+      visible: false,
+    });
   });
 
-  it("aaa", async () => {
-    expect(true).toBe(true);
+  it("renders RouterView", async () => {
+    render(App, {
+      global: {
+        stubs: {
+          RouterView: {
+            template: '<div data-testid="router-view"></div>'
+          },
+          AlertMessage: true,
+          LoadingScreen: true
+        },
+      },
+    });
+
+    expect(screen.getByTestId("router-view")).toBeTruthy();
   });
+
+  it('renders RouterView', () => {
+    const { container } = render(App, {
+      global: {
+        stubs: {
+          RouterView: true
+        }
+      }
+    })
+
+    expect(container.querySelector('router-view-stub')).toBeTruthy()
+  })
 });

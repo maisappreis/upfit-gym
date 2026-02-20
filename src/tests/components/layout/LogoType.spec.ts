@@ -16,7 +16,7 @@ describe("LogoType", () => {
   it("displays the logo image", () => {
     const img = wrapper.find("img");
     expect(img.exists()).toBe(true);
-    expect(img.attributes("src")).toBe("/upfit-gym/src/assets/logo.png");
+    expect(img.attributes("src")).toBe("/upfit-gym/src/assets/images/logo-white.png");
     expect(img.attributes("alt")).toBe("Logo");
   });
 });

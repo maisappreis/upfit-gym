@@ -6,7 +6,7 @@ interface SetupFormProps {
 
 type EmitFn = (event: 'update:modelValue', value: ModelValue) => void
 
-export default function SetupFormComponent (
+export default function setupFormComponent (
   props: SetupFormProps,
   { emit }: { emit: EmitFn }
 ) {

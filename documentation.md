@@ -5,24 +5,24 @@
 Dashboard composed of 4 graphs:
 
 - Line graph displaying total monthly revenue versus expenses over the last 12 months.
-- Pie chart displaying total active clients versus inactive clients over the last 12 months.
-- Line graph displaying the number of active clients per month over the last 12 months.
+- Pie chart displaying total active customers versus inactive customers over the last 12 months.
+- Line graph displaying the number of active customers per month over the last 12 months.
 - Bar graph displaying monthly profit over the last 12 months.
 
-## Clients
+## Customers
 
-Registration of active and inactive clients.
+Registration of active and inactive customers.
 
 CRUD Rules:
-- When creating an active Client, a Revenue entry is created for that same client in that month.
-- Clients with a history of Revenue entries cannot be deleted, only deactivated.
+- When creating an active Customer, a Revenue entry is created for that same customer in that month.
+- Customers with a history of Revenue entries cannot be deleted, only deactivated.
 
 ## Revenue
 
 Registration of all cash inflows related to the business.
 
 CRUD Rules:
-- When a Revenue value is changed, if this value is different from the value registered in the Client, a message will ask about changing the registration and future revenue entries with this new value.
+- When a Revenue value is changed, if this value is different from the value registered in the Customer, a message will ask about changing the registration and future revenue entries with this new value.
 - When marking an Income as "Paid," a new income will be automatically created for the following month.
 
 ## Expenses

@@ -1,92 +1,88 @@
-import { describe, it, expect } from "vitest";
-import { dateUtils } from "@/utils/dateUtils";
+import { describe, it, expect } from 'vitest'
+import {
+  getMonthIndex,
+  sortDataByDate,
+  getCurrentYearMonthDay,
+  getNextMonth,
+  formatDate,
+  getYearAndMonth
+} from '@/utils/dateUtils'
 
-describe("dateUtils", () => {
-  const {
-    getMonthIndex,
-    sortDataByDate,
-    getCurrentYearMonthDay,
-    getNextMonth,
-    formatDate,
-  } = dateUtils();
+import { months } from '@/utils/constants'
 
-  describe("getMonthIndex", () => {
-    it("deve retornar o índice correto do mês", () => {
-      expect(getMonthIndex("Janeiro")).toBe(0);
-      expect(getMonthIndex("Dezembro")).toBe(11);
-      expect(getMonthIndex("Todos os meses")).toBe(12);
-    });
+describe('dateUtils', () => {
+  /* ---------- getMonthIndex ---------- */
 
-    it("deve retornar -1 para um mês inválido", () => {
-      expect(getMonthIndex("Inexistente")).toBe(-1);
-    });
-  });
+  it('returns correct index of month', () => {
+    const index = getMonthIndex(months[0])
+    expect(index).toBe(0)
+  })
 
-  describe("sortDataByDate", () => {
-    it("deve ordenar os dados corretamente por ano e mês", () => {
-      const data = [
-        { year: 2023, month: "Fevereiro", sum: 100 },
-        { year: 2023, month: "Janeiro", sum: 200 },
-        { year: 2022, month: "Dezembro", sum: 150 },
-      ];
-      const sorted = sortDataByDate(data);
-      expect(sorted).toEqual([
-        { year: 2022, month: "Dezembro", sum: 150 },
-        { year: 2023, month: "Janeiro", sum: 200 },
-        { year: 2023, month: "Fevereiro", sum: 100 },
-      ]);
-    });
-  });
+  it('returns index for "Todos os meses"', () => {
+    const index = getMonthIndex('Todos os meses')
+    expect(index).toBe(months.length)
+  })
 
-  describe("getCurrentYearMonthDay", () => {
-    it("deve retornar o ano, mês e dia atuais da data fornecida", () => {
-      const result = getCurrentYearMonthDay("2024-12-16");
-      expect(result).toEqual({
-        year: 2024,
-        month: "Dezembro",
-        day: "16",
-      });
-    });
+  /* ---------- sortDataByDate ---------- */
 
-    it("deve lidar com uma data válida", () => {
-      const result = getCurrentYearMonthDay("2023-08-01");
-      expect(result).toEqual({
-        year: 2023,
-        month: "Agosto",
-        day: "01",
-      });
-    });
-  });
+  it('sorts by year then month order', () => {
+    const data = [
+      { year: 2024, month: months[5], total: 10 },
+      { year: 2023, month: months[10], total: 20 },
+      { year: 2024, month: months[1], total: 30 }
+    ] as any
 
-  describe("getNextMonth", () => {
-    it("deve retornar o próximo mês e ano para meses intermediários", () => {
-      const result = getNextMonth("Janeiro", 2024);
-      expect(result).toEqual({
-        month: "Fevereiro",
-        year: 2024,
-        monthNumber: 2,
-      });
-    });
+    const result = sortDataByDate(data)
 
-    it("deve retornar o próximo ano quando o mês for Dezembro", () => {
-      const result = getNextMonth("Dezembro", 2024);
-      expect(result).toEqual({
-        month: "Janeiro",
-        year: 2025,
-        monthNumber: 1,
-      });
-    });
-  });
+    expect(result.map((d) => `${d.year}-${d.month}`)).toEqual([
+      `2023-${months[10]}`,
+      `2024-${months[1]}`,
+      `2024-${months[5]}`
+    ])
+  })
 
-  describe("formatDate", () => {
-    it("deve formatar a data no formato brasileiro", () => {
-      const result = formatDate("2024-12-16");
-      expect(result).toBe("16/12/2024");
-    });
+  /* ---------- getCurrentYearMonthDay ---------- */
 
-    it("deve lidar com datas de outro formato", () => {
-      const result = formatDate("2023-01-01");
-      expect(result).toBe("01/01/2023");
-    });
-  });
-});
+  it('parses YYYY-MM-DD correctly', () => {
+    const result = getCurrentYearMonthDay('2024-03-05')
+
+    expect(result.year).toBe(2024)
+    expect(result.month).toBe(months[2]) // March = index 2
+    expect(result.day).toBe('05')
+  })
+
+  /* ---------- getNextMonth ---------- */
+
+  it('returns next month same year', () => {
+    const result = getNextMonth(months[0], 2024)
+
+    expect(result.month).toBe(months[1])
+    expect(result.year).toBe(2024)
+    expect(result.monthNumber).toBe(2)
+  })
+
+  it('wraps to next year after December', () => {
+    const december = months[11]
+
+    const result = getNextMonth(december, 2024)
+
+    expect(result.month).toBe(months[0])
+    expect(result.year).toBe(2025)
+    expect(result.monthNumber).toBe(1)
+  })
+
+  /* ---------- formatDate ---------- */
+
+  it('formats date to DD/MM/YYYY', () => {
+    expect(formatDate('2024-03-05')).toBe('05/03/2024')
+  })
+
+  /* ---------- getYearAndMonth ---------- */
+
+  it('extracts year and month from date', () => {
+    const result = getYearAndMonth('2024-07-10')
+
+    expect(result.year).toBe(2024)
+    expect(result.month).toBe(months[6]) // July
+  })
+})

@@ -23,8 +23,8 @@
 </template>
 
 <script setup lang="ts">
-import UniqueID from "@/features/UniqueID";
-import SetupFormComponent from "@/features/SetupFormComponent";
+import uniqueID from "@/utils/uniqueID";
+import setupFormComponent from "@/utils/setupFormComponent";
 import BaseErrorMessage from "@/components/base/BaseErrorMessage.vue";
 
 const props = defineProps<{
@@ -38,8 +38,8 @@ const emit = defineEmits<{
   (e: 'update:modelValue', value: string | number | boolean | null): void
 }>();
 
-const { updateValue } = SetupFormComponent(props, { emit });
-const uuid = UniqueID().getID();
+const { updateValue } = setupFormComponent(props, { emit });
+const uuid = uniqueID().getID();
 </script>
 
 <style scoped>
