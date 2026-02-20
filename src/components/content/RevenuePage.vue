@@ -93,7 +93,11 @@
           >
             Salvar
           </BaseButton>
-          <BaseButton size="lg" variant="danger" @click="modalCrud.close">
+          <BaseButton
+            size="lg"
+            variant="danger"
+            @click="closeModal"
+          >
             Cancelar
           </BaseButton>
       </template>

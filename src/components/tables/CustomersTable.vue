@@ -79,7 +79,6 @@
 
 <script setup lang="ts">
 import { formatDate } from "@/utils/dateUtils";
-import { searchData } from "@/utils/dataUtils";
 import { useTooltipAnchors } from "@/composables/useTooltipAnchors";
 import { useTablePagination } from "@/composables/useTablePagination";
 import { type Customer } from "@/types/customer";
@@ -101,7 +100,6 @@ const {
 } = useTablePagination(
   () => props.data,
   () => props.searchedField,
-  searchData
 );
 
 const columns: BaseTableColumn<Customer>[] = [

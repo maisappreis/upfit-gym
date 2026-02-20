@@ -1,15 +1,17 @@
 import { ref, computed, watch } from "vue";
+import { searchData } from "@/utils/dataUtils";
 
-export function useTablePagination<T>(
+type NamedItem = { name: string };
+
+export function useTablePagination<T extends NamedItem>(
   data: () => T[],
   searchedField: () => string[],
-  searchFn: (data: T[], search: string[]) => T[]
 ) {
   const itemsPerPage = ref(30);
   const currentPage = ref(1);
 
   const paginatedData = computed(() => {
-    const searched = searchFn(data(), searchedField());
+    const searched = searchData(data(), searchedField());
 
     const start = (currentPage.value - 1) * itemsPerPage.value;
     const end = start + itemsPerPage.value;
@@ -17,7 +19,7 @@ export function useTablePagination<T>(
     return searched.slice(start, end);
   });
 
-  watch(searchedField, () => {
+  watch([data, searchedField, itemsPerPage], () => {
     currentPage.value = 1;
   });
 

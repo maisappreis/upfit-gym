@@ -83,7 +83,7 @@
         </span>
       </template>
 
-      <p class="message-area" style="font-size: 20px">
+      <p class="message-area">
         Gostaria de marcar essa conta como <strong>{{ statusMessage }}</strong>?
       </p>
 
@@ -96,7 +96,10 @@
           Confirmar
         </BaseButton>
         <BaseButton
-          size="lg" variant="danger" @click="closeModal">
+          size="lg"
+          variant="danger"
+          @click="closeModal"
+        >
           Cancelar
         </BaseButton>
       </template>
@@ -111,7 +114,6 @@ import { useAlertStore } from "@/stores/alert";
 import { useLoadingStore } from "@/stores/loading";
 import { useCrudModal } from "@/composables/useCrudModal";
 import { formatDate, getNextMonth } from "@/utils/dateUtils";
-import { searchData } from "@/utils/dataUtils";
 import { useTooltipAnchors } from "@/composables/useTooltipAnchors";
 import { useTablePagination } from "@/composables/useTablePagination";
 import { expenseService } from "@/services/expense.service";
@@ -142,8 +144,7 @@ const {
   paginatedData
 } = useTablePagination(
   () => props.data,
-  () => props.searchedField,
-  searchData
+  () => props.searchedField
 );
 
 const statusMessage = ref<string>("");

@@ -80,7 +80,7 @@
           <BaseButton
             size="lg"
             variant="danger"
-            @click="modalCrud.close"
+            @click="closeModal"
           >
             Cancelar
           </BaseButton>

@@ -68,7 +68,7 @@ export interface DataFilterParams {
   currentMonth: string;
   currentYear: number | string;
   currentStatus: string;
-}
+};
 
 export const filteredData = <T extends PayableItem>(
   data: T[],
@@ -82,7 +82,7 @@ export const filteredData = <T extends PayableItem>(
 
   return data.filter((item) => {
     const matchMonth =
-      currentMonth === "Todos os meses" ||
+      currentMonth === "Todos" ||
       item.month === currentMonth;
 
     const matchYear =

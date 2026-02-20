@@ -84,7 +84,7 @@
         </span>
       </template>
 
-      <p class="message-area" style="font-size: 20px">
+      <p class="message-area">
         Gostaria de marcar essa receita como <strong>{{ statusMessage }}</strong>?
       </p>
 
@@ -97,7 +97,10 @@
           Confirmar
         </BaseButton>
         <BaseButton
-          size="lg" variant="danger" @click="closeModal">
+          size="lg"
+          variant="danger"
+          @click="closeModal"
+        >
           Cancelar
         </BaseButton>
       </template>
@@ -110,7 +113,6 @@ import { ref } from "vue";
 import { useApiStore } from "@/stores/api";
 import { useLoadingStore } from "@/stores/loading";
 import { formatDate, getNextMonth } from "@/utils/dateUtils";
-import { searchData } from "@/utils/dataUtils";
 import { useCrudModal } from "@/composables/useCrudModal";
 import { useTooltipAnchors } from "@/composables/useTooltipAnchors";
 import { useTablePagination } from "@/composables/useTablePagination";
@@ -141,8 +143,7 @@ const {
   paginatedData
 } = useTablePagination(
   () => props.data,
-  () => props.searchedField,
-  searchData
+  () => props.searchedField
 );
 
 const responseMessage = ref<string>("");
@@ -185,6 +186,7 @@ const closeModal = () => {
 
 const changePaidStatus = async () => {
   loadingStore.start();
+
   try {
     let updatedPaidStatus = {} as { paid: "Pago" | "À pagar" | "Link enviado"};
 
@@ -236,6 +238,7 @@ const createRevenueForNextMonth = async (revenue: Revenue) => {
     };
 
     await revenueService.create(newRevenue);
+    await apiStore.fetchRevenue();
   } catch (error) {
     console.error("Erro ao criar receita.", error);
   }
