@@ -26,6 +26,8 @@
     20px
     20px
     calc(var(--sidebar-width) + 30px);
+  --text-size: 18px;
+  --margin-botton: 15px;
 
   --input-height: 25px;
   --input-margin-left: 15px;
@@ -59,6 +61,8 @@
       15px
       15px
       calc(var(--sidebar-width) + 25px);
+    --text-size: 14px;
+    --margin-botton: 10px;
 
     --button-font-weight: 200;
     --button-padding-lg: 5px 20px;

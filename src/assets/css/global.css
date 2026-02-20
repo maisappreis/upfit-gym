@@ -22,17 +22,17 @@
 }
 
 .mb-normal {
-  margin-bottom: 15px;
+  margin-bottom: var(--margin-botton);
 }
 
 .not-found {
-  font-size: 20px;
-  background-color: var(--red-lighter);
+  font-size: var(--text-size);
   font-weight: bold;
-  margin: 0 20px;
-  padding: 30px;
+  text-align: center;
+
+  background-color: var(--red-lighter);
+  padding: 30px 20px;
   border-radius: 10px;
-  height: fit-content;
 }
 
 .highlight {
@@ -43,6 +43,7 @@
 .message-area {
   line-height: 1.5;
   text-align: center;
+  font-size: var( --text-size);
 }
 
 .divider {
@@ -57,21 +58,6 @@
 }
 
 @media only screen and (max-width: 1000px) {
-  .not-found {
-    font-size: 16px;
-    margin: 10px 20px;
-    padding: 20px;
-  }
-
-  .message-area {
-    margin: 0;
-    font-size: 14px;
-  }
-
-  .mb-normal {
-    margin-bottom: 10px;
-  }
-
   .icon-add {
     margin-right: 0;
   }
