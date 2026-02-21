@@ -1,11 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { apiClient } from "@/services/apiClient";
-import { type Expense } from "@/types/expense";
-import {
-  expenseService,
-  type CreateExpenseDTO,
-  type UpdateExpenseDTO
-} from "@/services/expense.service";
+import { type Expense, type CreateExpenseDTO, type UpdateExpenseDTO } from "@/types/expense";
+import { expenseService } from "@/services/expense.service";
 
 vi.mock("@/services/apiClient", () => ({
   apiClient: {

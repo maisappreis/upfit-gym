@@ -1,11 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { apiClient } from "@/services/apiClient";
-import { type Revenue } from "@/types/revenue";
-import {
-  revenueService,
-  type CreateRevenueDTO,
-  type UpdateRevenueDTO
-} from "@/services/revenue.service";
+import { type Revenue, type CreateRevenueDTO, type UpdateRevenueDTO } from "@/types/revenue";
+import { revenueService } from "@/services/revenue.service";
 
 vi.mock("@/services/apiClient", () => ({
   apiClient: {
@@ -91,7 +87,7 @@ describe("revenueService", () => {
       notes: "",
       paid: "À pagar",
       payment_day: 10,
-      plan: "5x",
+      plan: "Mensal",
       start: "2026-02-12",
       status: "Ativo",
       value: 560,

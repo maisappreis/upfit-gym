@@ -6,7 +6,7 @@ export interface Revenue {
   notes: string;
   paid: "Pago" | "À pagar" | "Link enviado";
   payment_day: number | null;
-  plan: "Mensal" |" Trimestral" | "Semestral" | "Anual",
+  plan: "Mensal" | "Trimestral" | "Semestral" | "Anual",
   start: string;
   status: "Ativo" | "Inativo",
   value: number | null;

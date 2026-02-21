@@ -1,6 +1,6 @@
 # Upfit Gym — Web Application
 
-![Coverage](https://img.shields.io/badge/coverage-78%25-yellowgreen) ![Last Commit](https://img.shields.io/github/last-commit/maisappreis/upfit-gym)
+![Coverage](https://img.shields.io/badge/coverage-95%25-yellowgreen) ![Last Commit](https://img.shields.io/github/last-commit/maisappreis/upfit-gym)
 
 - Web application developed to manage a gym company's **customers, revenues and expenses**, focusing on a clean UI and scalable frontend architecture.
 - More information can be found in the [documentation](https://github.com/maisappreis/upfit-gym/blob/main/documentation.md).
