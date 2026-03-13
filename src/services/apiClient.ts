@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API_BASE = import.meta.env.VITE_API_BASE;
-const API_PREFIX = "/upfit/test";
+const API_PREFIX = "/upfit";
 
 export const apiClient = axios.create({
   baseURL: `${API_BASE}${API_PREFIX}`,
@@ -47,7 +47,3 @@ apiClient.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
-export const setApiBaseURL = (url: string) => {
-  apiClient.defaults.baseURL = url;
-};

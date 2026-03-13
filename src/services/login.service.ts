@@ -1,26 +1,20 @@
 import { authClient } from "./authClient";
-
-export interface Login {
-  username: string;
-  password: string;
-}
-
-export interface CreateLoginDTO {
-  access: string;
-  refresh: string;
-}
+import { type LoginPayload, type CreateLoginDTO, type LoginAccess} from "@/types/login";
 
 export const loginService = {
 
-  async create(payload: Login): Promise<CreateLoginDTO> {
-    const { data } = await authClient.post<CreateLoginDTO>('/accounts/token/', payload);
-    
+  async create(payload: LoginPayload): Promise<LoginAccess> {
+    const { data } = await authClient.post<LoginAccess>('/accounts/token/', payload);
     return data;
   },
 
   async refresh(payload: string): Promise<CreateLoginDTO> {
-    const { data } = await authClient.post<CreateLoginDTO>('/api/token/refresh/', payload);
+    const { data } = await authClient.post<CreateLoginDTO>('/accounts/token/refresh/', payload);
+    return data;
+  },
 
+   async profile(): Promise<LoginAccess> {
+    const { data } = await authClient.post<LoginAccess>('/accounts/profile/');
     return data;
   },
 };

@@ -6,14 +6,16 @@
 
 <script setup lang="ts">
 import { onMounted } from "vue";
+import { useRouter } from "vue-router";
 import { useApiStore } from "@/stores/api";
 import { useAuthStore } from "@/stores/auth";
 import { useAlertStore } from "@/stores/alert";
 import { useLoadingStore } from "@/stores/loading";
 
-import AlertMessage from "@/components/base//AlertMessage.vue";
+import AlertMessage from "@/components/base/AlertMessage.vue";
 import LoadingScreen from "@/components/base/LoadingScreen.vue";
 
+const router = useRouter();
 const apiStore = useApiStore();
 const authStore = useAuthStore();
 const alertStore = useAlertStore();
@@ -22,7 +24,12 @@ const loadingStore = useLoadingStore();
 onMounted(async () => {
   loadingStore.start();
   authStore.checkAuthentication();
-  await apiStore.fetchData();
+
+  if (authStore.isAuthenticated) {
+    await apiStore.fetchData();
+  } else {
+    router.push("/login");
+  }
   loadingStore.stop();
 });
 </script>

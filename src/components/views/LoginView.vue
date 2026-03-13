@@ -1,9 +1,34 @@
 <template>
   <div class="login-area">
-    <div class="login-form">
-      <img class="logo-area" :src="logoUpfit" alt="Logotype company" />
+    <div class="login-box">
+      <div class="text-center">
+        <h3>
+          Entrar na aplicação como usuário demo
+        </h3>
+        <h4>
+          Log in to the application as a demo user
+        </h4>
+      </div>
+      <div class="text-center">
+        <p>
+          Essa aplicação faz parte de um portfólio do Github,
+          por isso possibilita acesso no modo demostração.
+        </p>
+        <p>
+          This application is part of a Github portfolio,
+          therefore it allows access in demo mode.
+        </p>
+      </div>
+      <div class="button-area">
+        <BaseButton size="lg" @click="loginDemoUser">
+          Entrar
+        </BaseButton>
+      </div>
+    </div>
 
-      <form class="form-area" @submit.prevent="loginUser">
+    <div class="login-box">
+      <img class="logo-area" :src="logoUpfit" alt="Logotype company" />
+      <form id="loginForm" class="form-area" @submit.prevent="loginRealUser">
         <div class="form-field">
           <label for="name">Username:</label>
           <input type="text" id="username" name="username" v-model="form.username" required />
@@ -13,13 +38,12 @@
           <label for="password">Senha:</label>
           <input type="password" id="password" name="password" v-model="form.password" required />
         </div>
-
-        <div class="button-area">
-          <BaseButton type="submit" size="lg" :disabled="disable">
-            Entrar
-          </BaseButton>
-        </div>
       </form>
+      <div class="button-area">
+        <BaseButton form="loginForm" type="submit" size="lg" :disabled="disable">
+          Entrar
+        </BaseButton>
+      </div>
     </div>
   </div>
 </template>
@@ -29,7 +53,7 @@ import { computed, reactive, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import { useAlertStore } from "@/stores/alert";
-import { useLoadingStore } from "@/stores/loading";
+import { useLogin } from "@/composables/useLogin";
 
 import BaseButton from "@/components/base/BaseButton.vue";
 import logoUpfit from "@/assets/images/logo-black.png";
@@ -37,7 +61,7 @@ import logoUpfit from "@/assets/images/logo-black.png";
 const router = useRouter();
 const authStore = useAuthStore();
 const alertStore = useAlertStore();
-const loadingStore = useLoadingStore();
+const { login } = useLogin();
 
 const form = reactive({
   username: "",
@@ -48,19 +72,19 @@ const disable = computed(
   () => !form.username || !form.password
 );
 
-const loginUser = async () => {
-  try {
-    loadingStore.start();
+const loginRealUser = async () => {
+  const success = await login(form);
 
-    await authStore.login(form);
+  if (success) router.push("/metricas");
+};
 
-    alertStore.success("Login realizado com sucesso!");
-    router.push("/metricas");
-  } catch (err) {
-    alertStore.error("Erro ao fazer login.", err);
-  } finally {
-    loadingStore.stop();
-  }
+const loginDemoUser = async () => {
+  const success = await login({
+    username: "demo",
+    password: "demo123"
+  });
+
+  if (success) router.push("/metricas");
 };
 
 onMounted(() => {
@@ -78,25 +102,30 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  width: 100vw;
+  gap: 20px;
+
+  min-height: 100vh;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.login-box {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  min-height: 60vh;
+  background-color: white;
+  border-radius: 10px;
+  padding: 30px;
+  box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.3);
 }
 
 .logo-area {
   margin: 20px auto;
   height: 80px;
-}
-
-.login-form {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-
-  background-color: white;
-  width: 35vw;
-  border-radius: 10px;
-  padding: 30px;
-  box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.3);
 }
 
 .form-field {
@@ -125,15 +154,23 @@ input {
   margin-top: 10px;
 }
 
+.text-center {
+  text-align: center;
+}
+
 @media only screen and (max-width: 1000px) {
+  .login-area {
+    flex-direction: column;
+    margin: 10vh auto;
+  }
+
+  .login-box {
+    width: 50vw;
+  }
+
   .logo-area {
     margin: 10px auto;
     height: 50px;
-  }
-
-  .login-form {
-    width: 50vw;
-    padding: 20px;
   }
 
   .form-field {
@@ -149,6 +186,23 @@ input {
     padding: 5px;
     font-size: 14px;
     height: 20px;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .login-area {
+    flex-direction: column;
+    margin: 30px auto;
+  }
+
+  .login-box {
+    width: 70vw;
+    padding: 20px;
+  }
+
+  .logo-area {
+    margin: 0 auto 0 auto;
+    height: 60px;
   }
 }
 </style>

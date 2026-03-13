@@ -2,20 +2,15 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import { loginService } from "@/services/login.service";
 import { useApiStore } from "@/stores/api";
-import { setApiBaseURL } from "@/services/apiClient";
 import * as jwt_decode from "jwt-decode";
-
-interface LoginPayload {
-  username: string;
-  password: string;
-}
+import { type LoginPayload, type User } from "@/types/login";
 
 export const useAuthStore = defineStore("auth", () => {
+  const user = ref<User | null>(null);
   const accessToken = ref<string>("");
   const refreshToken = ref<string>("");
   const tokenExpirationTime = ref<number>(0);
   const refreshInterval = ref<ReturnType<typeof setInterval>>();
-
   const isAuthenticated = ref<boolean>(false);
 
   const login = async (payload: LoginPayload) => {
@@ -27,12 +22,14 @@ export const useAuthStore = defineStore("auth", () => {
       throw new Error("Invalid login response");
     }
 
+    user.value = response.user;
+
     setTokens(response.access, response.refresh);
     checkAuthentication();
 
     await apiStore.fetchData();
 
-    return true;
+    return response;
   };
 
   const setTokens = (access: string, refresh: string) => {
@@ -74,26 +71,38 @@ export const useAuthStore = defineStore("auth", () => {
 
     if (token) {
       isAuthenticated.value = true;
-      setApiBaseURL(`${import.meta.env.VITE_API_BASE}/upfit`);
+      await getProfile();
     } else {
       isAuthenticated.value = false;
-      setApiBaseURL(`${import.meta.env.VITE_API_BASE}/upfit/test`);
+      user.value = null;
+    }
+  };
+
+  const getProfile = async () => {
+    try {
+      const response = await loginService.profile();
+      user.value = response.user;
+    } catch (error) {
+      console.error("Erro ao carregar perfil do usuário.", error);
+      user.value = null;
     }
   };
 
   const logout = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+
+    user.value = null;
     accessToken.value = "";
     refreshToken.value = "";
     tokenExpirationTime.value = 0;
-
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
 
     if (refreshInterval.value) clearInterval(refreshInterval.value);
     location.reload();
   };
 
   return {
+    user,
     login,
     setTokens,
     checkAuthentication,

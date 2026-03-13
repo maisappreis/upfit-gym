@@ -8,8 +8,8 @@
       <p class="subtitle">{{ pageConfig.subtitle }}</p>
     </div>
 
-    <div v-if="authStore.isAuthenticated" class="login" @click="showDropdown">
-      <span>Olá, <strong>Renan</strong></span>
+    <div v-if="authStore.user" class="login" @click="showDropdown">
+      <h2>Olá, {{ authStore.user.first_name }}</h2>
       <font-awesome-icon icon="fa-solid fa-circle-user" style="margin-left: 10px; zoom: 1.3" />
     </div>
 
