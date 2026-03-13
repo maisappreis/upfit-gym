@@ -26,6 +26,10 @@
 }
 
 .not-found {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
   font-size: var(--text-size);
   font-weight: bold;
   text-align: center;

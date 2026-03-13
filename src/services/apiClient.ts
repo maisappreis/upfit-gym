@@ -1,4 +1,5 @@
 import axios from "axios";
+import { authClient } from "./authClient";
 
 const API_BASE = import.meta.env.VITE_API_BASE;
 const API_PREFIX = "/upfit";
@@ -30,7 +31,7 @@ apiClient.interceptors.response.use(
       if (!refreshToken) return Promise.reject(error);
 
       try {
-        const { data } = await apiClient.post("/token/refresh/", {
+        const { data } = await authClient.post("/accounts/token/refresh/", {
           refresh: refreshToken,
         });
 

@@ -1,17 +1,54 @@
 <template>
   <div class="chart-area">
-    <RevenueExpensesChart class="chart-item" />
-    <ActiveInactiveChart class="chart-item" />
-    <ActiveCustomersChart class="chart-item" />
-    <ProfitChart class="chart-item" />
+    <RevenueExpensesChart class="chart-item" :data="chartData.revenue_versus_expense" />
+    <ActiveInactiveChart class="chart-item" :data="chartData.active_inactive_customers" />
+    <ActiveCustomersChart class="chart-item" :data="chartData.number_of_active_customer_per_month" />
+    <ProfitChart class="chart-item" :data="chartData.monthly_profit" />
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted } from "vue";
 import RevenueExpensesChart from "../charts/RevenueExpensesChart.vue";
 import ActiveInactiveChart from "../charts/ActiveInactiveChart.vue";
 import ActiveCustomersChart from "../charts/ActiveCustomersChart.vue";
 import ProfitChart from "../charts/ProfitChart.vue";
+import { dashboardService } from "@/services/dashboard.service";
+import type { Dashboard } from "@/types/chart";
+
+const chartData = ref<Dashboard>({
+  active_inactive_customers: {
+    labels: [],
+    data: []
+  },
+  number_of_active_customer_per_month: {
+    labels: [],
+    data: []
+  },
+  monthly_profit: {
+    labels: [],
+    data: []
+  },
+  revenue_versus_expense: {
+    labels: [],
+    data: {
+      revenue: [],
+      expense: []
+    }
+  }
+});
+
+const fetchChartData = async () => {
+  try {
+    chartData.value = await dashboardService.list();
+  } catch (error) {
+    console.error("Erro ao carregar dados do dashboard");
+  }
+};
+
+onMounted(async() => {
+  await fetchChartData();
+});
 </script>
 
 <style scoped>

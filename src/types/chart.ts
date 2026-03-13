@@ -1,47 +1,19 @@
-export interface SumPerMonth {
-  year: number;
-  month: string;
-  sum: number;
-};
-
-export interface Data {
+export interface Chart {
   labels: string[];
-  datasets: Dataset[];
-};
-
-interface Dataset {
-  label: string;
-  backgroundColor: string | string[];
   data: number[];
-  borderColor?: string;
-  pointRadius?: number;
 };
 
-export interface Options {
-  responsive: boolean;
-  plugins: {
-    legend: {
-      display: boolean;
-      labels: {
-        color: string;
-        boxHeight: number;
-        boxWidth: number;
-        font: {
-          size: number;
-        };
-      };
-    };
-    tooltip: {
-      enabled: boolean;
-      bodySpacing: number;
-      padding: number;
-      displayColors: boolean;
-      titleFont: {
-        size: number;
-      };
-      bodyFont: {
-        size: number;
-      };
-    };
-  };
+export interface ChartRevenueExpense {
+  labels: string[];
+  data: {
+    revenue: number[];
+    expense: number[];
+  }
+};
+
+export interface Dashboard {
+  active_inactive_customers: Chart;
+  number_of_active_customer_per_month: Chart;
+  monthly_profit: Chart;
+  revenue_versus_expense: ChartRevenueExpense;
 };

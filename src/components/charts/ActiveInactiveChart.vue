@@ -14,8 +14,8 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { useChart } from "@/composables/useChart";
 import { getCssVar } from "@/utils/dataUtils";
+import type { Chart } from "@/types/chart";
 import { Pie as PieChart } from "vue-chartjs";
 import {
   Chart as ChartJS,
@@ -28,10 +28,9 @@ import {
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const {
-  activeCustomers,
-  inactiveCustomers,
-} = useChart();
+const props = defineProps<{
+  data: Chart
+}>();
 
 const chartStyle = {
   height: "100%",
@@ -68,7 +67,7 @@ const chartOptions: ChartOptions<"pie"> = {
 };
 
 const chartData = computed<ChartData<"pie">>(() => {
-  if (!activeCustomers.value || !inactiveCustomers.value) {
+  if (!props.data.labels.length) {
     return {
       labels: [],
       datasets: [],
@@ -76,11 +75,11 @@ const chartData = computed<ChartData<"pie">>(() => {
   }
 
   return {
-    labels: ["Ativos", "Inativos"],
+    labels: props.data.labels,
     datasets: [
       {
         label: "Clientes",
-        data: [activeCustomers.value, inactiveCustomers.value],
+        data: props.data.data,
         backgroundColor: [
           getCssVar("--primary-color"),
           getCssVar("--red-darker"),

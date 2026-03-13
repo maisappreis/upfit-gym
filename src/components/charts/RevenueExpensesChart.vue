@@ -14,8 +14,8 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { useChart } from "@/composables/useChart";
 import { getCssVar } from "@/utils/dataUtils";
+import type { ChartRevenueExpense } from "@/types/chart";
 import { Line as LineChart } from "vue-chartjs";
 import {
   Chart as ChartJS,
@@ -40,10 +40,9 @@ ChartJS.register(
   Legend
 );
 
-const {
-  monthlyRevenueOrdered,
-  monthlyExpensesOrdered,
-} = useChart();
+const props = defineProps<{
+  data: ChartRevenueExpense
+}>();
 
 const chartStyle = {
   height: "100%",
@@ -80,33 +79,29 @@ const chartOptions: ChartOptions<"line"> = {
 };
 
 const chartData = computed<ChartData<"line">>(() => {
-  if (!monthlyRevenueOrdered.value.length || !monthlyExpensesOrdered.value.length) {
+  if (!props.data.labels.length) {
     return {
       labels: [],
       datasets: [],
     };
   }
 
-  let labels = monthlyRevenueOrdered.value.map((e) => e.month);
-  let revenueData = monthlyRevenueOrdered.value.map((e) => e.sum);
-  let expensesData = monthlyExpensesOrdered.value.map((e) => e.sum);
-
   return {
-    labels: labels,
+    labels: props.data.labels,
     datasets: [
       {
         label: 'Receita',
         backgroundColor: getCssVar("--primary-color"),
         borderColor: getCssVar("--primary-color"),
         pointRadius: 4,
-        data: revenueData
+        data: props.data.data.revenue
       },
       {
         label: 'Despesas',
         backgroundColor: getCssVar("--red-darker"),
         borderColor: getCssVar("--red-darker"),
         pointRadius: 4,
-        data: expensesData
+        data: props.data.data.expense
       }
     ]
   };

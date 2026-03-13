@@ -14,9 +14,8 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { useApiStore } from "@/stores/api";
 import { getCssVar } from "@/utils/dataUtils";
-import type { Customer } from "@/types/customer";
+import type { Chart } from "@/types/chart";
 import { Line as LineChart } from "vue-chartjs";
 import {
   Chart as ChartJS,
@@ -41,7 +40,9 @@ ChartJS.register(
   Legend
 );
 
-const apiStore = useApiStore();
+const props = defineProps<{
+  data: Chart
+}>();
 
 const chartStyle = {
   height: "100%",
@@ -77,40 +78,8 @@ const chartOptions: ChartOptions<"line"> = {
   },
 };
 
-const customersMap = computed(() => {
-  return new Map<number, Customer>(
-    apiStore.customers.map((c) => [c.id, c])
-  );
-});
-
-const activeCustomersPerMonth = computed(() => {
-  const monthMap = new Map<string, { month: string; sum: number }>();
-
-  apiStore.revenue.forEach((record) => {
-    if (record.paid !== "Pago") return;
-
-    const customer = customersMap.value.get(record.customer!);
-
-    if (!customer || customer.status !== "Ativo") return;
-
-    const key = `${record.year}-${record.month}`;
-    const current = monthMap.get(key);
-
-    if (!current) {
-      monthMap.set(key, {
-        month: record.month,
-        sum: 1,
-      });
-    } else {
-      current.sum += 1;
-    }
-  });
-
-  return Array.from(monthMap.values());
-});
-
 const chartData = computed<ChartData<"line">>(() => {
-  if (!activeCustomersPerMonth.value.length) {
+  if (!props.data.labels.length) {
     return {
       labels: [],
       datasets: [],
@@ -118,14 +87,14 @@ const chartData = computed<ChartData<"line">>(() => {
   }
 
   return {
-    labels: activeCustomersPerMonth.value.map((e) => e.month),
+    labels: props.data.labels,
     datasets: [
       {
         label: "Clientes",
         backgroundColor: getCssVar("--primary-color"),
         borderColor: getCssVar("--primary-color"),
         pointRadius: 4,
-        data: activeCustomersPerMonth.value.map((e) => e.sum),
+        data: props.data.data
       },
     ],
   };

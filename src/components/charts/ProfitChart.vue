@@ -14,8 +14,8 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { useChart } from "@/composables/useChart";
 import { getCssVar } from "@/utils/dataUtils";
+import type { Chart } from "@/types/chart";
 import { Bar } from "vue-chartjs";
 import {
   Chart as ChartJS,
@@ -38,7 +38,9 @@ ChartJS.register(
   LinearScale
 );
 
-const { monthlyProfit } = useChart();
+const props = defineProps<{
+  data: Chart
+}>();
 
 const chartStyle = {
   height: "100%",
@@ -47,51 +49,48 @@ const chartStyle = {
 
 const chartOptions: ChartOptions<"bar"> = {
   responsive: true,
-    plugins: {
-      legend: {
-        display: true,
-        labels: {
-          color: "gray",
-          boxHeight: 15,
-          boxWidth: 15,
-          font: {
-            size: 20
-          }
-        }
-      },
-      tooltip: {
-        enabled: true,
-        bodySpacing: 5,
-        padding: 15,
-        displayColors: false,
-        titleFont: {
-          size: 18
-        },
-        bodyFont: {
-          size: 15
+  plugins: {
+    legend: {
+      display: true,
+      labels: {
+        color: "gray",
+        boxHeight: 15,
+        boxWidth: 15,
+        font: {
+          size: 20
         }
       }
+    },
+    tooltip: {
+      enabled: true,
+      bodySpacing: 5,
+      padding: 15,
+      displayColors: false,
+      titleFont: {
+        size: 18
+      },
+      bodyFont: {
+        size: 15
+      }
     }
+  }
 };
 
 const chartData = computed<ChartData<"bar">>(() => {
-  if (!monthlyProfit.value) {
+  if (!props.data.labels.length) {
     return {
       labels: [],
       datasets: [],
     };
   }
 
-  let labels = monthlyProfit.value.map((e) => e.month);
-  let data = monthlyProfit.value.map((e) => e.sum);
-
   return {
-    labels: labels,
+    labels: props.data.labels,
     datasets: [
       {
         label: "Lucro",
         backgroundColor: getCssVar("--primary-color"),
-        data: data
+        data: props.data.data,
       }
     ]
   };

@@ -46,9 +46,6 @@
 
     --input-height: 16px;
     --input-margin-left: 5px;
-
-    --button-padding-lg: 10px 20px;
-    --button-font-size-lg: 14px;
   }
 }
 
@@ -65,6 +62,6 @@
     --margin-botton: 10px;
 
     --button-font-weight: 200;
-    --button-padding-lg: 5px 20px;
+    --button-padding-lg: 10px 20px;
   }
 }

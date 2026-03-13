@@ -1,27 +1,11 @@
-import { type SumPerMonth } from "@/types/chart";
 import { months } from "@/utils/constants";
 
 const MONTHS_FILTER = [...months, "Todos os meses"];
-
-const MONTH_ORDER: Record<string, number> = Object.fromEntries(
-  months.map((m, i) => [m, i + 1])
-);
 
 /* ---------- BASICS ---------- */
 
 export const getMonthIndex = (month: string) =>
   MONTHS_FILTER.indexOf(month);
-
-/* ---------- SORT ---------- */
-
-export const sortDataByDate = (
-  data: SumPerMonth[]
-): SumPerMonth[] => {
-  return [...data].sort((a, b) => {
-    if (a.year !== b.year) return a.year - b.year;
-    return MONTH_ORDER[a.month] - MONTH_ORDER[b.month];
-  });
-};
 
 /* ---------- DATE PARSING ---------- */
 
