@@ -12,6 +12,7 @@
       :checked="modelValue"
       :id="String(uuid)"
       type="checkbox"
+      style="cursor: pointer;"
     />
   </div>
   
