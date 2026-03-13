@@ -12,8 +12,8 @@ import { useAuthStore } from "@/stores/auth";
 import { useAlertStore } from "@/stores/alert";
 import { useLoadingStore } from "@/stores/loading";
 
-import AlertMessage from "@/components/base/AlertMessage.vue";
-import LoadingScreen from "@/components/base/LoadingScreen.vue";
+import AlertMessage from "@/components/AlertMessage.vue";
+import LoadingScreen from "@/components/LoadingScreen.vue";
 
 const router = useRouter();
 const apiStore = useApiStore();

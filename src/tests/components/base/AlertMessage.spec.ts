@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import { nextTick } from 'vue'
-import AlertMessage from '@/components/base/AlertMessage.vue'
+import AlertMessage from '@/components/AlertMessage.vue'
 import { useAlertStore } from '@/stores/alert'
 
 describe('AlertMessage', () => {

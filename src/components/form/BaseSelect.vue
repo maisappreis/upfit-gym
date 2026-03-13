@@ -35,7 +35,7 @@
 import { ref } from "vue";
 import setupFormComponent from "@/utils/setupFormComponent";
 import uniqueID from "@/utils/uniqueID";
-import BaseErrorMessage from "@/components/base/BaseErrorMessage.vue";
+import BaseErrorMessage from "@/components/BaseErrorMessage.vue";
 
 const props = defineProps<{
   label?: string

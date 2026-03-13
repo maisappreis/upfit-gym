@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { mount } from '@vue/test-utils'
-import LoadingScreen from '@/components/base/LoadingScreen.vue'
+import LoadingScreen from '@/components/LoadingScreen.vue'
 
 describe('LoadingScreen', () => {
   beforeEach(() => {

@@ -1,6 +1,6 @@
 import { describe, vi, it, expect, beforeEach, afterEach } from 'vitest'
 import { mount } from '@vue/test-utils'
-import ModalCard from '@/components/base/ModalCard.vue'
+import ModalCard from '@/components/ModalCard.vue'
 
 describe('ModalCard', () => {
   beforeEach(() => {

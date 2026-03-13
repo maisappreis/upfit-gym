@@ -25,7 +25,7 @@
 <script setup lang="ts">
 import uniqueID from "@/utils/uniqueID";
 import setupFormComponent from "@/utils/setupFormComponent";
-import BaseErrorMessage from "@/components/base/BaseErrorMessage.vue";
+import BaseErrorMessage from "@/components/BaseErrorMessage.vue";
 
 const props = defineProps<{
   label?: string

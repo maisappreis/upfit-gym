@@ -3,7 +3,7 @@ import { mount } from '@vue/test-utils'
 import { type CreateCustomerDTO } from '@/types/customer'
 import CustomersForm from '@/components/forms/CustomersForm.vue'
 
-vi.mock('@/components/base/form/BaseInput.vue', () => ({
+vi.mock('@/components/form/BaseInput.vue', () => ({
   default: {
     name: 'BaseInput',
     template: '<input />',
@@ -13,21 +13,21 @@ vi.mock('@/components/base/form/BaseInput.vue', () => ({
   }
 }))
 
-vi.mock('@/components/base/form/BaseSelect.vue', () => ({
+vi.mock('@/components/form/BaseSelect.vue', () => ({
   default: {
     name: 'BaseSelect',
     template: '<select><slot /></select>'
   }
 }))
 
-vi.mock('@/components/base/form/BaseTextarea.vue', () => ({
+vi.mock('@/components/form/BaseTextarea.vue', () => ({
   default: {
     name: 'BaseTextarea',
     template: '<textarea />'
   }
 }))
 
-vi.mock('@/components/base/form/BaseRadioGroup.vue', () => ({
+vi.mock('@/components/form/BaseRadioGroup.vue', () => ({
   default: {
     name: 'BaseRadioGroup',
     template: '<div />'

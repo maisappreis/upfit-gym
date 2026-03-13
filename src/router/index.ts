@@ -6,18 +6,18 @@ const router = createRouter({
     {
       path: "/login",
       name: "login",
-      component: () => import("@/components/views/LoginView.vue")
+      component: () => import("@/app/LoginView.vue")
     },
     {
       path: "/",
-      component: () => import("@/components/views/LayoutView.vue"),
+      component: () => import("@/app/LayoutView.vue"),
       children: [
         {
           path: "", redirect: "/metricas"
         },
         {
           path: "metricas",
-          component: () => import("@/components/content/MetricsPage.vue"),
+          component: () => import("@/app/metrics/MetricsPage.vue"),
           meta: {
             icon: "fa-solid fa-chart-line",
             title: "Métricas",
@@ -26,7 +26,7 @@ const router = createRouter({
         },
         {
           path: "clientes",
-          component: () => import("@/components/content/CustomersPage.vue"),
+          component: () => import("@/app/customer/CustomersPage.vue"),
           meta: {
             icon: "fa-solid fa-users",
             title: "Clientes",
@@ -35,7 +35,7 @@ const router = createRouter({
         },
         {
           path: "receitas",
-          component: () => import("@/components/content/RevenuePage.vue"),
+          component: () => import("@/app/revenue/RevenuePage.vue"),
           meta: {
             icon: "fa-solid fa-hand-holding-dollar",
             title: "Receitas",
@@ -44,7 +44,7 @@ const router = createRouter({
         },
         {
           path: "despesas",
-          component: () => import("@/components/content/ExpensesPage.vue"),
+          component: () => import("@/app/expense/ExpensesPage.vue"),
           meta: {
             icon: "fa-solid fa-money-bill-transfer",
             title: "Despesas",

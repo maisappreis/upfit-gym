@@ -83,9 +83,9 @@ import { useTooltipAnchors } from "@/composables/useTooltipAnchors";
 import { useTablePagination } from "@/composables/useTablePagination";
 import { type Customer } from "@/types/customer";
 
-import BaseTable, { type BaseTableColumn } from "@/components/base/BaseTable.vue";
-import PaginationTable from "@/components/base/PaginationTable.vue";
-import TooltipModal from "@/components/base/TooltipModal.vue";
+import BaseTable, { type BaseTableColumn } from "@/components/BaseTable.vue";
+import PaginationTable from "@/components/PaginationTable.vue";
+import TooltipModal from "@/components/TooltipModal.vue";
 
 const props = defineProps<{
   data: Customer[];

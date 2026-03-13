@@ -58,9 +58,9 @@ import { ref, computed, onMounted } from "vue";
 import { type CreateRevenueDTO } from "@/types/revenue";
 import { type Customer } from "@/types/customer";
 
-import BaseInput from "@/components/base/form/BaseInput.vue";
-import BaseSelect from "@/components/base/form/BaseSelect.vue";
-import BaseTextarea from "@/components/base/form/BaseTextarea.vue";
+import BaseInput from "@/components/form/BaseInput.vue";
+import BaseSelect from "@/components/form/BaseSelect.vue";
+import BaseTextarea from "@/components/form/BaseTextarea.vue";
 
 const props = defineProps<{
   modelValue: CreateRevenueDTO;

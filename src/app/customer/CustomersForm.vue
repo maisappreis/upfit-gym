@@ -60,10 +60,10 @@
 import { ref, computed, onMounted } from "vue";
 import { type CreateCustomerDTO } from "@/types/customer";
 
-import BaseInput from "@/components/base/form/BaseInput.vue";
-import BaseSelect from "@/components/base/form/BaseSelect.vue";
-import BaseTextarea from "@/components/base/form/BaseTextarea.vue";
-import BaseRadioGroup from "@/components/base/form/BaseRadioGroup.vue";
+import BaseInput from "@/components/form/BaseInput.vue";
+import BaseSelect from "@/components/form/BaseSelect.vue";
+import BaseTextarea from "@/components/form/BaseTextarea.vue";
+import BaseRadioGroup from "@/components/form/BaseRadioGroup.vue";
 
 const props = defineProps<{
   modelValue: CreateCustomerDTO;

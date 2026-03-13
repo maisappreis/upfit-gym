@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import BaseRadio from "@/components/base/form/BaseRadio.vue";
+import BaseRadio from "@/components/form/BaseRadio.vue";
 
 interface Option {
   label: string, value: string

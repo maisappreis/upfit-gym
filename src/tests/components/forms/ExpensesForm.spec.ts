@@ -3,7 +3,7 @@ import { mount } from '@vue/test-utils'
 import { type CreateExpenseDTO } from '@/types/expense'
 import ExpensesForm from '@/components/forms/ExpensesForm.vue'
 
-vi.mock('@/components/base/form/BaseInput.vue', () => ({
+vi.mock('@/components/form/BaseInput.vue', () => ({
   default: {
     name: 'BaseInput',
     template: '<input />',
@@ -13,14 +13,14 @@ vi.mock('@/components/base/form/BaseInput.vue', () => ({
   }
 }))
 
-vi.mock('@/components/base/form/BaseCheckbox.vue', () => ({
+vi.mock('@/components/form/BaseCheckbox.vue', () => ({
   default: {
     name: 'BaseCheckbox',
     template: '<input type="checkbox" />'
   }
 }))
 
-vi.mock('@/components/base/form/BaseTextarea.vue', () => ({
+vi.mock('@/components/form/BaseTextarea.vue', () => ({
   default: {
     name: 'BaseTextarea',
     template: '<textarea />'

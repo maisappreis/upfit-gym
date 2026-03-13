@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
-import BaseCheckbox from '@/components/base/form/BaseCheckbox.vue'
+import BaseCheckbox from '@/components/form/BaseCheckbox.vue'
 
 describe('BaseCheckbox', () => {
   it('renders label when provided', () => {

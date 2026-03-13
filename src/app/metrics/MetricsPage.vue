@@ -9,10 +9,10 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import RevenueExpensesChart from "../charts/RevenueExpensesChart.vue";
-import ActiveInactiveChart from "../charts/ActiveInactiveChart.vue";
-import ActiveCustomersChart from "../charts/ActiveCustomersChart.vue";
-import ProfitChart from "../charts/ProfitChart.vue";
+import RevenueExpensesChart from "@/app/metrics/charts/RevenueExpensesChart.vue";
+import ActiveInactiveChart from "@/app/metrics/charts/ActiveInactiveChart.vue";
+import ActiveCustomersChart from "@/app/metrics/charts/ActiveCustomersChart.vue";
+import ProfitChart from "@/app/metrics/charts/ProfitChart.vue";
 import { dashboardService } from "@/services/dashboard.service";
 import type { Dashboard } from "@/types/chart";
 

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
-import BaseRadio from '@/components/base/form/BaseRadio.vue'
+import BaseRadio from '@/components/form/BaseRadio.vue'
 
 vi.mock('@/features/setupFormComponent', () => ({
   default: (props: any, { emit }: any) => ({

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
-import BaseInput from '@/components/base/form/BaseInput.vue'
+import BaseInput from '@/components/form/BaseInput.vue'
 
 vi.mock('@/features/setupFormComponent', () => ({
   default: (props: any, { emit }: any) => ({

@@ -55,7 +55,7 @@ import { useAuthStore } from "@/stores/auth";
 import { useAlertStore } from "@/stores/alert";
 import { useLogin } from "@/composables/useLogin";
 
-import BaseButton from "@/components/base/BaseButton.vue";
+import BaseButton from "@/components/BaseButton.vue";
 import logoUpfit from "@/assets/images/logo-black.png";
 
 const router = useRouter();

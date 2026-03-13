@@ -94,13 +94,13 @@ import { getYearAndMonth } from "@/utils/dateUtils";
 import { expenseService } from "@/services/expense.service";
 import { type Expense, type CreateExpenseDTO } from "@/types/expense";
 
-import BaseButton from "@/components/base/BaseButton.vue";
-import ExpensesTable from "@/components/tables/ExpensesTable.vue";
-import ModalCard from "@/components/base/ModalCard.vue";
-import DateFilter from "@/components/base/DateFilter.vue";
-import SearchFilter from "@/components/base/SearchFilter.vue";
-import StatusFilter from "@/components/base/StatusFilter.vue";
-import ExpensesForm from "@/components/forms/ExpensesForm.vue";
+import BaseButton from "@/components/BaseButton.vue";
+import ExpensesTable from "@/app/expense/ExpensesTable.vue";
+import ModalCard from "@/components/ModalCard.vue";
+import DateFilter from "@/components/DateFilter.vue";
+import SearchFilter from "@/components/SearchFilter.vue";
+import StatusFilter from "@/components/StatusFilter.vue";
+import ExpensesForm from "@/app/expense/ExpensesForm.vue";
 
 const apiStore = useApiStore();
 const alertStore = useAlertStore();

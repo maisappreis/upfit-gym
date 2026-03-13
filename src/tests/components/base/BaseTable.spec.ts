@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
-import BaseTable from '@/components/base/BaseTable.vue'
+import BaseTable from '@/components/BaseTable.vue'
 
 interface TestRow {
   id: number

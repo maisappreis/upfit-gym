@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
-import BaseErrorMessage from '@/components/base/BaseErrorMessage.vue'
+import BaseErrorMessage from '@/components/BaseErrorMessage.vue'
 
 describe('BaseErrorMessage', () => {
   it('renders slot content', () => {

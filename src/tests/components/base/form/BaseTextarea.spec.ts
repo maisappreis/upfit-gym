@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
-import BaseTextarea from '@/components/base/form/BaseTextarea.vue'
+import BaseTextarea from '@/components/form/BaseTextarea.vue'
 
 vi.mock('@/features/setupFormComponent', () => ({
   default: (_props: any, { emit }: any) => ({

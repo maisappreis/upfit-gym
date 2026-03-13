@@ -6,8 +6,8 @@
         :columns="columns"
         rowKey="id"
       >
-        <template #cell-date="{ row }">
-          {{ formatDate(row.date) }}
+        <template #cell-start="{ row }">
+          {{ formatDate(row.start) }}
         </template>
 
         <template #cell-value="{ row }">
@@ -19,9 +19,10 @@
             class="status paid"
             :class="{
               active: row.paid === 'Pago',
-              inactive: row.paid === 'À pagar'
+              inactive: row.paid === 'À pagar',
+              sent: row.paid === 'Link enviado'
             }"
-           @click="confirmPaidStatus(row)"
+            @click="confirmPaidStatus(row)"
           >
             {{ row.paid }}
           </span>
@@ -84,7 +85,7 @@
       </template>
 
       <p class="message-area">
-        Gostaria de marcar essa conta como <strong>{{ statusMessage }}</strong>?
+        Gostaria de marcar essa receita como <strong>{{ statusMessage }}</strong>?
       </p>
 
       <template #footer>
@@ -110,33 +111,31 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useApiStore } from "@/stores/api";
-import { useAlertStore } from "@/stores/alert";
 import { useLoadingStore } from "@/stores/loading";
-import { useCrudModal } from "@/composables/useCrudModal";
 import { formatDate, getNextMonth } from "@/utils/dateUtils";
+import { useCrudModal } from "@/composables/useCrudModal";
 import { useTooltipAnchors } from "@/composables/useTooltipAnchors";
 import { useTablePagination } from "@/composables/useTablePagination";
-import { expenseService } from "@/services/expense.service";
-import { type Expense } from "@/types/expense";
+import { revenueService } from "@/services/revenue.service";
+import { type Revenue } from "@/types/revenue";
 
-import BaseTable, { type BaseTableColumn } from "@/components/base/BaseTable.vue";
-import PaginationTable from "@/components/base/PaginationTable.vue";
-import TooltipModal from "@/components/base/TooltipModal.vue";
-import BaseButton from "@/components/base/BaseButton.vue";
-import ModalCard from "@/components/base/ModalCard.vue";
+import BaseTable, { type BaseTableColumn } from "@/components/BaseTable.vue";
+import PaginationTable from "@/components/PaginationTable.vue";
+import TooltipModal from "@/components/TooltipModal.vue";
+import BaseButton from "@/components/BaseButton.vue";
+import ModalCard from "@/components/ModalCard.vue";
 
 const apiStore = useApiStore();
-const alertStore = useAlertStore();
 const loadingStore = useLoadingStore();
 
 const props = defineProps<{
-  data: Expense[];
+  data: Revenue[];
   searchedField: string[];
 }>();
 
 const emit = defineEmits(["update-item", "delete-item"]);
 
-const modalCrud = useCrudModal<Expense>();
+const modalCrud = useCrudModal<Revenue>();
 const { hoveredId, refsMap, setRef } = useTooltipAnchors();
 const {
   itemsPerPage,
@@ -147,24 +146,29 @@ const {
   () => props.searchedField
 );
 
+const responseMessage = ref<string>("");
 const statusMessage = ref<string>("");
-const selectedExpense = ref<Expense>();
-const columns: BaseTableColumn<Expense>[] = [
+const selectedRevenue = ref<Revenue>();
+const columns: BaseTableColumn<Revenue>[] = [
   { key: "year", label: "Ano" },
   { key: "month", label: "Mês" },
   { key: "name", label: "Nome" },
-  { key: "date", label: "Vencimento" },
-  { key: "installments", label: "Parcelas" },
+  { key: "start", label: "Início" },
+  { key: "plan", label: "Plano" },
+  { key: "payment_day", label: "Venc." },
   { key: "value", label: "Valor" },
   { key: "paid", label: "Status" },
   { key: "actions", label: "" },
 ];
 
-const confirmPaidStatus = (expense: Expense) => {
-  selectedExpense.value = expense;
+const confirmPaidStatus = (revenue: Revenue) => {
+  selectedRevenue.value = revenue;
 
-  switch (selectedExpense.value!.paid) {
+  switch (selectedRevenue.value!.paid) {
     case "À pagar":
+      statusMessage.value = "link enviado";
+      break;
+    case "Link enviado":
       statusMessage.value = "pago";
       break;
     case "Pago":
@@ -172,7 +176,7 @@ const confirmPaidStatus = (expense: Expense) => {
       break;
   }
 
-  modalCrud.openUpdate(selectedExpense.value);
+  modalCrud.openUpdate(selectedRevenue.value)
 };
 
 const closeModal = () => {
@@ -182,56 +186,61 @@ const closeModal = () => {
 
 const changePaidStatus = async () => {
   loadingStore.start();
-  try {
-    let updatedPaidStatus = {} as { paid: "Pago" | "À pagar"};
 
-    switch (selectedExpense.value!.paid) {
+  try {
+    let updatedPaidStatus = {} as { paid: "Pago" | "À pagar" | "Link enviado"};
+
+    switch (selectedRevenue.value!.paid) {
       case "À pagar":
+        updatedPaidStatus = { paid: "Link enviado" };
+        break;
+      case "Link enviado":
         updatedPaidStatus = { paid: "Pago" };
         break;
       case "Pago":
         updatedPaidStatus = { paid: "À pagar" };
         break;
-    }
+    };
 
-    await expenseService.update(selectedExpense.value!.id, updatedPaidStatus);
-    await apiStore.fetchExpenses();
+    await revenueService.update(selectedRevenue.value!.id, updatedPaidStatus);
 
     if (updatedPaidStatus.paid === "Pago") {
-      if (selectedExpense.value!.installments === "") {
-        createExpenseForNextMonth(selectedExpense.value!);
+      if (selectedRevenue.value!.status === "Ativo") {
+        createRevenueForNextMonth(selectedRevenue.value!);
       }
     }
+
+    await apiStore.fetchRevenue();
+
     closeModal();
-    alertStore.success( "Status do pagamento salvo com sucesso!");
+    responseMessage.value = "Status do pagamento salvo com sucesso!";
   } catch (error) {
     console.error("Erro ao atualizar o status de pagamento...", error);
-    alertStore.error("Erro ao salvar o status do pagamento.", error);
+    responseMessage.value = "Erro ao salvar o status do pagamento.";
   } finally {
     loadingStore.stop();
   }
 };
 
-const createExpenseForNextMonth = async (expense: Expense) => {
+const createRevenueForNextMonth = async (revenue: Revenue) => {
   try {
-    let nextMonth = getNextMonth(expense.month, expense.year);
-    let paymentDay = parseInt(expense.date.slice(-2));
-    let dueDate = `${nextMonth.year}-${nextMonth.monthNumber}-${paymentDay}`;
+    let nextMonth = getNextMonth(revenue.month, revenue.year!);
+    let paidStatus = "À pagar" as "Pago" | "À pagar";
 
-    let newExpense = {
+    let newRevenue = {
+      customer: revenue.customer,
       year: nextMonth.year,
       month: nextMonth.month,
-      name: expense.name,
-      date: dueDate,
-      value: expense.value,
-      paid: "À pagar",
-      notes: expense.notes
-    } as Expense;
+      value: revenue.value,
+      payment_day: revenue.payment_day,
+      notes: revenue.notes,
+      paid: paidStatus
+    };
 
-    await expenseService.create(newExpense);
-    await apiStore.fetchExpenses();
+    await revenueService.create(newRevenue);
+    await apiStore.fetchRevenue();
   } catch (error) {
-    console.error("Erro ao criar despesa.", error);
+    console.error("Erro ao criar receita.", error);
   }
 };
 </script>

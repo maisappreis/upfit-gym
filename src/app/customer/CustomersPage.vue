@@ -101,12 +101,12 @@ import { revenueService } from "@/services/revenue.service";
 import { getCurrentYearMonthDay } from "@/utils/dateUtils";
 import { type Customer, type CreateCustomerDTO } from "@/types/customer";
 
-import BaseButton from "@/components/base/BaseButton.vue";
-import CustomersTable from "@/components/tables/CustomersTable.vue";
-import SearchFilter from "@/components/base/SearchFilter.vue";
-import ModalCard from "@/components/base/ModalCard.vue";
-import CustomersForm from "@/components/forms/CustomersForm.vue";
-import StatusFilter from "@/components/base/StatusFilter.vue";
+import BaseButton from "@/components/BaseButton.vue";
+import CustomersTable from "@/app/customer/CustomersTable.vue";
+import SearchFilter from "@/components/SearchFilter.vue";
+import ModalCard from "@/components/ModalCard.vue";
+import CustomersForm from "@/app/customer/CustomersForm.vue";
+import StatusFilter from "@/components/StatusFilter.vue";
 
 const apiStore = useApiStore();
 const alertStore = useAlertStore();
