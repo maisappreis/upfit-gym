@@ -68,11 +68,12 @@
 import { ref, computed } from "vue";
 import { capitalize } from "@/utils/dataUtils";
 import { useLoadingStore } from "@/stores/loading";
+import { type Customer, type CreateCustomerDTO } from "@/types/customer";
+import { type CrudModal } from "@/composables/useCrudModal";
+
 import ModalCard from "@/components/ModalCard.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import CustomersForm from "@/app/customer/CustomersForm.vue";
-import { type Customer, type CreateCustomerDTO } from "@/types/customer";
-import { type CrudModal } from "@/composables/useCrudModal";
 
 const loadingStore = useLoadingStore();
 

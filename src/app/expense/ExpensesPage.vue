@@ -27,59 +27,15 @@
       @delete-item="openDeleteModal($event)"
     />
 
-    <ModalCard v-model="modalCrud.isOpen.value">
-      <template #header>
-        <span>
-          {{ modalTitle }}
-        </span>
-      </template>
-
-      <!-- DELETE CONFIRM -->
-      <p
-        v-if="modalCrud.isDelete.value"
-        class="message-area"
-      >
-        Tem certeza que deseja excluir o pagamento da despesa de
-        <strong class="highlight">{{ selectedExpense?.name }}</strong> referente ao mês de
-        <strong class="highlight">{{ selectedExpense?.month }}</strong> de
-        <strong class="highlight">{{ selectedExpense?.year }}</strong>?
-      </p>
-
-      <!-- CREATE AND UPDATE FORM -->
-      <ExpensesForm
-        v-else
-        v-model="expenseForm"
-        ref="formRef"
-      />
-
-      <template #footer>
-        <BaseButton
-          v-if="modalCrud.isDelete.value"
-          size="lg"
-          :loading="loadingStore.isLoading"
-          @click="deleteExpense"
-        >
-          Confirmar
-        </BaseButton>
-        <BaseButton
-          v-else
-          type="submit"
-          size="lg"
-          :disabled="!formRef?.isValid"
-          :loading="loadingStore.isLoading"
-          @click="submitForm"
-        >
-          Salvar
-        </BaseButton>
-        <BaseButton
-          size="lg"
-          variant="danger"
-          @click="closeModal"
-        >
-          Cancelar
-        </BaseButton>
-      </template>
-    </ModalCard>
+    <ExpensesModal
+      :modalCrud="modalCrud"
+      :expenseForm="expenseForm"
+      :expense="selectedExpense"
+      @create-expense="createExpense"
+      @update-expense="updateExpense"
+      @delete-expense="deleteExpense"
+      @close-modal="closeModal"
+    />
   </div>
 </template>
 
@@ -89,18 +45,16 @@ import { useApiStore } from "@/stores/api";
 import { useAlertStore } from "@/stores/alert";
 import { useLoadingStore } from "@/stores/loading";
 import { useCrudModal } from "@/composables/useCrudModal";
-import { filteredData, capitalize } from "@/utils/dataUtils";
-import { getYearAndMonth } from "@/utils/dateUtils";
+import { filteredData } from "@/utils/dataUtils";
 import { expenseService } from "@/services/expense.service";
 import { type Expense, type CreateExpenseDTO } from "@/types/expense";
 
-import BaseButton from "@/components/BaseButton.vue";
 import ExpensesTable from "@/app/expense/ExpensesTable.vue";
-import ModalCard from "@/components/ModalCard.vue";
+import ExpensesModal from "@/app/expense/ExpensesModal.vue";
+import BaseButton from "@/components/BaseButton.vue";
 import DateFilter from "@/components/DateFilter.vue";
 import SearchFilter from "@/components/SearchFilter.vue";
 import StatusFilter from "@/components/StatusFilter.vue";
-import ExpensesForm from "@/app/expense/ExpensesForm.vue";
 
 const apiStore = useApiStore();
 const alertStore = useAlertStore();
@@ -111,7 +65,6 @@ const searchedField = ref<string[]>([]);
 const currentMonth = ref<string>("");
 const currentYear = ref<number>(0);
 const currentStatus = ref<string>("");
-const formRef = ref<any>(null);
 const expenseForm = ref<CreateExpenseDTO>({
   name: "",
   month: "",
@@ -125,15 +78,6 @@ const expenseForm = ref<CreateExpenseDTO>({
 
 const selectedExpense = computed(() => modalCrud.entity.value);
 
-const modalTitle = computed(() => {
-  switch (modalCrud.mode.value) {
-    case "create": return "Adicionar Despesa";
-    case "update": return "Atualizar Despesa";
-    case "delete": return "Excluir Despesa";
-    default: return "";
-  }
-});
-
 const filteredExpenses = computed(() => {
   return filteredData(apiStore.expenses, {
     currentMonth: currentMonth.value,
@@ -141,21 +85,6 @@ const filteredExpenses = computed(() => {
     currentStatus: currentStatus.value,
   });
 });
-
-const closeModal = () => {
-  modalCrud.close();
-
-  expenseForm.value = {
-     name: "",
-    month: "",
-    date: "",
-    paid: "À pagar",
-    value: null,
-    year: 0,
-    installments: "",
-    notes: "",
-  };
-};
 
 const openUpdateModal = (expense: Expense) => {
   expenseForm.value = {
@@ -176,26 +105,19 @@ const openDeleteModal = (expense: Expense) => {
   modalCrud.openDelete(expense)
 };
 
-const submitForm = async () => {
-  if (!formRef.value?.isValid) return;
+const closeModal = () => {
+  modalCrud.close();
 
-  let date = getYearAndMonth(expenseForm.value.date);
-
-  const payload = {
-    ...expenseForm.value,
-    name: capitalize(expenseForm.value.name),
-    year: date.year,
-    month: date.month,
+  expenseForm.value = {
+     name: "",
+    month: "",
+    date: "",
+    paid: "À pagar",
+    value: null,
+    year: 0,
+    installments: "",
+    notes: "",
   };
-
-  if (modalCrud.mode.value === "create") {
-    createExpense(payload);
-  } else {
-    updateExpense(
-      selectedExpense.value!.id,
-      payload
-    );
-  }
 };
 
 const createExpense = async (payload: CreateExpenseDTO) => {
@@ -214,11 +136,11 @@ const createExpense = async (payload: CreateExpenseDTO) => {
   }
 };
 
-const updateExpense = async (expenseId: number, payload: CreateExpenseDTO) => {
+const updateExpense = async (payload: CreateExpenseDTO) => {
   loadingStore.start();
 
   try {
-    await expenseService.update(expenseId, payload);
+    await expenseService.update(selectedExpense.value!.id, payload);
     await apiStore.fetchExpenses();
 
     closeModal();

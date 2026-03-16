@@ -47,7 +47,7 @@ import { getCurrentYearMonthDay } from "@/utils/dateUtils";
 import { type Customer, type CreateCustomerDTO } from "@/types/customer";
 
 import CustomersTable from "@/app/customer/CustomersTable.vue";
-import CustomerModal from "@/app/customer/CustomerModal.vue";
+import CustomerModal from "@/app/customer/CustomersModal.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import SearchFilter from "@/components/SearchFilter.vue";
 import StatusFilter from "@/components/StatusFilter.vue";
