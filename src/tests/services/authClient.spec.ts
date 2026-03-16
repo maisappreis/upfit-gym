@@ -1,10 +1,17 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 
 const createMock = vi.fn()
+const requestUseMock = vi.fn()
 
 vi.mock('axios', () => ({
   default: {
-    create: createMock
+    create: createMock.mockReturnValue({
+      interceptors: {
+        request: {
+          use: requestUseMock
+        }
+      }
+    })
   }
 }))
 

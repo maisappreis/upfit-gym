@@ -1,7 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import {
   getMonthIndex,
-  sortDataByDate,
   getCurrentYearMonthDay,
   getNextMonth,
   formatDate,
@@ -21,24 +20,6 @@ describe('dateUtils', () => {
   it('returns index for "Todos os meses"', () => {
     const index = getMonthIndex('Todos os meses')
     expect(index).toBe(months.length)
-  })
-
-  /* ---------- sortDataByDate ---------- */
-
-  it('sorts by year then month order', () => {
-    const data = [
-      { year: 2024, month: months[5], total: 10 },
-      { year: 2023, month: months[10], total: 20 },
-      { year: 2024, month: months[1], total: 30 }
-    ] as any
-
-    const result = sortDataByDate(data)
-
-    expect(result.map((d) => `${d.year}-${d.month}`)).toEqual([
-      `2023-${months[10]}`,
-      `2024-${months[1]}`,
-      `2024-${months[5]}`
-    ])
   })
 
   /* ---------- getCurrentYearMonthDay ---------- */

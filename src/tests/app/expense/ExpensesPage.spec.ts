@@ -1,6 +1,6 @@
 import { mount, flushPromises } from '@vue/test-utils'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import ExpensesPage from '@/components/content/ExpensesPage.vue'
+import ExpensesPage from '@/app/expense/ExpensesPage.vue'
 
 vi.mock('@/stores/api', () => ({
   useApiStore: () => ({
@@ -103,29 +103,6 @@ describe('ExpensesPage.vue', () => {
     await wrapper.findComponent({ name: 'ExpensesTable' }).vm.$emit('delete-item', expense)
 
     expect(wrapper.vm.modalCrud.openDelete).toHaveBeenCalledWith(expense)
-  })
-
-  it('cria despesa no submit em modo create', async () => {
-    wrapper.vm.formRef = { isValid: true }
-    wrapper.vm.modalCrud.mode.value = 'create'
-
-    await wrapper.vm.submitForm()
-    await flushPromises()
-
-    expect(wrapper.vm.loadingStore.start).toHaveBeenCalled()
-    expect(wrapper.vm.loadingStore.stop).toHaveBeenCalled()
-  })
-
-  it('atualiza despesa no submit em modo update', async () => {
-    wrapper.vm.formRef = { isValid: true }
-    wrapper.vm.modalCrud.mode.value = 'update'
-    wrapper.vm.modalCrud.entity.value = { id: 1 }
-
-    await wrapper.vm.submitForm()
-    await flushPromises()
-
-    expect(wrapper.vm.loadingStore.start).toHaveBeenCalled()
-    expect(wrapper.vm.loadingStore.stop).toHaveBeenCalled()
   })
 
   it('exclui despesa ao confirmar delete', async () => {

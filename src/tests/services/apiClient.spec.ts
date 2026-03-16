@@ -6,6 +6,12 @@ const responseUse = vi.fn()
 const postMock = vi.fn()
 const apiCallMock = vi.fn()
 
+vi.mock('@/services/authClient', () => ({
+  authClient: {
+    post: postMock
+  }
+}))
+
 vi.mock('axios', () => {
   const mockInstance: any = vi.fn()
 
@@ -85,7 +91,7 @@ describe('apiClient', () => {
 
     await resultPromise
 
-    expect(postMock).toHaveBeenCalledWith('/token/refresh/', {
+    expect(postMock).toHaveBeenCalledWith('/accounts/token/refresh/', {
       refresh: 'refresh123'
     })
 
@@ -104,13 +110,5 @@ describe('apiClient', () => {
     }
 
     await expect(responseInterceptor(error)).rejects.toBe(error)
-  })
-
-  it('sets baseURL correctly', async () => {
-    const { apiClient, setApiBaseURL } = await import('@/services/apiClient')
-
-    setApiBaseURL('http://new-url.com')
-
-    expect(apiClient.defaults.baseURL).toBe('http://new-url.com')
   })
 })

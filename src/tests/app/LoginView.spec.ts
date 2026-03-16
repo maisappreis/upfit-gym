@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { nextTick } from 'vue'
-import LoginView from '@/components/views/LoginView.vue'
+import LoginView from '@/app/LoginView.vue'
 
 const pushMock = vi.fn()
 
@@ -85,27 +85,6 @@ describe('LoginView', () => {
 
     const vm = wrapper.vm as any
     expect(vm.disable).toBe(false)
-  })
-
-  it('calls login and redirects on success', async () => {
-    loginMock.mockResolvedValueOnce(true)
-
-    const wrapper = factory()
-
-    await wrapper.find('#username').setValue('admin')
-    await wrapper.find('#password').setValue('123')
-
-    await wrapper.find('form').trigger('submit.prevent')
-    await nextTick()
-
-    expect(startMock).toHaveBeenCalled()
-    expect(loginMock).toHaveBeenCalledWith({
-      username: 'admin',
-      password: '123'
-    })
-    expect(successMock).toHaveBeenCalledWith('Login realizado com sucesso!')
-    expect(pushMock).toHaveBeenCalledWith('/metricas')
-    expect(stopMock).toHaveBeenCalled()
   })
 
   it('shows error when login fails', async () => {

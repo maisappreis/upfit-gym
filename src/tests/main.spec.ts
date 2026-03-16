@@ -1,45 +1,67 @@
-import { vi, describe, it, expect } from 'vitest'
-import * as vue from 'vue'
-import * as main from "@/main";
+import { vi, describe, it, expect } from "vitest"
 
-vi.mock('vue', async () => {
-  const actual = await vi.importActual('vue')
-  return {
-    ...actual,
-    createApp: vi.fn(() => ({
-      component: vi.fn(),
-      use: vi.fn(),
-      mount: vi.fn()
-    }))
-  }
-})
+const componentMock = vi.fn()
+const useMock = vi.fn()
+const mountMock = vi.fn()
 
-vi.mock("@/router/index", async (importOriginal) => {
-  const actual = (await importOriginal()) as { default: unknown; [key: string]: unknown };
-  return {
-    ...actual,
-    default: actual.default,
-  };
-});
+const createAppMock = vi.fn(() => ({
+  component: componentMock,
+  use: useMock,
+  mount: mountMock
+}))
 
-vi.mock('@/icons', () => ({ library: {} }))
+const createPiniaMock = vi.fn(() => ({}))
+const checkAuthenticationMock = vi.fn()
 
-vi.mock("pinia", async (importOriginal) => {
-  const actual = (await importOriginal()) as { default: unknown; [key: string]: unknown };
-  return {
-    ...actual,
-    createPinia: vi.fn(() => ({})),
-  };
-});
+vi.mock("vue", () => ({
+  createApp: createAppMock
+}))
 
-describe('main.ts', () => {
-  it('configures app correctly', () => {
-    const createAppSpy = vue.createApp as unknown as ReturnType<typeof vi.fn>
-    expect(createAppSpy).toHaveBeenCalledWith(expect.any(Object))
+vi.mock("pinia", () => ({
+  createPinia: createPiniaMock
+}))
 
-    const appInstance = createAppSpy.mock.results[0].value
-    expect(appInstance.component).toHaveBeenCalledWith('font-awesome-icon', expect.any(Object))
-    expect(appInstance.use).toHaveBeenCalledTimes(3) // library, router, pinia
-    expect(appInstance.mount).toHaveBeenCalledWith('#app')
+vi.mock("@/stores/auth", () => ({
+  useAuthStore: () => ({
+    checkAuthentication: checkAuthenticationMock
+  })
+}))
+
+vi.mock("@/router/index", () => ({
+  default: {}
+}))
+
+vi.mock("@/icons", () => ({
+  library: {}
+}))
+
+vi.mock("@fortawesome/vue-fontawesome", () => ({
+  FontAwesomeIcon: {}
+}))
+
+vi.mock("@/App.vue", () => ({
+  default: {}
+}))
+
+vi.mock("@/assets/css/global.css", () => ({}))
+
+describe("main.ts", () => {
+
+  it("configures and mounts the Vue app correctly", async () => {
+
+    await import("@/main")
+
+    expect(createAppMock).toHaveBeenCalled()
+
+    expect(componentMock).toHaveBeenCalledWith(
+      "font-awesome-icon",
+      expect.anything()
+    )
+
+    expect(useMock).toHaveBeenCalledTimes(3)
+
+    expect(checkAuthenticationMock).toHaveBeenCalled()
+
+    expect(mountMock).toHaveBeenCalledWith("#app")
   })
 })

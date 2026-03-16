@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
 import { describe, it, expect, beforeEach } from 'vitest'
-import MetricsPage from '@/components/content/MetricsPage.vue'
+import MetricsPage from '@/app/metrics/MetricsPage.vue'
 
 describe('MetricsPage.vue', () => {
   let wrapper: any

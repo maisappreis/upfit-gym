@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { createRouter, createMemoryHistory } from 'vue-router'
-import SideBar from '@/components/layout/SideBar.vue'
+import SideBar from '@/app/layout/SideBar.vue'
 
 const router = createRouter({
   history: createMemoryHistory(),

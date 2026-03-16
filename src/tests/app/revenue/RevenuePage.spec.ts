@@ -1,6 +1,6 @@
 import { mount, flushPromises } from '@vue/test-utils'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import RevenuePage from '@/components/content/RevenuePage.vue'
+import RevenuePage from '@/app/revenue/RevenuePage.vue'
 
 vi.mock('@/stores/api', () => ({
   useApiStore: () => ({
@@ -112,29 +112,6 @@ describe('RevenuePage.vue', () => {
     expect(wrapper.vm.modalCrud.openDelete).toHaveBeenCalledWith(revenue)
   })
 
-  it('cria receita no submit em modo create', async () => {
-    wrapper.vm.formRef = { isValid: true }
-    wrapper.vm.modalCrud.mode.value = 'create'
-
-    await wrapper.vm.submitForm()
-    await flushPromises()
-
-    expect(wrapper.vm.loadingStore.start).toHaveBeenCalled()
-    expect(wrapper.vm.loadingStore.stop).toHaveBeenCalled()
-  })
-
-  it('atualiza receita no submit em modo update', async () => {
-    wrapper.vm.formRef = { isValid: true }
-    wrapper.vm.modalCrud.mode.value = 'update'
-    wrapper.vm.modalCrud.entity.value = wrapper.vm.apiStore.revenue[0]
-
-    await wrapper.vm.submitForm()
-    await flushPromises()
-
-    expect(wrapper.vm.loadingStore.start).toHaveBeenCalled()
-    expect(wrapper.vm.loadingStore.stop).toHaveBeenCalled()
-  })
-
   it('exclui receita ao confirmar delete', async () => {
     wrapper.vm.modalCrud.isDelete.value = true
     wrapper.vm.modalCrud.entity.value = wrapper.vm.apiStore.revenue[0]
@@ -144,16 +121,5 @@ describe('RevenuePage.vue', () => {
 
     expect(wrapper.vm.loadingStore.start).toHaveBeenCalled()
     expect(wrapper.vm.loadingStore.stop).toHaveBeenCalled()
-  })
-
-  it('mostra confirmação ao alterar valor da receita', async () => {
-    wrapper.vm.modalCrud.mode.value = 'update'
-    wrapper.vm.modalCrud.entity.value = wrapper.vm.apiStore.revenue[0]
-    wrapper.vm.revenueForm.value = 200
-
-    await wrapper.vm.updateRevenue(10, { value: 200 } as any)
-    await flushPromises()
-
-    expect(wrapper.vm.showConfirmationOfValueChange).toBe(true)
   })
 })

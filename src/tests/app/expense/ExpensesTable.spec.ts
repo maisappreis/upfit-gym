@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
-import ExpensesTable from '@/components/tables/ExpensesTable.vue'
+import ExpensesTable from '@/app/expense/ExpensesTable.vue'
 
 vi.mock('@/services/expense.service', () => {
   return {

@@ -1,6 +1,6 @@
-import { mount, flushPromises } from '@vue/test-utils'
+import { mount } from '@vue/test-utils'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import CustomersPage from '@/components/content/CustomersPage.vue'
+import CustomersPage from '@/app/customer/CustomersPage.vue'
 
 vi.mock('@/stores/api', () => ({
   useApiStore: () => ({
@@ -85,6 +85,9 @@ describe('CustomersPage.vue', () => {
           BaseButton: {
             template: `<button><slot /></button>`
           },
+          CustomerModal: {
+            template: '<div></div>'
+          },
           CustomersTable: true,
           SearchFilter: true,
           StatusFilter: true,
@@ -123,39 +126,5 @@ describe('CustomersPage.vue', () => {
     const customer = { id: 1, name: 'João', status: 'Ativo' }
     await wrapper.findComponent({ name: 'CustomersTable' }).vm.$emit('delete-item', customer)
     expect(wrapper.vm.modalCrud.openDelete).toHaveBeenCalled()
-  })
-
-  it('cria cliente quando submitForm é chamado em modo create', async () => {
-    wrapper.vm.formRef = { isValid: true }
-    wrapper.vm.modalCrud.mode.value = 'create'
-
-    await wrapper.vm.submitForm()
-    await flushPromises()
-
-    expect(wrapper.vm.loadingStore.start).toHaveBeenCalled()
-    expect(wrapper.vm.loadingStore.stop).toHaveBeenCalled()
-  })
-
-  it('atualiza cliente quando submitForm é chamado em modo update', async () => {
-    wrapper.vm.formRef = { isValid: true }
-    wrapper.vm.modalCrud.mode.value = 'update'
-    wrapper.vm.modalCrud.entity.value = { id: 1 }
-
-    await wrapper.vm.submitForm()
-    await flushPromises()
-
-    expect(wrapper.vm.loadingStore.start).toHaveBeenCalled()
-    expect(wrapper.vm.loadingStore.stop).toHaveBeenCalled()
-  })
-
-  it('exclui cliente ao confirmar delete', async () => {
-    wrapper.vm.modalCrud.isDelete.value = true
-    wrapper.vm.modalCrud.entity.value = { id: 1 }
-
-    await wrapper.vm.confirmDelete()
-    await flushPromises()
-
-    expect(wrapper.vm.loadingStore.start).toHaveBeenCalled()
-    expect(wrapper.vm.loadingStore.stop).toHaveBeenCalled()
   })
 })

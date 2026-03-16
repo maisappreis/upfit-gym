@@ -17,6 +17,6 @@ app.use(router);
 app.use(pinia);
 
 const authStore = useAuthStore();
-await authStore.checkAuthentication();
+authStore.checkAuthentication();
 
 app.mount("#app");
