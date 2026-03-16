@@ -23,69 +23,15 @@
       @delete-item="openDeleteModal"
     />
 
-    <ModalCard v-model="modalCrud.isOpen.value">
-      <template #header>
-        <span>
-          {{ modalTitle }}
-        </span>
-      </template>
-
-      <!-- DELETE BLOCKED -->
-      <p
-        v-if="modalCrud.isDelete.value && modalCrud.deleteIsBlocked.value"
-        class="message-area"
-      >
-        Não é possível excluir o cliente
-        <strong class="highlight">{{ customerName }}</strong>,
-        pois isso excluiria todo o seu histórico de receitas.
-        Ao invés de excluí-lo, mude seu status para
-        <strong class="highlight">Inativo</strong>.
-      </p>
-
-      <!-- DELETE CONFIRM -->
-      <p
-        v-else-if="modalCrud.isDelete.value"
-        class="message-area"
-      >
-        Tem certeza que deseja excluir o cliente
-        <strong class="highlight">{{ customerName }}</strong>?
-      </p>
-
-      <!-- CREATE AND UPDATE FORM -->
-      <CustomersForm
-        v-else
-        v-model="customerForm"
-        ref="formRef"
-      />
-
-      <template #footer>
-          <BaseButton
-            v-if="modalCrud.isDelete.value"
-            size="lg"
-            :loading="loadingStore.isLoading"
-            @click="confirmDelete"
-          >
-            {{ buttonMessage }}
-          </BaseButton>
-          <BaseButton
-            v-else
-            type="submit"
-            size="lg"
-            :disabled="!formRef?.isValid"
-            :loading="loadingStore.isLoading"
-            @click="submitForm"
-          >
-            Salvar
-          </BaseButton>
-          <BaseButton
-            size="lg"
-            variant="danger"
-            @click="closeModal"
-          >
-            Cancelar
-          </BaseButton>
-      </template>
-    </ModalCard>
+    <CustomerModal
+      :modalCrud="modalCrud"
+      :customerForm="customerForm"
+      @create-customer="createCustomer"
+      @update-customer="updateCustomer"
+      @inactive-customer="inactiveCustomer"
+      @delete-customer="deleteCustomer"
+      @close-modal="closeModal"
+    />
   </div>
 </template>
 
@@ -95,17 +41,15 @@ import { useApiStore } from "@/stores/api";
 import { useAlertStore } from "@/stores/alert";
 import { useLoadingStore } from "@/stores/loading";
 import { useCrudModal } from "@/composables/useCrudModal";
-import { capitalize } from "@/utils/dataUtils";
 import { customerService } from "@/services/customer.service";
 import { revenueService } from "@/services/revenue.service";
 import { getCurrentYearMonthDay } from "@/utils/dateUtils";
 import { type Customer, type CreateCustomerDTO } from "@/types/customer";
 
-import BaseButton from "@/components/BaseButton.vue";
 import CustomersTable from "@/app/customer/CustomersTable.vue";
+import CustomerModal from "@/app/customer/CustomerModal.vue";
+import BaseButton from "@/components/BaseButton.vue";
 import SearchFilter from "@/components/SearchFilter.vue";
-import ModalCard from "@/components/ModalCard.vue";
-import CustomersForm from "@/app/customer/CustomersForm.vue";
 import StatusFilter from "@/components/StatusFilter.vue";
 
 const apiStore = useApiStore();
@@ -115,7 +59,6 @@ const modalCrud = useCrudModal<Customer>();
 
 const searchedField = ref<string[]>([]);
 const currentStatus = ref<"Inativo" | "Ativo" | "Todos">("Ativo");
-const formRef = ref<any>(null);
 const customerForm = ref<CreateCustomerDTO>({
   name: "",
   frequency: "",
@@ -127,22 +70,6 @@ const customerForm = ref<CreateCustomerDTO>({
 });
 
 const selectedCustomer = computed(() => modalCrud.entity.value);
-const customerName = computed(() => modalCrud.entity.value?.name ?? "");
-
-const modalTitle = computed(() => {
-  switch (modalCrud.mode.value) {
-    case "create": return "Adicionar Cliente";
-    case "update": return "Atualizar Cliente";
-    case "delete": return "Excluir Cliente";
-    default: return "";
-  }
-});
-
-const buttonMessage = computed(() =>
-  modalCrud.mode.value === "delete" && modalCrud.deleteIsBlocked.value
-    ? "Inativar"
-    : "Confirmar"
-);
 
 const filteredCustomers = computed(() =>
   apiStore.customers.filter(customer =>
@@ -151,24 +78,6 @@ const filteredCustomers = computed(() =>
       : customer.status === currentStatus.value
   )
 );
-
-const confirmDelete = () => {
-  modalCrud.deleteIsBlocked.value ? inactiveCustomer() : deleteCustomer();
-};
-
-const closeModal = () => {
-  modalCrud.close();
-
-  customerForm.value = {
-    name: "",
-    frequency: "",
-    start: "",
-    plan: "Mensal",
-    value: null,
-    status: "Ativo",
-    notes: ""
-  };
-};
 
 const openUpdateModal = (customer: Customer) => {
   customerForm.value = {
@@ -188,22 +97,18 @@ const openDeleteModal = (custumer: Customer) => {
   modalCrud.openDelete(custumer, !apiStore.canDeleteCustomer(custumer.id));
 };
 
-const submitForm = async () => {
-  if (!formRef.value?.isValid) return;
+const closeModal = () => {
+  modalCrud.close();
 
-  const payload = {
-    ...customerForm.value,
-    name: capitalize(customerForm.value.name),
+  customerForm.value = {
+    name: "",
+    frequency: "",
+    start: "",
+    plan: "Mensal",
+    value: null,
+    status: "Ativo",
+    notes: ""
   };
-
-  if (modalCrud.mode.value === "create") {
-    createCustomer(payload);
-  } else {
-    updateCustomer(
-      selectedCustomer.value!.id,
-      payload
-    );
-  }
 };
 
 const createCustomer = async (payload: CreateCustomerDTO) => {
@@ -228,11 +133,11 @@ const createCustomer = async (payload: CreateCustomerDTO) => {
   }
 };
 
-const updateCustomer = async (customerId: number, payload: CreateCustomerDTO) => {
+const updateCustomer = async (payload: CreateCustomerDTO) => {
   loadingStore.start();
 
   try {
-    await customerService.update(customerId, payload);
+    await customerService.update(selectedCustomer.value!.id, payload);
     await apiStore.fetchCustomers();
 
     closeModal();
