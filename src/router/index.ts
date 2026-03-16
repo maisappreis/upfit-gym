@@ -1,4 +1,5 @@
 import { createRouter, createWebHashHistory } from "vue-router";
+import { useAuthStore } from "@/stores/auth";
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -21,7 +22,8 @@ const router = createRouter({
           meta: {
             icon: "fa-solid fa-chart-line",
             title: "Métricas",
-            subtitle: "Visualização gráfica de receita, despesas, lucro e clientes"
+            subtitle: "Visualização gráfica de receita, despesas, lucro e clientes",
+            requiresAuth: true
           }
         },
         {
@@ -30,7 +32,8 @@ const router = createRouter({
           meta: {
             icon: "fa-solid fa-users",
             title: "Clientes",
-            subtitle: "Cadastramento dos clientes"
+            subtitle: "Cadastramento dos clientes",
+            requiresAuth: true
           }
         },
         {
@@ -39,7 +42,8 @@ const router = createRouter({
           meta: {
             icon: "fa-solid fa-hand-holding-dollar",
             title: "Receitas",
-            subtitle: "Controle do recebimento das mensalidades dos clientes"
+            subtitle: "Controle do recebimento das mensalidades dos clientes",
+            requiresAuth: true
           }
         },
         {
@@ -48,16 +52,27 @@ const router = createRouter({
           meta: {
             icon: "fa-solid fa-money-bill-transfer",
             title: "Despesas",
-            subtitle: "Controle do pagamento das contas"
+            subtitle: "Controle do pagamento das contas",
+            requiresAuth: true
           }
         }
       ]
     },
     {
       path: "/:pathMatch(.*)*",
-      redirect: "/"
+      redirect: "/login"
     },
   ]
+});
+
+router.beforeEach((to) => {
+  const authStore = useAuthStore();
+
+  if (to.meta.requiresAuth &&
+    !authStore.isAuthenticated
+  ) {
+    return "/login";
+  }
 });
 
 export default router;

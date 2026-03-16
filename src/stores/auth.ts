@@ -4,32 +4,29 @@ import { loginService } from "@/services/login.service";
 import { useApiStore } from "@/stores/api";
 import * as jwt_decode from "jwt-decode";
 import { type LoginPayload, type User } from "@/types/login";
+import router from "@/router";
 
 export const useAuthStore = defineStore("auth", () => {
   const user = ref<User | null>(null);
   const accessToken = ref<string>("");
   const refreshToken = ref<string>("");
   const tokenExpirationTime = ref<number>(0);
-  const refreshInterval = ref<ReturnType<typeof setInterval>>();
-  const isAuthenticated = ref<boolean>(false);
+  const refreshTimeout = ref<ReturnType<typeof setTimeout>>();
+  const isAuthenticated = ref<boolean>(false);  
 
   const login = async (payload: LoginPayload) => {
     const apiStore = useApiStore();
 
     const response = await loginService.create(payload);
 
-    if (!response.access || !response.refresh) {
-      throw new Error("Invalid login response");
-    }
-
-    user.value = response.user;
-
     setTokens(response.access, response.refresh);
-    checkAuthentication();
+
+    isAuthenticated.value = true;
+    user.value = response.user;
 
     await apiStore.fetchData();
 
-    return response;
+    router.push("/");
   };
 
   const setTokens = (access: string, refresh: string) => {
@@ -43,16 +40,14 @@ export const useAuthStore = defineStore("auth", () => {
 
     tokenExpirationTime.value = decoded.exp ? decoded.exp * 1000 : 0;
 
-    const refreshTimeout = ref<ReturnType<typeof setTimeout>>();
-
     if (refreshTimeout.value) {
-        clearTimeout(refreshTimeout.value);
+      clearTimeout(refreshTimeout.value);
     }
 
     const delay = tokenExpirationTime.value - Date.now() - 60000;
 
     if (delay > 0) {
-        refreshTimeout.value = setTimeout(refreshTokenFunc, delay);
+      refreshTimeout.value = setTimeout(refreshTokenFunc, delay);
     }
   };
 
@@ -69,12 +64,20 @@ export const useAuthStore = defineStore("auth", () => {
   const checkAuthentication = async () => {
     const token = localStorage.getItem("accessToken");
 
-    if (token) {
-      isAuthenticated.value = true;
-      await getProfile();
-    } else {
+    if (!token) {
       isAuthenticated.value = false;
       user.value = null;
+      return;
+    }
+
+    accessToken.value = token;
+    refreshToken.value = localStorage.getItem("refreshToken") || "";
+
+    try {
+      await getProfile();
+      isAuthenticated.value = true;
+    } catch {
+      logout();
     }
   };
 
@@ -97,8 +100,9 @@ export const useAuthStore = defineStore("auth", () => {
     refreshToken.value = "";
     tokenExpirationTime.value = 0;
 
-    if (refreshInterval.value) clearInterval(refreshInterval.value);
-    location.reload();
+    isAuthenticated.value = false;
+
+    router.replace("/login");
   };
 
   return {
@@ -108,5 +112,5 @@ export const useAuthStore = defineStore("auth", () => {
     checkAuthentication,
     isAuthenticated,
     logout
-  }
-})
+  };
+});

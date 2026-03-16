@@ -73,18 +73,14 @@ const disable = computed(
 );
 
 const loginRealUser = async () => {
-  const success = await login(form);
-
-  if (success) router.push("/metricas");
+  await login(form);
 };
 
 const loginDemoUser = async () => {
-  const success = await login({
+  await login({
     username: "demo",
     password: "demo123"
   });
-
-  if (success) router.push("/metricas");
 };
 
 onMounted(() => {
