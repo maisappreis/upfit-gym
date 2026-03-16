@@ -27,81 +27,18 @@
       @delete-item="openDeleteModal"
     />
 
-    <ModalCard v-model="modalCrud.isOpen.value">
-      <template #header>
-        <span>
-          {{ modalTitle }}
-        </span>
-      </template>
-
-      <!-- CHANGE VALUE CONFIRM -->
-      <p
-        v-if="showConfirmationOfValueChange"
-        class="message-area"
-      >
-        O valor atual da mensalidade do cliente
-        <strong class="highlight">{{ currentCustomer?.name }}</strong> é de
-        <strong class="highlight">R${{ formatValue(currentCustomer?.value!) }}</strong>
-        segundo o seu cadastro. Você gostaria de atualizar todos os futuros pagamentos deste cliente
-        para este novo valor de
-        <strong class="highlight">R${{ formatValue(Number(revenueForm.value!)) }}</strong>?
-      </p>
-
-      <!-- DELETE CONFIRM -->
-      <p
-        v-else-if="modalCrud.isDelete.value"
-        class="message-area"
-      >
-        Tem certeza que deseja excluir o recebimento da mensalidade do cliente
-        <strong class="highlight">{{ currentCustomer?.name }}</strong>
-        referente ao mês de
-        <strong class="highlight">{{ selectedRevenue?.month }}</strong>?
-      </p>
-
-      <!-- CREATE AND UPDATE FORM -->
-      <RevenueForm
-        v-else
-        v-model="revenueForm"
-        :months="months"
-        :years="years"
-        :customers-list="apiStore.customers.filter((c) => c.status === 'Ativo')"
-        ref="formRef"
-      />
-
-      <template #footer>
-          <BaseButton
-            v-if="modalCrud.isDelete.value"
-            :loading="loadingStore.isLoading"
-            @click="deleteRevenue"
-          >
-            Confimar
-          </BaseButton>
-          <BaseButton
-            v-else-if="showConfirmationOfValueChange"
-            :loading="loadingStore.isLoading"
-            @click="changeValue"
-          >
-            Confimar
-          </BaseButton>
-          <BaseButton
-            v-else
-            type="submit"
-            size="lg"
-            :disabled="!formRef?.isValid"
-            :loading="loadingStore.isLoading"
-            @click="submitForm"
-          >
-            Salvar
-          </BaseButton>
-          <BaseButton
-            size="lg"
-            variant="danger"
-            @click="closeModal"
-          >
-            Cancelar
-          </BaseButton>
-      </template>
-    </ModalCard>
+    <RevenueModal
+      :modalCrud="modalCrud"
+      :revenueForm="revenueForm"
+      :revenue="selectedRevenue"
+      :customer="currentCustomer"
+      :showConfirmation="showConfirmationOfValueChange"
+      @create-revenue="createRevenue"
+      @update-revenue="updateRevenue"
+      @delete-revenue="deleteRevenue"
+      @change-value="changeValue"
+      @close-modal="closeModal"
+    />
   </div>
 </template>
 
@@ -115,17 +52,15 @@ import { getNextMonth } from "@/utils/dateUtils";
 import { filteredData } from "@/utils/dataUtils";
 import { customerService } from "@/services/customer.service";
 import { revenueService } from "@/services/revenue.service";
-import { months, years } from "@/utils/constants";
 import { type Customer } from "@/types/customer";
 import { type Revenue, type CreateRevenueDTO } from "@/types/revenue";
 
-import BaseButton from "@/components/BaseButton.vue";
 import RevenuesTable from "@/app/revenue/RevenuesTable.vue";
-import ModalCard from "@/components/ModalCard.vue";
+import RevenueModal from "@/app/revenue/RevenueModal.vue";
+import BaseButton from "@/components/BaseButton.vue";
 import DateFilter from "@/components/DateFilter.vue";
 import SearchFilter from "@/components/SearchFilter.vue";
 import StatusFilter from "@/components/StatusFilter.vue";
-import RevenueForm from "@/app/revenue/RevenueForm.vue";
 
 const apiStore = useApiStore();
 const alertStore = useAlertStore();
@@ -137,7 +72,6 @@ const currentMonth = ref<string>("");
 const currentYear = ref<number>(0);
 const currentStatus = ref<string>("");
 const showConfirmationOfValueChange = ref<boolean>(false);
-const formRef = ref<any>(null);
 const revenueForm = ref<CreateRevenueDTO>({
   customer: null,
   month: "",
@@ -151,16 +85,8 @@ const revenueForm = ref<CreateRevenueDTO>({
 const selectedRevenue = computed(() => modalCrud.entity.value);
 
 const currentCustomer = computed(() => {
+  if (!selectedRevenue.value) return
   return apiStore.customers.find((e: Customer) => e.id === selectedRevenue.value!.customer);
-});
-
-const modalTitle = computed(() => {
-  switch (modalCrud.mode.value) {
-    case "create": return "Adicionar Receita";
-    case "update": return "Atualizar Receita";
-    case "delete": return "Excluir Receita";
-    default: return "";
-  }
 });
 
 const filteredRevenue = computed(() => {
@@ -219,25 +145,6 @@ const updateRevenueValue = async (id: number) => {
   }
 };
 
-const formatValue = (value: number) => {
-  return value.toFixed(2).toString().replace(/\./g, ",");
-};
-
-const closeModal = () => {
-  modalCrud.close();
-  showConfirmationOfValueChange.value = false;
-
-  revenueForm.value = {
-    customer: null,
-    month: "",
-    notes: "",
-    paid: "À pagar",
-    payment_day: null,
-    value: null,
-    year: null
-  };
-};
-
 const openUpdateModal = (revenue: Revenue) => {
   revenueForm.value = {
     customer: revenue.customer,
@@ -256,21 +163,19 @@ const openDeleteModal = (revenue: Revenue) => {
   modalCrud.openDelete(revenue);
 };
 
-const submitForm = async () => {
-  if (!formRef.value?.isValid) return;
+const closeModal = () => {
+  modalCrud.close();
+  showConfirmationOfValueChange.value = false;
 
-  const payload = {
-    ...revenueForm.value
+  revenueForm.value = {
+    customer: null,
+    month: "",
+    notes: "",
+    paid: "À pagar",
+    payment_day: null,
+    value: null,
+    year: null
   };
-
-  if (modalCrud.mode.value === "create") {
-    createRevenue(payload);
-  } else {
-    updateRevenue(
-      selectedRevenue.value!.id,
-      payload
-    );
-  }
 };
 
 const createRevenue = async (payload: CreateRevenueDTO) => {
@@ -292,11 +197,11 @@ const createRevenue = async (payload: CreateRevenueDTO) => {
   }
 };
 
-const updateRevenue = async (revenueId: number, payload: CreateRevenueDTO) => {
+const updateRevenue = async (payload: CreateRevenueDTO) => {
   loadingStore.start();
 
   try {
-    await revenueService.update(revenueId, payload);
+    await revenueService.update(selectedRevenue.value!.id, payload);
     await apiStore.fetchRevenue();
 
     checkChangesInValue();

@@ -59,8 +59,8 @@ import { ref, computed } from "vue";
 import { useLoadingStore } from "@/stores/loading";
 import { getYearAndMonth } from "@/utils/dateUtils";
 import { capitalize } from "@/utils/dataUtils";
-import { type Expense, type CreateExpenseDTO } from "@/types/expense";
 import { type CrudModal } from "@/composables/useCrudModal";
+import { type Expense, type CreateExpenseDTO } from "@/types/expense";
 
 import ModalCard from "@/components/ModalCard.vue";
 import BaseButton from "@/components/BaseButton.vue";

@@ -111,6 +111,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useApiStore } from "@/stores/api";
+import { useAlertStore } from "@/stores/alert";
 import { useLoadingStore } from "@/stores/loading";
 import { formatDate, getNextMonth } from "@/utils/dateUtils";
 import { useCrudModal } from "@/composables/useCrudModal";
@@ -126,6 +127,7 @@ import BaseButton from "@/components/BaseButton.vue";
 import ModalCard from "@/components/ModalCard.vue";
 
 const apiStore = useApiStore();
+const alertStore = useAlertStore();
 const loadingStore = useLoadingStore();
 
 const props = defineProps<{
@@ -146,7 +148,6 @@ const {
   () => props.searchedField
 );
 
-const responseMessage = ref<string>("");
 const statusMessage = ref<string>("");
 const selectedRevenue = ref<Revenue>();
 const columns: BaseTableColumn<Revenue>[] = [
@@ -213,10 +214,9 @@ const changePaidStatus = async () => {
     await apiStore.fetchRevenue();
 
     closeModal();
-    responseMessage.value = "Status do pagamento salvo com sucesso!";
+    alertStore.success("Status do pagamento salvo com sucesso!");
   } catch (error) {
-    console.error("Erro ao atualizar o status de pagamento...", error);
-    responseMessage.value = "Erro ao salvar o status do pagamento.";
+    alertStore.error("Erro ao atualizar o status de pagamento.", error);
   } finally {
     loadingStore.stop();
   }
