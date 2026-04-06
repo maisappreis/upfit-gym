@@ -21,7 +21,7 @@ vi.mock("pinia", () => ({
   createPinia: createPiniaMock
 }))
 
-vi.mock("@/stores/auth", () => ({
+vi.mock("@/features/auth/stores/auth", () => ({
   useAuthStore: () => ({
     checkAuthentication: checkAuthenticationMock
   })

@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { shallowMount } from '@vue/test-utils'
-import LayoutView from '@/app/LayoutView.vue'
+import LayoutView from '@/shared/components/layout/LayoutView.vue'
 
 describe('LayoutView', () => {
   const factory = () =>

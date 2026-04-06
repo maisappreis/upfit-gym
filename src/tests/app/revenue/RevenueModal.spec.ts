@@ -5,14 +5,14 @@ import RevenueModal from "@/features/revenue/components/RevenueModal.vue";
 import type { CrudModal } from "@/shared/composables/useCrudModal";
 import type { Revenue } from "@/features/revenue/types/revenue";
 
-vi.mock("@/stores/loading", () => ({
+vi.mock("@/shared/stores/loading", () => ({
   useLoadingStore: () => ({
     isLoading: false,
   }),
 }));
 
-vi.mock("@/stores/api", () => ({
-  useApiStore: () => ({
+vi.mock("@/features/customer/stores/useCustomerStore", () => ({
+  useCustomerStore: () => ({
     customers: [
       { id: 1, name: "Joao", status: "Ativo" },
       { id: 2, name: "Maria", status: "Inativo" },

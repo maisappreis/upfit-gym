@@ -4,7 +4,7 @@ import { ref } from "vue"
 
 import RevenuesTable from "@/features/revenue/components/RevenuesTable.vue"
 import { revenueService } from "@/features/revenue/services/revenue.service"
-import { useApiStore } from "@/stores/api"
+import { useRevenueStore } from "@/features/revenue/stores/useRevenueStore"
 import { useLoadingStore } from "@/shared/stores/loading"
 
 const fetchRevenueMock = vi.fn()
@@ -13,13 +13,13 @@ const loadingStopMock = vi.fn()
 const openUpdateMock = vi.fn()
 const closeMock = vi.fn()
 
-vi.mock("@/stores/api", () => ({
-  useApiStore: () => ({
+vi.mock("@/features/revenue/stores/useRevenueStore", () => ({
+  useRevenueStore: () => ({
     fetchRevenue: fetchRevenueMock
   })
 }))
 
-vi.mock("@/stores/loading", () => ({
+vi.mock("@/shared/stores/loading", () => ({
   useLoadingStore: () => ({
     isLoading: false,
     start: loadingStartMock,
@@ -30,21 +30,21 @@ vi.mock("@/stores/loading", () => ({
 const alertSuccessMock = vi.fn()
 const alertErrorMock = vi.fn()
 
-vi.mock("@/stores/alert", () => ({
+vi.mock("@/shared/stores/alert", () => ({
   useAlertStore: () => ({
     success: alertSuccessMock,
     error: alertErrorMock
   })
 }))
 
-vi.mock("@/services/revenue.service", () => ({
+vi.mock("@/features/revenue/services/revenue.service", () => ({
   revenueService: {
     update: vi.fn(),
     create: vi.fn()
   }
 }))
 
-vi.mock("@/composables/useCrudModal", () => ({
+vi.mock("@/shared/composables/useCrudModal", () => ({
   useCrudModal: () => ({
     isOpen: { value: false },
     openUpdate: openUpdateMock,
@@ -52,7 +52,7 @@ vi.mock("@/composables/useCrudModal", () => ({
   })
 }))
 
-vi.mock("@/composables/useTooltipAnchors", () => ({
+vi.mock("@/shared/composables/useTooltipAnchors", () => ({
   useTooltipAnchors: () => ({
     hoveredId: ref(null),
     refsMap: {},
@@ -60,7 +60,7 @@ vi.mock("@/composables/useTooltipAnchors", () => ({
   })
 }))
 
-vi.mock("@/composables/useTablePagination", () => ({
+vi.mock("@/shared/composables/useTablePagination", () => ({
   useTablePagination: (dataFn: any) => ({
     itemsPerPage: ref(10),
     currentPage: ref(1),
@@ -206,11 +206,11 @@ describe("RevenuesTable", () => {
 
     await wrapper.vm.changePaidStatus()
 
-    const apiStore = useApiStore()
+    const revenueStore = useRevenueStore()
     const loadingStore = useLoadingStore()
 
     expect(revenueService.update).toHaveBeenCalled()
-    expect(apiStore.fetchRevenue).toHaveBeenCalled()
+    expect(revenueStore.fetchRevenue).toHaveBeenCalled()
     expect(loadingStore.start).toHaveBeenCalled()
     expect(loadingStore.stop).toHaveBeenCalled()
   })

@@ -4,7 +4,7 @@ import { ref, computed } from "vue";
 import CustomersModal from "@/features/customer/components/CustomersModal.vue";
 import type { Customer } from "@/features/customer/types/customer";
 
-vi.mock("@/stores/loading", () => ({
+vi.mock("@/shared/stores/loading", () => ({
   useLoadingStore: () => ({
     isLoading: false,
   }),

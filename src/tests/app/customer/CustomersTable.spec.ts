@@ -1,12 +1,12 @@
 import { describe, it, expect, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
-import CustomersTable from '@/app/customer/CustomersTable.vue'
+import CustomersTable from '@/features/customer/components/CustomersTable.vue'
 
 vi.mock('@/shared/utils/dateUtils', () => ({
   formatDate: (value: string) => `formatted-${value}`
 }))
 
-vi.mock('@/composables/useTooltipAnchors', () => ({
+vi.mock('@/shared/composables/useTooltipAnchors', () => ({
   useTooltipAnchors: () => ({
     hoveredId: null,
     refsMap: {},
@@ -14,7 +14,7 @@ vi.mock('@/composables/useTooltipAnchors', () => ({
   })
 }))
 
-vi.mock('@/composables/useTablePagination', () => ({
+vi.mock('@/shared/composables/useTablePagination', () => ({
   useTablePagination: (dataFn: any) => ({
     itemsPerPage: 10,
     currentPage: 1,

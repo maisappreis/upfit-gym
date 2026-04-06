@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { nextTick } from 'vue'
-import LoginView from '@/app/LoginView.vue'
+import LoginView from '@/features/auth/components/LoginView.vue'
 
 const pushMock = vi.fn()
 
@@ -16,7 +16,7 @@ const checkAuthMock = vi.fn()
 
 let isAuthenticatedMock = false
 
-vi.mock('@/stores/auth', () => ({
+vi.mock("@/features/auth/stores/auth", () => ({
   useAuthStore: () => ({
     login: loginMock,
     checkAuthentication: checkAuthMock,
@@ -29,7 +29,7 @@ vi.mock('@/stores/auth', () => ({
 const successMock = vi.fn()
 const errorMock = vi.fn()
 
-vi.mock('@/stores/alert', () => ({
+vi.mock('@/shared/stores/alert', () => ({
   useAlertStore: () => ({
     success: successMock,
     error: errorMock
@@ -39,7 +39,7 @@ vi.mock('@/stores/alert', () => ({
 const startMock = vi.fn()
 const stopMock = vi.fn()
 
-vi.mock('@/stores/loading', () => ({
+vi.mock('@/shared/stores/loading', () => ({
   useLoadingStore: () => ({
     start: startMock,
     stop: stopMock

@@ -5,7 +5,7 @@ import ExpensesModal from "@/features/expense/components/ExpensesModal.vue";
 import type { Expense } from "@/features/expense/types/expense";
 import type { CrudModal } from "@/shared/composables/useCrudModal";
 
-vi.mock("@/stores/loading", () => ({
+vi.mock("@/shared/stores/loading", () => ({
   useLoadingStore: () => ({
     isLoading: false,
   }),

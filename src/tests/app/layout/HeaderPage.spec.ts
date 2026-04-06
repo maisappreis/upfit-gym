@@ -5,7 +5,7 @@ import HeaderPage from "@/shared/components/layout/HeaderPage.vue"
 
 const logoutMock = vi.fn()
 
-vi.mock("@/stores/auth", () => ({
+vi.mock("@/features/auth/stores/auth", () => ({
   useAuthStore: () => ({
     user: {
       first_name: "João"

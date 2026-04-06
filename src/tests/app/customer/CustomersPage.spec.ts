@@ -1,9 +1,9 @@
 import { mount } from '@vue/test-utils'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import CustomersPage from '@/app/customer/CustomersPage.vue'
+import CustomersPage from '@/features/customer/components/CustomersPage.vue'
 
-vi.mock('@/stores/api', () => ({
-  useApiStore: () => ({
+vi.mock('@/features/customer/stores/useCustomerStore', () => ({
+  useCustomerStore: () => ({
     customers: [
       {
         id: 1,
@@ -27,19 +27,29 @@ vi.mock('@/stores/api', () => ({
       }
     ],
     fetchCustomers: vi.fn(),
-    fetchRevenue: vi.fn(),
+  })
+}))
+
+vi.mock('@/features/customer/domain/canDeleteCustomer', () => ({
+  canDeleteCustomer: () => ({
     canDeleteCustomer: vi.fn(() => true)
   })
 }))
 
-vi.mock('@/stores/alert', () => ({
+vi.mock('@/features/revenue/stores/useRevenueStore', () => ({
+  useRevenueStore: () => ({
+    fetchRevenue: vi.fn()
+  })
+}))
+
+vi.mock('@/shared/stores/alert', () => ({
   useAlertStore: () => ({
     success: vi.fn(),
     error: vi.fn()
   })
 }))
 
-vi.mock('@/stores/loading', () => ({
+vi.mock('@/shared/stores/loading', () => ({
   useLoadingStore: () => ({
     isLoading: false,
     start: vi.fn(),
@@ -47,7 +57,7 @@ vi.mock('@/stores/loading', () => ({
   })
 }))
 
-vi.mock('@/services/customer.service', () => ({
+vi.mock('@/features/customer/services/customer.service', () => ({
   customerService: {
     create: vi.fn(() => Promise.resolve({ id: 3 })),
     update: vi.fn(() => Promise.resolve()),
@@ -55,13 +65,13 @@ vi.mock('@/services/customer.service', () => ({
   }
 }))
 
-vi.mock('@/services/revenue.service', () => ({
+vi.mock('@/features/revenue/services/revenue.service', () => ({
   revenueService: {
     create: vi.fn(() => Promise.resolve())
   }
 }))
 
-vi.mock('@/composables/useCrudModal', () => ({
+vi.mock('@/shared/composables/useCrudModal', () => ({
   useCrudModal: () => ({
     isOpen: { value: false },
     isDelete: { value: false },

@@ -1,9 +1,9 @@
 import { mount, flushPromises } from '@vue/test-utils'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import ExpensesPage from '@/app/expense/ExpensesPage.vue'
+import ExpensesPage from '@/features/expense/components/ExpensesPage.vue'
 
-vi.mock('@/stores/api', () => ({
-  useApiStore: () => ({
+vi.mock('@/features/expense/stores/useExpenseStore', () => ({
+  useExpenseStore: () => ({
     expenses: [
       {
         id: 1,
@@ -21,14 +21,14 @@ vi.mock('@/stores/api', () => ({
   })
 }))
 
-vi.mock('@/stores/alert', () => ({
+vi.mock('@/shared/stores/alert', () => ({
   useAlertStore: () => ({
     success: vi.fn(),
     error: vi.fn()
   })
 }))
 
-vi.mock('@/stores/loading', () => ({
+vi.mock('@/shared/stores/loading', () => ({
   useLoadingStore: () => ({
     isLoading: false,
     start: vi.fn(),
@@ -36,7 +36,7 @@ vi.mock('@/stores/loading', () => ({
   })
 }))
 
-vi.mock('@/services/expense.service', () => ({
+vi.mock('@/features/expense/services/expense.service', () => ({
   expenseService: {
     create: vi.fn(() => Promise.resolve()),
     update: vi.fn(() => Promise.resolve()),
@@ -44,7 +44,7 @@ vi.mock('@/services/expense.service', () => ({
   }
 }))
 
-vi.mock('@/composables/useCrudModal', () => ({
+vi.mock('@/shared/composables/useCrudModal', () => ({
   useCrudModal: () => ({
     isOpen: { value: false },
     isDelete: { value: false },

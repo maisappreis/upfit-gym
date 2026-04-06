@@ -3,7 +3,7 @@ import { mount } from '@vue/test-utils'
 import { defineComponent, h } from 'vue'
 import { type CreateRevenueDTO } from '@/features/revenue/types/revenue'
 import { type Customer } from '@/features/customer/types/customer'
-import RevenueForm from '@/app/revenue/RevenueForm.vue'
+import RevenueForm from '@/features/revenue/components/RevenueForm.vue'
 
 const FocusableStub = defineComponent({
   name: 'FocusableStub',

@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { type CreateCustomerDTO } from '@/features/customer/types/customer'
-import CustomersForm from '@/app/customer/CustomersForm.vue'
+import CustomersForm from '@/features/customer/components/CustomersForm.vue'
 
 vi.mock('@/shared/components/form/BaseInput.vue', () => ({
   default: {

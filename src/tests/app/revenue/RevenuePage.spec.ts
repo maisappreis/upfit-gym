@@ -1,10 +1,15 @@
 import { mount, flushPromises } from '@vue/test-utils'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import RevenuePage from '@/app/revenue/RevenuePage.vue'
+import RevenuePage from '@/features/revenue/components/RevenuePage.vue'
 
-vi.mock('@/stores/api', () => ({
-  useApiStore: () => ({
+vi.mock('@/features/customer/stores/useCustomerStore', () => ({
+  useCustomerStore: () => ({
     customers: [{ id: 1, name: 'João', value: 100, status: 'Ativo', start: '', plan: 'Mensal' }],
+  })
+}))
+
+vi.mock('@/features/revenue/stores/useRevenueStore', () => ({
+  useRevenueStore: () => ({
     revenue: [
       {
         id: 10,
@@ -17,19 +22,24 @@ vi.mock('@/stores/api', () => ({
         notes: ''
       }
     ],
-    fetchRevenue: vi.fn(),
+    fetchRevenue: vi.fn()
+  })
+}))
+
+vi.mock('@/shared/composables/useAppData', () => ({
+  useAppData: () => ({
     fetchData: vi.fn()
   })
 }))
 
-vi.mock('@/stores/alert', () => ({
+vi.mock('@/shared/stores/alert', () => ({
   useAlertStore: () => ({
     success: vi.fn(),
     error: vi.fn()
   })
 }))
 
-vi.mock('@/stores/loading', () => ({
+vi.mock('@/shared/stores/loading', () => ({
   useLoadingStore: () => ({
     isLoading: false,
     start: vi.fn(),
@@ -37,13 +47,13 @@ vi.mock('@/stores/loading', () => ({
   })
 }))
 
-vi.mock('@/services/customer.service', () => ({
+vi.mock('@/features/customer/services/customer.service', () => ({
   customerService: {
     update: vi.fn(() => Promise.resolve())
   }
 }))
 
-vi.mock('@/services/revenue.service', () => ({
+vi.mock('@/features/revenue/services/revenue.service', () => ({
   revenueService: {
     create: vi.fn(() => Promise.resolve()),
     update: vi.fn(() => Promise.resolve()),
@@ -51,7 +61,7 @@ vi.mock('@/services/revenue.service', () => ({
   }
 }))
 
-vi.mock('@/composables/useCrudModal', () => ({
+vi.mock('@/shared/composables/useCrudModal', () => ({
   useCrudModal: () => ({
     isOpen: { value: false },
     isDelete: { value: false },
@@ -99,14 +109,14 @@ describe('RevenuePage.vue', () => {
   })
 
   it('abre modal de update ao emitir update-item', async () => {
-    const revenue = wrapper.vm.apiStore.revenue[0]
+    const revenue = wrapper.vm.revenueStore.revenue[0]
     await wrapper.findComponent({ name: 'RevenuesTable' }).vm.$emit('update-item', revenue)
 
     expect(wrapper.vm.modalCrud.openUpdate).toHaveBeenCalledWith(revenue)
   })
 
   it('abre modal de delete ao emitir delete-item', async () => {
-    const revenue = wrapper.vm.apiStore.revenue[0]
+    const revenue = wrapper.vm.revenueStore.revenue[0]
     await wrapper.findComponent({ name: 'RevenuesTable' }).vm.$emit('delete-item', revenue)
 
     expect(wrapper.vm.modalCrud.openDelete).toHaveBeenCalledWith(revenue)
@@ -114,7 +124,7 @@ describe('RevenuePage.vue', () => {
 
   it('exclui receita ao confirmar delete', async () => {
     wrapper.vm.modalCrud.isDelete.value = true
-    wrapper.vm.modalCrud.entity.value = wrapper.vm.apiStore.revenue[0]
+    wrapper.vm.modalCrud.entity.value = wrapper.vm.revenueStore.revenue[0]
 
     await wrapper.vm.deleteRevenue()
     await flushPromises()

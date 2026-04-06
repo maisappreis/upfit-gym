@@ -3,7 +3,7 @@ import { apiClient } from "@/shared/services/apiClient";
 import { type Customer, type CreateCustomerDTO, type UpdateCustomerDTO } from "@/features/customer/types/customer";
 import { customerService } from "@/features/customer/services/customer.service";
 
-vi.mock("@/services/apiClient", () => ({
+vi.mock("@/shared/services/apiClient", () => ({
   apiClient: {
     get: vi.fn(),
     post: vi.fn(),

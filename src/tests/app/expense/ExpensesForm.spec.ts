@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { type CreateExpenseDTO } from '@/features/expense/types/expense'
-import ExpensesForm from '@/app/expense/ExpensesForm.vue'
+import ExpensesForm from '@/features/expense/components/ExpensesForm.vue'
 
 vi.mock('@/shared/components/form/BaseInput.vue', () => ({
   default: {

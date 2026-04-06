@@ -6,7 +6,7 @@ const responseUse = vi.fn()
 const postMock = vi.fn()
 const apiCallMock = vi.fn()
 
-vi.mock('@/services/authClient', () => ({
+vi.mock('@/features/auth/services/authClient', () => ({
   authClient: {
     post: postMock
   }

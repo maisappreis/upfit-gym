@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
-import ExpensesTable from '@/app/expense/ExpensesTable.vue'
+import ExpensesTable from '@/features/expense/components/ExpensesTable.vue'
 
-vi.mock('@/services/expense.service', () => {
+vi.mock('@/features/expense/services/expense.service', () => {
   return {
     expenseService: {
       update: vi.fn().mockResolvedValue(undefined),
@@ -11,15 +11,15 @@ vi.mock('@/services/expense.service', () => {
   }
 })
 
-vi.mock('@/stores/api', () => {
+vi.mock('@/features/expense/stores/useExpenseStore', () => {
   return {
-    useApiStore: () => ({
+    useExpenseStore: () => ({
       fetchExpenses: vi.fn().mockResolvedValue(undefined)
     })
   }
 })
 
-vi.mock('@/stores/alert', () => {
+vi.mock('@/shared/stores/alert', () => {
   return {
     useAlertStore: () => ({
       success: vi.fn(),
@@ -28,7 +28,7 @@ vi.mock('@/stores/alert', () => {
   }
 })
 
-vi.mock('@/stores/loading', () => {
+vi.mock('@/shared/stores/loading', () => {
   return {
     useLoadingStore: () => ({
       isLoading: false,
@@ -47,7 +47,7 @@ vi.mock('@/shared/utils/dateUtils', () => ({
   })
 }))
 
-vi.mock('@/composables/useTooltipAnchors', () => ({
+vi.mock('@/shared/composables/useTooltipAnchors', () => ({
   useTooltipAnchors: () => ({
     hoveredId: null,
     refsMap: {},
@@ -55,7 +55,7 @@ vi.mock('@/composables/useTooltipAnchors', () => ({
   })
 }))
 
-vi.mock('@/composables/useTablePagination', () => ({
+vi.mock('@/shared/composables/useTablePagination', () => ({
   useTablePagination: (dataFn: any) => ({
     itemsPerPage: 10,
     currentPage: 1,
@@ -63,7 +63,7 @@ vi.mock('@/composables/useTablePagination', () => ({
   })
 }))
 
-vi.mock('@/composables/useCrudModal', () => ({
+vi.mock('@/shared/composables/useCrudModal', () => ({
   useCrudModal: () => ({
     isOpen: { value: false },
     openUpdate: vi.fn(),

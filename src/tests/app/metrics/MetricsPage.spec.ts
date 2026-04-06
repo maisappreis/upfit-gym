@@ -1,6 +1,21 @@
 import { mount } from '@vue/test-utils'
-import { describe, it, expect, beforeEach } from 'vitest'
-import MetricsPage from '@/app/metrics/MetricsPage.vue'
+import { describe, it, vi, expect, beforeEach } from 'vitest'
+import MetricsPage from '@/features/metrics/components/MetricsPage.vue'
+
+vi.mock("@/shared/services/apiClient", () => ({
+  apiClient: {
+    get: vi.fn(() =>
+      Promise.resolve({
+        data: {
+          active_inactive_customers: {},
+          number_of_active_customer_per_month: {},
+          monthly_profit: {},
+          revenue_versus_expense: {},
+        },
+      })
+    ),
+  },
+}));
 
 describe('MetricsPage.vue', () => {
   let wrapper: any

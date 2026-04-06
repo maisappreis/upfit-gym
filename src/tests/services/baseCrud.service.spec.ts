@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { crudService } from "@/shared/services/baseCrud.service";
 import { apiClient } from "@/shared/services/apiClient";
 
-vi.mock("@/services/apiClient", () => ({
+vi.mock("@/shared/services/apiClient", () => ({
   apiClient: {
     get: vi.fn(),
     post: vi.fn(),

@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { mount, VueWrapper } from "@vue/test-utils";
-import LogoType from "@/features/layout/LogoType.vue";
+import LogoType from "@/shared/components/layout/LogoType.vue";
 
 describe("LogoType", () => {
   let wrapper: VueWrapper<any, any>;

@@ -1,8 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { authClient } from "@/features/auth/services/authClient";
-import { loginService, type Login } from "@/features/auth/services/login.service";
+import { loginService } from "@/features/auth/services/login.service";
+import { type LoginPayload } from "@/features/auth/types/login";
 
-vi.mock("@/services/authClient", () => ({
+vi.mock("@/features/auth/services/authClient", () => ({
   authClient: {
     get: vi.fn(),
     post: vi.fn(),
@@ -20,7 +21,7 @@ describe("loginService", () => {
     const payload = {
       username: "maria2545",
       password: "password"
-    } as Login;
+    } as LoginPayload;
 
     (authClient.post as any).mockResolvedValue({
       data: payload

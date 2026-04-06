@@ -12,7 +12,7 @@ vi.mock('@/router', () => ({
   }
 }))
 
-vi.mock('@/services/login.service', () => ({
+vi.mock('@/features/auth/services/login.service', () => ({
   loginService: {
     create: vi.fn(),
     refresh: vi.fn(),
@@ -20,8 +20,8 @@ vi.mock('@/services/login.service', () => ({
   }
 }))
 
-vi.mock('@/stores/api', () => ({
-  useApiStore: () => ({
+vi.mock('@/shared/composables/useAppData', () => ({
+  useAppData: () => ({
     fetchData: vi.fn().mockResolvedValue(undefined)
   })
 }))

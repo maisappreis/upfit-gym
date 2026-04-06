@@ -7,10 +7,21 @@ import { useAppData } from "@/shared/composables/useAppData";
 import { useLoadingStore } from "@/shared/stores/loading";
 import { useAlertStore } from "@/shared/stores/alert";
 
-vi.mock("@/stores/auth");
+vi.mock("@/features/auth/stores/auth");
 vi.mock("@/shared/composables/useAppData");
-vi.mock("@/stores/loading");
-vi.mock("@/stores/alert");
+vi.mock("@/shared/stores/loading");
+vi.mock("@/shared/stores/alert");
+
+vi.mock("vue-router", async (importOriginal) => {
+  const actual = await importOriginal() as typeof import("vue-router");
+
+  return {
+    ...actual,
+    useRouter: () => ({
+      push: vi.fn(),
+    }),
+  };
+});
 
 describe("App.vue", () => {
   let checkAuthMock: any;
