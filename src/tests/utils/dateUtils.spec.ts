@@ -5,9 +5,9 @@ import {
   getNextMonth,
   formatDate,
   getYearAndMonth
-} from '@/utils/dateUtils'
+} from '@/shared/utils/dateUtils'
 
-import { months } from '@/utils/constants'
+import { months } from '@/shared/utils/constants'
 
 describe('dateUtils', () => {
   /* ---------- getMonthIndex ---------- */

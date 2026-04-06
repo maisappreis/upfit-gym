@@ -1,12 +1,12 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import { useApiStore } from '@/stores/api'
-import { customerService } from '@/services/customer.service'
-import { revenueService } from '@/services/revenue.service'
-import { expenseService } from '@/services/expense.service'
-import { type Revenue } from '@/types/revenue'
-import { type Expense} from '@/types/expense'
-import { type Customer } from '@/types/customer'
+import { customerService } from '@/features/customer/services/customer.service'
+import { revenueService } from '@/features/revenue/services/revenue.service'
+import { expenseService } from '@/features/expense/services/expense.service'
+import { type Revenue } from '@/features/revenue/types/revenue'
+import { type Expense} from '@/features/expense/types/expense'
+import { type Customer } from '@/features/customer/types/customer'
 
 vi.mock('@/services/customer.service', () => {
   return {

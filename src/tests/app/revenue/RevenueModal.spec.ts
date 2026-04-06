@@ -1,9 +1,9 @@
 import { mount } from "@vue/test-utils";
 import { describe, it, expect, vi } from "vitest";
 import { ref } from "vue";
-import RevenueModal from "@/app/revenue/RevenueModal.vue";
-import type { CrudModal } from "@/composables/useCrudModal";
-import type { Revenue } from "@/types/revenue";
+import RevenueModal from "@/features/revenue/components/RevenueModal.vue";
+import type { CrudModal } from "@/shared/composables/useCrudModal";
+import type { Revenue } from "@/features/revenue/types/revenue";
 
 vi.mock("@/stores/loading", () => ({
   useLoadingStore: () => ({
@@ -20,7 +20,7 @@ vi.mock("@/stores/api", () => ({
   }),
 }));
 
-vi.mock("@/components/ModalCard.vue", () => ({
+vi.mock("@/shared/components/ModalCard.vue", () => ({
   default: {
     name: "ModalCard",
     props: ["modelValue"],
@@ -29,14 +29,14 @@ vi.mock("@/components/ModalCard.vue", () => ({
   },
 }));
 
-vi.mock("@/components/BaseButton.vue", () => ({
+vi.mock("@/shared/components/BaseButton.vue", () => ({
   default: {
     name: "BaseButton",
     template: "<button @click='$emit(\"click\")'><slot /></button>",
   },
 }));
 
-vi.mock("@/app/revenue/RevenueForm.vue", () => ({
+vi.mock("@/features/revenue/components/RevenueForm.vue", () => ({
   default: {
     name: "RevenueForm",
     template: "<div class='revenue-form'></div>",

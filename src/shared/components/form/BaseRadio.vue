@@ -1,0 +1,51 @@
+<template>
+  <input
+      type="radio"
+      class="form-radio"
+      :value="value" 
+      v-bind="{ ...$attrs, onChange: updateValue }"
+      :checked="modelValue === value"
+      :id="String(uuid)"
+    />
+  <label
+    v-if="label"
+    class="form-label"
+    :for="String(uuid)"
+  >
+    {{ label }}
+  </label>
+  <BaseErrorMessage
+    v-if="error"
+    :id="`${String(uuid)}-error`"
+  >
+    {{ error }}
+  </BaseErrorMessage>
+</template>
+
+<script setup lang="ts">
+import uniqueID from "@/shared/utils/uniqueID";
+import setupFormComponent from "@/shared/utils/setupFormComponent";
+import BaseErrorMessage from "@/shared/components/BaseErrorMessage.vue";
+
+const props = defineProps<{
+  label?: string
+  modelValue?: string | number | null
+  value: string | number | null
+  error?: string
+}>();
+
+const emit = defineEmits<{
+  (e: 'update:modelValue', value: string | number | boolean | null): void
+}>();
+
+const { updateValue } = setupFormComponent(props, { emit });
+const uuid = uniqueID().getID();
+</script>
+
+<style scoped>
+.form-radio {
+  margin: 7px;
+  width: 20px;
+  cursor: pointer;
+}
+</style>

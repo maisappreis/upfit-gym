@@ -7,16 +7,17 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
 import { useRouter } from "vue-router";
-import { useApiStore } from "@/stores/api";
-import { useAuthStore } from "@/stores/auth";
-import { useAlertStore } from "@/stores/alert";
-import { useLoadingStore } from "@/stores/loading";
+import { useAppData } from "@/shared/composables/useAppData";
+import { useAuthStore } from "@/features/auth/stores/auth";
+import { useAlertStore } from "@/shared/stores/alert";
+import { useLoadingStore } from "@/shared/stores/loading";
 
-import AlertMessage from "@/components/AlertMessage.vue";
-import LoadingScreen from "@/components/LoadingScreen.vue";
+import AlertMessage from "@/shared/components/AlertMessage.vue";
+import LoadingScreen from "@/shared/components/LoadingScreen.vue";
 
 const router = useRouter();
-const apiStore = useApiStore();
+const { fetchData } = useAppData();
+
 const authStore = useAuthStore();
 const alertStore = useAlertStore();
 const loadingStore = useLoadingStore();
@@ -26,7 +27,7 @@ onMounted(async () => {
   authStore.checkAuthentication();
 
   if (authStore.isAuthenticated) {
-    await apiStore.fetchData();
+    await fetchData();
   } else {
     router.push("/login");
   }

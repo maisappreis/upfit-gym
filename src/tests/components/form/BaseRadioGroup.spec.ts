@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
-import BaseRadioGroup from '@/components/form/BaseRadioGroup.vue'
-import BaseRadio from '@/components/form/BaseRadio.vue'
+import BaseRadioGroup from '@/shared/components/form/BaseRadioGroup.vue'
+import BaseRadio from '@/shared/components/form/BaseRadio.vue'
 
 describe('BaseRadioGroup', () => {
   const options = [

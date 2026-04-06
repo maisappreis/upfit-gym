@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { useCrudModal } from '@/composables/useCrudModal'
+import { useCrudModal } from '@/shared/composables/useCrudModal'
 
 interface TestEntity {
   id: number

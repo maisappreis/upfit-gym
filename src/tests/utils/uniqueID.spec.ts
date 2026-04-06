@@ -6,7 +6,7 @@ describe('uniqueID', () => {
   })
 
   it('returns incremented id starting from 2', async () => {
-    const { default: uniqueID } = await import('@/utils/uniqueID')
+    const { default: uniqueID } = await import('@/shared/utils/uniqueID')
 
     const { getID } = uniqueID()
 
@@ -16,7 +16,7 @@ describe('uniqueID', () => {
   })
 
   it('maintains increment within same instance', async () => {
-    const { default: uniqueID } = await import('@/utils/uniqueID')
+    const { default: uniqueID } = await import('@/shared/utils/uniqueID')
 
     const { getID } = uniqueID()
 

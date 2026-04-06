@@ -22,7 +22,7 @@ describe('authClient', () => {
   })
 
   it('creates axios instance with correct config', async () => {
-    await import('@/services/authClient')
+    await import('@/features/auth/services/authClient')
 
     expect(createMock).toHaveBeenCalledTimes(1)
 

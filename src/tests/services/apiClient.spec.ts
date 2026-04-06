@@ -41,7 +41,7 @@ describe('apiClient', () => {
   it('sets Authorization header if token exists', async () => {
     localStorage.setItem('accessToken', 'abc123')
 
-    await import('@/services/apiClient')
+    await import('@/shared/services/apiClient')
 
     const interceptor = requestUse.mock.calls[0][0]
 
@@ -53,7 +53,7 @@ describe('apiClient', () => {
   })
 
   it('does not set Authorization if no token', async () => {
-    await import('@/services/apiClient')
+    await import('@/shared/services/apiClient')
 
     const interceptor = requestUse.mock.calls[0][0]
 
@@ -65,7 +65,7 @@ describe('apiClient', () => {
   })
 
   it('refreshes token on 401 and retries request', async () => {
-    await import('@/services/apiClient')
+    await import('@/shared/services/apiClient')
 
     const responseInterceptor = responseUse.mock.calls[0][1]
 
@@ -100,7 +100,7 @@ describe('apiClient', () => {
   })
 
   it('rejects if no refresh token', async () => {
-    await import('@/services/apiClient')
+    await import('@/shared/services/apiClient')
 
     const responseInterceptor = responseUse.mock.calls[0][1]
 

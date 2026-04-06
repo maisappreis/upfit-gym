@@ -2,8 +2,8 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import { nextTick } from 'vue'
-import AlertMessage from '@/components/AlertMessage.vue'
-import { useAlertStore } from '@/stores/alert'
+import AlertMessage from '@/shared/components/AlertMessage.vue'
+import { useAlertStore } from '@/shared/stores/alert'
 
 describe('AlertMessage', () => {
   beforeEach(() => {

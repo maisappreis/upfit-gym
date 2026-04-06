@@ -1,8 +1,8 @@
 import { mount } from "@vue/test-utils";
 import { describe, it, expect, vi } from "vitest";
 import { ref, computed } from "vue";
-import CustomersModal from "@/app/customer/CustomersModal.vue";
-import type { Customer } from "@/types/customer";
+import CustomersModal from "@/features/customer/components/CustomersModal.vue";
+import type { Customer } from "@/features/customer/types/customer";
 
 vi.mock("@/stores/loading", () => ({
   useLoadingStore: () => ({
@@ -10,11 +10,11 @@ vi.mock("@/stores/loading", () => ({
   }),
 }));
 
-vi.mock("@/utils/dataUtils", () => ({
+vi.mock("@/shared/utils/dataUtils", () => ({
   capitalize: (v: string) => v.charAt(0).toUpperCase() + v.slice(1),
 }));
 
-vi.mock("@/components/ModalCard.vue", () => ({
+vi.mock("@/shared/components/ModalCard.vue", () => ({
   default: {
     name: "ModalCard",
     props: ["modelValue"],
@@ -22,14 +22,14 @@ vi.mock("@/components/ModalCard.vue", () => ({
   },
 }));
 
-vi.mock("@/components/BaseButton.vue", () => ({
+vi.mock("@/shared/components/BaseButton.vue", () => ({
   default: {
     name: "BaseButton",
     template: "<button @click='$emit(\"click\")'><slot /></button>",
   },
 }));
 
-vi.mock("@/app/customer/CustomersForm.vue", () => ({
+vi.mock("@/features/customer/components/CustomersForm.vue", () => ({
   default: {
     name: "CustomersForm",
     template: "<div class='customers-form'></div>",

@@ -38,7 +38,7 @@ vi.mock('@/stores/loading', () => {
   }
 })
 
-vi.mock('@/utils/dateUtils', () => ({
+vi.mock('@/shared/utils/dateUtils', () => ({
   formatDate: (v: string) => `formatted-${v}`,
   getNextMonth: () => ({
     year: 2024,

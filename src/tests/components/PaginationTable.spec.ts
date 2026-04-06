@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
-import PaginationTable from '@/components/PaginationTable.vue'
+import PaginationTable from '@/shared/components/PaginationTable.vue'
 
 describe('PaginationTable', () => {
   const factory = (props = {}) =>

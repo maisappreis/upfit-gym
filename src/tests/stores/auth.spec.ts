@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
-import { loginService } from '@/services/login.service'
+import { loginService } from '@/features/auth/services/login.service'
 import { jwtDecode } from 'jwt-decode'
-import { useAuthStore } from '@/stores/auth'
+import { useAuthStore } from '@/features/auth/stores/auth'
 import router from "@/router";
 
 vi.mock('@/router', () => ({

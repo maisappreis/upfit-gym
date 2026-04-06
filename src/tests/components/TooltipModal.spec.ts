@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
-import TooltipModal from '@/components/TooltipModal.vue'
+import TooltipModal from '@/shared/components/TooltipModal.vue'
 
 describe('TooltipModal', () => {
   beforeEach(() => {

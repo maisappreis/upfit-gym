@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { setActivePinia, createPinia } from "pinia";
-import { useLoadingStore } from "@/stores/loading";
+import { useLoadingStore } from "@/shared/stores/loading";
 
 describe("Loading Store", () => {
   let loadingStore: ReturnType<typeof useLoadingStore>; 

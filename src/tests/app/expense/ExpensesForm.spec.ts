@@ -1,9 +1,9 @@
 import { describe, it, expect, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
-import { type CreateExpenseDTO } from '@/types/expense'
+import { type CreateExpenseDTO } from '@/features/expense/types/expense'
 import ExpensesForm from '@/app/expense/ExpensesForm.vue'
 
-vi.mock('@/components/form/BaseInput.vue', () => ({
+vi.mock('@/shared/components/form/BaseInput.vue', () => ({
   default: {
     name: 'BaseInput',
     template: '<input />',
@@ -13,14 +13,14 @@ vi.mock('@/components/form/BaseInput.vue', () => ({
   }
 }))
 
-vi.mock('@/components/form/BaseCheckbox.vue', () => ({
+vi.mock('@/shared/components/form/BaseCheckbox.vue', () => ({
   default: {
     name: 'BaseCheckbox',
     template: '<input type="checkbox" />'
   }
 }))
 
-vi.mock('@/components/form/BaseTextarea.vue', () => ({
+vi.mock('@/shared/components/form/BaseTextarea.vue', () => ({
   default: {
     name: 'BaseTextarea',
     template: '<textarea />'

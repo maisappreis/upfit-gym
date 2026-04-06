@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils"
 import { describe, it, expect, vi } from "vitest"
-import ActiveCustomersChart from "@/app/metrics/charts/ActiveCustomersChart.vue"
+import ActiveCustomersChart from "@/features/metrics/components/charts/ActiveCustomersChart.vue"
 
 vi.mock("vue-chartjs", () => ({
   Line: {
@@ -10,7 +10,7 @@ vi.mock("vue-chartjs", () => ({
   }
 }))
 
-vi.mock("@/utils/dataUtils", () => ({
+vi.mock("@/shared/utils/dataUtils", () => ({
   getCssVar: vi.fn(() => "#000")
 }))
 

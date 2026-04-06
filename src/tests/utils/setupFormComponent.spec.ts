@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest'
-import setupFormComponent from '@/utils/setupFormComponent'
+import setupFormComponent from '@/shared/utils/setupFormComponent'
 
 describe('setupFormComponent', () => {
   const createEvent = (options: Partial<HTMLInputElement>) => {

@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 import { mount } from "@vue/test-utils"
 import { createRouter, createMemoryHistory } from "vue-router"
-import HeaderPage from "@/app/layout/HeaderPage.vue"
+import HeaderPage from "@/shared/components/layout/HeaderPage.vue"
 
 const logoutMock = vi.fn()
 

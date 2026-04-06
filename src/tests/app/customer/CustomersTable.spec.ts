@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import CustomersTable from '@/app/customer/CustomersTable.vue'
 
-vi.mock('@/utils/dateUtils', () => ({
+vi.mock('@/shared/utils/dateUtils', () => ({
   formatDate: (value: string) => `formatted-${value}`
 }))
 

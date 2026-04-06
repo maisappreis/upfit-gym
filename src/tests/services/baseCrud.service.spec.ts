@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { crudService } from "@/services/baseCrud.service";
-import { apiClient } from "@/services/apiClient";
+import { crudService } from "@/shared/services/baseCrud.service";
+import { apiClient } from "@/shared/services/apiClient";
 
 vi.mock("@/services/apiClient", () => ({
   apiClient: {

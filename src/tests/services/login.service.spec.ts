@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { authClient } from "@/services/authClient";
-import { loginService, type Login } from "@/services/login.service";
+import { authClient } from "@/features/auth/services/authClient";
+import { loginService, type Login } from "@/features/auth/services/login.service";
 
 vi.mock("@/services/authClient", () => ({
   authClient: {

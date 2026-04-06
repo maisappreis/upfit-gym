@@ -1,9 +1,9 @@
 import { mount } from "@vue/test-utils";
 import { describe, it, expect, vi } from "vitest";
 import { ref } from "vue";
-import ExpensesModal from "@/app/expense/ExpensesModal.vue";
-import type { Expense } from "@/types/expense";
-import type { CrudModal } from "@/composables/useCrudModal";
+import ExpensesModal from "@/features/expense/components/ExpensesModal.vue";
+import type { Expense } from "@/features/expense/types/expense";
+import type { CrudModal } from "@/shared/composables/useCrudModal";
 
 vi.mock("@/stores/loading", () => ({
   useLoadingStore: () => ({
@@ -11,18 +11,18 @@ vi.mock("@/stores/loading", () => ({
   }),
 }));
 
-vi.mock("@/utils/dataUtils", () => ({
+vi.mock("@/shared/utils/dataUtils", () => ({
   capitalize: (v: string) => v.charAt(0).toUpperCase() + v.slice(1),
 }));
 
-vi.mock("@/utils/dateUtils", () => ({
+vi.mock("@/shared/utils/dateUtils", () => ({
   getYearAndMonth: () => ({
     year: 2024,
     month: "Janeiro",
   }),
 }));
 
-vi.mock("@/components/ModalCard.vue", () => ({
+vi.mock("@/shared/components/ModalCard.vue", () => ({
   default: {
     name: "ModalCard",
     props: ["modelValue"],
@@ -30,14 +30,14 @@ vi.mock("@/components/ModalCard.vue", () => ({
   },
 }));
 
-vi.mock("@/components/BaseButton.vue", () => ({
+vi.mock("@/shared/components/BaseButton.vue", () => ({
   default: {
     name: "BaseButton",
     template: "<button @click='$emit(\"click\")'><slot /></button>",
   },
 }));
 
-vi.mock("@/app/expense/ExpensesForm.vue", () => ({
+vi.mock("@/features/expense/components/ExpensesForm.vue", () => ({
   default: {
     name: "ExpensesForm",
     template: "<div class='expenses-form'></div>",

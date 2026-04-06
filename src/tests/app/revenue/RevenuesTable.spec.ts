@@ -2,10 +2,10 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 import { shallowMount } from "@vue/test-utils"
 import { ref } from "vue"
 
-import RevenuesTable from "@/app/revenue/RevenuesTable.vue"
-import { revenueService } from "@/services/revenue.service"
+import RevenuesTable from "@/features/revenue/components/RevenuesTable.vue"
+import { revenueService } from "@/features/revenue/services/revenue.service"
 import { useApiStore } from "@/stores/api"
-import { useLoadingStore } from "@/stores/loading"
+import { useLoadingStore } from "@/shared/stores/loading"
 
 const fetchRevenueMock = vi.fn()
 const loadingStartMock = vi.fn()
@@ -68,7 +68,7 @@ vi.mock("@/composables/useTablePagination", () => ({
   })
 }))
 
-vi.mock("@/utils/dateUtils", () => ({
+vi.mock("@/shared/utils/dateUtils", () => ({
   formatDate: vi.fn((v: string) => v),
   getNextMonth: vi.fn(() => ({ month: "Fevereiro", year: 2024 }))
 }))

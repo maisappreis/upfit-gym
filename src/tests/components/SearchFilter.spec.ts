@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
-import SearchFilter from '@/components/SearchFilter.vue'
+import SearchFilter from '@/shared/components/SearchFilter.vue'
 
 describe('SearchFilter', () => {
   const factory = (props = {}) =>

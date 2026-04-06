@@ -2,13 +2,13 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen } from "@testing-library/vue";
 
 import App from "@/App.vue";
-import { useAuthStore } from "@/stores/auth";
-import { useApiStore } from "@/stores/api";
-import { useLoadingStore } from "@/stores/loading";
-import { useAlertStore } from "@/stores/alert";
+import { useAuthStore } from "@/features/auth/stores/auth";
+import { useAppData } from "@/shared/composables/useAppData";
+import { useLoadingStore } from "@/shared/stores/loading";
+import { useAlertStore } from "@/shared/stores/alert";
 
 vi.mock("@/stores/auth");
-vi.mock("@/stores/api");
+vi.mock("@/shared/composables/useAppData");
 vi.mock("@/stores/loading");
 vi.mock("@/stores/alert");
 
@@ -27,7 +27,7 @@ describe("App.vue", () => {
     (useAuthStore as any).mockReturnValue({
       checkAuthentication: checkAuthMock,
     });
-    (useApiStore as any).mockReturnValue({
+    (useAppData as any).mockReturnValue({
       fetchData: fetchDataMock,
     });
     (useLoadingStore as any).mockReturnValue({

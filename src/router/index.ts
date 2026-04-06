@@ -1,5 +1,5 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import { useAuthStore } from "@/stores/auth";
+import { useAuthStore } from "@/features/auth/stores/auth";
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -7,18 +7,18 @@ const router = createRouter({
     {
       path: "/login",
       name: "login",
-      component: () => import("@/app/LoginView.vue")
+      component: () => import("@/features/auth/components/LoginView.vue")
     },
     {
       path: "/",
-      component: () => import("@/app/LayoutView.vue"),
+      component: () => import("@/shared/components/layout/LayoutView.vue"),
       children: [
         {
           path: "", redirect: "/metricas"
         },
         {
           path: "metricas",
-          component: () => import("@/app/metrics/MetricsPage.vue"),
+          component: () => import("@/features/metrics/components/MetricsPage.vue"),
           meta: {
             icon: "fa-solid fa-chart-line",
             title: "Métricas",
@@ -28,7 +28,7 @@ const router = createRouter({
         },
         {
           path: "clientes",
-          component: () => import("@/app/customer/CustomersPage.vue"),
+          component: () => import("@/features/customer/components/CustomersPage.vue"),
           meta: {
             icon: "fa-solid fa-users",
             title: "Clientes",
@@ -38,7 +38,7 @@ const router = createRouter({
         },
         {
           path: "receitas",
-          component: () => import("@/app/revenue/RevenuePage.vue"),
+          component: () => import("@/features/revenue/components/RevenuePage.vue"),
           meta: {
             icon: "fa-solid fa-hand-holding-dollar",
             title: "Receitas",
@@ -48,7 +48,7 @@ const router = createRouter({
         },
         {
           path: "despesas",
-          component: () => import("@/app/expense/ExpensesPage.vue"),
+          component: () => import("@/features/expense/components/ExpensesPage.vue"),
           meta: {
             icon: "fa-solid fa-money-bill-transfer",
             title: "Despesas",

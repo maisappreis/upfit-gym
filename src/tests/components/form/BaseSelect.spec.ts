@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
-import BaseSelect from '@/components/form/BaseSelect.vue'
+import BaseSelect from '@/shared/components/form/BaseSelect.vue'
 
 vi.mock('@/features/setupFormComponent', () => ({
   default: (props: any, { emit }: any) => ({

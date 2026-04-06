@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
-import StatusFilter from '@/components/StatusFilter.vue'
+import StatusFilter from '@/shared/components/StatusFilter.vue'
 
 describe('StatusFilter', () => {
   const options = ['Ativo', 'Inativo', 'Pendente']

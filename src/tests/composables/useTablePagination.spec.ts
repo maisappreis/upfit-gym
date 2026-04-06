@@ -1,10 +1,10 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { ref, nextTick } from 'vue'
-import { useTablePagination } from '@/composables/useTablePagination'
+import { useTablePagination } from '@/shared/composables/useTablePagination'
 
 const searchMock = vi.fn()
 
-vi.mock('@/utils/dataUtils', () => ({
+vi.mock('@/shared/utils/dataUtils', () => ({
   searchData: (...args: any[]) => searchMock(...args)
 }))
 

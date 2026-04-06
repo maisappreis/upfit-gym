@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest'
-import { normalize, getCssVar, orderData, searchData, capitalize, filteredData } from '@/utils/dataUtils'
+import { normalize, getCssVar, orderData, searchData, capitalize, filteredData } from '@/shared/utils/dataUtils'
 
 describe('dataUtils', () => {
   /* ---------- normalize ---------- */

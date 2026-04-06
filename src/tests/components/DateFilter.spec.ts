@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
-import DateFilter from '@/components/DateFilter.vue'
+import DateFilter from '@/shared/components/DateFilter.vue'
 
-vi.mock('@/utils/constants', () => ({
+vi.mock('@/shared/utils/constants', () => ({
   months: ['Jan', 'Fev', 'Mar'],
   years: [2023, 2024]
 }))

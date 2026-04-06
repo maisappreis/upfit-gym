@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { useTooltipAnchors } from '@/composables/useTooltipAnchors'
+import { useTooltipAnchors } from '@/shared/composables/useTooltipAnchors'
 
 describe('useTooltipAnchors', () => {
   it('initial state is correct', () => {
