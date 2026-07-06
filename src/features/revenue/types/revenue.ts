@@ -4,7 +4,7 @@ export interface Revenue {
   month: string;
   name: string;
   notes: string;
-  paid: "Pago" | "À pagar" | "Link enviado";
+  paid: "Pago" | "À pagar";
   payment_day: number | null;
   plan: "Mensal" | "Trimestral" | "Semestral" | "Anual",
   start: string;

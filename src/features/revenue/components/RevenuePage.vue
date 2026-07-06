@@ -13,7 +13,7 @@
         />
         <StatusFilter
           v-model="currentStatus"
-          :options="['Pago', 'À pagar', 'Link enviado', 'Todos']"
+          :options="['Pago', 'À pagar', 'Todos']"
           defaultValue="Todos"
         />
         <SearchFilter v-model="searchedField" />

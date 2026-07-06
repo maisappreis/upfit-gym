@@ -7,7 +7,7 @@ export function useTablePagination<T extends NamedItem>(
   data: () => T[],
   searchedField: () => string[],
 ) {
-  const itemsPerPage = ref(30);
+  const itemsPerPage = ref(100);
   const currentPage = ref(1);
 
   const paginatedData = computed(() => {

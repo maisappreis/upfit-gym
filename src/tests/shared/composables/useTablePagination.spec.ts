@@ -34,13 +34,13 @@ describe('useTablePagination', () => {
       () => searchedFieldRef.value
     )
 
-    expect(paginatedData.value.length).toBe(30)
+    expect(paginatedData.value.length).toBe(100)
     expect(paginatedData.value[0].name).toBe('Item 1')
-    expect(paginatedData.value[29].name).toBe('Item 30')
+    expect(paginatedData.value[99].name).toBe('Item 100')
   })
 
   it('changes page correctly', async () => {
-    dataRef.value = Array.from({ length: 50 }, (_, i) => ({
+    dataRef.value = Array.from({ length: 150 }, (_, i) => ({
       name: `Item ${i + 1}`
     }))
 
@@ -54,7 +54,7 @@ describe('useTablePagination', () => {
     currentPage.value = 2
     await nextTick()
 
-    expect(paginatedData.value[0].name).toBe('Item 31')
+    expect(paginatedData.value[0].name).toBe('Item 101')
   })
 
   it('resets page when data changes', async () => {

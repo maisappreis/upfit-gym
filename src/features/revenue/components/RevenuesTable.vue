@@ -19,8 +19,7 @@
             class="status paid"
             :class="{
               active: row.paid === 'Pago',
-              inactive: row.paid === 'À pagar',
-              sent: row.paid === 'Link enviado'
+              inactive: row.paid === 'À pagar'
             }"
             @click="confirmPaidStatus(row)"
           >
@@ -167,9 +166,6 @@ const confirmPaidStatus = (revenue: Revenue) => {
 
   switch (selectedRevenue.value!.paid) {
     case "À pagar":
-      statusMessage.value = "link enviado";
-      break;
-    case "Link enviado":
       statusMessage.value = "pago";
       break;
     case "Pago":
@@ -189,13 +185,10 @@ const changePaidStatus = async () => {
   loadingStore.start();
 
   try {
-    let updatedPaidStatus = {} as { paid: "Pago" | "À pagar" | "Link enviado"};
+    let updatedPaidStatus = {} as { paid: "Pago" | "À pagar"};
 
     switch (selectedRevenue.value!.paid) {
       case "À pagar":
-        updatedPaidStatus = { paid: "Link enviado" };
-        break;
-      case "Link enviado":
         updatedPaidStatus = { paid: "Pago" };
         break;
       case "Pago":
