@@ -1,5 +1,5 @@
 import { authClient } from "./authClient";
-import { type LoginPayload, type CreateLoginDTO, type LoginAccess} from "@/features/auth/types/login";
+import { type LoginPayload, type CreateLoginDTO, type LoginAccess, type UpdateUserDTO, type User } from "@/features/auth/types/login";
 
 export const loginService = {
 
@@ -13,8 +13,13 @@ export const loginService = {
     return data;
   },
 
-   async profile(): Promise<LoginAccess> {
-    const { data } = await authClient.post<LoginAccess>('/accounts/profile/');
+  async profile(): Promise<User> {
+    const { data } = await authClient.get<User>('/accounts/profile/');
+    return data;
+  },
+
+  async updateProfile(payload: UpdateUserDTO): Promise<User> {
+    const { data } = await authClient.patch<User>('/accounts/profile/', payload);
     return data;
   },
 };

@@ -16,7 +16,8 @@ vi.mock('@/features/auth/services/login.service', () => ({
   loginService: {
     create: vi.fn(),
     refresh: vi.fn(),
-    profile: vi.fn()
+    profile: vi.fn(),
+    updateProfile: vi.fn()
   }
 }))
 
@@ -83,15 +84,11 @@ describe('useAuthStore', () => {
     localStorage.setItem('refreshToken', 'def')
 
     vi.mocked(loginService.profile).mockResolvedValue({
-      access: 'access123',
-      refresh: 'refresh123',
-      user: {
-        id: 1,
-        username: 'user',
-        first_name: 'test',
-        last_name: 'test',
-        email: 'email@email.com'
-      }
+      id: 1,
+      username: 'user',
+      first_name: 'test',
+      last_name: 'test',
+      email: 'email@email.com'
     })
 
     const store = useAuthStore()

@@ -3,7 +3,7 @@ import { ref } from "vue";
 import { loginService } from "@/features/auth/services/login.service";
 import { useAppData } from "@/shared/composables/useAppData";
 import * as jwt_decode from "jwt-decode";
-import { type LoginPayload, type User } from "@/features/auth/types/login";
+import { type LoginPayload, type UpdateUserDTO, type User } from "@/features/auth/types/login";
 import router from "@/router";
 
 export const useAuthStore = defineStore("auth", () => {
@@ -27,6 +27,8 @@ export const useAuthStore = defineStore("auth", () => {
     await fetchData();
 
     router.push("/");
+
+    return response;
   };
 
   const setTokens = (access: string, refresh: string) => {
@@ -84,11 +86,16 @@ export const useAuthStore = defineStore("auth", () => {
   const getProfile = async () => {
     try {
       const response = await loginService.profile();
-      user.value = response.user;
+      user.value = response;
     } catch (error) {
       console.error("Erro ao carregar perfil do usuário.", error);
       user.value = null;
     }
+  };
+
+  const updateProfile = async (payload: UpdateUserDTO) => {
+    const response = await loginService.updateProfile(payload);
+    user.value = response;
   };
 
   const logout = () => {
@@ -111,6 +118,7 @@ export const useAuthStore = defineStore("auth", () => {
     setTokens,
     checkAuthentication,
     isAuthenticated,
+    updateProfile,
     logout
   };
 });

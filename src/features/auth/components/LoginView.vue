@@ -83,8 +83,8 @@ const loginDemoUser = async () => {
   });
 };
 
-onMounted(() => {
-  authStore.checkAuthentication();
+onMounted(async () => {
+  await authStore.checkAuthentication();
 
   if (authStore.isAuthenticated) {
     alertStore.success("Você já está logado! Redirecionando...");

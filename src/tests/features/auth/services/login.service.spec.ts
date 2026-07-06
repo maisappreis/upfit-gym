@@ -36,5 +36,50 @@ describe("loginService", () => {
 
     expect(result).toEqual(payload);
   });
+
+  it("profile must call /accounts/profile/ with get", async () => {
+    const user = {
+      id: 1,
+      username: "maria2545",
+      first_name: "Maria",
+      last_name: "Silva",
+      email: "maria@email.com"
+    };
+
+    (authClient.get as any).mockResolvedValue({
+      data: user
+    });
+
+    const result = await loginService.profile();
+
+    expect(authClient.get).toHaveBeenCalledWith("/accounts/profile/");
+    expect(result).toEqual(user);
+  });
+
+  it("updateProfile must call /accounts/profile/ with patch", async () => {
+    const payload = {
+      first_name: "Maria"
+    };
+
+    const user = {
+      id: 1,
+      username: "maria2545",
+      first_name: "Maria",
+      last_name: "Silva",
+      email: "maria@email.com"
+    };
+
+    (authClient.patch as any).mockResolvedValue({
+      data: user
+    });
+
+    const result = await loginService.updateProfile(payload);
+
+    expect(authClient.patch).toHaveBeenCalledWith(
+      "/accounts/profile/",
+      payload
+    );
+    expect(result).toEqual(user);
+  });
 });
 

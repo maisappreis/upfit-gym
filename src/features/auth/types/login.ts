@@ -27,3 +27,5 @@ export interface User {
   last_name: string;
   email: string;
 };
+
+export type UpdateUserDTO = Partial<Pick<User, "username" | "first_name" | "last_name" | "email">>;

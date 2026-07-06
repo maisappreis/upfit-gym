@@ -24,7 +24,6 @@ const loadingStore = useLoadingStore();
 
 onMounted(async () => {
   loadingStore.start();
-  authStore.checkAuthentication();
 
   if (authStore.isAuthenticated) {
     await fetchData();

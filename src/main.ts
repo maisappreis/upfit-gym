@@ -13,10 +13,10 @@ const pinia = createPinia();
 
 app.component("font-awesome-icon", FontAwesomeIcon)
 app.use(library);
-app.use(router);
 app.use(pinia);
 
 const authStore = useAuthStore();
-authStore.checkAuthentication();
+await authStore.checkAuthentication();
 
+app.use(router);
 app.mount("#app");
